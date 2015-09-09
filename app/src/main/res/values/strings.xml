@@ -1,0 +1,10 @@
+<resources>
+    <!-- Titles -->
+    <string name="app_name">Wifi Passwords</string>
+
+    <!-- Settings Menu -->
+    <string name="action_settings">Settings</string>
+    <string name="text_placeholder">NA</string>
+
+
+</resources>
