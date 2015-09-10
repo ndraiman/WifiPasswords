@@ -9,6 +9,7 @@
         android:id="@+id/app_bar"
         layout="@layout/app_bar" />
 
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/wifiList"
         android:layout_width="match_parent"

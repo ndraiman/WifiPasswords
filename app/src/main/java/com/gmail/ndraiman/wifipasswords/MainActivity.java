@@ -12,7 +12,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import java.io.File;
+import jp.wasabeef.recyclerview.animators.LandingAnimator;
+import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,7 +24,8 @@ public class MainActivity extends AppCompatActivity {
     private boolean isDbExists = false;
     SQLiteDatabase passwordsDB = null;
     private final String DB_NAME = "WifiPasswords";
-    private final String TABLE_NAME = "passwords";
+    private final String TABLE_MAIN = "passwords";
+    private final String TABLE_HIDDEN = "hidden"; //will hold hidden passwords?
 
 
     @Override
@@ -37,8 +39,31 @@ public class MainActivity extends AppCompatActivity {
 
         listWifi = (RecyclerView) findViewById(R.id.wifiList);
         listWifi.setLayoutManager(new LinearLayoutManager(this));
+
+        //Setting RecyclerView Design - Divider
+        RecyclerView.ItemDecoration itemDecoration = new
+                DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST);
+        listWifi.addItemDecoration(itemDecoration);
+
+
+        //Animate addition and removal of items
+        //TODO Test to see if this works.
+        listWifi.setItemAnimator(new LandingAnimator());
+        listWifi.getItemAnimator().setAddDuration(1000);
+        listWifi.getItemAnimator().setRemoveDuration(1000);
+        listWifi.getItemAnimator().setMoveDuration(1000);
+        listWifi.getItemAnimator().setChangeDuration(1000);
+
+
+        //Setting RecyclerView Adapter
         listAdapter = new WifiListAdapter(this);
-        listWifi.setAdapter(listAdapter);
+
+        //Appearance animations for items in RecyclerView.Adapter
+        //TODO why doesnt animate recycled items
+        ScaleInAnimationAdapter animationAdapter = new ScaleInAnimationAdapter(listAdapter);
+        animationAdapter.setDuration(400);
+
+        listWifi.setAdapter(animationAdapter);
 
         //TODO create SQLite database to hold Wifi Passwords
         //TODO Check if database is empty:
@@ -85,14 +110,14 @@ public class MainActivity extends AppCompatActivity {
     public void openOrCreateDatabase() {
         try {
             passwordsDB = this.openOrCreateDatabase(DB_NAME, MODE_PRIVATE, null);
-            if(isDbExists) {
-                if(passwordsDB.isOpen()) {
+            if (isDbExists) {
+                if (passwordsDB.isOpen()) {
                     Toast.makeText(this, "Database Opened", Toast.LENGTH_SHORT).show();
                 }
                 return;
             }
 
-            passwordsDB.execSQL("CREATE TABLE IF NOT EXISTS "+ TABLE_NAME
+            passwordsDB.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_MAIN
                     + " (id integer primary key, name VARCHAR, pass VARCHAR);");
 
 
@@ -113,13 +138,13 @@ public class MainActivity extends AppCompatActivity {
 
     public void addEntry(String title, String password) {
 
-        passwordsDB.execSQL("INSERT INTO " + TABLE_NAME + " (name, pass) VALUES ('" +
+        passwordsDB.execSQL("INSERT INTO " + TABLE_MAIN + " (name, pass) VALUES ('" +
                 title + "', '" + password + "');");
     }
 
     public void getEntries() {
         // A Cursor provides read and write access to database results
-        Cursor cursor = passwordsDB.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+        Cursor cursor = passwordsDB.rawQuery("SELECT * FROM " + TABLE_MAIN, null);
 
         // Get the index for the column name provided
         int idColumn = cursor.getColumnIndex("id");
