@@ -19,7 +19,7 @@ public class FetchSupplicant extends ExecuteAsRootBase {
         ArrayList<String> arrayList = new ArrayList<>();
         //copy supplicant to sdcard
         arrayList.add("su -c cp /data/misc/wifi/wpa_supplicant.conf /sdcard/WifiPasswords");
-
+        //TODO change "/data/misc/wifi/wpa_supplicant.conf" to Path variable, changeable through settings
 
         return arrayList;
     }

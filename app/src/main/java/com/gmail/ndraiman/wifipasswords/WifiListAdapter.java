@@ -28,7 +28,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyCust
         this.context = context;
 
         //TODO Delete once SQLite database is implemented
-        listWifi = placeholderData();
+        //listWifi = placeholderData();
     }
 
     @Override

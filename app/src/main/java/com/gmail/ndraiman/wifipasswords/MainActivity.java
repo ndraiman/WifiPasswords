@@ -18,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
@@ -25,14 +26,16 @@ import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
-    private RecyclerView listWifi;
+    private RecyclerView recyclerView;
     private WifiListAdapter listAdapter;
 
     private boolean isDbExists = false;
     SQLiteDatabase passwordsDB = null;
     private final String DB_NAME = "WifiPasswords";
-    private final String TABLE_MAIN = "passwords";
+    private final String TABLE_PASSWORDS = "passwords";
     private final String TABLE_HIDDEN = "hidden"; //will hold hidden passwords?
+
+    private ArrayList<WifiEntry> wifiData = new ArrayList<>();
 
 
     @Override
@@ -44,22 +47,22 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         //getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        listWifi = (RecyclerView) findViewById(R.id.wifiList);
-        listWifi.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView = (RecyclerView) findViewById(R.id.wifiList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         //Setting RecyclerView Design - Divider
         RecyclerView.ItemDecoration itemDecoration = new
                 DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST);
-        listWifi.addItemDecoration(itemDecoration);
+        recyclerView.addItemDecoration(itemDecoration);
 
 
         //Animate addition and removal of items
         //TODO Test to see if this works.
-        listWifi.setItemAnimator(new LandingAnimator());
-        listWifi.getItemAnimator().setAddDuration(1000);
-        listWifi.getItemAnimator().setRemoveDuration(1000);
-        listWifi.getItemAnimator().setMoveDuration(1000);
-        listWifi.getItemAnimator().setChangeDuration(1000);
+        recyclerView.setItemAnimator(new LandingAnimator());
+        recyclerView.getItemAnimator().setAddDuration(1000);
+        recyclerView.getItemAnimator().setRemoveDuration(1000);
+        recyclerView.getItemAnimator().setMoveDuration(1000);
+        recyclerView.getItemAnimator().setChangeDuration(1000);
 
 
         //Setting RecyclerView Adapter
@@ -71,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         ScaleInAnimationAdapter animationAdapter = new ScaleInAnimationAdapter(listAdapter);
         animationAdapter.setDuration(400);
 
-        listWifi.setAdapter(animationAdapter);
+        recyclerView.setAdapter(animationAdapter);
 
         //TODO create SQLite database to hold Wifi Passwords
         //TODO Check if database is empty:
@@ -81,10 +84,21 @@ public class MainActivity extends AppCompatActivity {
         //TODO Refresh database from wpa_supplicant.conf
 
         openOrCreateDatabase();
+        //TODO !!!!! Find out why RecyclerView wont update view after getEntries calls setWifiList which calls notify
+        dataFromFile();
+        getEntries(TABLE_PASSWORDS);
 
-        DataFetcher dataFetcher = new DataFetcher();
-        dataFetcher.execute("");
-        //TODO check dataFetcher was successful - then start reading file.
+        //TODO Handle the following commented lines after fixing recyclerview updating new data
+//        if (passwordsDB != null) {
+//
+//            if (dbIsEmpty(passwordsDB, TABLE_PASSWORDS)) {
+//                dataFromFile();
+//
+//            } else { //db isnt empty
+//                Toast.makeText(this, "onCreate() - DB isnt empty! - loading data from DB", Toast.LENGTH_SHORT).show(); //placeholder
+//                getEntries(TABLE_PASSWORDS);
+//            }
+//        }
     }
 
 
@@ -112,49 +126,37 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        passwordsDB.execSQL("DROP TABLE " + TABLE_PASSWORDS); //TODO Debugging reading file method
         passwordsDB.close();
         super.onDestroy();
     }
 
-    public void dataFromFile() {
-        try {
-            //root
-            Process psProc = Runtime.getRuntime().exec(new String[]{"su", "-c"});
+    public boolean dbIsEmpty(SQLiteDatabase db, String table) {
+        Cursor mCursor = db.rawQuery("SELECT COUNT(*) FROM " + table, null);
 
-            File file = new File(""); //TODO Replace with variable to save path in settings
-            if(!file.canRead()) {
-                Log.e("FILE ERROR", "cannot read file");
+        if (mCursor != null) {
+            mCursor.moveToFirst();
+            int count = mCursor.getInt(0);
+
+            if (count > 0) {
+                return false;
             }
 
-            //FileInputStream inputStream = new FileInputStream(file);
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-            String line = "";
-            String title = "";
-            String password = "";
-            String check = "";
-
-            while((line = bufferedReader.readLine()) != null) {
-                if(line.equals("network={")) {
-                    while(!(line = bufferedReader.readLine()).equals("}")) {
-                        line = bufferedReader.readLine();
-                        title = line.substring(6, line.length() - 1);
-
-                        line = bufferedReader.readLine();
-                        if(!(check = line.substring(0, 3)).equals("psk")) {
-                            break;
-                        }
-                    }
-                }
-            }
-
-
-        } catch (IOException e) {
-            e.printStackTrace();
+            mCursor.close();
         }
+        return true;
+    }
+
+    public void dataFromFile() {
+
+        DataFetcher dataFetcher = new DataFetcher();
+        dataFetcher.execute("");
+
     }
 
     /***********************************************************************/
     // SQLite Methods
+
     /***********************************************************************/
     public void openOrCreateDatabase() {
         try {
@@ -166,7 +168,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            passwordsDB.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_MAIN
+            passwordsDB.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_PASSWORDS
                     + " (id integer primary key, name VARCHAR, pass VARCHAR);");
 
 
@@ -185,15 +187,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void addEntry(String title, String password) {
+    public void addEntry(String table, String title, String password) {
 
-        passwordsDB.execSQL("INSERT INTO " + TABLE_MAIN + " (name, pass) VALUES ('" +
+        passwordsDB.execSQL("INSERT INTO " + table + " (name, pass) VALUES ('" +
                 title + "', '" + password + "');");
     }
 
-    public void getEntries() {
+    public void getEntries(String table) {
         // A Cursor provides read and write access to database results
-        Cursor cursor = passwordsDB.rawQuery("SELECT * FROM " + TABLE_MAIN, null);
+        Cursor cursor = passwordsDB.rawQuery("SELECT * FROM " + table, null);
 
         // Get the index for the column name provided
         int idColumn = cursor.getColumnIndex("id");
@@ -203,19 +205,59 @@ public class MainActivity extends AppCompatActivity {
         cursor.moveToFirst();
 
         //TODO Add each entry to a RecyclerView row
+        if (cursor != null && (cursor.getCount() > 0)) {
+
+            do {
+                // Get the results and store them in a String
+                String id = cursor.getString(idColumn);
+                String name = cursor.getString(nameColumn);
+                String password = cursor.getString(passColumn);
+
+                WifiEntry current = new WifiEntry(id, name, password);
+                wifiData.add(current);
+
+                // Keep getting results as long as they exist
+            } while (cursor.moveToNext());
+
+            //notify our RecyclerView Adapter
+            listAdapter.setWifiList(wifiData); //TODO check if its better to call setWifiList after we add all the entries
+
+            cursor.close();
+
+        } else {
+            Toast.makeText(this, "No Results to Show", Toast.LENGTH_SHORT).show();
+            Log.e("getEntries", "Cursor is null");
+        }
+
+
     }
 
     /***********************************************************************/
     //Copy wpa_supplicant.conf from /data/misc/wifi to sdcard/WifiPasswords
+
     /***********************************************************************/
     public class DataFetcher extends AsyncTask<String, Void, Boolean> {
 
         public DataFetcher() {
-            super();
+
         }
 
         @Override
         protected Boolean doInBackground(String... params) {
+            boolean dirCreated = createDir();
+            if (!dirCreated) {
+                Toast.makeText(getParent(), "Failed to create app directory", Toast.LENGTH_LONG).show();
+                return false;
+            }
+            copyFile();
+            readFile();
+
+            return true;
+        }
+
+
+        private boolean createDir() {
+
             File folder = new File(Environment.getExternalStorageDirectory() + "/WifiPasswords");
             boolean dirCreated = true;
             if (!folder.exists()) {
@@ -226,19 +268,67 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
 
-
-            copyFile();
             return true;
         }
 
-        public void copyFile() {
+        private void copyFile() {
             if (!ExecuteAsRootBase.canRunRootCommands()) {
                 return;
             }
 
-            FetchSupplicant fetchSupplicant = new FetchSupplicant();
-            fetchSupplicant.execute();
+            Log.e("DataFetcher", "Copying File");
+            try {
+                Runtime.getRuntime().exec("su -c cp /data/misc/wifi/wpa_supplicant.conf /sdcard/WifiPasswords");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
+        private void readFile() {
+
+            try {
+
+                File directory = Environment.getExternalStorageDirectory();
+                File file = new File(directory + "/WifiPasswords/wpa_supplicant.conf");
+                if (!file.exists()) {
+                    Log.e("DataFetcher", "readFile - File not found");
+                }
+
+                Log.e("DataFetcher", "Starting to read");
+
+                BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+                String line = "";
+                String title = "";
+                String password = "";
+                String check = "";
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    if (line.equals("network={")) {
+
+                        line = bufferedReader.readLine();
+                        title = line.substring(7, line.length() - 1);
+
+                        line = bufferedReader.readLine();
+
+                        //Log.i("DataFetcher", title + " " + line.substring(6, line.length() - 1));
+                        //Log.i("DataFetcher", title + " " + line.substring(1, 4));
+
+                        if ((line.substring(1, 4)).equals("psk")) {
+                            password = line.substring(6, line.length() - 1);
+                        } else {
+                            password = "no password";
+                        }
+
+                        Log.e("DataFetcher", title + " " + password);
+
+                        addEntry(TABLE_PASSWORDS, title, password);
+                    }
+                }
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
