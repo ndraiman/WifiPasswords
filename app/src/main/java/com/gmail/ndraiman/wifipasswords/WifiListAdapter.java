@@ -19,21 +19,19 @@ import jp.wasabeef.recyclerview.animators.holder.AnimateViewHolder;
  */
 public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyCustomViewHolder> {
 
-    private Context context;
     private LayoutInflater layoutInflater;
     private List<WifiEntry> listWifi = new ArrayList<>();
 
     public WifiListAdapter(Context context) {
         layoutInflater = LayoutInflater.from(context);
-        this.context = context;
 
         //TODO Delete once SQLite database is implemented
         //listWifi = placeholderData();
     }
 
     @Override
-    public MyCustomViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = layoutInflater.inflate(R.layout.custom_wifi_entry, viewGroup, false);
+    public MyCustomViewHolder onCreateViewHolder(ViewGroup parent, int i) {
+        View view = layoutInflater.inflate(R.layout.custom_wifi_entry, parent, false);
         MyCustomViewHolder viewHolder = new MyCustomViewHolder(view);
 
         return viewHolder;
@@ -55,7 +53,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyCust
 
     public void setWifiList(ArrayList<WifiEntry> listWifi) {
         this.listWifi = listWifi;
-        notifyItemRangeChanged(0, listWifi.size());
+        this.notifyItemRangeChanged(0, listWifi.size());
     }
 
     //TODO Delete the non-used ViewHolder

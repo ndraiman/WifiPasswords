@@ -12,9 +12,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -28,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private RecyclerView recyclerView;
     private WifiListAdapter listAdapter;
+    private TextView textNoData;
 
     private boolean isDbExists = false;
     SQLiteDatabase passwordsDB = null;
@@ -36,6 +41,10 @@ public class MainActivity extends AppCompatActivity {
     private final String TABLE_HIDDEN = "hidden"; //will hold hidden passwords?
 
     private ArrayList<WifiEntry> wifiData = new ArrayList<>();
+
+    //TODO possible way to solve layout draw issue - check if app running for first time.
+    //is this App being started for the very first time?
+    private boolean mFromSavedInstanceState;
 
 
     @Override
@@ -46,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         //getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        textNoData = (TextView) findViewById(R.id.text_no_data);
 
         recyclerView = (RecyclerView) findViewById(R.id.wifiList);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -76,31 +87,25 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView.setAdapter(animationAdapter);
 
-        //TODO create SQLite database to hold Wifi Passwords
-        //TODO Check if database is empty:
-        //TODO  if yes, load from wpa_supplicant.conf
-        //TODO  if no, load from database
-
-        //TODO Refresh database from wpa_supplicant.conf
-
+        //open or create tables.
         openOrCreateDatabase();
-        //TODO !!!!! Find out why RecyclerView wont update view after getEntries calls setWifiList which calls notify
-        dataFromFile();
-        getEntries(TABLE_PASSWORDS);
 
-        //TODO Handle the following commented lines after fixing recyclerview updating new data
-//        if (passwordsDB != null) {
-//
-//            if (dbIsEmpty(passwordsDB, TABLE_PASSWORDS)) {
-//                dataFromFile();
-//
-//            } else { //db isnt empty
-//                Toast.makeText(this, "onCreate() - DB isnt empty! - loading data from DB", Toast.LENGTH_SHORT).show(); //placeholder
-//                getEntries(TABLE_PASSWORDS);
-//            }
-//        }
+        //getEntries will remove textNoData from layout (GONE)
+        textNoData.setText("Retrieving Data...");
+
+        if (passwordsDB != null) {
+
+            if (dbIsEmpty(passwordsDB, TABLE_PASSWORDS)) {
+                //TODO leave commented until drawing issue is solved (StackOverflow)
+                //dataFromFile(); //onPostExecute calls getEntries()
+
+            } else {
+                Log.e("onCreate", "DB isnt empty! - loading data from DB");
+                getEntries(TABLE_PASSWORDS);
+            }
+        }
     }
-
+    //TODO Implement "Hidden" table.
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -119,6 +124,10 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+
+        } else if (id == R.id.action_refresh_from_file) {
+            dataFromFile();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -126,10 +135,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        Toast.makeText(this, "Destroying Database", Toast.LENGTH_SHORT).show();
         passwordsDB.execSQL("DROP TABLE " + TABLE_PASSWORDS); //TODO Debugging reading file method
         passwordsDB.close();
         super.onDestroy();
     }
+
 
     public boolean dbIsEmpty(SQLiteDatabase db, String table) {
         Cursor mCursor = db.rawQuery("SELECT COUNT(*) FROM " + table, null);
@@ -174,10 +185,10 @@ public class MainActivity extends AppCompatActivity {
 
             //File database = getApplicationContext().getDatabasePath("WifiPasswords.db");
             if (passwordsDB.isOpen()) { //database.exists()
-                Toast.makeText(this, "Database created successfully", Toast.LENGTH_SHORT).show();
+                Log.e("SQLite DB", "Database created successfully");
                 isDbExists = true;
             } else {
-                Toast.makeText(this, "Error creating Database", Toast.LENGTH_SHORT).show();
+                Log.e("SQLite DB", "Error creating Database");
                 isDbExists = false;
             }
 
@@ -204,8 +215,8 @@ public class MainActivity extends AppCompatActivity {
 
         cursor.moveToFirst();
 
-        //TODO Add each entry to a RecyclerView row
         if (cursor != null && (cursor.getCount() > 0)) {
+            textNoData.setVisibility(View.GONE);
 
             do {
                 // Get the results and store them in a String
@@ -219,8 +230,8 @@ public class MainActivity extends AppCompatActivity {
                 // Keep getting results as long as they exist
             } while (cursor.moveToNext());
 
-            //notify our RecyclerView Adapter
-            listAdapter.setWifiList(wifiData); //TODO check if its better to call setWifiList after we add all the entries
+            //notify RecyclerView Adapter
+            listAdapter.setWifiList(wifiData);
 
             cursor.close();
 
@@ -229,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
             Log.e("getEntries", "Cursor is null");
         }
 
-
+        Log.i("getEntries", "getEntries finished");
     }
 
     /***********************************************************************/
@@ -243,21 +254,43 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            if(!canRunRootCommands()) {
+                Log.e("DataFetcher", "No Root Access");
+                cancel(true);
+            }
+        }
+
+        @Override
         protected Boolean doInBackground(String... params) {
             boolean dirCreated = createDir();
             if (!dirCreated) {
-                Toast.makeText(getParent(), "Failed to create app directory", Toast.LENGTH_LONG).show();
+                Log.e("DataFetcher", "Failed to create app directory");
                 return false;
             }
             copyFile();
-            readFile();
 
-            return true;
+            return readFile();
         }
 
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            getEntries(TABLE_PASSWORDS);
+        }
 
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
+            textNoData.setText("No Root Access");
+        }
+
+        /**************
+         * Helper Methods
+         ********************/
         private boolean createDir() {
-
+            Log.e("DataFetcher", "Creating Dir");
             File folder = new File(Environment.getExternalStorageDirectory() + "/WifiPasswords");
             boolean dirCreated = true;
             if (!folder.exists()) {
@@ -278,20 +311,24 @@ public class MainActivity extends AppCompatActivity {
 
             Log.e("DataFetcher", "Copying File");
             try {
-                Runtime.getRuntime().exec("su -c cp /data/misc/wifi/wpa_supplicant.conf /sdcard/WifiPasswords");
-            } catch (IOException e) {
+                Process suProcess = Runtime.getRuntime().exec("su -c cp /data/misc/wifi/wpa_supplicant.conf /sdcard/WifiPasswords");
+                suProcess.waitFor(); //wait for SU command to finish
+            } catch (IOException | InterruptedException e) {
+                Log.e("DataFetcher", "copyFile Error: " + e.getClass().getName() + " " + e);
                 e.printStackTrace();
             }
         }
 
-        private void readFile() {
+        private boolean readFile() {
 
             try {
 
                 File directory = Environment.getExternalStorageDirectory();
                 File file = new File(directory + "/WifiPasswords/wpa_supplicant.conf");
+
                 if (!file.exists()) {
                     Log.e("DataFetcher", "readFile - File not found");
+                    return false;
                 }
 
                 Log.e("DataFetcher", "Starting to read");
@@ -328,7 +365,62 @@ public class MainActivity extends AppCompatActivity {
 
             } catch (IOException e) {
                 e.printStackTrace();
+                return false;
             }
+
+            return true;
+        }
+
+        /***********************************************************************/
+        //Root Check method
+        //Credit: http://muzikant-android.blogspot.co.il/2011/02/how-to-get-root-access-and-execute.html
+
+        /***********************************************************************/
+        private boolean canRunRootCommands() {
+            boolean retval = false;
+            Process suProcess;
+
+            try {
+                suProcess = Runtime.getRuntime().exec("su");
+
+                DataOutputStream os = new DataOutputStream(suProcess.getOutputStream());
+                DataInputStream osRes = new DataInputStream(suProcess.getInputStream());
+
+                if (null != os && null != osRes) {
+                    // Getting the id of the current user to check if this is root
+                    os.writeBytes("id\n");
+                    os.flush();
+
+                    String currUid = osRes.readLine();
+                    boolean exitSu = false;
+                    if (null == currUid) {
+                        retval = false;
+                        exitSu = false;
+                        Log.d("ROOT", "Can't get root access or denied by user");
+                    } else if (true == currUid.contains("uid=0")) {
+                        retval = true;
+                        exitSu = true;
+                        Log.d("ROOT", "Root access granted");
+                    } else {
+                        retval = false;
+                        exitSu = true;
+                        Log.d("ROOT", "Root access rejected: " + currUid);
+                    }
+
+                    if (exitSu) {
+                        os.writeBytes("exit\n");
+                        os.flush();
+                    }
+                }
+            } catch (Exception e) {
+                // Can't get root !
+                // Probably broken pipe exception on trying to write to output stream (os) after su failed, meaning that the device is not rooted
+
+                retval = false;
+                Log.d("ROOT", "Root access rejected [" + e.getClass().getName() + "] : " + e.getMessage());
+            }
+
+            return retval;
         }
     }
 

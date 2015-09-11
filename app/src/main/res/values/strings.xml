@@ -4,7 +4,11 @@
 
     <!-- Settings Menu -->
     <string name="action_settings">Settings</string>
+    <string name="action_refresh_from_file">Refresh From File</string>
+
+
     <string name="text_placeholder">NA</string>
+    <string name="text_no_data">No Data Found</string>
 
 
 </resources>

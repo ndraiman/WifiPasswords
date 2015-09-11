@@ -2,13 +2,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
     <include
         android:id="@+id/app_bar"
         layout="@layout/app_bar" />
 
+    <TextView
+        android:id="@+id/text_no_data"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textSize="36sp"
+        android:text="@string/text_no_data"
+        android:visibility="visible"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/wifiList"
