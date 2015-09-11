@@ -87,6 +87,24 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView.setAdapter(animationAdapter);
 
+        //Setting RecyclerTouchListener
+        recyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, recyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Toast.makeText(MainActivity.this, "onClick " + position, Toast.LENGTH_SHORT).show();  //placeholder
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+                Toast.makeText(MainActivity.this, "onLongClick " + position, Toast.LENGTH_SHORT).show(); //placeholder
+                //TODO open overlay fragment with options:
+                //copy title & pass
+                //copy title
+                //copy pass
+                //hide
+            }
+        }));
+
         //open or create tables.
         openOrCreateDatabase();
 
@@ -96,11 +114,10 @@ public class MainActivity extends AppCompatActivity {
         if (passwordsDB != null) {
 
             if (dbIsEmpty(passwordsDB, TABLE_PASSWORDS)) {
-                //TODO leave commented until drawing issue is solved (StackOverflow)
-                //dataFromFile(); //onPostExecute calls getEntries()
+                dataFromFile(); //onPostExecute calls getEntries()
 
             } else {
-                Log.e("onCreate", "DB isnt empty! - loading data from DB");
+                Log.d("onCreate", "DB isnt empty! - loading data from DB");
                 getEntries(TABLE_PASSWORDS);
             }
         }
@@ -185,10 +202,10 @@ public class MainActivity extends AppCompatActivity {
 
             //File database = getApplicationContext().getDatabasePath("WifiPasswords.db");
             if (passwordsDB.isOpen()) { //database.exists()
-                Log.e("SQLite DB", "Database created successfully");
+                Log.d("SQLite DB", "Database created successfully");
                 isDbExists = true;
             } else {
-                Log.e("SQLite DB", "Error creating Database");
+                Log.d("SQLite DB", "Error creating Database");
                 isDbExists = false;
             }
 
@@ -240,7 +257,7 @@ public class MainActivity extends AppCompatActivity {
             Log.e("getEntries", "Cursor is null");
         }
 
-        Log.i("getEntries", "getEntries finished");
+        Log.d("getEntries", "getEntries finished");
     }
 
     /***********************************************************************/
