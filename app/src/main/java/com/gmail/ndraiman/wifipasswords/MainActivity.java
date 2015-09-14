@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private RecyclerView recyclerView;
     private WifiListAdapter listAdapter;
-    private TextView textNoData;
+    public static TextView textNoData;
 
     private boolean isDbExists = false;
     SQLiteDatabase passwordsDB = null;
@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         openOrCreateDatabase();
 
         //getEntries will remove textNoData from layout (GONE)
-        textNoData.setText("Retrieving Data...");
+        textNoData.setText("Getting Root Permission...");
 
         if (passwordsDB != null) {
 
@@ -177,11 +177,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void dataFromFile() {
 
-        DataFetcher dataFetcher = new DataFetcher();
-        dataFetcher.execute("");
+        new DataFetcher().execute("");
 
     }
 
+    //TODO move to SQLite Helper class
     /***********************************************************************/
     // SQLite Methods
 
@@ -270,17 +270,16 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+
         @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
+        protected Boolean doInBackground(String... params) {
             if(!canRunRootCommands()) {
                 Log.e("DataFetcher", "No Root Access");
                 cancel(true);
             }
-        }
 
-        @Override
-        protected Boolean doInBackground(String... params) {
+
+
             boolean dirCreated = createDir();
             if (!dirCreated) {
                 Log.e("DataFetcher", "Failed to create app directory");
