@@ -1,4 +1,4 @@
-package com.gmail.ndraiman.wifipasswords;
+package com.gmail.ndraiman.wifipasswords.recycler;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;

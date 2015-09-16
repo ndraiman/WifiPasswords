@@ -11,15 +11,14 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.gmail.ndraiman.wifipasswords.DividerItemDecoration;
 import com.gmail.ndraiman.wifipasswords.R;
-import com.gmail.ndraiman.wifipasswords.RecyclerTouchListener;
-import com.gmail.ndraiman.wifipasswords.WifiListAdapter;
 import com.gmail.ndraiman.wifipasswords.extras.L;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
 import com.gmail.ndraiman.wifipasswords.extras.TaskLoadWifiEntries;
 import com.gmail.ndraiman.wifipasswords.extras.WifiListLoadedListener;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
+import com.gmail.ndraiman.wifipasswords.recycler.RecyclerTouchListener;
+import com.gmail.ndraiman.wifipasswords.recycler.WifiListAdapter;
 
 import java.util.ArrayList;
 
@@ -53,30 +52,14 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
         mRecyclerView = (RecyclerView) findViewById(R.id.wifiList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        //TODO implement in a different way
         //Setting RecyclerView Design - Divider
-        RecyclerView.ItemDecoration itemDecoration = new
-                DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST);
-        mRecyclerView.addItemDecoration(itemDecoration);
-
-
-        //Animate addition and removal of items
-        //TODO Test to see if this works.
-//        mRecyclerView.setItemAnimator(new LandingAnimator());
-//        mRecyclerView.getItemAnimator().setAddDuration(1000);
-//        mRecyclerView.getItemAnimator().setRemoveDuration(1000);
-//        mRecyclerView.getItemAnimator().setMoveDuration(1000);
-//        mRecyclerView.getItemAnimator().setChangeDuration(1000);
-
+//        RecyclerView.ItemDecoration itemDecoration = new
+//                DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST);
+//        mRecyclerView.addItemDecoration(itemDecoration);
 
         //Setting RecyclerView Adapter
         mAdapter = new WifiListAdapter(this);
-
-        //Appearance animations for items in RecyclerView.Adapter
-        //TODO why doesnt animate recycled items
-        //TODO add appropriate line in Gradle build (check github)
-//        ScaleInAnimationAdapter animationAdapter = new ScaleInAnimationAdapter(mAdapter);
-//        animationAdapter.setDuration(400);
-
         mRecyclerView.setAdapter(mAdapter);
 
         //Setting RecyclerTouchListener

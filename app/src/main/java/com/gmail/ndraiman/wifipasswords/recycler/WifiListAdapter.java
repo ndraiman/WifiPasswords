@@ -1,4 +1,4 @@
-package com.gmail.ndraiman.wifipasswords;
+package com.gmail.ndraiman.wifipasswords.recycler;
 
 import android.content.Context;
 import android.support.v4.view.ViewCompat;
@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.gmail.ndraiman.wifipasswords.R;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
 
 import java.util.ArrayList;
@@ -17,43 +18,53 @@ import java.util.List;
 import jp.wasabeef.recyclerview.animators.holder.AnimateViewHolder;
 
 
-public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyCustomViewHolder> {
+public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyViewHolder> {
 
     private LayoutInflater layoutInflater;
-    private List<WifiEntry> listWifi = new ArrayList<>();
+    private List<WifiEntry> mListWifi = new ArrayList<>();
+    private int mPreviousPosition = 0;
 
     public WifiListAdapter(Context context) {
         layoutInflater = LayoutInflater.from(context);
 
         //TODO Delete once SQLite database is implemented
-        //listWifi = placeholderData();
+        //mListWifi = placeholderData();
     }
 
     @Override
-    public MyCustomViewHolder onCreateViewHolder(ViewGroup parent, int i) {
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int i) {
         View view = layoutInflater.inflate(R.layout.custom_wifi_entry, parent, false);
-        MyCustomViewHolder viewHolder = new MyCustomViewHolder(view);
+        MyViewHolder viewHolder = new MyViewHolder(view);
 
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(MyCustomViewHolder holder, int position) {
-        WifiEntry currentEntry = listWifi.get(position);
+    public void onBindViewHolder(MyViewHolder holder, int position) {
+        WifiEntry currentEntry = mListWifi.get(position);
         holder.wifiTitle.setText(currentEntry.getTitle());
         holder.wifiPassword.setText(currentEntry.getPassword());
+
+        //Set Animation
+        if (position > mPreviousPosition) {
+            AnimationUtils.animateSunblind(holder, true);
+
+        } else {
+            AnimationUtils.animateSunblind(holder, false);
+        }
+        mPreviousPosition = position;
 
     }
 
     @Override
     public int getItemCount() {
-        return listWifi.size();
+        return mListWifi.size();
     }
 
 
     public void setWifiList(ArrayList<WifiEntry> listWifi) {
-        this.listWifi = listWifi;
-        this.notifyItemRangeChanged(0, listWifi.size());
+        mListWifi = listWifi;
+        notifyItemRangeChanged(0, listWifi.size());
     }
 
     //TODO Delete the non-used ViewHolder
