@@ -43,13 +43,13 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_coordinator);
 
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
         //getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        textNoData = (TextView) findViewById(R.id.text_no_data);
+        //textNoData = (TextView) findViewById(R.id.text_no_data);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeWifiList);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
 
 
         //getEntries will remove textNoData from layout (GONE)
-        textNoData.setText("Getting Root Permission...");
+        //textNoData.setText("Getting Root Permission...");
 
         if (savedInstanceState != null) {
             L.m("extracting mListWifi from Parcelable");
