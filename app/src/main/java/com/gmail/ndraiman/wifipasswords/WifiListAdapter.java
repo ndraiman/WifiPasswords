@@ -16,9 +16,7 @@ import java.util.List;
 
 import jp.wasabeef.recyclerview.animators.holder.AnimateViewHolder;
 
-/**
- * Created by ND88 on 09/09/2015.
- */
+
 public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyCustomViewHolder> {
 
     private LayoutInflater layoutInflater;

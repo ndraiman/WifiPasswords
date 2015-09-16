@@ -15,11 +15,10 @@ public class WifiEntry implements Parcelable {
 
     public WifiEntry() {}
 
-//    public WifiEntry(String title, String password) {
-//        this.title = title;
-//        this.password = password;
-//    }
-
+    public WifiEntry(String title, String password) {
+        this.title = title;
+        this.password = password;
+    }
 
 
     public String getTitle() {
@@ -38,6 +37,10 @@ public class WifiEntry implements Parcelable {
         this.password = password;
     }
 
+    @Override
+    public String toString() {
+        return "Wifi: " + title + ", pass: " + password + "\n";
+    }
 
     /************************************************************/
     //Parcelable Implementation

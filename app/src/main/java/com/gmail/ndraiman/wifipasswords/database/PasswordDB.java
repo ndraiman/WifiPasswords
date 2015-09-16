@@ -25,10 +25,10 @@ public class PasswordDB {
 
     }
 
-    public void insertWifiEntry(ArrayList<WifiEntry> listWifi, boolean isHidden) {
+    public void insertWifiEntries(ArrayList<WifiEntry> listWifi, boolean isHidden) {
 
         String table = isHidden ? PasswordHelper.TABLE_PASSWORDS_HIDDEN : PasswordHelper.TABLE_PASSWORDS_MAIN;
-        L.m("insertWifiEntry - isHidden=" + isHidden + " table=" + table);
+        L.m("insertWifiEntries - isHidden=" + isHidden + " table=" + table);
 
         //create a sql prepared statement
         String sql = "INSERT INTO " + table + " VALUES (?,?,?);";
