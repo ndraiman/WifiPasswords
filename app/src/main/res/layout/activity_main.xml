@@ -9,18 +9,25 @@
         android:id="@+id/app_bar"
         layout="@layout/app_bar" />
 
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeWifiList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/wifiList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
+
     <TextView
         android:id="@+id/text_no_data"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:textSize="36sp"
         android:text="@string/text_no_data"
-        android:visibility="visible"/>
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/wifiList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:textSize="36sp"
+        android:visibility="gone" />
 
 </LinearLayout>

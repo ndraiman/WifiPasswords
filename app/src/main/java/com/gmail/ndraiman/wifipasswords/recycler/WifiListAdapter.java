@@ -60,7 +60,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
 
     public void setWifiList(ArrayList<WifiEntry> listWifi) {
         mListWifi = listWifi;
-        notifyItemRangeChanged(0, listWifi.size());
+        notifyDataSetChanged();
     }
 
     //TODO Delete the non-used ViewHolder

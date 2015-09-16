@@ -1,6 +1,7 @@
 package com.gmail.ndraiman.wifipasswords.activities;
 
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -22,13 +23,14 @@ import com.gmail.ndraiman.wifipasswords.recycler.WifiListAdapter;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements WifiListLoadedListener {
+public class MainActivity extends AppCompatActivity implements WifiListLoadedListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String STATE_WIFI_ENTRIES = "state_wifi_entries";
     private Toolbar toolbar;
     private RecyclerView mRecyclerView;
     private WifiListAdapter mAdapter;
     private ArrayList<WifiEntry> mListWifi = new ArrayList<>();
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public static TextView textNoData; //TODO implement in a different way
 
@@ -48,6 +50,10 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
         //getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         textNoData = (TextView) findViewById(R.id.text_no_data);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeWifiList);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.wifiList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -83,22 +89,32 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
 
         //getEntries will remove textNoData from layout (GONE)
         textNoData.setText("Getting Root Permission...");
-        textNoData.setVisibility(View.GONE);
 
         if (savedInstanceState != null) {
+            L.m("extracting mListWifi from Parcelable");
             //if this fragment starts after a rotation or configuration change, load the existing movies from a parcelable
             mListWifi = savedInstanceState.getParcelableArrayList(STATE_WIFI_ENTRIES);
+
         } else {
             //if this fragment starts for the first time, load the list of movies from a database
             mListWifi = MyApplication.getWritableDatabase().getAllWifiEntries(false);
             //if the database is empty, trigger an AsycnTask to download movie list from the web
             if (mListWifi.isEmpty()) {
-                L.m("FragmentBoxOffice: executing task from fragment");
+                L.m("executing task from onCreate");
                 new TaskLoadWifiEntries(this).execute();
             }
         }
+
+        mAdapter.setWifiList(mListWifi);
     }
     //TODO Implement "Hidden" table.
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //save the wifi list to a parcelable prior to rotation or configuration change
+        outState.putParcelableArrayList(STATE_WIFI_ENTRIES, mListWifi);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -135,14 +151,20 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
 
     @Override
     public void onWifiListLoaded(ArrayList<WifiEntry> listWifi) {
+
+        if (mSwipeRefreshLayout.isRefreshing()) {
+            mSwipeRefreshLayout.setRefreshing(false);
+        }
+
         L.m("onWifiListLoaded");
         mAdapter.setWifiList(listWifi);
     }
 
+    //Swipe to Refresh
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        //save the wifi list to a parcelable prior to rotation or configuration change
-        outState.putParcelableArrayList(STATE_WIFI_ENTRIES, mListWifi);
+    public void onRefresh() {
+        L.t(this, "onRefresh");
+        //load the whole feed again on refresh.
+        new TaskLoadWifiEntries(this).execute();
     }
 }

@@ -9,6 +9,18 @@ import com.gmail.ndraiman.wifipasswords.extras.L;
  * Created by ND88 on 09/09/2015.
  */
 public class WifiEntry implements Parcelable {
+    public static final Parcelable.Creator<WifiEntry> CREATOR = new Parcelable.Creator<WifiEntry>() {
+        @Override
+        public WifiEntry createFromParcel(Parcel in) {
+            L.m("create from parcel :WifiEntry");
+            return new WifiEntry(in);
+        }
+
+        @Override
+        public WifiEntry[] newArray(int size) {
+            return new WifiEntry[size];
+        }
+    };
 
     private String title;
     private String password;
@@ -45,18 +57,7 @@ public class WifiEntry implements Parcelable {
     /************************************************************/
     //Parcelable Implementation
 
-    public static final Creator<WifiEntry> CREATOR = new Creator<WifiEntry>() {
-        @Override
-        public WifiEntry createFromParcel(Parcel in) {
-            L.m("create from parcel :WifiEntry");
-            return new WifiEntry(in);
-        }
 
-        @Override
-        public WifiEntry[] newArray(int size) {
-            return new WifiEntry[size];
-        }
-    };
 
     //Parcel Constructor
     protected WifiEntry(Parcel in) {
@@ -72,6 +73,7 @@ public class WifiEntry implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        L.m("writeToParcel WifiEntry");
         dest.writeString(title);
         dest.writeString(password);
     }
