@@ -11,7 +11,7 @@ import android.view.View;
 /*****************************************************************************************/
 /****************** Implement Clicks & Gesture for RecycleView ***************************/
 /*****************************************************************************************/
-class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
+public class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
 
     private GestureDetector gestureDetector;
     private ClickListener clickListener;

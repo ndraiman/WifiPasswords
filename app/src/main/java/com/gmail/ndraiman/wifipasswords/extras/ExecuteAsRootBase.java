@@ -1,4 +1,4 @@
-package com.gmail.ndraiman.wifipasswords;
+package com.gmail.ndraiman.wifipasswords.extras;
 
 import android.util.Log;
 

@@ -1,4 +1,4 @@
-package com.gmail.ndraiman.wifipasswords;
+package com.gmail.ndraiman.wifipasswords.activities;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,6 +16,15 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gmail.ndraiman.wifipasswords.DividerItemDecoration;
+import com.gmail.ndraiman.wifipasswords.database.PasswordDB;
+import com.gmail.ndraiman.wifipasswords.extras.ExecuteAsRootBase;
+import com.gmail.ndraiman.wifipasswords.R;
+import com.gmail.ndraiman.wifipasswords.RecyclerTouchListener;
+import com.gmail.ndraiman.wifipasswords.extras.L;
+import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
+import com.gmail.ndraiman.wifipasswords.WifiListAdapter;
+
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -29,20 +38,14 @@ import jp.wasabeef.recyclerview.animators.adapters.ScaleInAnimationAdapter;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String STATE_WIFI_ENTRIES = "state_wifi_entries";
     private Toolbar toolbar;
     private RecyclerView recyclerView;
     private WifiListAdapter listAdapter;
-    public static TextView textNoData;
+    private PasswordDB mDatabase;
+    private static TextView textNoData; //TODO implement in a different way
+    private ArrayList<WifiEntry> mListWifi = new ArrayList<>();
 
-    private boolean isDbExists = false;
-    SQLiteDatabase passwordsDB = null;
-    private final String DB_NAME = "WifiPasswords";
-    private final String TABLE_PASSWORDS = "passwords";
-    private final String TABLE_HIDDEN = "hidden"; //will hold hidden passwords?
-
-    private ArrayList<WifiEntry> wifiData = new ArrayList<>();
-
-    //TODO possible way to solve layout draw issue - check if app running for first time.
     //is this App being started for the very first time?
     private boolean mFromSavedInstanceState;
 
@@ -105,20 +108,23 @@ public class MainActivity extends AppCompatActivity {
             }
         }));
 
-        //open or create tables.
-        openOrCreateDatabase();
+        if(mDatabase == null) {
+            mDatabase = new PasswordDB(this);
+        }
 
         //getEntries will remove textNoData from layout (GONE)
         textNoData.setText("Getting Root Permission...");
 
-        if (passwordsDB != null) {
-
-            if (dbIsEmpty(passwordsDB, TABLE_PASSWORDS)) {
-                dataFromFile(); //onPostExecute calls getEntries()
-
-            } else {
-                Log.d("onCreate", "DB isnt empty! - loading data from DB");
-                getEntries(TABLE_PASSWORDS);
+        if (savedInstanceState != null) {
+            //if this fragment starts after a rotation or configuration change, load the existing movies from a parcelable
+            mListWifi = savedInstanceState.getParcelableArrayList(STATE_WIFI_ENTRIES);
+        } else {
+            //if this fragment starts for the first time, load the list of movies from a database
+            mListWifi = mDatabase.getAllWifiEntries(false);
+            //if the database is empty, trigger an AsycnTask to download movie list from the web
+            if (mListWifi.isEmpty()) {
+                L.m("FragmentBoxOffice: executing task from fragment");
+                new TaskLoadWifiEntries(this).execute();
             }
         }
     }
@@ -152,112 +158,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        Toast.makeText(this, "Destroying Database", Toast.LENGTH_SHORT).show();
-        passwordsDB.execSQL("DROP TABLE " + TABLE_PASSWORDS); //TODO Debugging reading file method
-        passwordsDB.close();
+        L.T(this, "Destroying Database");
+        mDatabase.deleteAll(false);
         super.onDestroy();
     }
 
-
-    public boolean dbIsEmpty(SQLiteDatabase db, String table) {
-        Cursor mCursor = db.rawQuery("SELECT COUNT(*) FROM " + table, null);
-
-        if (mCursor != null) {
-            mCursor.moveToFirst();
-            int count = mCursor.getInt(0);
-
-            if (count > 0) {
-                return false;
-            }
-
-            mCursor.close();
-        }
-        return true;
-    }
 
     public void dataFromFile() {
 
         new DataFetcher().execute("");
 
-    }
-
-    //TODO move to SQLite Helper class
-    /***********************************************************************/
-    // SQLite Methods
-
-    /***********************************************************************/
-    public void openOrCreateDatabase() {
-        try {
-            passwordsDB = this.openOrCreateDatabase(DB_NAME, MODE_PRIVATE, null);
-            if (isDbExists) {
-                if (passwordsDB.isOpen()) {
-                    Toast.makeText(this, "Database Opened", Toast.LENGTH_SHORT).show();
-                }
-                return;
-            }
-
-            passwordsDB.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_PASSWORDS
-                    + " (id integer primary key, name VARCHAR, pass VARCHAR);");
-
-
-            //File database = getApplicationContext().getDatabasePath("WifiPasswords.db");
-            if (passwordsDB.isOpen()) { //database.exists()
-                Log.d("SQLite DB", "Database created successfully");
-                isDbExists = true;
-            } else {
-                Log.d("SQLite DB", "Error creating Database");
-                isDbExists = false;
-            }
-
-        } catch (Exception e) {
-            Log.e("SQLite DB", "SQLite createDatabase() exception" + e);
-            e.printStackTrace();
-        }
-    }
-
-    public void addEntry(String table, String title, String password) {
-
-        passwordsDB.execSQL("INSERT INTO " + table + " (name, pass) VALUES ('" +
-                title + "', '" + password + "');");
-    }
-
-    public void getEntries(String table) {
-        // A Cursor provides read and write access to database results
-        Cursor cursor = passwordsDB.rawQuery("SELECT * FROM " + table, null);
-
-        // Get the index for the column name provided
-        int idColumn = cursor.getColumnIndex("id");
-        int nameColumn = cursor.getColumnIndex("name");
-        int passColumn = cursor.getColumnIndex("pass");
-
-        cursor.moveToFirst();
-
-        if (cursor != null && (cursor.getCount() > 0)) {
-            textNoData.setVisibility(View.GONE);
-
-            do {
-                // Get the results and store them in a String
-                String id = cursor.getString(idColumn);
-                String name = cursor.getString(nameColumn);
-                String password = cursor.getString(passColumn);
-
-                WifiEntry current = new WifiEntry(id, name, password);
-                wifiData.add(current);
-
-                // Keep getting results as long as they exist
-            } while (cursor.moveToNext());
-
-            //notify RecyclerView Adapter
-            listAdapter.setWifiList(wifiData);
-
-            cursor.close();
-
-        } else {
-            Toast.makeText(this, "No Results to Show", Toast.LENGTH_SHORT).show();
-            Log.e("getEntries", "Cursor is null");
-        }
-
-        Log.d("getEntries", "getEntries finished");
     }
 
     /***********************************************************************/
@@ -293,7 +203,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Boolean aBoolean) {
             super.onPostExecute(aBoolean);
-            getEntries(TABLE_PASSWORDS);
+            //getEntries(TABLE_PASSWORDS);
         }
 
         @Override
