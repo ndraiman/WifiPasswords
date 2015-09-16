@@ -29,7 +29,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int i) {
-        View view = layoutInflater.inflate(R.layout.custom_wifi_entry, parent, false);
+        View view = layoutInflater.inflate(R.layout.wifi_entry_row, parent, false);
         MyViewHolder viewHolder = new MyViewHolder(view);
 
         return viewHolder;
@@ -43,10 +43,10 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
 
         //Set Animation
         if (position > mPreviousPosition) {
-            AnimationUtils.animateSunblind(holder, true);
+            AnimationUtils.translateY(holder, true);
 
         } else {
-            AnimationUtils.animateSunblind(holder, false);
+            AnimationUtils.translateY(holder, false);
         }
         mPreviousPosition = position;
 
