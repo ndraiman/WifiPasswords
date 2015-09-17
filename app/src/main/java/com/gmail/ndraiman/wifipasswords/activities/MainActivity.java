@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,8 +32,9 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
     private WifiListAdapter mAdapter;
     private ArrayList<WifiEntry> mListWifi = new ArrayList<>();
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    public static TextView textNoRoot;
+    public static ProgressBar mProgressBar;
 
-    public static TextView textNoData; //TODO implement in a different way
 
     //is this App being started for the very first time?
     private boolean mFromSavedInstanceState;
@@ -49,26 +51,22 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
         setSupportActionBar(toolbar);
         //getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        //textNoData = (TextView) findViewById(R.id.text_no_data);
+        textNoRoot = (TextView) findViewById(R.id.text_no_root);
+//        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
+//        mProgressBar.setVisibility(View.VISIBLE);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeWifiList);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
+
+        //Setup RecyclerView & Adapter
         mRecyclerView = (RecyclerView) findViewById(R.id.wifiList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-        //TODO implement in a different way
-        //Setting RecyclerView Design - Divider
-//        RecyclerView.ItemDecoration itemDecoration = new
-//                DividerItemDecoration(this, DividerItemDecoration.VERTICAL_LIST);
-//        mRecyclerView.addItemDecoration(itemDecoration);
-
-        //Setting RecyclerView Adapter
         mAdapter = new WifiListAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
 
-        //Setting RecyclerTouchListener
+        //Setup RecyclerTouchListener
         mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, mRecyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
@@ -87,18 +85,15 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
         }));
 
 
-        //getEntries will remove textNoData from layout (GONE)
-        //textNoData.setText("Getting Root Permission...");
-
         if (savedInstanceState != null) {
             L.m("extracting mListWifi from Parcelable");
-            //if this fragment starts after a rotation or configuration change, load the existing movies from a parcelable
+            //if this fragment starts after a rotation or configuration change, load the existing Wifi list from a parcelable
             mListWifi = savedInstanceState.getParcelableArrayList(STATE_WIFI_ENTRIES);
 
         } else {
-            //if this fragment starts for the first time, load the list of movies from a database
+            //if this fragment starts for the first time, load the list of wifi from a database
             mListWifi = MyApplication.getWritableDatabase().getAllWifiEntries(false);
-            //if the database is empty, trigger an AsycnTask to download movie list from the web
+            //if the database is empty, trigger an AsyncTask to get wifi list from the wpa_supplicant
             if (mListWifi.isEmpty()) {
                 L.m("executing task from onCreate");
                 new TaskLoadWifiEntries(this).execute();

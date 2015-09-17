@@ -4,6 +4,7 @@ package com.gmail.ndraiman.wifipasswords.extras;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
+import android.view.View;
 
 import com.gmail.ndraiman.wifipasswords.activities.MainActivity;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
@@ -24,14 +25,27 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
 
     private static final String LOG_TAG = "TaskLoadWifiEntries";
     private WifiListLoadedListener mListListener;
+    private boolean hasRootAccess;
 
     public TaskLoadWifiEntries(WifiListLoadedListener listener) {
         mListListener = listener;
     }
 
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+
+        //Remove "No Root Access" error
+        if(MainActivity.textNoRoot.getVisibility() == View.VISIBLE && hasRootAccess) {
+            MainActivity.textNoRoot.setVisibility(View.GONE);
+        }
+    }
+
     @Override
     protected ArrayList<WifiEntry> doInBackground(String... params) {
-        if(!RootCheck.canRunRootCommands()) {
+
+        if(!(hasRootAccess = RootCheck.canRunRootCommands())) {
             Log.e(LOG_TAG, "No Root Access");
             cancel(true);
         }
@@ -48,10 +62,16 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
 
     @Override
     protected void onPostExecute(ArrayList<WifiEntry> wifiEntries) {
-
+        //Insert Wifi Entries to database
         MyApplication.getWritableDatabase().deleteAll(false);
         MyApplication.getWritableDatabase().insertWifiEntries(wifiEntries, false);
 
+//        if(MainActivity.mProgressBar.getVisibility() == View.VISIBLE) {
+//            MainActivity.mProgressBar.setVisibility(View.GONE);
+//        }
+
+
+        //Update RecyclerView
         if(mListListener != null) {
             L.m("OnPost Execute \n" + wifiEntries.toString());
             mListListener.onWifiListLoaded(wifiEntries);
@@ -61,7 +81,11 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
     @Override
     protected void onCancelled() {
         super.onCancelled();
-        MainActivity.textNoData.setText("No Root Access");
+
+        //Show "No Root Access" error
+        if(!hasRootAccess) {
+            MainActivity.textNoRoot.setVisibility(View.VISIBLE);
+        }
     }
 
 

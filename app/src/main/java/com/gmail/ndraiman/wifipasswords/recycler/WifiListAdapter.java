@@ -30,9 +30,8 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int i) {
         View view = layoutInflater.inflate(R.layout.wifi_entry_row, parent, false);
-        MyViewHolder viewHolder = new MyViewHolder(view);
 
-        return viewHolder;
+        return new MyViewHolder(view);
     }
 
     @Override

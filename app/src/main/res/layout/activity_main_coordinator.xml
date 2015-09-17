@@ -15,15 +15,13 @@
             android:id="@+id/app_bar"
             layout="@layout/app_bar" />
 
-        <!--<android.support.v7.widget.Toolbar-->
-        <!--android:id="@+id/app_bar"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="?attr/actionBarSize"-->
-        <!--android:background="@color/colorPrimary"-->
-        <!--app:layout_scrollFlags="scroll|enterAlways" />-->
-
     </android.support.design.widget.AppBarLayout>
 
+
+    <!--<android.support.v4.widget.ContentLoadingProgressBar-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:foregroundGravity="center"/>-->
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeWifiList"
@@ -37,5 +35,16 @@
             android:layout_height="wrap_content" />
 
     </android.support.v4.widget.SwipeRefreshLayout>
+
+    <!-- No Root Error TextView -->
+    <TextView
+        android:id="@+id/text_no_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/text_no_root"
+        android:textSize="36sp"
+        android:visibility="gone" />
+
 
 </android.support.design.widget.CoordinatorLayout>

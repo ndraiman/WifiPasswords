@@ -8,7 +8,7 @@
 
 
     <string name="text_placeholder">NA</string>
-    <string name="text_no_data">No Data Found</string>
+    <string name="text_no_root">No Root Access</string>
 
 
 </resources>
