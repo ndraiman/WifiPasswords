@@ -6,8 +6,8 @@
     android:background="@color/colorPrimary"
     android:paddingTop="@dimen/app_bar_top_padding"
     app:layout_scrollFlags="scroll|enterAlways"
-    app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"
-    app:theme="@style/AppTheme">
+    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
 
 </android.support.v7.widget.Toolbar>

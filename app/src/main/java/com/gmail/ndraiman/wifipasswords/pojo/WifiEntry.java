@@ -3,8 +3,6 @@ package com.gmail.ndraiman.wifipasswords.pojo;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.gmail.ndraiman.wifipasswords.extras.L;
-
 /**
  * Created by ND88 on 09/09/2015.
  */
@@ -73,7 +71,7 @@ public class WifiEntry implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        L.m("writeToParcel WifiEntry");
+        //L.m("writeToParcel WifiEntry");
         dest.writeString(title);
         dest.writeString(password);
     }

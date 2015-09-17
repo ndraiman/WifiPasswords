@@ -4,8 +4,8 @@
     android:id="@+id/wifi_entry_row"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    card_view:cardCornerRadius="4dp"
-    android:layout_margin="3dp">
+    android:layout_margin="3dp"
+    card_view:cardCornerRadius="4dp">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
@@ -25,6 +25,7 @@
             android:padding="4dp"
             android:paddingTop="20dp"
             android:text="@string/text_placeholder"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textSize="16sp" />
 
         <TextView
@@ -36,6 +37,7 @@
             android:padding="4dp"
             android:paddingBottom="20dp"
             android:text="@string/text_placeholder"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textSize="14sp" />
 
 
