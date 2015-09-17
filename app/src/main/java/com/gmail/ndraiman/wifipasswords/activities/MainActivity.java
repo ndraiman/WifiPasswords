@@ -161,6 +161,7 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
         }
 
         L.m("onWifiListLoaded");
+        mListWifi = listWifi;
         mAdapter.setWifiList(listWifi);
     }
 
