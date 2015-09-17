@@ -136,10 +136,6 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
-
-        } else if (id == R.id.action_refresh_from_file) {
-            new TaskLoadWifiEntries(this).execute();
-            return true;
         }
 
         return super.onOptionsItemSelected(item);

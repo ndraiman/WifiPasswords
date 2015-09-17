@@ -10,10 +10,5 @@
         app:showAsAction="never" />
 
     <!-- Debug Actions -->
-    <item
-        android:id="@+id/action_refresh_from_file"
-        android:orderInCategory="50"
-        android:title="@string/action_refresh_from_file"
-        app:showAsAction="never"/>
 
 </menu>
