@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
     private boolean mFromSavedInstanceState;
 
     //TODO Implement "Hidden" table.
+    //TODO App Design - move SwipeToRefresh functionality back to Menu (invokes entire reload of data from wpa_supplicant)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,6 +162,7 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
         super.onDestroy();
     }
 
+    //WifiListLoadedListener method
     @Override
     public void onWifiListLoaded(ArrayList<WifiEntry> listWifi) {
 
@@ -169,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
         }
 
         //Hide Progress Bar
-        if(mProgressBar.getVisibility() == View.VISIBLE) {
+        if (mProgressBar.getVisibility() == View.VISIBLE) {
             mProgressBar.setVisibility(View.GONE);
         }
 
@@ -178,13 +180,19 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
         mAdapter.setWifiList(listWifi);
     }
 
-    //Swipe to Refresh
+    //Swipe to Refresh Listener method
     @Override
     public void onRefresh() {
         L.t(this, "onRefresh");
+        makeSnackbar("Reloading Data From File");
         //load the whole feed again on refresh.
         new TaskLoadWifiEntries(this).execute();
     }
+
+
+    /********************************************************/
+    /****************** Additional Methods ******************/
+    /********************************************************/
 
     //Copy to Clipboard Method
     private void copyToClipboard(String copiedLabel, String copiedText, String snackbarMessage) {
