@@ -19,9 +19,9 @@
 
 
     <!--<android.support.v4.widget.ContentLoadingProgressBar-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:foregroundGravity="center"/>-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:foregroundGravity="center"/>-->
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeWifiList"
@@ -46,5 +46,13 @@
         android:textSize="36sp"
         android:visibility="gone" />
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="@style/Widget.MaterialProgressBar.ProgressBar.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:visibility="gone" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -1,6 +1,7 @@
 package com.gmail.ndraiman.wifipasswords.activities;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,6 +25,8 @@ import com.gmail.ndraiman.wifipasswords.recycler.WifiListAdapter;
 
 import java.util.ArrayList;
 
+import me.zhanghai.android.materialprogressbar.IndeterminateProgressDrawable;
+
 public class MainActivity extends AppCompatActivity implements WifiListLoadedListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String STATE_WIFI_ENTRIES = "state_wifi_entries";
@@ -33,14 +36,13 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
     private ArrayList<WifiEntry> mListWifi = new ArrayList<>();
     private SwipeRefreshLayout mSwipeRefreshLayout;
     public static TextView textNoRoot;
-    public static ProgressBar mProgressBar;
+    private ProgressBar mProgressBar;
 
 
     //is this App being started for the very first time?
     private boolean mFromSavedInstanceState;
 
-    //TODO add swipe to refresh functionality
-
+    //TODO Implement "Hidden" table.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,8 +54,12 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
         //getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         textNoRoot = (TextView) findViewById(R.id.text_no_root);
-//        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
-//        mProgressBar.setVisibility(View.VISIBLE);
+
+        //backward compatible MaterialProgressBar - https://github.com/DreaminginCodeZH/MaterialProgressBar
+        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
+        IndeterminateProgressDrawable progressDrawable = new IndeterminateProgressDrawable(this);
+        progressDrawable.setTint(ContextCompat.getColor(this, R.color.colorPrimary)); //Change Color
+        mProgressBar.setIndeterminateDrawable(progressDrawable);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeWifiList);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
@@ -95,6 +101,8 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
             mListWifi = MyApplication.getWritableDatabase().getAllWifiEntries(false);
             //if the database is empty, trigger an AsyncTask to get wifi list from the wpa_supplicant
             if (mListWifi.isEmpty()) {
+
+                mProgressBar.setVisibility(View.VISIBLE); //Show Progress Bar
                 L.m("executing task from onCreate");
                 new TaskLoadWifiEntries(this).execute();
             }
@@ -102,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
 
         mAdapter.setWifiList(mListWifi);
     }
-    //TODO Implement "Hidden" table.
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -149,6 +157,11 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
 
         if (mSwipeRefreshLayout.isRefreshing()) {
             mSwipeRefreshLayout.setRefreshing(false);
+        }
+
+        //Hide Progress Bar
+        if(mProgressBar.getVisibility() == View.VISIBLE) {
+            mProgressBar.setVisibility(View.GONE);
         }
 
         L.m("onWifiListLoaded");

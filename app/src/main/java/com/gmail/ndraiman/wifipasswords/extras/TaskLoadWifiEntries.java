@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.gmail.ndraiman.wifipasswords.activities.MainActivity;
+import com.gmail.ndraiman.wifipasswords.database.PasswordDB;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
 
 import java.io.BufferedReader;
@@ -25,7 +26,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
 
     private static final String LOG_TAG = "TaskLoadWifiEntries";
     private WifiListLoadedListener mListListener;
-    private boolean hasRootAccess;
+    private boolean hasRootAccess = true;
 
     public TaskLoadWifiEntries(WifiListLoadedListener listener) {
         mListListener = listener;
@@ -63,13 +64,9 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
     @Override
     protected void onPostExecute(ArrayList<WifiEntry> wifiEntries) {
         //Insert Wifi Entries to database
-        MyApplication.getWritableDatabase().deleteAll(false);
-        MyApplication.getWritableDatabase().insertWifiEntries(wifiEntries, false);
-
-//        if(MainActivity.mProgressBar.getVisibility() == View.VISIBLE) {
-//            MainActivity.mProgressBar.setVisibility(View.GONE);
-//        }
-
+        PasswordDB db = MyApplication.getWritableDatabase();
+        db.deleteAll(false);
+        db.insertWifiEntries(wifiEntries, false);
 
         //Update RecyclerView
         if(mListListener != null) {
@@ -85,7 +82,14 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         //Show "No Root Access" error
         if(!hasRootAccess) {
             MainActivity.textNoRoot.setVisibility(View.VISIBLE);
+
+            if(mListListener != null) {
+                L.m("OnCancelled Execute \n");
+                //return empty list
+                mListListener.onWifiListLoaded(new ArrayList<WifiEntry>());
+            }
         }
+
     }
 
 
