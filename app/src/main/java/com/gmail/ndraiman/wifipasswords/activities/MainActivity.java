@@ -1,12 +1,17 @@
 package com.gmail.ndraiman.wifipasswords.activities;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,13 +35,17 @@ import me.zhanghai.android.materialprogressbar.IndeterminateProgressDrawable;
 public class MainActivity extends AppCompatActivity implements WifiListLoadedListener, SwipeRefreshLayout.OnRefreshListener {
 
     private static final String STATE_WIFI_ENTRIES = "state_wifi_entries";
+    private static final String COPIED_WIFI_ENTRY = "copied_wifi_entry";
     private Toolbar toolbar;
     private RecyclerView mRecyclerView;
     private WifiListAdapter mAdapter;
     private ArrayList<WifiEntry> mListWifi = new ArrayList<>();
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    public static TextView textNoRoot;
     private ProgressBar mProgressBar;
+    private CoordinatorLayout mRoot;
+    private Snackbar mSnackbar;
+
+    public static TextView textNoRoot;
 
 
     //is this App being started for the very first time?
@@ -54,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
         //getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         textNoRoot = (TextView) findViewById(R.id.text_no_root);
+        mRoot = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
 
         //backward compatible MaterialProgressBar - https://github.com/DreaminginCodeZH/MaterialProgressBar
         mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
@@ -82,12 +92,14 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
 
             @Override
             public void onLongClick(View view, int position) {
-                Toast.makeText(MainActivity.this, "onLongClick " + position, Toast.LENGTH_SHORT).show(); //placeholder
-                //TODO open overlay fragment with options:
-                //copy title & pass
-                //copy title
-                //copy pass
-                //hide
+                L.m("ReyclerView - onLongClick " + position);
+
+                WifiEntry entry = mListWifi.get(position);
+                String textToCopy = "Wifi Name: " + entry.getTitle() + "\n"
+                        + "Password: " + entry.getPassword();
+                String snackbarMessage = getResources().getString(R.string.text_wifi_copy);
+
+                copyToClipboard(COPIED_WIFI_ENTRY, textToCopy, snackbarMessage);
             }
         }));
 
@@ -172,5 +184,34 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
         L.t(this, "onRefresh");
         //load the whole feed again on refresh.
         new TaskLoadWifiEntries(this).execute();
+    }
+
+    //Copy to Clipboard Method
+    private void copyToClipboard(String copiedLabel, String copiedText, String snackbarMessage) {
+
+        ClipboardManager clipboardManager =
+                (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+
+        ClipData clipData = ClipData.newPlainText(copiedLabel, copiedText);
+        clipboardManager.setPrimaryClip(clipData);
+
+        makeSnackbar(snackbarMessage);
+        L.m("copyToClipboard:\n" + clipData.toString());
+    }
+
+    //Custom Snackbar
+    private void makeSnackbar(String message) {
+
+        Snackbar mSnackbar = Snackbar.make(mRoot, message, Snackbar.LENGTH_SHORT);
+        View snackbarView = mSnackbar.getView();
+
+        //snackbarView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
+
+        TextView snackbarText = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
+        snackbarText.setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+        snackbarText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
+
+        mSnackbar.show();
+
     }
 }
