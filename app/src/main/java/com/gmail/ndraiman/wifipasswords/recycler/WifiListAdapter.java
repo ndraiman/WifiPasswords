@@ -18,7 +18,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
 
     private LayoutInflater layoutInflater;
     private List<WifiEntry> mListWifi = new ArrayList<>();
-    private int mPreviousPosition = 0;
+    private int mPreviousPosition = -1;
 
     public WifiListAdapter(Context context) {
         layoutInflater = LayoutInflater.from(context);
@@ -59,6 +59,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
 
     public void setWifiList(ArrayList<WifiEntry> listWifi) {
         mListWifi = listWifi;
+        mPreviousPosition = -1; //fix new load animation
         notifyDataSetChanged();
     }
 

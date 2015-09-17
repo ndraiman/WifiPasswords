@@ -1,18 +1,27 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
 
-    <include
-        android:id="@+id/app_bar"
-        layout="@layout/app_bar" />
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include
+            android:id="@+id/app_bar"
+            layout="@layout/app_bar" />
+
+    </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeWifiList"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/wifiList"
@@ -21,8 +30,9 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
+    <!-- No Root Error TextView -->
     <TextView
-        android:id="@+id/text_no_data"
+        android:id="@+id/text_no_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
@@ -30,4 +40,13 @@
         android:textSize="36sp"
         android:visibility="gone" />
 
-</LinearLayout>
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="@style/Widget.MaterialProgressBar.ProgressBar.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminate="true"
+        android:visibility="gone" />
+
+</android.support.design.widget.CoordinatorLayout>
