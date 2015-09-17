@@ -17,12 +17,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
-    <!--<android.support.v4.widget.ContentLoadingProgressBar-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:foregroundGravity="center"/>-->
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeWifiList"
         android:layout_width="match_parent"

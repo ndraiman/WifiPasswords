@@ -64,13 +64,14 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeWifiList);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
         mSwipeRefreshLayout.setOnRefreshListener(this);
-
+        mSwipeRefreshLayout.setDistanceToTriggerSync(500);
 
         //Setup RecyclerView & Adapter
         mRecyclerView = (RecyclerView) findViewById(R.id.wifiList);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new WifiListAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
+
 
         //Setup RecyclerTouchListener
         mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, mRecyclerView, new RecyclerTouchListener.ClickListener() {
