@@ -2,7 +2,9 @@ package com.gmail.ndraiman.wifipasswords.activities;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -58,6 +60,9 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Set default values for preferences - false = runs only once!!
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
@@ -149,6 +154,7 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
 
