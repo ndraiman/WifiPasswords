@@ -3,37 +3,28 @@ package com.gmail.ndraiman.wifipasswords.activities;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.gmail.ndraiman.wifipasswords.R;
+import com.gmail.ndraiman.wifipasswords.extras.AppCompatPreferenceActivity;
 import com.gmail.ndraiman.wifipasswords.extras.L;
 
-/**
- * Created by ND88 on 17/09/2015.
- */
-public class SettingsActivity extends PreferenceActivity {
+import java.util.List;
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+public class SettingsActivity extends AppCompatPreferenceActivity {
 
-        //TODO add toolbar
-
-        // Display the fragment as the main content
-        getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, new SettingsFragment()).commit();
-
-    }
-
-    //Required Method to Override to Validated Fragments
-    @Override
-    protected boolean isValidFragment(String fragmentName) {
-        return SettingsFragment.class.getName().equals(fragmentName);
-    }
-
+    private Toolbar mToolbar;
     //Setup Listener
     private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener
             = new Preference.OnPreferenceChangeListener() {
@@ -53,6 +44,52 @@ public class SettingsActivity extends PreferenceActivity {
         }
     };
 
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Display the fragment as the main content
+        getFragmentManager().beginTransaction()
+                .replace(android.R.id.content, new SettingsFragment()).commit();
+
+    }
+
+
+    @Override
+    public void onBuildHeaders(List<Header> target) {
+        L.m("SettingsActivity onBuildHeaders");
+
+        //loadHeadersFromResource(R.xml.pref_header, target);
+
+        setContentView(R.layout.activity_settings);
+        mToolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(mToolbar);
+
+    }
+
+    //Required Method to Override to Validated Fragments
+    @Override
+    protected boolean isValidFragment(String fragmentName) {
+        return SettingsFragment.class.getName().equals(fragmentName);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+
+        if (id == R.id.action_help) {
+            return true;
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
 
     private static void bindPreferenceSummaryToValue(Preference preference) {
         L.m("bindPreferenceSummaryToValue");
@@ -77,9 +114,10 @@ public class SettingsActivity extends PreferenceActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-
             L.m("SettingsFragment - onCreate");
 
+            getActivity().setTheme(R.style.AppTheme); //TODO theme according to preference
+            setHasOptionsMenu(true);
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.preferences);
 
@@ -87,6 +125,34 @@ public class SettingsActivity extends PreferenceActivity {
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_path_key)));
         }
 
+        @Override
+        public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+            inflater.inflate(R.menu.menu_settings, menu);
+        }
 
+
+        @Override
+        public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+            View layout = inflater.inflate(R.layout.activity_settings, container, false);
+
+            if (layout != null) {
+                //Adding Toolbar to fragment
+                L.m("SettingsFragment onCreateView");
+                AppCompatPreferenceActivity sActivity = (AppCompatPreferenceActivity) getActivity();
+                Toolbar sToolbar = (Toolbar) layout.findViewById(R.id.app_bar);
+                sActivity.setSupportActionBar(sToolbar);
+
+                ActionBar sBar = sActivity.getSupportActionBar();
+                sBar.setDisplayShowHomeEnabled(true);
+                sBar.setDisplayHomeAsUpEnabled(true);
+                sBar.setDisplayShowTitleEnabled(true);
+
+                sBar.setTitle(getResources().getString(R.string.activity_title_settings));
+
+            }
+
+
+            return layout;
+        }
     }
 }

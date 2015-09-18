@@ -1,6 +1,7 @@
 <resources>
     <!-- Titles -->
     <string name="app_name">Wifi Passwords</string>
+    <string name="activity_title_settings">Settings</string>
 
     <!-- Settings Menu -->
     <string name="action_settings">Settings</string>
@@ -14,6 +15,7 @@
     <!-- Settings Activity -->
     <string name="pref_path_default">/data/misc/wifi/wpa_supplicant.conf</string>
     <string name="pref_path_key">pref_path</string>
+    <string name="action_help">Help &amp; Feedback</string>
 
 
 </resources>

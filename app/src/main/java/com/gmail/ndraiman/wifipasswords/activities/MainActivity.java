@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
 
     //TODO Implement "Hidden" table.
     //TODO App Design - move SwipeToRefresh functionality back to Menu (invokes entire reload of data from wpa_supplicant)
+    //TODO App Design - Implement Drawer Layout to swap between activities and settings
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +67,6 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
 
         toolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(toolbar);
-        //getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         textNoRoot = (TextView) findViewById(R.id.text_no_root);
         mRoot = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
         progressDrawable.setTint(ContextCompat.getColor(this, R.color.colorPrimary)); //Change Color
         mProgressBar.setIndeterminateDrawable(progressDrawable);
 
+        //Setup Swipe To Refresh Layout
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeWifiList);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
         mSwipeRefreshLayout.setOnRefreshListener(this);
@@ -109,14 +110,14 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
             }
         }));
 
-
+        //Determine if Activity runs for first time
         if (savedInstanceState != null) {
             L.m("extracting mListWifi from Parcelable");
-            //if this fragment starts after a rotation or configuration change, load the existing Wifi list from a parcelable
+            //if starts after a rotation or configuration change, load the existing Wifi list from a parcelable
             mListWifi = savedInstanceState.getParcelableArrayList(STATE_WIFI_ENTRIES);
 
         } else {
-            //if this fragment starts for the first time, load the list of wifi from a database
+            //if starts for the first time, load the list of wifi from a database
             mListWifi = MyApplication.getWritableDatabase().getAllWifiEntries(false);
             //if the database is empty, trigger an AsyncTask to get wifi list from the wpa_supplicant
             if (mListWifi.isEmpty()) {
@@ -155,6 +156,10 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
+            return true;
+        }
+
+        if (id == R.id.action_help) {
             return true;
         }
 
@@ -222,7 +227,7 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
         //snackbarView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
 
         TextView snackbarText = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
-        snackbarText.setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
+        //snackbarText.setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
         snackbarText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
 
         mSnackbar.show();
