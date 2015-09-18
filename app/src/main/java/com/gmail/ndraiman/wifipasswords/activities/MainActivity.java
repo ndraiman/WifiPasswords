@@ -8,7 +8,6 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,7 +33,7 @@ import java.util.ArrayList;
 
 import me.zhanghai.android.materialprogressbar.IndeterminateProgressDrawable;
 
-public class MainActivity extends AppCompatActivity implements WifiListLoadedListener, SwipeRefreshLayout.OnRefreshListener {
+public class MainActivity extends AppCompatActivity implements WifiListLoadedListener {
 
     private static final String STATE_WIFI_ENTRIES = "state_wifi_entries";
     private static final String COPIED_WIFI_ENTRY = "copied_wifi_entry";
@@ -42,10 +41,8 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
     private RecyclerView mRecyclerView;
     private WifiListAdapter mAdapter;
     private ArrayList<WifiEntry> mListWifi = new ArrayList<>();
-    private SwipeRefreshLayout mSwipeRefreshLayout;
     private ProgressBar mProgressBar;
     private CoordinatorLayout mRoot;
-    private Snackbar mSnackbar;
 
     public static TextView textNoRoot;
 
@@ -54,7 +51,6 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
     private boolean mFromSavedInstanceState;
 
     //TODO Implement "Hidden" table.
-    //TODO App Design - move SwipeToRefresh functionality back to Menu (invokes entire reload of data from wpa_supplicant)
     //TODO App Design - Implement Drawer Layout to swap between activities and settings
 
     @Override
@@ -76,12 +72,6 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
         IndeterminateProgressDrawable progressDrawable = new IndeterminateProgressDrawable(this);
         progressDrawable.setTint(ContextCompat.getColor(this, R.color.colorPrimary)); //Change Color
         mProgressBar.setIndeterminateDrawable(progressDrawable);
-
-        //Setup Swipe To Refresh Layout
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeWifiList);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-        mSwipeRefreshLayout.setDistanceToTriggerSync(500);
 
         //Setup RecyclerView & Adapter
         mRecyclerView = (RecyclerView) findViewById(R.id.wifiList);
@@ -122,13 +112,23 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
             //if the database is empty, trigger an AsyncTask to get wifi list from the wpa_supplicant
             if (mListWifi.isEmpty()) {
 
-                mProgressBar.setVisibility(View.VISIBLE); //Show Progress Bar
+                loadFromFile();
                 L.m("executing task from onCreate");
-                new TaskLoadWifiEntries(this).execute();
             }
         }
 
         mAdapter.setWifiList(mListWifi);
+    }
+
+    //Copy wpa_supplicant and extract data from it via AsyncTask
+    private void loadFromFile() {
+
+        mAdapter.setWifiList(new ArrayList<WifiEntry>());
+        mProgressBar.setVisibility(View.VISIBLE); //Show Progress Bar
+        L.m("loadFromFile");
+        makeSnackbar("Loading Data From File");
+        new TaskLoadWifiEntries(this).execute();
+
     }
 
 
@@ -163,6 +163,11 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
             return true;
         }
 
+        if(id == R.id.action_refresh_from_file) {
+            loadFromFile();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -173,13 +178,9 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
         super.onDestroy();
     }
 
-    //WifiListLoadedListener method
+    //WifiListLoadedListener method - called from TaskLoadWifiEntries
     @Override
     public void onWifiListLoaded(ArrayList<WifiEntry> listWifi) {
-
-        if (mSwipeRefreshLayout.isRefreshing()) {
-            mSwipeRefreshLayout.setRefreshing(false);
-        }
 
         //Hide Progress Bar
         if (mProgressBar.getVisibility() == View.VISIBLE) {
@@ -191,14 +192,6 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
         mAdapter.setWifiList(listWifi);
     }
 
-    //Swipe to Refresh Listener method
-    @Override
-    public void onRefresh() {
-        L.t(this, "onRefresh");
-        makeSnackbar("Reloading Data From File");
-        //load the whole feed again on refresh.
-        new TaskLoadWifiEntries(this).execute();
-    }
 
 
     /********************************************************/
