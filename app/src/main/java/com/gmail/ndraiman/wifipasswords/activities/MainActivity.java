@@ -1,50 +1,35 @@
 package com.gmail.ndraiman.wifipasswords.activities;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gmail.ndraiman.wifipasswords.R;
-import com.gmail.ndraiman.wifipasswords.extras.L;
-import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
-import com.gmail.ndraiman.wifipasswords.extras.TaskLoadWifiEntries;
-import com.gmail.ndraiman.wifipasswords.extras.WifiListLoadedListener;
-import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
-import com.gmail.ndraiman.wifipasswords.recycler.RecyclerTouchListener;
-import com.gmail.ndraiman.wifipasswords.recycler.WifiListAdapter;
+import com.gmail.ndraiman.wifipasswords.extras.NoSwipeViewPager;
 
-import java.util.ArrayList;
+public class MainActivity extends AppCompatActivity {
 
-import me.zhanghai.android.materialprogressbar.IndeterminateProgressDrawable;
+//    private static final String STATE_WIFI_ENTRIES = "state_wifi_entries";
+//    private static final String COPIED_WIFI_ENTRY = "copied_wifi_entry";
+    private Toolbar mToolbar;
+//    private RecyclerView mRecyclerView;
+//    private WifiListAdapter mAdapter;
+//    private ArrayList<WifiEntry> mListWifi = new ArrayList<>();
+//    private ProgressBar mProgressBar;
+    private static CoordinatorLayout mRoot;
 
-public class MainActivity extends AppCompatActivity implements WifiListLoadedListener {
+//    public static TextView textNoRoot;
 
-    private static final String STATE_WIFI_ENTRIES = "state_wifi_entries";
-    private static final String COPIED_WIFI_ENTRY = "copied_wifi_entry";
-    private Toolbar toolbar;
-    private RecyclerView mRecyclerView;
-    private WifiListAdapter mAdapter;
-    private ArrayList<WifiEntry> mListWifi = new ArrayList<>();
-    private ProgressBar mProgressBar;
-    private CoordinatorLayout mRoot;
-
-    public static TextView textNoRoot;
+    private NoSwipeViewPager mPager;
 
 
     //is this App being started for the very first time?
@@ -61,83 +46,85 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
         //Set default values for preferences - false = runs only once!!
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-        toolbar = (Toolbar) findViewById(R.id.app_bar);
-        setSupportActionBar(toolbar);
+        mToolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(mToolbar);
 
-        textNoRoot = (TextView) findViewById(R.id.text_no_root);
+//        textNoRoot = (TextView) findViewById(R.id.text_no_root);
         mRoot = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
 
-        //backward compatible MaterialProgressBar - https://github.com/DreaminginCodeZH/MaterialProgressBar
-        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
-        IndeterminateProgressDrawable progressDrawable = new IndeterminateProgressDrawable(this);
-        progressDrawable.setTint(ContextCompat.getColor(this, R.color.colorPrimary)); //Change Color
-        mProgressBar.setIndeterminateDrawable(progressDrawable);
-
-        //Setup RecyclerView & Adapter
-        mRecyclerView = (RecyclerView) findViewById(R.id.wifiList);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mAdapter = new WifiListAdapter(this);
-        mRecyclerView.setAdapter(mAdapter);
 
 
-        //Setup RecyclerTouchListener
-        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, mRecyclerView, new RecyclerTouchListener.ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                Toast.makeText(MainActivity.this, "onClick " + position, Toast.LENGTH_SHORT).show();  //placeholder
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-                L.m("ReyclerView - onLongClick " + position);
-
-                WifiEntry entry = mListWifi.get(position);
-                String textToCopy = "Wifi Name: " + entry.getTitle() + "\n"
-                        + "Password: " + entry.getPassword();
-                String snackbarMessage = getResources().getString(R.string.text_wifi_copy);
-
-                copyToClipboard(COPIED_WIFI_ENTRY, textToCopy, snackbarMessage);
-            }
-        }));
-
-        //Determine if Activity runs for first time
-        if (savedInstanceState != null) {
-            L.m("extracting mListWifi from Parcelable");
-            //if starts after a rotation or configuration change, load the existing Wifi list from a parcelable
-            mListWifi = savedInstanceState.getParcelableArrayList(STATE_WIFI_ENTRIES);
-
-        } else {
-            //if starts for the first time, load the list of wifi from a database
-            mListWifi = MyApplication.getWritableDatabase().getAllWifiEntries(false);
-            //if the database is empty, trigger an AsyncTask to get wifi list from the wpa_supplicant
-            if (mListWifi.isEmpty()) {
-
-                loadFromFile();
-                L.m("executing task from onCreate");
-            }
-        }
-
-        mAdapter.setWifiList(mListWifi);
+//        //backward compatible MaterialProgressBar - https://github.com/DreaminginCodeZH/MaterialProgressBar
+//        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
+//        IndeterminateProgressDrawable progressDrawable = new IndeterminateProgressDrawable(this);
+//        progressDrawable.setTint(ContextCompat.getColor(this, R.color.colorPrimary)); //Change Color
+//        mProgressBar.setIndeterminateDrawable(progressDrawable);
+//
+//        //Setup RecyclerView & Adapter
+//        mRecyclerView = (RecyclerView) findViewById(R.id.wifiList);
+//        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        mAdapter = new WifiListAdapter(this);
+//        mRecyclerView.setAdapter(mAdapter);
+//
+//
+//        //Setup RecyclerTouchListener
+//        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, mRecyclerView, new RecyclerTouchListener.ClickListener() {
+//            @Override
+//            public void onClick(View view, int position) {
+//                Toast.makeText(MainActivity.this, "onClick " + position, Toast.LENGTH_SHORT).show();  //placeholder
+//            }
+//
+//            @Override
+//            public void onLongClick(View view, int position) {
+//                L.m("ReyclerView - onLongClick " + position);
+//
+//                WifiEntry entry = mListWifi.get(position);
+//                String textToCopy = "Wifi Name: " + entry.getTitle() + "\n"
+//                        + "Password: " + entry.getPassword();
+//                String snackbarMessage = getResources().getString(R.string.text_wifi_copy);
+//
+//                copyToClipboard(COPIED_WIFI_ENTRY, textToCopy, snackbarMessage);
+//            }
+//        }));
+//
+//        //Determine if Activity runs for first time
+//        if (savedInstanceState != null) {
+//            L.m("extracting mListWifi from Parcelable");
+//            //if starts after a rotation or configuration change, load the existing Wifi list from a parcelable
+//            mListWifi = savedInstanceState.getParcelableArrayList(STATE_WIFI_ENTRIES);
+//
+//        } else {
+//            //if starts for the first time, load the list of wifi from a database
+//            mListWifi = MyApplication.getWritableDatabase().getAllWifiEntries(false);
+//            //if the database is empty, trigger an AsyncTask to get wifi list from the wpa_supplicant
+//            if (mListWifi.isEmpty()) {
+//
+//                loadFromFile();
+//                L.m("executing task from onCreate");
+//            }
+//        }
+//
+//        mAdapter.setWifiList(mListWifi);
     }
 
     //Copy wpa_supplicant and extract data from it via AsyncTask
-    private void loadFromFile() {
+//    private void loadFromFile() {
+//
+//        mAdapter.setWifiList(new ArrayList<WifiEntry>());
+//        mProgressBar.setVisibility(View.VISIBLE); //Show Progress Bar
+//        L.m("loadFromFile");
+//        makeSnackbar("Loading Data From File");
+//        new TaskLoadWifiEntries(this).execute();
+//
+//    }
 
-        mAdapter.setWifiList(new ArrayList<WifiEntry>());
-        mProgressBar.setVisibility(View.VISIBLE); //Show Progress Bar
-        L.m("loadFromFile");
-        makeSnackbar("Loading Data From File");
-        new TaskLoadWifiEntries(this).execute();
 
-    }
-
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        //save the wifi list to a parcelable prior to rotation or configuration change
-        outState.putParcelableArrayList(STATE_WIFI_ENTRIES, mListWifi);
-    }
+//    @Override
+//    protected void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//        //save the wifi list to a parcelable prior to rotation or configuration change
+//        outState.putParcelableArrayList(STATE_WIFI_ENTRIES, mListWifi);
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -164,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
         }
 
         if(id == R.id.action_refresh_from_file) {
-            loadFromFile();
+            //loadFromFile();
             return true;
         }
 
@@ -179,18 +166,18 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
     }
 
     //WifiListLoadedListener method - called from TaskLoadWifiEntries
-    @Override
-    public void onWifiListLoaded(ArrayList<WifiEntry> listWifi) {
-
-        //Hide Progress Bar
-        if (mProgressBar.getVisibility() == View.VISIBLE) {
-            mProgressBar.setVisibility(View.GONE);
-        }
-
-        L.m("onWifiListLoaded");
-        mListWifi = listWifi;
-        mAdapter.setWifiList(listWifi);
-    }
+//    @Override
+//    public void onWifiListLoaded(ArrayList<WifiEntry> listWifi) {
+//
+//        //Hide Progress Bar
+//        if (mProgressBar.getVisibility() == View.VISIBLE) {
+//            mProgressBar.setVisibility(View.GONE);
+//        }
+//
+//        L.m("onWifiListLoaded");
+//        mListWifi = listWifi;
+//        mAdapter.setWifiList(listWifi);
+//    }
 
 
 
@@ -199,20 +186,20 @@ public class MainActivity extends AppCompatActivity implements WifiListLoadedLis
     /********************************************************/
 
     //Copy to Clipboard Method
-    private void copyToClipboard(String copiedLabel, String copiedText, String snackbarMessage) {
-
-        ClipboardManager clipboardManager =
-                (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-
-        ClipData clipData = ClipData.newPlainText(copiedLabel, copiedText);
-        clipboardManager.setPrimaryClip(clipData);
-
-        makeSnackbar(snackbarMessage);
-        L.m("copyToClipboard:\n" + clipData.toString());
-    }
+//    private void copyToClipboard(String copiedLabel, String copiedText, String snackbarMessage) {
+//
+//        ClipboardManager clipboardManager =
+//                (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+//
+//        ClipData clipData = ClipData.newPlainText(copiedLabel, copiedText);
+//        clipboardManager.setPrimaryClip(clipData);
+//
+//        makeSnackbar(snackbarMessage);
+//        L.m("copyToClipboard:\n" + clipData.toString());
+//    }
 
     //Custom Snackbar
-    private void makeSnackbar(String message) {
+    public static void makeSnackbar(String message) {
 
         Snackbar mSnackbar = Snackbar.make(mRoot, message, Snackbar.LENGTH_SHORT);
         View snackbarView = mSnackbar.getView();

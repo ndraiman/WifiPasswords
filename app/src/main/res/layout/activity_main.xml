@@ -18,30 +18,30 @@
     </android.support.design.widget.AppBarLayout>
 
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/wifiList"
+    <com.gmail.ndraiman.wifipasswords.extras.NoSwipeViewPager
+        android:id="@+id/non_swipe_view_pager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
 
     <!-- No Root Error TextView -->
-    <TextView
-        android:id="@+id/text_no_root"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="@string/text_no_root"
-        android:textSize="36sp"
-        android:visibility="gone" />
+    <!--<TextView-->
+        <!--android:id="@+id/text_no_root"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:gravity="center"-->
+        <!--android:text="@string/text_no_root"-->
+        <!--android:textSize="36sp"-->
+        <!--android:visibility="gone" />-->
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        style="@style/Widget.MaterialProgressBar.ProgressBar.Large"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:indeterminate="true"
-        android:visibility="gone" />
+    <!--<ProgressBar-->
+        <!--android:id="@+id/progress_bar"-->
+        <!--style="@style/Widget.MaterialProgressBar.ProgressBar.Large"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:indeterminate="true"-->
+        <!--android:visibility="gone" />-->
 
 </android.support.design.widget.CoordinatorLayout>

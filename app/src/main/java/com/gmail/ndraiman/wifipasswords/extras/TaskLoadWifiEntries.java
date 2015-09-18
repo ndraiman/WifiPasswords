@@ -6,7 +6,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 
-import com.gmail.ndraiman.wifipasswords.activities.MainActivity;
+import com.gmail.ndraiman.wifipasswords.activities.MainWifiFragment;
 import com.gmail.ndraiman.wifipasswords.database.PasswordDB;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
 
@@ -38,8 +38,8 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         super.onPreExecute();
 
         //Remove "No Root Access" error
-        if(MainActivity.textNoRoot.getVisibility() == View.VISIBLE && hasRootAccess) {
-            MainActivity.textNoRoot.setVisibility(View.GONE);
+        if(MainWifiFragment.textNoRoot.getVisibility() == View.VISIBLE && hasRootAccess) {
+            MainWifiFragment.textNoRoot.setVisibility(View.GONE);
         }
     }
 
@@ -81,7 +81,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
 
         //Show "No Root Access" error
         if(!hasRootAccess) {
-            MainActivity.textNoRoot.setVisibility(View.VISIBLE);
+            MainWifiFragment.textNoRoot.setVisibility(View.VISIBLE);
 
             if(mListListener != null) {
                 L.m("OnCancelled Execute \n");
