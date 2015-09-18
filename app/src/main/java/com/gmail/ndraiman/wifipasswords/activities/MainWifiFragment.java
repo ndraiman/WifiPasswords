@@ -1,16 +1,17 @@
 package com.gmail.ndraiman.wifipasswords.activities;
 
-import android.app.Fragment;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -30,19 +31,11 @@ import java.util.ArrayList;
 
 import me.zhanghai.android.materialprogressbar.IndeterminateProgressDrawable;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MainWifiFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MainWifiFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class MainWifiFragment extends Fragment implements WifiListLoadedListener {
 
     private static final String STATE_WIFI_ENTRIES = "state_wifi_entries";
     private static final String COPIED_WIFI_ENTRY = "copied_wifi_entry";
-    private Toolbar toolbar;
     private RecyclerView mRecyclerView;
     private WifiListAdapter mAdapter;
     private ArrayList<WifiEntry> mListWifi = new ArrayList<>();
@@ -70,6 +63,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View layout = inflater.inflate(R.layout.fragment_main_wifi, container, false);
+        setHasOptionsMenu(true);
 
         textNoRoot = (TextView) layout.findViewById(R.id.text_no_root);
 
@@ -95,7 +89,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
             @Override
             public void onLongClick(View view, int position) {
-                L.m("ReyclerView - onLongClick " + position);
+                L.m("RecyclerView - onLongClick " + position);
 
                 WifiEntry entry = mListWifi.get(position);
                 String textToCopy = "Wifi Name: " + entry.getTitle() + "\n"
@@ -129,17 +123,6 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     }
 
 
-    //Copy wpa_supplicant and extract data from it via AsyncTask
-    private void loadFromFile() {
-
-        mAdapter.setWifiList(new ArrayList<WifiEntry>());
-        mProgressBar.setVisibility(View.VISIBLE); //Show Progress Bar
-        L.m("loadFromFile");
-        MainActivity.makeSnackbar("Loading Data From File");
-        new TaskLoadWifiEntries(this).execute();
-
-    }
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -162,6 +145,36 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         mAdapter.setWifiList(listWifi);
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_wifi_list_main, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if(id == R.id.action_refresh_from_file) {
+            loadFromFile();
+        }
+        return true;
+    }
+
+
+    /********************************************************/
+    /****************** Additional Methods ******************/
+    /********************************************************/
+
+    //Copy wpa_supplicant and extract data from it via AsyncTask
+    private void loadFromFile() {
+
+        mAdapter.setWifiList(new ArrayList<WifiEntry>());
+        mProgressBar.setVisibility(View.VISIBLE); //Show Progress Bar
+        L.m("loadFromFile");
+        MainActivity.makeSnackbar("Loading Data From File");
+        new TaskLoadWifiEntries(this).execute();
+
+    }
 
     //Copy to Clipboard Method
     private void copyToClipboard(String copiedLabel, String copiedText, String snackbarMessage) {
