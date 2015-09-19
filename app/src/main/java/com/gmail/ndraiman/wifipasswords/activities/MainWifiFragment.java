@@ -35,8 +35,8 @@ import me.zhanghai.android.materialprogressbar.IndeterminateProgressDrawable;
 
 public class MainWifiFragment extends Fragment implements WifiListLoadedListener {
 
-    private static final String STATE_WIFI_ENTRIES = "state_wifi_entries";
-    private static final String COPIED_WIFI_ENTRY = "copied_wifi_entry";
+    private static final String STATE_WIFI_ENTRIES = "state_wifi_entries"; //Parcel key
+    private static final String COPIED_WIFI_ENTRY = "copied_wifi_entry"; //Clipboard Label
     private RecyclerView mRecyclerView;
     private WifiListAdapter mAdapter;
     private ArrayList<WifiEntry> mListWifi = new ArrayList<>();
@@ -74,7 +74,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         mProgressBar.setIndeterminateDrawable(progressDrawable);
 
         //Setup RecyclerView & Adapter
-        mRecyclerView = (RecyclerView) layout.findViewById(R.id.wifiList);
+        mRecyclerView = (RecyclerView) layout.findViewById(R.id.main_wifi_list_recycler);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new WifiListAdapter(getActivity());
         mRecyclerView.setAdapter(mAdapter);

@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
         mRoot = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame, MainWifiFragment.newInstance()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, MainWifiFragment.newInstance()).commit();
 
     }
 

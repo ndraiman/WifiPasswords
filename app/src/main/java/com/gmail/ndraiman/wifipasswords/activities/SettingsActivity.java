@@ -60,7 +60,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             Transition slide_out = transitionInflater.inflateTransition(R.transition.activity_slide_out);
 
             getWindow().setEnterTransition(slide_in);
-            getWindow().setReturnTransition(slide_out);
+            getWindow().setExitTransition(slide_out);
 
         }
 
