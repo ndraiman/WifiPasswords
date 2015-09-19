@@ -1,5 +1,6 @@
 package com.gmail.ndraiman.wifipasswords.activities;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
@@ -8,6 +9,8 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,7 +37,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             String stringValue = newValue.toString();
             L.m("onPreferenceChange: " + stringValue);
 
-            if(preference instanceof EditTextPreference) {
+            if (preference instanceof EditTextPreference) {
 
                 preference.setSummary(stringValue);
 
@@ -49,8 +52,21 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //Set Activity Transition - Lollipop+
+        if(Build.VERSION.SDK_INT >= 21) {
+
+            TransitionInflater transitionInflater = TransitionInflater.from(this);
+            Transition slide_in = transitionInflater.inflateTransition(R.transition.activity_slide_in);
+            Transition slide_out = transitionInflater.inflateTransition(R.transition.activity_slide_out);
+
+            getWindow().setEnterTransition(slide_in);
+            getWindow().setReturnTransition(slide_out);
+
+        }
+
         // Display the fragment as the main content
         getFragmentManager().beginTransaction()
+                .setCustomAnimations(R.anim.fragment_slide_in, R.anim.fragment_slide_out)
                 .replace(android.R.id.content, new SettingsFragment()).commit();
 
     }
@@ -105,7 +121,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     }
 
 
-
     /***************************************************************/
     /****************** Settings Fragment **************************/
     /***************************************************************/
@@ -123,6 +138,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
             //Summary to Value
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_path_key)));
+
         }
 
         @Override
@@ -133,9 +149,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+            if(Build.VERSION.SDK_INT >= 21)
+                setEnterTransition(TransitionInflater.from(getActivity()).inflateTransition(R.transition.activity_slide_in));
+
             View layout = inflater.inflate(R.layout.activity_settings, container, false);
 
             if (layout != null) {
+
                 //Adding Toolbar to fragment
                 L.m("SettingsFragment onCreateView");
                 AppCompatPreferenceActivity sActivity = (AppCompatPreferenceActivity) getActivity();

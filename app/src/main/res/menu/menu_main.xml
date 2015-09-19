@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
 
-    <item
-        android:id="@+id/action_refresh_from_file"
-        android:orderInCategory="50"
-        android:title="@string/action_refresh_from_file"
-        app:showAsAction="never" />
+    <!--<item-->
+        <!--android:id="@+id/action_refresh_from_file"-->
+        <!--android:orderInCategory="50"-->
+        <!--android:title="@string/action_refresh_from_file"-->
+        <!--app:showAsAction="never" />-->
 
     <item
         android:id="@+id/action_settings"
