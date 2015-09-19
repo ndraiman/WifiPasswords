@@ -4,15 +4,16 @@
     tools:context=".MainActivity">
 
     <item
+        android:id="@+id/action_share"
+        android:orderInCategory="50"
+        android:title="@string/action_share"
+        android:icon="@drawable/ic_share_light"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/action_refresh_from_file"
         android:orderInCategory="100"
         android:title="@string/action_refresh_from_file"
         app:showAsAction="never" />
-
-    <!--<item-->
-        <!--android:id="@+id/action_help"-->
-        <!--android:orderInCategory="200"-->
-        <!--android:title="@string/action_help"-->
-        <!--app:showAsAction="never" />-->
 
 </menu>

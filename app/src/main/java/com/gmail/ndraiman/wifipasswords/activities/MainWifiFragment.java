@@ -3,6 +3,7 @@ package com.gmail.ndraiman.wifipasswords.activities;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -42,7 +43,6 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     private ProgressBar mProgressBar;
 
     public static TextView textNoRoot;
-
 
 
     public static MainWifiFragment newInstance() {
@@ -154,8 +154,12 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if(id == R.id.action_refresh_from_file) {
+        if (id == R.id.action_refresh_from_file) {
             loadFromFile();
+        }
+
+        if (id == R.id.action_share) {
+            shareWifiList();
         }
         return true;
     }
@@ -164,6 +168,28 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     /********************************************************/
     /****************** Additional Methods ******************/
     /********************************************************/
+
+    //Share entire wifi list
+    private void shareWifiList() {
+
+        String textToShare = "";
+
+        for (int i = 0; i < mListWifi.size(); i++) {
+
+            WifiEntry current = mListWifi.get(i);
+
+            textToShare += "Wifi Name: " + current.getTitle() + "\n"
+                    + "Password: " + current.getPassword() + "\n\n";
+        }
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, textToShare);
+        sendIntent.setType("text/plain");
+        startActivity(sendIntent);
+
+    }
+
 
     //Copy wpa_supplicant and extract data from it via AsyncTask
     private void loadFromFile() {
