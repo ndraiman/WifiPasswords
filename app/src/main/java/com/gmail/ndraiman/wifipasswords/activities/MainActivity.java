@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.Transition;
@@ -48,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
         mToolbar = (Toolbar) findViewById(R.id.app_bar);
+        //Transparent Background for CollapsingToolbar Parallax
+        mToolbar.setBackgroundColor(ContextCompat.getColor(this, android.R.color.transparent));
         setSupportActionBar(mToolbar);
 
         mRoot = (CoordinatorLayout) findViewById(R.id.coordinator_layout);

@@ -17,12 +17,26 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:contentScrim="@color/colorPrimary"
+            app:expandedTitleMarginBottom="32dp"
+            app:expandedTitleMarginEnd="64dp"
+            app:expandedTitleMarginStart="48dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-        <include
-            android:id="@+id/app_bar"
-            layout="@layout/app_bar" />
+            <ImageView
+                android:id="@+id/collapsing_header"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/collapsing_header"
+                android:contentDescription="@string/collapsing_header_description"
+                android:fitsSystemWindows="true"
+                android:scaleType="centerCrop"
+                app:layout_collapseMode="parallax" />
+
+            <include
+                android:id="@+id/app_bar"
+                layout="@layout/app_bar" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
