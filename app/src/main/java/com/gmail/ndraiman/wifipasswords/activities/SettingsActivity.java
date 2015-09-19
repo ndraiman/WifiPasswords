@@ -64,10 +64,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         }
 
+        setContentView(R.layout.activity_settings);
+
         // Display the fragment as the main content
         getFragmentManager().beginTransaction()
                 .setCustomAnimations(R.anim.fragment_slide_in, R.anim.fragment_slide_out)
-                .replace(android.R.id.content, new SettingsFragment()).commit();
+                .replace(R.id.settings_frame, new SettingsFragment()).commit();
 
     }
 
@@ -78,7 +80,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         //loadHeadersFromResource(R.xml.pref_header, target);
 
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.fragment_settings);
         mToolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(mToolbar);
 
@@ -153,7 +155,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             if(Build.VERSION.SDK_INT >= 21)
                 setEnterTransition(TransitionInflater.from(getActivity()).inflateTransition(R.transition.activity_slide_in));
 
-            View layout = inflater.inflate(R.layout.activity_settings, container, false);
+            View layout = inflater.inflate(R.layout.fragment_settings, container, false);
 
             if (layout != null) {
 
