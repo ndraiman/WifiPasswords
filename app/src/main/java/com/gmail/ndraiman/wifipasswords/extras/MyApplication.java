@@ -36,7 +36,7 @@ public class MyApplication extends Application {
         return mPasswordDB;
     }
 
-    public synchronized static void close() {
+    public synchronized static void closeDatabase() {
         if (mOpenCounter.decrementAndGet() == 0) {
             mPasswordDB.close();
         }
@@ -44,5 +44,5 @@ public class MyApplication extends Application {
     }
 
     //TODO Test if the addition of AtomicInteger helps with SQLiteDB remaining open error
-    //TODO if not, remove it and remove "close()" method from PasswordDB.java
+    //TODO if not, remove it and remove "closeDatabase()" method from PasswordDB.java
 }

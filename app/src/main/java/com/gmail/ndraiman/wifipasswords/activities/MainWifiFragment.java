@@ -109,6 +109,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         } else {
             //if starts for the first time, load the list of wifi from a database
             mListWifi = MyApplication.getWritableDatabase().getAllWifiEntries(false);
+            MyApplication.closeDatabase();
             //if the database is empty, trigger an AsyncTask to get wifi list from the wpa_supplicant
             if (mListWifi.isEmpty()) {
 

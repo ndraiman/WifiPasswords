@@ -67,6 +67,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         PasswordDB db = MyApplication.getWritableDatabase();
         db.deleteAll(false);
         db.insertWifiEntries(wifiEntries, false);
+        MyApplication.closeDatabase();
 
         //Update RecyclerView
         if(mListListener != null) {

@@ -10,7 +10,6 @@
 
     <Preference
         android:key="@string/pref_reset_key"
-        android:selectable="true"
         android:summary="@string/pref_reset_summary"
         android:title="@string/pref_reset_title" />
 
