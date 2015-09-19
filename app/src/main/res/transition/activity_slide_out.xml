@@ -6,6 +6,7 @@
 
         <targets>
             <target android:excludeId="@android:id/statusBarBackground" />
+            <target android:excludeId="@android:id/navigationBarBackground"/>
         </targets>
 
     </slide>
@@ -13,6 +14,7 @@
     <fade>
         <targets>
             <target android:excludeId="@android:id/statusBarBackground" />
+            <target android:excludeId="@android:id/navigationBarBackground"/>
         </targets>
     </fade>
 
