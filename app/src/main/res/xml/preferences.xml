@@ -2,11 +2,18 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:title="Settings">
 
+    <ListPreference android:key="@string/pref_path_list_key"
+        android:title="@string/pref_path_list_title"
+        android:defaultValue="@string/pref_path_default"
+        android:entries="@array/wpa_supplicant_locations"
+        android:entryValues="@array/wpa_supplicant_locations"
+        android:summary="@string/pref_path_default" />
+
     <EditTextPreference
         android:defaultValue="@string/pref_path_default"
-        android:key="@string/pref_path_key"
+        android:key="@string/pref_path_manual_key"
         android:summary="@string/pref_path_default"
-        android:title="@string/pref_path_title" />
+        android:title="@string/pref_path_manual_title" />
 
     <Preference
         android:key="@string/pref_reset_key"

@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -30,23 +31,29 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     private Toolbar mToolbar;
     //Setup Listener
-    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener
-            = new Preference.OnPreferenceChangeListener() {
-        @Override
-        public boolean onPreferenceChange(Preference preference, Object newValue) {
-
-            String stringValue = newValue.toString();
-            L.m("onPreferenceChange: " + stringValue);
-
-            if (preference instanceof EditTextPreference) {
-
-                preference.setSummary(stringValue);
-
-            }
-
-            return true;
-        }
-    };
+//    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener
+//            = new Preference.OnPreferenceChangeListener() {
+//        @Override
+//        public boolean onPreferenceChange(Preference preference, Object newValue) {
+//
+//            String stringValue = newValue.toString();
+//            L.m("onPreferenceChange: " + stringValue);
+//
+//            if (preference instanceof EditTextPreference) {
+//
+//                preference.setSummary(stringValue);
+//
+//            }
+//
+//            if (preference instanceof ListPreference) {
+//
+//                preference.setSummary(stringValue);
+//
+//            }
+//
+//            return true;
+//        }
+//    };
 
 
     @Override
@@ -110,18 +117,18 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private static void bindPreferenceSummaryToValue(Preference preference) {
-        L.m("bindPreferenceSummaryToValue");
-        // Set the listener to watch for value changes.
-        preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
-
-        // Trigger the listener immediately with the preference's
-        // current value.
-        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-                PreferenceManager
-                        .getDefaultSharedPreferences(preference.getContext())
-                        .getString(preference.getKey(), ""));
-    }
+//    private static void bindPreferenceSummaryToValue(Preference preference) {
+//        L.m("bindPreferenceSummaryToValue");
+//        // Set the listener to watch for value changes.
+//        preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
+//
+//        // Trigger the listener immediately with the preference's
+//        // current value.
+//        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
+//                PreferenceManager
+//                        .getDefaultSharedPreferences(preference.getContext())
+//                        .getString(preference.getKey(), ""));
+//    }
 
 
 
@@ -132,6 +139,44 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     /****************** Settings Fragment **************************/
     /***************************************************************/
     public static class SettingsFragment extends PreferenceFragment {
+
+
+        private Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener
+                = new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+
+                String stringValue = newValue.toString();
+                L.m("onPreferenceChange: " + stringValue);
+
+                if (preference instanceof EditTextPreference) {
+
+                    preference.setSummary(stringValue);
+
+                }
+
+                if (preference instanceof ListPreference) {
+
+                    preference.setSummary(stringValue);
+
+                }
+
+                return true;
+            }
+        };
+
+        private void bindPreferenceSummaryToValue(Preference preference) {
+            L.m("bindPreferenceSummaryToValue");
+            // Set the listener to watch for value changes.
+            preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
+
+            // Trigger the listener immediately with the preference's
+            // current value.
+            sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
+                    PreferenceManager
+                            .getDefaultSharedPreferences(preference.getContext())
+                            .getString(preference.getKey(), ""));
+        }
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
@@ -191,8 +236,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 }
             });
 
+
             //Summary to Value
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_path_key)));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_path_manual_key)));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_path_list_key)));
 
         }
         
@@ -203,11 +250,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
             SharedPreferences.Editor editor = settings.edit();
-            editor.putString(getString(R.string.pref_path_key), getString(R.string.pref_path_default));
+            editor.putString(getString(R.string.pref_path_manual_key), getString(R.string.pref_path_default));
             editor.apply();
 
 
-            findPreference(getString(R.string.pref_path_key)).setSummary(getString(R.string.pref_path_default));
+            findPreference(getString(R.string.pref_path_manual_key)).setSummary(getString(R.string.pref_path_default));
 
             //Refresh Preference Screen
             setPreferenceScreen(null);

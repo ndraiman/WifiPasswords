@@ -16,12 +16,22 @@
 
     <!-- Preference Activity -->
     <string name="pref_path_default">/data/misc/wifi/wpa_supplicant.conf</string>
-    <string name="pref_path_key">pref_path</string>
-    <string name="pref_path_title">wpa_supplicant Location</string>
+    <string name="pref_path_manual_key">pref_path_manual</string>
+    <string name="pref_path_manual_title">Manual Location</string>
+    <string name="pref_path_list_key">pref_path_list</string>
+    <string name="pref_path_list_title">wpa_supplicant Location</string>
     <string name="pref_reset_key">pref_reset</string>
     <string name="pref_reset_summary">restore wpa_supplicant path</string>
     <string name="pref_reset_title">Reset to Default</string>
 
+
+
+    <string-array name="wpa_supplicant_locations">
+        <item>/data/misc/wifi/wpa_supplicant.conf</item>
+        <item>/data/wifi/bcm_supp.conf</item>
+        <item>/data/misc/wifi/wpa.conf</item>
+        <item>Manual</item>
+    </string-array>
 
 
 
