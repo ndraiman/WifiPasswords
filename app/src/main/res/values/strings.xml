@@ -2,6 +2,7 @@
     <!-- Titles -->
     <string name="app_name">Wifi Passwords</string>
     <string name="activity_title_settings">Settings</string>
+    <string name="collapsing_header_description">collapsing header</string>
 
     <!-- Settings Menu -->
     <string name="action_settings">Settings</string>
@@ -11,16 +12,18 @@
 
     <string name="text_placeholder">NA</string>
     <string name="text_no_root">No Root Access</string>
-
     <string name="text_wifi_copy">WIFI Data Copied to Clipboard</string>
 
-    <!-- Settings Activity -->
+    <!-- Preference Activity -->
     <string name="pref_path_default">/data/misc/wifi/wpa_supplicant.conf</string>
     <string name="pref_path_key">pref_path</string>
+    <string name="pref_path_title">wpa_supplicant Location</string>
+    <string name="pref_reset_key">pref_reset</string>
+    <string name="pref_reset_summary">restore wpa_supplicant path</string>
+    <string name="pref_reset_title">Reset to Default</string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="collapsing_header_description">collapsing header</string>
+
+
 
 
 </resources>

@@ -1,5 +1,6 @@
 package com.gmail.ndraiman.wifipasswords.activities;
 
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
@@ -123,6 +124,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     }
 
 
+
+
+
+
     /***************************************************************/
     /****************** Settings Fragment **************************/
     /***************************************************************/
@@ -135,12 +140,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
             getActivity().setTheme(R.style.AppTheme); //TODO theme according to preference
             setHasOptionsMenu(true);
-            // Load the preferences from an XML resource
-            addPreferencesFromResource(R.xml.preferences);
 
-            //Summary to Value
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_path_key)));
-
+            loadPreferences();
         }
 
         @Override
@@ -174,8 +175,45 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
             }
 
-
             return layout;
         }
+
+        //Helper method for onCreate
+        private void loadPreferences() {
+            // Load the preferences from an XML resource
+            addPreferencesFromResource(R.xml.preferences);
+
+            findPreference(getString(R.string.pref_reset_key)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    resetPathPref();
+                    return true;
+                }
+            });
+
+            //Summary to Value
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_path_key)));
+
+        }
+        
+
+        //Restore wpa_supplicant path to default
+        private void resetPathPref() {
+            L.m("resetPathPref");
+
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString(getString(R.string.pref_path_key), getString(R.string.pref_path_default));
+            editor.apply();
+
+
+            findPreference(getString(R.string.pref_path_key)).setSummary(getString(R.string.pref_path_default));
+
+            //Refresh Preference Screen
+            setPreferenceScreen(null);
+            loadPreferences();
+
+        }
+
     }
 }

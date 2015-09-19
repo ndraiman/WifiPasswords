@@ -6,6 +6,13 @@
         android:defaultValue="@string/pref_path_default"
         android:key="@string/pref_path_key"
         android:summary="@string/pref_path_default"
-        android:title="wpa_supplicant Location" />
+        android:title="@string/pref_path_title" />
+
+    <Preference
+        android:key="@string/pref_reset_key"
+        android:selectable="true"
+        android:summary="@string/pref_reset_summary"
+        android:title="@string/pref_reset_title" />
+
 
 </PreferenceScreen>
