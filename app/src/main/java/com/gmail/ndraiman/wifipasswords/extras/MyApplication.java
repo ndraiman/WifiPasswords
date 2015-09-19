@@ -5,16 +5,19 @@ import android.content.Context;
 
 import com.gmail.ndraiman.wifipasswords.database.PasswordDB;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class MyApplication extends Application {
 
     private static MyApplication sInstance;
-    private static PasswordDB mDatabase;
+    private static PasswordDB mPasswordDB;
+    private static AtomicInteger mOpenCounter = new AtomicInteger();
 
     @Override
     public void onCreate() {
         super.onCreate();
         sInstance = this;
-        mDatabase = new PasswordDB(this);
+        mPasswordDB = new PasswordDB(this);
     }
 
     public static MyApplication getInstance() {
@@ -26,9 +29,20 @@ public class MyApplication extends Application {
     }
 
     public synchronized static PasswordDB getWritableDatabase() {
-        if (mDatabase == null) {
-            mDatabase = new PasswordDB(getAppContext());
+
+        if (mPasswordDB == null && mOpenCounter.incrementAndGet() == 1) {
+            mPasswordDB = new PasswordDB(getAppContext());
         }
-        return mDatabase;
+        return mPasswordDB;
     }
+
+    public synchronized static void close() {
+        if (mOpenCounter.decrementAndGet() == 0) {
+            mPasswordDB.close();
+        }
+
+    }
+
+    //TODO Test if the addition of AtomicInteger helps with SQLiteDB remaining open error
+    //TODO if not, remove it and remove "close()" method from PasswordDB.java
 }

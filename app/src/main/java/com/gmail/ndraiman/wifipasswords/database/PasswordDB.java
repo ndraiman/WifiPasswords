@@ -19,6 +19,7 @@ public class PasswordDB {
     private PasswordHelper mHelper;
     private SQLiteDatabase mDatabase;
 
+
     public PasswordDB(Context context) {
         mHelper = new PasswordHelper(context);
         mDatabase = mHelper.getWritableDatabase();
@@ -94,6 +95,10 @@ public class PasswordDB {
         L.m("deleteAll - isHidden=" + isHidden + " table=" + table);
 
         mDatabase.delete(table, null, null);
+    }
+
+    public void close() {
+        mDatabase.close();
     }
 
 
