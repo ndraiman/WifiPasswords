@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -77,10 +78,12 @@ public class CustomAlertDialogFragment extends DialogFragment {
 
             if(which == BUTTON_SETTINGS) {
                 Log.d(LOG_TAG, "Listener - Settings");
-                //startActivity(new Intent(getActivity(), SettingsActivity.class));
+
+                ActivityOptionsCompat compat = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), null);
                 getActivity().startActivityForResult(
                         new Intent(getActivity(), SettingsActivity.class),
-                        SETTINGS_ACTIVITY_RESULT_CODE);
+                        SETTINGS_ACTIVITY_RESULT_CODE,
+                        compat.toBundle());
             }
 
             if(which == BUTTON_DISMISS) {
