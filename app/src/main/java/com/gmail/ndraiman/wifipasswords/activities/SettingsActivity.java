@@ -159,6 +159,15 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
                     preference.setSummary(stringValue);
 
+                    if(stringValue.equals(getString(R.string.pref_path_list_manual))) {
+
+                        findPreference(getString(R.string.pref_path_manual_key)).setEnabled(true);
+                        findPreference(getString(R.string.pref_reset_key)).setEnabled(true);
+                    } else {
+                        findPreference(getString(R.string.pref_path_manual_key)).setEnabled(false);
+                        findPreference(getString(R.string.pref_reset_key)).setEnabled(false);
+                    }
+
                 }
 
                 return true;
