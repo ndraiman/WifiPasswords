@@ -1,4 +1,10 @@
 <resources>
+
+    <string name="text_placeholder">NA</string>
+    <string name="text_no_root">No Root Access</string>
+    <string name="text_wifi_copy">WIFI Data Copied to Clipboard</string>
+
+
     <!-- Titles -->
     <string name="app_name">Wifi Passwords</string>
     <string name="activity_title_settings">Settings</string>
@@ -9,10 +15,6 @@
     <string name="action_refresh_from_file">Refresh From File</string>
     <string name="action_help">Help &amp; Feedback</string>
     <string name="action_share">Share</string>
-
-    <string name="text_placeholder">NA</string>
-    <string name="text_no_root">No Root Access</string>
-    <string name="text_wifi_copy">WIFI Data Copied to Clipboard</string>
 
     <!-- Preference Activity -->
     <string name="pref_path_default">/data/misc/wifi/wpa_supplicant.conf</string>

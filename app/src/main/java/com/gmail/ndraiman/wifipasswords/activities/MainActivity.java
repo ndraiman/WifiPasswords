@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
@@ -29,13 +30,12 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private static CoordinatorLayout mRoot;
     private MainWifiFragment mainWifiFragment;
-    private static final int SETTINGS_ACTIVITY_RESULT_CODE = 15;
+    private FloatingActionButton mFAB;
 
 
     //TODO Implement "Hidden" table.
     //TODO App Design - Implement Drawer Layout to swap between activities and settings
 
-    //TODO move settings activity to fragment
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
 
         mRoot = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
+
+        setupFAB();
 
         mainWifiFragment = MainWifiFragment.newInstance();
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, mainWifiFragment).commit();
@@ -90,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (id == R.id.action_help) {
+            //TODO implement "Help & Feedback" fragment
             return true;
         }
 
@@ -108,6 +111,19 @@ public class MainActivity extends AppCompatActivity {
     /********************************************************/
     /****************** Additional Methods ******************/
     /********************************************************/
+
+    private void setupFAB() {
+
+        mFAB = (FloatingActionButton) findViewById(R.id.fab);
+        mFAB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO Implement Search
+                L.t(getBaseContext(), "FAB Search");
+            }
+        });
+
+    }
 
 
     //Custom Snackbar

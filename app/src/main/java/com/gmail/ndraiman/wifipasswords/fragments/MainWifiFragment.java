@@ -76,6 +76,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
         textNoRoot = (TextView) layout.findViewById(R.id.text_no_root);
 
+
         //backward compatible MaterialProgressBar - https://github.com/DreaminginCodeZH/MaterialProgressBar
         mProgressBar = (ProgressBar) layout.findViewById(R.id.progress_bar);
         IndeterminateProgressDrawable progressDrawable = new IndeterminateProgressDrawable(getActivity());
