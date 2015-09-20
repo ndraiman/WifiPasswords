@@ -15,18 +15,22 @@ import com.gmail.ndraiman.wifipasswords.activities.SettingsActivity;
 
 public class CustomAlertDialogFragment extends DialogFragment {
 
-    private static final String MESSAGE_KEY = "error_dialog_message";
-    private static final String ERROR_TITLE = "Error...";
-    private static final int BUTTON_SETTINGS = -1;
-    private static final int BUTTON_DISMISS = -2;
-    private static final String LOG_TAG = "ErrorDialog";
+    private static final String MESSAGE_KEY = "alert_dialog_message";
+    private static final String TITLE_KEY = "alert_dialog_title";
+    private static final String HAS_BUTTONS_KEY = "alert_dialog_buttons";
+    private static final int BUTTON_SETTINGS = AlertDialog.BUTTON_POSITIVE;
+    private static final int BUTTON_DISMISS = AlertDialog.BUTTON_NEGATIVE;
+    private static final String LOG_TAG = "CustomAlertDialog";
+    private static final int SETTINGS_ACTIVITY_RESULT_CODE = 15;
     private DialogListener mListener;
 
-    public static CustomAlertDialogFragment getInstance(String message) {
+    public static CustomAlertDialogFragment getInstance(String title, String message, boolean hasButtons) {
         CustomAlertDialogFragment fragment = new CustomAlertDialogFragment();
 
         Bundle args = new Bundle();
+        args.putString(TITLE_KEY, title);
         args.putString(MESSAGE_KEY, message);
+        args.putBoolean(HAS_BUTTONS_KEY, hasButtons);
         fragment.setArguments(args);
 
         return fragment;
@@ -40,14 +44,23 @@ public class CustomAlertDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        String message = getArguments().getString(MESSAGE_KEY);
+
+        Bundle bundle = getArguments();
+        String title = bundle.getString(TITLE_KEY);
+        String message = bundle.getString(MESSAGE_KEY);
+        boolean hasButtons = bundle.getBoolean(HAS_BUTTONS_KEY);
+
+
         mListener = new DialogListener();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.CustomErrorDialog);
         builder.setMessage(message)
-                .setTitle(ERROR_TITLE)
-                .setPositiveButton(R.string.error_settings_button, mListener)
-                .setNegativeButton(R.string.error_dismiss_button, mListener);
+                .setTitle(title);
+
+        if(hasButtons) {
+            builder.setPositiveButton(R.string.error_settings_button, mListener)
+                    .setNegativeButton(R.string.error_dismiss_button, mListener);
+        }
 
          return builder.create();
     }
@@ -64,7 +77,10 @@ public class CustomAlertDialogFragment extends DialogFragment {
 
             if(which == BUTTON_SETTINGS) {
                 Log.d(LOG_TAG, "Listener - Settings");
-                startActivity(new Intent(getActivity(), SettingsActivity.class));
+                //startActivity(new Intent(getActivity(), SettingsActivity.class));
+                getActivity().startActivityForResult(
+                        new Intent(getActivity(), SettingsActivity.class),
+                        SETTINGS_ACTIVITY_RESULT_CODE);
             }
 
             if(which == BUTTON_DISMISS) {

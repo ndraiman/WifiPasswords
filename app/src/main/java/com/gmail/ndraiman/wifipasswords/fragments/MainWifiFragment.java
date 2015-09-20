@@ -25,11 +25,11 @@ import com.gmail.ndraiman.wifipasswords.R;
 import com.gmail.ndraiman.wifipasswords.activities.MainActivity;
 import com.gmail.ndraiman.wifipasswords.extras.L;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
-import com.gmail.ndraiman.wifipasswords.task.TaskLoadWifiEntries;
-import com.gmail.ndraiman.wifipasswords.recycler.WifiListLoadedListener;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
 import com.gmail.ndraiman.wifipasswords.recycler.RecyclerTouchListener;
 import com.gmail.ndraiman.wifipasswords.recycler.WifiListAdapter;
+import com.gmail.ndraiman.wifipasswords.recycler.WifiListLoadedListener;
+import com.gmail.ndraiman.wifipasswords.task.TaskLoadWifiEntries;
 
 import java.util.ArrayList;
 
@@ -198,7 +198,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
 
     //Copy wpa_supplicant and extract data from it via AsyncTask
-    private void loadFromFile() {
+    public void loadFromFile() {
 
         getPath();
 
@@ -244,8 +244,10 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
     //Invoke CustomAlertDialogFragment
     @Override
-    public void onError(String message) {
-        CustomAlertDialogFragment fragment = CustomAlertDialogFragment.getInstance(message);
+    public void onError(String title, String message, boolean hasButtons) {
+        CustomAlertDialogFragment fragment = CustomAlertDialogFragment.getInstance(title, message, hasButtons);
         fragment.show(getFragmentManager(), "DIALOG_TAG");
+        //TODO change tag
     }
+
 }

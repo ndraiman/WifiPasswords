@@ -157,7 +157,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
             if (!file.exists()) {
                 Log.e(LOG_TAG, "readFile - File not found");
                 //Error Dialog
-                mDialogListener.onError("File Not Found");
+                mDialogListener.onError("Error!", "File Not Found", true);
                 return new ArrayList<>();
             }
 

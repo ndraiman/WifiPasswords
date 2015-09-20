@@ -146,6 +146,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
 
+                getActivity().setResult(RESULT_OK);
+
                 String stringValue = newValue.toString();
                 L.m("onPreferenceChange: " + stringValue);
 
@@ -195,6 +197,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
             getActivity().setTheme(R.style.AppTheme); //TODO theme according to preference
             setHasOptionsMenu(true);
+
+            getActivity().setResult(RESULT_CANCELED);
 
             loadPreferences();
         }

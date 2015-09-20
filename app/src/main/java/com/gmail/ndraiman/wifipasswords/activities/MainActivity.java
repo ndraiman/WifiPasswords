@@ -1,5 +1,6 @@
 package com.gmail.ndraiman.wifipasswords.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,13 +20,15 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.gmail.ndraiman.wifipasswords.R;
-import com.gmail.ndraiman.wifipasswords.fragments.CustomAlertDialogFragment;
+import com.gmail.ndraiman.wifipasswords.extras.L;
 import com.gmail.ndraiman.wifipasswords.fragments.MainWifiFragment;
 
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private static CoordinatorLayout mRoot;
+    private MainWifiFragment mainWifiFragment;
+    private static final int SETTINGS_ACTIVITY_RESULT_CODE = 15;
 
 
     //TODO Implement "Hidden" table.
@@ -57,7 +60,8 @@ public class MainActivity extends AppCompatActivity {
 
         mRoot = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, MainWifiFragment.newInstance()).commit();
+        mainWifiFragment = MainWifiFragment.newInstance();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, mainWifiFragment).commit();
 
     }
 
@@ -121,12 +125,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void showErrorDialog(String message) {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        if (requestCode == SETTINGS_ACTIVITY_RESULT_CODE) {
 
-        CustomAlertDialogFragment dialogFragment = CustomAlertDialogFragment.getInstance(message);
-        dialogFragment.show(getSupportFragmentManager(), "DIALOG_TAG");
-
+            if (resultCode == Activity.RESULT_OK) {
+                L.m("Return from Settings - Loading from file");
+                mainWifiFragment.loadFromFile();
+            } else {
+                L.m("Return from Settings - didn't change anything");
+            }
+        }
     }
 
 }
