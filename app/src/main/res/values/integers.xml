@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <integer name="settings_activity_code">40</integer>
+
+    <integer name="dialog_error_code">51</integer>
+    <integer name="dialog_warning_code">52</integer>
+
+    <integer name="dialog_confirm">0</integer>
+    <integer name="dialog_cancel">1</integer>
+
+</resources>

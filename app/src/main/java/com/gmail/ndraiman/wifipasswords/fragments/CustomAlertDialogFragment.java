@@ -2,36 +2,28 @@ package com.gmail.ndraiman.wifipasswords.fragments;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 
 import com.gmail.ndraiman.wifipasswords.R;
-import com.gmail.ndraiman.wifipasswords.activities.SettingsActivity;
 
 
 public class CustomAlertDialogFragment extends DialogFragment {
 
     private static final String MESSAGE_KEY = "alert_dialog_message";
     private static final String TITLE_KEY = "alert_dialog_title";
-    private static final String HAS_BUTTONS_KEY = "alert_dialog_buttons";
-    private static final int BUTTON_SETTINGS = AlertDialog.BUTTON_POSITIVE;
-    private static final int BUTTON_DISMISS = AlertDialog.BUTTON_NEGATIVE;
+    private static final String BUTTONS_KEY = "alert_dialog_buttons";
     private static final String LOG_TAG = "CustomAlertDialog";
-    private static final int SETTINGS_ACTIVITY_RESULT_CODE = 15;
-    private DialogListener mListener;
 
-    public static CustomAlertDialogFragment getInstance(String title, String message, boolean hasButtons) {
+    public static CustomAlertDialogFragment getInstance(String title, String message, String... buttons) {
         CustomAlertDialogFragment fragment = new CustomAlertDialogFragment();
 
         Bundle args = new Bundle();
         args.putString(TITLE_KEY, title);
         args.putString(MESSAGE_KEY, message);
-        args.putBoolean(HAS_BUTTONS_KEY, hasButtons);
+        args.putStringArray(BUTTONS_KEY, buttons);
         fragment.setArguments(args);
 
         return fragment;
@@ -41,7 +33,6 @@ public class CustomAlertDialogFragment extends DialogFragment {
 
     }
 
-
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -49,46 +40,33 @@ public class CustomAlertDialogFragment extends DialogFragment {
         Bundle bundle = getArguments();
         String title = bundle.getString(TITLE_KEY);
         String message = bundle.getString(MESSAGE_KEY);
-        boolean hasButtons = bundle.getBoolean(HAS_BUTTONS_KEY);
-
-
-        mListener = new DialogListener();
+        String[] buttons = bundle.getStringArray(BUTTONS_KEY);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.CustomErrorDialog);
         builder.setMessage(message)
                 .setTitle(title);
 
-        if(hasButtons) {
-            builder.setPositiveButton(R.string.error_settings_button, mListener)
-                    .setNegativeButton(R.string.error_dismiss_button, mListener);
-        }
+        if(buttons != null && buttons.length > 1) {
 
+            //Send Result Codes to target fragment according to button clicked
+            builder.setPositiveButton(buttons[0], new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    getTargetFragment().onActivityResult(getTargetRequestCode(),
+                            getResources().getInteger(R.integer.dialog_confirm),
+                            null);
+                }
+            }).setNegativeButton(buttons[1], new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    getTargetFragment().onActivityResult(getTargetRequestCode(),
+                            getResources().getInteger(R.integer.dialog_cancel),
+                            null);
+                }
+            });
+
+        }
          return builder.create();
     }
 
-
-
-    //Listener Class to handle Dialog Button Clicks
-    private class DialogListener implements DialogInterface.OnClickListener {
-
-
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-
-
-            if(which == BUTTON_SETTINGS) {
-                Log.d(LOG_TAG, "Listener - Settings");
-
-                ActivityOptionsCompat compat = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(), null);
-                getActivity().startActivityForResult(
-                        new Intent(getActivity(), SettingsActivity.class),
-                        SETTINGS_ACTIVITY_RESULT_CODE,
-                        compat.toBundle());
-            }
-
-            if(which == BUTTON_DISMISS) {
-                Log.d(LOG_TAG, "Listener - Dismissed");
-            }
-        }
-    }
 }

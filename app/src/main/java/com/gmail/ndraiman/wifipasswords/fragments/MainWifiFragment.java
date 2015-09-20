@@ -5,9 +5,12 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -23,6 +26,7 @@ import android.widget.Toast;
 
 import com.gmail.ndraiman.wifipasswords.R;
 import com.gmail.ndraiman.wifipasswords.activities.MainActivity;
+import com.gmail.ndraiman.wifipasswords.activities.SettingsActivity;
 import com.gmail.ndraiman.wifipasswords.extras.L;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
@@ -161,7 +165,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         int id = item.getItemId();
 
         if (id == R.id.action_refresh_from_file) {
-            loadFromFile();
+            showReloadWarningDialog();
         }
 
         if (id == R.id.action_share) {
@@ -169,6 +173,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         }
         return true;
     }
+
 
 
     /********************************************************/
@@ -242,12 +247,67 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
     }
 
-    //Invoke CustomAlertDialogFragment
-    @Override
-    public void onError(String title, String message, boolean hasButtons) {
-        CustomAlertDialogFragment fragment = CustomAlertDialogFragment.getInstance(title, message, hasButtons);
-        fragment.show(getFragmentManager(), "DIALOG_TAG");
-        //TODO change tag
+
+
+    /********************************************************/
+    /******************** Dialog Methods ********************/
+    /********************************************************/
+
+    private void showReloadWarningDialog() {
+        L.m("showReloadWarningDialog");
+
+        String title = getString(R.string.dialog_warning_title);
+        String message = getString(R.string.dialog_warning_message);
+        String[] buttons = getResources().getStringArray(R.array.dialog_warning_buttons);
+
+        CustomAlertDialogFragment fragment = CustomAlertDialogFragment.getInstance(title, message, buttons);
+        fragment.setTargetFragment(this, getResources().getInteger(R.integer.dialog_warning_code));
+        fragment.show(getFragmentManager(), getString(R.string.dialog_warning_tag));
+
     }
 
+    //TaskLoadWifiEntries creating PathError Dialog.
+    @Override
+    public void showPathErrorDialog() {
+        L.m("showPathErrorDialog");
+
+        String title = getString(R.string.dialog_error_title);
+        String message = getString(R.string.dialog_error_message);
+        String[] buttons = getResources().getStringArray(R.array.dialog_error_buttons);
+
+        CustomAlertDialogFragment fragment = CustomAlertDialogFragment.getInstance(title, message, buttons);
+        fragment.setTargetFragment(this, getResources().getInteger(R.integer.dialog_error_code));
+        fragment.show(getFragmentManager(), getString(R.string.dialog_error_tag));
+    }
+
+    //Handle Dialog Result Codes
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Resources resources = getResources();
+
+        //Handle Path Error Dialog
+        if(requestCode == resources.getInteger(R.integer.dialog_error_code)) {
+
+            if(resultCode == resources.getInteger(R.integer.dialog_confirm)) {
+                L.m("Dialog Error - Confirm");
+                FragmentActivity parent = getActivity();
+                ActivityOptionsCompat compat = ActivityOptionsCompat.makeSceneTransitionAnimation(parent, null);
+                parent.startActivityForResult(
+                        new Intent(parent, SettingsActivity.class),
+                        resources.getInteger(R.integer.settings_activity_code),
+                        compat.toBundle());
+
+            } //Else Dismissed
+        }
+
+        //Handle LoadFromFile Warning Dialog
+        if (requestCode == resources.getInteger(R.integer.dialog_warning_code)) {
+
+            if(resultCode == resources.getInteger(R.integer.dialog_confirm)) {
+                L.m("Dialog Warning - Confirm");
+                loadFromFile();
+
+            } //Else Dismissed
+        }
+    }
 }

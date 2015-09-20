@@ -33,8 +33,21 @@
     <string name="pref_path_list_manual">Manual</string>
 
 
-    <!-- Error Dialog Fragment -->
-    <string name="error_settings_button">Settings</string>
-    <string name="error_dismiss_button">Dismiss</string>
+    <!-- Dialog Fragment -->
+    <string name="dialog_error_tag">dialog_error</string>
+    <string name="dialog_error_title">Error!</string>
+    <string name="dialog_error_message">Could not locate File \n would you like to change path settings?</string>
+    <string-array name="dialog_error_buttons">
+        <item>Settings</item>
+        <item>Dismiss</item>
+    </string-array>
+
+    <string name="dialog_warning_tag">dialog_warning</string>
+    <string name="dialog_warning_title">Warning!</string>
+    <string name="dialog_warning_message">Reloading data from file will erase current database</string>
+    <string-array name="dialog_warning_buttons">
+        <item>Reload</item>
+        <item>Cancel</item>
+    </string-array>
 
 </resources>
