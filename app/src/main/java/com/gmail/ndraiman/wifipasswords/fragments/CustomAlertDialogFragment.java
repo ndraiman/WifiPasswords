@@ -13,7 +13,7 @@ import com.gmail.ndraiman.wifipasswords.R;
 import com.gmail.ndraiman.wifipasswords.activities.SettingsActivity;
 
 
-public class ErrorDialogFragment extends DialogFragment {
+public class CustomAlertDialogFragment extends DialogFragment {
 
     private static final String MESSAGE_KEY = "error_dialog_message";
     private static final String ERROR_TITLE = "Error...";
@@ -22,8 +22,8 @@ public class ErrorDialogFragment extends DialogFragment {
     private static final String LOG_TAG = "ErrorDialog";
     private DialogListener mListener;
 
-    public static ErrorDialogFragment getInstance(String message) {
-        ErrorDialogFragment fragment = new ErrorDialogFragment();
+    public static CustomAlertDialogFragment getInstance(String message) {
+        CustomAlertDialogFragment fragment = new CustomAlertDialogFragment();
 
         Bundle args = new Bundle();
         args.putString(MESSAGE_KEY, message);
@@ -32,7 +32,7 @@ public class ErrorDialogFragment extends DialogFragment {
         return fragment;
     }
 
-    public ErrorDialogFragment() {
+    public CustomAlertDialogFragment() {
 
     }
 
@@ -53,6 +53,8 @@ public class ErrorDialogFragment extends DialogFragment {
     }
 
 
+
+    //Listener Class to handle Dialog Button Clicks
     private class DialogListener implements DialogInterface.OnClickListener {
 
 

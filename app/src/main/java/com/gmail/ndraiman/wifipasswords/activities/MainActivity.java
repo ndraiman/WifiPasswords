@@ -19,7 +19,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.gmail.ndraiman.wifipasswords.R;
-import com.gmail.ndraiman.wifipasswords.fragments.ErrorDialogFragment;
+import com.gmail.ndraiman.wifipasswords.fragments.CustomAlertDialogFragment;
 import com.gmail.ndraiman.wifipasswords.fragments.MainWifiFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
     public void showErrorDialog(String message) {
 
 
-        ErrorDialogFragment dialogFragment = ErrorDialogFragment.getInstance(message);
+        CustomAlertDialogFragment dialogFragment = CustomAlertDialogFragment.getInstance(message);
         dialogFragment.show(getSupportFragmentManager(), "DIALOG_TAG");
 
     }

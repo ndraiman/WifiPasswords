@@ -11,7 +11,7 @@ import com.gmail.ndraiman.wifipasswords.extras.ExecuteAsRootBase;
 import com.gmail.ndraiman.wifipasswords.extras.L;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
 import com.gmail.ndraiman.wifipasswords.extras.RootCheck;
-import com.gmail.ndraiman.wifipasswords.fragments.ErrorDialogListener;
+import com.gmail.ndraiman.wifipasswords.fragments.CustomAlertDialogListener;
 import com.gmail.ndraiman.wifipasswords.fragments.MainWifiFragment;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
 import com.gmail.ndraiman.wifipasswords.recycler.WifiListLoadedListener;
@@ -36,13 +36,13 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
     private boolean hasRootAccess = true;
     private String mPath;
     private String mFileName;
-    private ErrorDialogListener mErrorDialogListener;
+    private CustomAlertDialogListener mDialogListener;
 
-    public TaskLoadWifiEntries(String filePath, String fileName, WifiListLoadedListener listListener, ErrorDialogListener dialogListener) {
+    public TaskLoadWifiEntries(String filePath, String fileName, WifiListLoadedListener listListener, CustomAlertDialogListener dialogListener) {
         mListListener = listListener;
         mPath = filePath;
         mFileName = fileName;
-        mErrorDialogListener = dialogListener;
+        mDialogListener = dialogListener;
 
         Log.d(LOG_TAG, "Constructor - mPath = " + mPath + "\n mFileName = " + mFileName);
     }
@@ -157,7 +157,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
             if (!file.exists()) {
                 Log.e(LOG_TAG, "readFile - File not found");
                 //Error Dialog
-                mErrorDialogListener.onError("File Not Found");
+                mDialogListener.onError("File Not Found");
                 return new ArrayList<>();
             }
 

@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import me.zhanghai.android.materialprogressbar.IndeterminateProgressDrawable;
 
 
-public class MainWifiFragment extends Fragment implements WifiListLoadedListener, ErrorDialogListener {
+public class MainWifiFragment extends Fragment implements WifiListLoadedListener, CustomAlertDialogListener {
 
     private static final String STATE_WIFI_ENTRIES = "state_wifi_entries"; //Parcel key
     private static final String COPIED_WIFI_ENTRY = "copied_wifi_entry"; //Clipboard Label
@@ -242,10 +242,10 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
     }
 
-    //Invoke ErrorDialogFragment
+    //Invoke CustomAlertDialogFragment
     @Override
     public void onError(String message) {
-        ErrorDialogFragment fragment = ErrorDialogFragment.getInstance(message);
+        CustomAlertDialogFragment fragment = CustomAlertDialogFragment.getInstance(message);
         fragment.show(getFragmentManager(), "DIALOG_TAG");
     }
 }
