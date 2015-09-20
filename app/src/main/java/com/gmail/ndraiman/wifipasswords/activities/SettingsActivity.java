@@ -159,6 +159,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
                     preference.setSummary(stringValue);
 
+                    //Toggle Manual location entry according to List Choice
                     if(stringValue.equals(getString(R.string.pref_path_list_manual))) {
 
                         findPreference(getString(R.string.pref_path_manual_key)).setEnabled(true);

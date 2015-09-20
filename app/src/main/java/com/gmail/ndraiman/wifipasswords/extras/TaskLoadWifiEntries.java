@@ -35,6 +35,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         mListListener = listener;
         mPath = filePath;
         mFileName = fileName;
+
         Log.d(LOG_TAG, "Constructor - mPath = " + mPath + "\n mFileName = " + mFileName);
     }
 
@@ -156,7 +157,6 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
             String line = "";
             String title = "";
             String password = "";
-            String check = "";
 
             while ((line = bufferedReader.readLine()) != null) {
                 if (line.equals("network={")) {
