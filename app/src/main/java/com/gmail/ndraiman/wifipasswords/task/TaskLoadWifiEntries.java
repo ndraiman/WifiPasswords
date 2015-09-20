@@ -1,4 +1,4 @@
-package com.gmail.ndraiman.wifipasswords.extras;
+package com.gmail.ndraiman.wifipasswords.task;
 
 
 import android.os.AsyncTask;
@@ -6,9 +6,15 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 
-import com.gmail.ndraiman.wifipasswords.activities.MainWifiFragment;
 import com.gmail.ndraiman.wifipasswords.database.PasswordDB;
+import com.gmail.ndraiman.wifipasswords.extras.ExecuteAsRootBase;
+import com.gmail.ndraiman.wifipasswords.extras.L;
+import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
+import com.gmail.ndraiman.wifipasswords.extras.RootCheck;
+import com.gmail.ndraiman.wifipasswords.fragments.ErrorDialogListener;
+import com.gmail.ndraiman.wifipasswords.fragments.MainWifiFragment;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
+import com.gmail.ndraiman.wifipasswords.recycler.WifiListLoadedListener;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -30,11 +36,13 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
     private boolean hasRootAccess = true;
     private String mPath;
     private String mFileName;
+    private ErrorDialogListener mErrorDialogListener;
 
-    public TaskLoadWifiEntries(String filePath, String fileName, WifiListLoadedListener listener) {
-        mListListener = listener;
+    public TaskLoadWifiEntries(String filePath, String fileName, WifiListLoadedListener listListener, ErrorDialogListener dialogListener) {
+        mListListener = listListener;
         mPath = filePath;
         mFileName = fileName;
+        mErrorDialogListener = dialogListener;
 
         Log.d(LOG_TAG, "Constructor - mPath = " + mPath + "\n mFileName = " + mFileName);
     }
@@ -75,6 +83,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         db.deleteAll(false);
         db.insertWifiEntries(wifiEntries, false);
         MyApplication.closeDatabase();
+
 
         //Update RecyclerView
         if(mListListener != null) {
@@ -147,7 +156,8 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
 
             if (!file.exists()) {
                 Log.e(LOG_TAG, "readFile - File not found");
-                //TODO Error Dialog
+                //Error Dialog
+                mErrorDialogListener.onError("File Not Found");
                 return new ArrayList<>();
             }
 
@@ -190,5 +200,4 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
 
         return listWifi;
     }
-
 }

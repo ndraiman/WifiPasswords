@@ -1,4 +1,4 @@
-package com.gmail.ndraiman.wifipasswords.extras;
+package com.gmail.ndraiman.wifipasswords.recycler;
 
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
 

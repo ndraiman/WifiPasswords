@@ -24,8 +24,6 @@
     <string name="pref_reset_summary">restore wpa_supplicant path</string>
     <string name="pref_reset_title">Reset to Default</string>
 
-
-
     <string-array name="wpa_supplicant_locations">
         <item>/data/misc/wifi/wpa_supplicant.conf</item>
         <item>/data/wifi/bcm_supp.conf</item>
@@ -35,5 +33,8 @@
     <string name="pref_path_list_manual">Manual</string>
 
 
+    <!-- Error Dialog Fragment -->
+    <string name="error_settings_button">Settings</string>
+    <string name="error_dismiss_button">Dismiss</string>
 
 </resources>

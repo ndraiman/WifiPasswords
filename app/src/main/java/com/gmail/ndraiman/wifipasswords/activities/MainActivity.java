@@ -19,6 +19,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.gmail.ndraiman.wifipasswords.R;
+import com.gmail.ndraiman.wifipasswords.fragments.ErrorDialogFragment;
+import com.gmail.ndraiman.wifipasswords.fragments.MainWifiFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -116,6 +118,14 @@ public class MainActivity extends AppCompatActivity {
         snackbarText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
 
         mSnackbar.show();
+
+    }
+
+    public void showErrorDialog(String message) {
+
+
+        ErrorDialogFragment dialogFragment = ErrorDialogFragment.getInstance(message);
+        dialogFragment.show(getSupportFragmentManager(), "DIALOG_TAG");
 
     }
 

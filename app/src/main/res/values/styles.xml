@@ -16,6 +16,11 @@
 
     <style name="AppTheme_Dark" parent="Theme.AppCompat.NoActionBar" />
 
+    <style name="CustomErrorDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/colorPrimary</item>
+
+    </style>
+
     <!--<style name="myCustomToolbarTheme" parent="ThemeOverlay.AppCompat.Light">-->
     <!--<item name="android:textColorPrimary">#F00</item>-->
     <!--<item name="android:textColorSecondary">#00F</item>-->

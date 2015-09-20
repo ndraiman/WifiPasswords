@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="192dp"
         android:fitsSystemWindows="true"
-        app:layout_behavior="com.gmail.ndraiman.wifipasswords.activities.FlingBehavior">
+        app:layout_behavior="com.gmail.ndraiman.wifipasswords.extras.FlingBehavior">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"

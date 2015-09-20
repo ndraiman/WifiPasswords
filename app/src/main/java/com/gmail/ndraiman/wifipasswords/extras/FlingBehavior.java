@@ -1,4 +1,4 @@
-package com.gmail.ndraiman.wifipasswords.activities;
+package com.gmail.ndraiman.wifipasswords.extras;
 
 import android.content.Context;
 import android.support.design.widget.AppBarLayout;

@@ -1,4 +1,4 @@
-package com.gmail.ndraiman.wifipasswords.activities;
+package com.gmail.ndraiman.wifipasswords.fragments;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -22,10 +22,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gmail.ndraiman.wifipasswords.R;
+import com.gmail.ndraiman.wifipasswords.activities.MainActivity;
 import com.gmail.ndraiman.wifipasswords.extras.L;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
-import com.gmail.ndraiman.wifipasswords.extras.TaskLoadWifiEntries;
-import com.gmail.ndraiman.wifipasswords.extras.WifiListLoadedListener;
+import com.gmail.ndraiman.wifipasswords.task.TaskLoadWifiEntries;
+import com.gmail.ndraiman.wifipasswords.recycler.WifiListLoadedListener;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
 import com.gmail.ndraiman.wifipasswords.recycler.RecyclerTouchListener;
 import com.gmail.ndraiman.wifipasswords.recycler.WifiListAdapter;
@@ -35,7 +36,7 @@ import java.util.ArrayList;
 import me.zhanghai.android.materialprogressbar.IndeterminateProgressDrawable;
 
 
-public class MainWifiFragment extends Fragment implements WifiListLoadedListener {
+public class MainWifiFragment extends Fragment implements WifiListLoadedListener, ErrorDialogListener {
 
     private static final String STATE_WIFI_ENTRIES = "state_wifi_entries"; //Parcel key
     private static final String COPIED_WIFI_ENTRY = "copied_wifi_entry"; //Clipboard Label
@@ -205,7 +206,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         mProgressBar.setVisibility(View.VISIBLE); //Show Progress Bar
         L.m("loadFromFile");
         MainActivity.makeSnackbar("Loading Data From File");
-        new TaskLoadWifiEntries(mPath, mFileName, this).execute();
+        new TaskLoadWifiEntries(mPath, mFileName, this, this).execute();
 
     }
 
@@ -239,5 +240,12 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
         L.m("getPath() - path = " + mPath + "\n filename = " + mFileName);
 
+    }
+
+    //Invoke ErrorDialogFragment
+    @Override
+    public void onError(String message) {
+        ErrorDialogFragment fragment = ErrorDialogFragment.getInstance(message);
+        fragment.show(getFragmentManager(), "DIALOG_TAG");
     }
 }
