@@ -25,11 +25,17 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
 
 
     private static final String LOG_TAG = "TaskLoadWifiEntries";
+    private static final String APP_FOLDER = "WifiPasswords";
     private WifiListLoadedListener mListListener;
     private boolean hasRootAccess = true;
+    private String mPath;
+    private String mFileName;
 
-    public TaskLoadWifiEntries(WifiListLoadedListener listener) {
+    public TaskLoadWifiEntries(String filePath, String fileName, WifiListLoadedListener listener) {
         mListListener = listener;
+        mPath = filePath;
+        mFileName = fileName;
+        Log.d(LOG_TAG, "Constructor - mPath = " + mPath + "\n mFileName = " + mFileName);
     }
 
 
@@ -100,7 +106,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
      ********************/
     private boolean createDir() {
         Log.e(LOG_TAG, "Creating Dir");
-        File folder = new File(Environment.getExternalStorageDirectory() + "/WifiPasswords");
+        File folder = new File(Environment.getExternalStorageDirectory() + "/" + APP_FOLDER);
         boolean dirCreated = true;
         if (!folder.exists()) {
             dirCreated = folder.mkdir();
@@ -120,7 +126,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
 
         Log.e(LOG_TAG, "Copying File");
         try {
-            Process suProcess = Runtime.getRuntime().exec("su -c cp /data/misc/wifi/wpa_supplicant.conf /sdcard/WifiPasswords");
+            Process suProcess = Runtime.getRuntime().exec("su -c cp " + mPath + mFileName + " /sdcard/" + APP_FOLDER);
             suProcess.waitFor(); //wait for SU command to finish
         } catch (IOException | InterruptedException e) {
             Log.e(LOG_TAG, "copyFile Error: " + e.getClass().getName() + " " + e);
@@ -135,11 +141,13 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
 
 
             File directory = Environment.getExternalStorageDirectory();
-            File file = new File(directory + "/WifiPasswords/wpa_supplicant.conf");
+            File file = new File(directory + "/" + APP_FOLDER + "/" + mFileName);
+            Log.d(LOG_TAG, directory + "/" + APP_FOLDER + "/" + mFileName);
 
             if (!file.exists()) {
                 Log.e(LOG_TAG, "readFile - File not found");
-                return null;
+                //TODO Error Dialog
+                return new ArrayList<>();
             }
 
             Log.e(LOG_TAG, "Starting to read");

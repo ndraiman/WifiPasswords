@@ -32,7 +32,7 @@
         <item>/data/misc/wifi/wpa.conf</item>
         <item>Manual</item>
     </string-array>
-
+    <string name="pref_path_list_manual">Manual</string>
 
 
 

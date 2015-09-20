@@ -4,8 +4,8 @@
     android:id="@+id/wifi_entry_row"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="3dp"
-    card_view:cardElevation="5dp"
+    card_view:cardElevation="3dp"
+    card_view:cardUseCompatPadding="true"
     card_view:cardCornerRadius="4dp">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

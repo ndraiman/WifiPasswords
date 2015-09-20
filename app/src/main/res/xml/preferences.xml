@@ -7,18 +7,21 @@
         android:defaultValue="@string/pref_path_default"
         android:entries="@array/wpa_supplicant_locations"
         android:entryValues="@array/wpa_supplicant_locations"
-        android:summary="@string/pref_path_default" />
+        android:summary="@string/pref_path_default"
+        android:order="200"/>
 
     <EditTextPreference
         android:defaultValue="@string/pref_path_default"
         android:key="@string/pref_path_manual_key"
         android:summary="@string/pref_path_default"
-        android:title="@string/pref_path_manual_title" />
+        android:title="@string/pref_path_manual_title"
+        android:order="210"/>
 
     <Preference
         android:key="@string/pref_reset_key"
         android:summary="@string/pref_reset_summary"
-        android:title="@string/pref_reset_title" />
+        android:title="@string/pref_reset_title"
+        android:order="220"/>
 
 
 </PreferenceScreen>

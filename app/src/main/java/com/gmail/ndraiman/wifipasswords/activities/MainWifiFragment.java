@@ -4,7 +4,9 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -41,6 +43,8 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     private WifiListAdapter mAdapter;
     private ArrayList<WifiEntry> mListWifi = new ArrayList<>();
     private ProgressBar mProgressBar;
+    private String mPath;
+    private String mFileName;
 
     public static TextView textNoRoot;
 
@@ -195,11 +199,13 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     //Copy wpa_supplicant and extract data from it via AsyncTask
     private void loadFromFile() {
 
+        getPath();
+
         mAdapter.setWifiList(new ArrayList<WifiEntry>());
         mProgressBar.setVisibility(View.VISIBLE); //Show Progress Bar
         L.m("loadFromFile");
         MainActivity.makeSnackbar("Loading Data From File");
-        new TaskLoadWifiEntries(this).execute();
+        new TaskLoadWifiEntries(mPath, mFileName, this).execute();
 
     }
 
@@ -214,5 +220,24 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
         MainActivity.makeSnackbar(snackbarMessage);
         L.m("copyToClipboard:\n" + clipData.toString());
+    }
+
+    //Retrieve wpa_supplicant Path from Settings
+    private void getPath() {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String prefListChoice = sharedPreferences.getString(getString(R.string.pref_path_list_key), getString(R.string.pref_path_default));
+
+        if(prefListChoice.equals(getString(R.string.pref_path_list_manual)))
+            mPath = sharedPreferences.getString(getString(R.string.pref_path_manual_key), getString(R.string.pref_path_default));
+        else
+            mPath = prefListChoice;
+
+        //Split entire path to Path & Filename
+        mFileName = mPath.substring(mPath.lastIndexOf("/") + 1);
+        mPath = mPath.substring(0, mPath.lastIndexOf("/") + 1);
+
+        L.m("getPath() - path = " + mPath + "\n filename = " + mFileName);
+
     }
 }
