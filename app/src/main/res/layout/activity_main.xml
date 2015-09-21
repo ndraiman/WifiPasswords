@@ -14,6 +14,7 @@
         app:layout_behavior="com.gmail.ndraiman.wifipasswords.extras.FlingBehavior">
 
         <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
@@ -53,7 +54,6 @@
         style="@style/floating_action_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_search_open_light"
         app:backgroundTint="@color/colorPrimary"
         app:borderWidth="0dp"
         app:elevation="2dp"

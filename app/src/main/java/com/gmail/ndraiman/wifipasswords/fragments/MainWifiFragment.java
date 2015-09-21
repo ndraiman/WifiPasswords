@@ -8,6 +8,9 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -54,6 +57,10 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     private ProgressBar mProgressBar;
     private String mPath;
     private String mFileName;
+    private AppBarLayout mAppBarLayout;
+    private FloatingActionButton mFAB;
+    private SearchView mSearchView;
+    private CollapsingToolbarLayout mCollapsingToolbarLayout;
 
     public static TextView textNoRoot;
 
@@ -78,10 +85,17 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         View layout = inflater.inflate(R.layout.fragment_main_wifi, container, false);
         setHasOptionsMenu(true);
 
+        //Init local Views
         mListWifi = new ArrayList<>();
         textNoRoot = (TextView) layout.findViewById(R.id.text_no_root);
         mRecyclerView = (RecyclerView) layout.findViewById(R.id.main_wifi_list_recycler);
         mProgressBar = (ProgressBar) layout.findViewById(R.id.progress_bar);
+
+        //get Activity Views
+        mFAB = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        mFAB.setImageResource(R.drawable.ic_search_open_light);
+        mCollapsingToolbarLayout = (CollapsingToolbarLayout) getActivity().findViewById(R.id.collapsing_layout);
+        mAppBarLayout = (AppBarLayout) getActivity().findViewById(R.id.app_bar_layout);
 
 
         //backward compatible MaterialProgressBar - https://github.com/DreaminginCodeZH/MaterialProgressBar
@@ -116,34 +130,6 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         return layout;
     }
 
-    private void setupRecyclerView() {
-
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new WifiListAdapter(getActivity());
-        mRecyclerView.setAdapter(mAdapter);
-
-
-        //Setup RecyclerTouchListener
-        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                Toast.makeText(getActivity(), "onClick " + position, Toast.LENGTH_SHORT).show();  //placeholder
-            }
-
-            @Override
-            public void onLongClick(View view, int position) {
-                L.m("RecyclerView - onLongClick " + position);
-
-                WifiEntry entry = mListWifi.get(position);
-                String textToCopy = "Wifi Name: " + entry.getTitle() + "\n"
-                        + "Password: " + entry.getPassword();
-                String snackbarMessage = getResources().getString(R.string.text_wifi_copy);
-
-                copyToClipboard(COPIED_WIFI_ENTRY, textToCopy, snackbarMessage);
-            }
-        }));
-    }
-
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -171,10 +157,12 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_wifi_main_fragment, menu);
 
-        final MenuItem item = menu.findItem(R.id.action_search);
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
-        searchView.setOnQueryTextListener(this);
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+
+        setupSearch(searchItem);
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -264,6 +252,70 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
     }
 
+
+    /********************************************************/
+    /******************** Setup Methods *********************/
+    /********************************************************/
+
+    private void setupRecyclerView() {
+
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mAdapter = new WifiListAdapter(getActivity());
+        mRecyclerView.setAdapter(mAdapter);
+
+
+        //Setup RecyclerTouchListener
+        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
+            @Override
+            public void onClick(View view, int position) {
+                Toast.makeText(getActivity(), "onClick " + position, Toast.LENGTH_SHORT).show();  //placeholder
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+                L.m("RecyclerView - onLongClick " + position);
+
+                WifiEntry entry = mListWifi.get(position);
+                String textToCopy = "Wifi Name: " + entry.getTitle() + "\n"
+                        + "Password: " + entry.getPassword();
+                String snackbarMessage = getResources().getString(R.string.text_wifi_copy);
+
+                copyToClipboard(COPIED_WIFI_ENTRY, textToCopy, snackbarMessage);
+            }
+        }));
+    }
+
+
+
+    private void setupSearch(MenuItem searchItem) {
+
+        MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
+            //on Search - Collapse Toolbar & disable expanding, hide title;
+            @Override
+            public boolean onMenuItemActionExpand(MenuItem item) {
+                L.m("Search - onMenuItemActionExpand");
+                mCollapsingToolbarLayout.setTitleEnabled(false);
+                mAppBarLayout.setExpanded(false);
+                mRecyclerView.setNestedScrollingEnabled(false);
+
+                return true;
+            }
+
+            //on Close - Expand Toolbar & enable expanding, show title;
+            @Override
+            public boolean onMenuItemActionCollapse(MenuItem item) {
+                L.m("Search - onMenuItemActionCollapse");
+                mRecyclerView.setNestedScrollingEnabled(true);
+                mAppBarLayout.setExpanded(true);
+                mCollapsingToolbarLayout.setTitleEnabled(true);
+
+                return true;
+            }
+        });
+
+        mSearchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        mSearchView.setOnQueryTextListener(this);
+    }
 
 
     /********************************************************/
