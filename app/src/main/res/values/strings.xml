@@ -2,8 +2,8 @@
 
     <string name="text_placeholder">NA</string>
     <string name="text_no_root">No Root Access</string>
-    <string name="text_wifi_copy">WIFI Data Copied to Clipboard</string>
-
+    <string name="snackbar_wifi_copy">WIFI Data Copied to Clipboard</string>
+    <string name="snackbar_dismiss">Dismiss</string>
 
     <!-- Titles -->
     <string name="app_name">Wifi Passwords</string>
@@ -50,6 +50,18 @@
     <string name="dialog_warning_message">Reloading data from file will erase current database</string>
     <string-array name="dialog_warning_buttons">
         <item>Reload</item>
+        <item>Cancel</item>
+    </string-array>
+
+    <string name="dialog_input_title_hint">Title</string>
+    <string name="dialog_input_password_hint">Password</string>
+    <string name="dialog_add_tag">dialog_add</string>
+    <string name="dialog_add_title">Add Wifi Entry</string>
+    <string name="dialog_add_error_empty">One or More fields are blank</string>
+    <string name="dialog_add_title_empty">Title cannot be empty</string>
+    <string name="dialog_add_password_empty">Password cannot be empty</string>
+    <string-array name="dialog_add_buttons">
+        <item>Add</item>
         <item>Cancel</item>
     </string-array>
 

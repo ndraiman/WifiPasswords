@@ -59,7 +59,7 @@
         app:elevation="2dp"
         app:layout_anchor="@id/app_bar_layout"
         app:layout_anchorGravity="bottom|right|end"
-        app:pressedTranslationZ="5dp" />
+        app:pressedTranslationZ="20dp" />
 
 
 </android.support.design.widget.CoordinatorLayout>
