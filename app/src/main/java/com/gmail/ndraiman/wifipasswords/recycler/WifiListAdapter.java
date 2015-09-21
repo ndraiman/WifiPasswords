@@ -2,6 +2,7 @@ package com.gmail.ndraiman.wifipasswords.recycler;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +18,12 @@ import java.util.List;
 public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyViewHolder> {
 
     private LayoutInflater layoutInflater;
-    private List<WifiEntry> mListWifi = new ArrayList<>();
+    private List<WifiEntry> mListWifi;
     private int mPreviousPosition = -1;
 
     public WifiListAdapter(Context context) {
         layoutInflater = LayoutInflater.from(context);
+        mListWifi = new ArrayList<>();
 
         //TODO Delete once SQLite database is implemented
         //mListWifi = placeholderData();
@@ -41,13 +43,13 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
         holder.wifiPassword.setText(currentEntry.getPassword());
 
         //Set Animation
-        if (position > mPreviousPosition) {
-            AnimationUtils.translateY(holder, true);
-
-        } else {
-            AnimationUtils.translateY(holder, false);
-        }
-        mPreviousPosition = position;
+//        if (position > mPreviousPosition) {
+//            AnimationUtils.translateY(holder, true);
+//
+//        } else {
+//            AnimationUtils.translateY(holder, false);
+//        }
+//        mPreviousPosition = position;
 
     }
 
@@ -58,10 +60,73 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
 
 
     public void setWifiList(ArrayList<WifiEntry> listWifi) {
-        mListWifi = listWifi;
-        mPreviousPosition = -1; //fix new load animation
+        Log.d("RecyclerAdapter", "setWifiList");
+        mListWifi = new ArrayList<>(listWifi);
+        mPreviousPosition = -1; //fix load animation on new data loaded
         notifyDataSetChanged();
     }
+
+    /*****************************************/
+
+    public WifiEntry removeItem(int position) {
+        Log.d("RecyclerAdapter", "removeItem");
+        final WifiEntry entry = mListWifi.remove(position);
+        notifyItemRemoved(position);
+        return entry;
+    }
+
+    public void addItem(int position, WifiEntry entry) {
+        Log.d("RecyclerAdapter", "addItem");
+        mListWifi.add(position, entry);
+        notifyItemInserted(position);
+    }
+
+    public void moveItem(int fromPosition, int toPosition) {
+        Log.d("RecyclerAdapter", "moveItem");
+        final WifiEntry entry = mListWifi.remove(fromPosition);
+        mListWifi.add(toPosition, entry);
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+    public void animateTo(ArrayList<WifiEntry> listWifi) {
+        Log.d("RecyclerAdapter", "animateTo");
+        //Order is important
+        applyAndAnimateRemovals(listWifi);
+        applyAndAnimateAdditions(listWifi);
+        applyAndAnimateMovedItems(listWifi);
+    }
+
+    private void applyAndAnimateRemovals(ArrayList<WifiEntry> newListWifi) {
+        Log.d("RecyclerAdapter", "applyAndAnimateRemovals");
+        for (int i = mListWifi.size() - 1; i >= 0; i--) {
+            final WifiEntry entry = mListWifi.get(i);
+            if (!newListWifi.contains(entry)) {
+                removeItem(i);
+            }
+        }
+    }
+
+    private void applyAndAnimateAdditions(ArrayList<WifiEntry> newListWifi) {
+        Log.d("RecyclerAdapter", "applyAndAnimateAdditions");
+        for (int i = 0, count = newListWifi.size(); i < count; i++) {
+            final WifiEntry entry = newListWifi.get(i);
+            if (!mListWifi.contains(entry)) {
+                addItem(i, entry);
+            }
+        }
+    }
+
+    private void applyAndAnimateMovedItems(ArrayList<WifiEntry> newListWifi) {
+        Log.d("RecyclerAdapter", "applyAndAnimateMovedItems");
+        for (int toPosition = newListWifi.size() - 1; toPosition >= 0; toPosition--) {
+            final WifiEntry entry = newListWifi.get(toPosition);
+            final int fromPosition = mListWifi.indexOf(entry);
+            if (fromPosition >= 0 && fromPosition != toPosition) {
+                moveItem(fromPosition, toPosition);
+            }
+        }
+    }
+    /*****************************************/
 
     //TODO Delete the non-used ViewHolder
     /*****************************************/

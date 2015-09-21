@@ -12,8 +12,11 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,13 +43,14 @@ import java.util.ArrayList;
 import me.zhanghai.android.materialprogressbar.IndeterminateProgressDrawable;
 
 
-public class MainWifiFragment extends Fragment implements WifiListLoadedListener, CustomAlertDialogListener {
+public class MainWifiFragment extends Fragment implements WifiListLoadedListener,
+        CustomAlertDialogListener , SearchView.OnQueryTextListener {
 
     private static final String STATE_WIFI_ENTRIES = "state_wifi_entries"; //Parcel key
     private static final String COPIED_WIFI_ENTRY = "copied_wifi_entry"; //Clipboard Label
     private RecyclerView mRecyclerView;
     private WifiListAdapter mAdapter;
-    private ArrayList<WifiEntry> mListWifi = new ArrayList<>();
+    private ArrayList<WifiEntry> mListWifi;
     private ProgressBar mProgressBar;
     private String mPath;
     private String mFileName;
@@ -74,17 +78,46 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         View layout = inflater.inflate(R.layout.fragment_main_wifi, container, false);
         setHasOptionsMenu(true);
 
+        mListWifi = new ArrayList<>();
         textNoRoot = (TextView) layout.findViewById(R.id.text_no_root);
+        mRecyclerView = (RecyclerView) layout.findViewById(R.id.main_wifi_list_recycler);
+        mProgressBar = (ProgressBar) layout.findViewById(R.id.progress_bar);
 
 
         //backward compatible MaterialProgressBar - https://github.com/DreaminginCodeZH/MaterialProgressBar
-        mProgressBar = (ProgressBar) layout.findViewById(R.id.progress_bar);
         IndeterminateProgressDrawable progressDrawable = new IndeterminateProgressDrawable(getActivity());
         progressDrawable.setTint(ContextCompat.getColor(getActivity(), R.color.colorPrimary)); //Change Color
         mProgressBar.setIndeterminateDrawable(progressDrawable);
 
         //Setup RecyclerView & Adapter
-        mRecyclerView = (RecyclerView) layout.findViewById(R.id.main_wifi_list_recycler);
+        setupRecyclerView();
+
+        //Determine if Activity runs for first time
+        if (savedInstanceState != null) {
+
+            L.m("extracting mListWifi from Parcelable");
+            //if starts after a rotation or configuration change, load the existing Wifi list from a parcelable
+            mListWifi = savedInstanceState.getParcelableArrayList(STATE_WIFI_ENTRIES);
+
+        } else {
+            //if starts for the first time, load the list of wifi from a database
+            mListWifi = MyApplication.getWritableDatabase().getAllWifiEntries(false);
+            MyApplication.closeDatabase();
+            //if the database is empty, trigger an AsyncTask to get wifi list from the wpa_supplicant
+            if (mListWifi.isEmpty()) {
+
+                loadFromFile();
+                L.m("executing task from onCreate");
+            }
+        }
+
+        mAdapter.setWifiList(mListWifi);
+
+        return layout;
+    }
+
+    private void setupRecyclerView() {
+
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new WifiListAdapter(getActivity());
         mRecyclerView.setAdapter(mAdapter);
@@ -109,28 +142,6 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
                 copyToClipboard(COPIED_WIFI_ENTRY, textToCopy, snackbarMessage);
             }
         }));
-
-        //Determine if Activity runs for first time
-        if (savedInstanceState != null) {
-            L.m("extracting mListWifi from Parcelable");
-            //if starts after a rotation or configuration change, load the existing Wifi list from a parcelable
-            mListWifi = savedInstanceState.getParcelableArrayList(STATE_WIFI_ENTRIES);
-
-        } else {
-            //if starts for the first time, load the list of wifi from a database
-            mListWifi = MyApplication.getWritableDatabase().getAllWifiEntries(false);
-            MyApplication.closeDatabase();
-            //if the database is empty, trigger an AsyncTask to get wifi list from the wpa_supplicant
-            if (mListWifi.isEmpty()) {
-
-                loadFromFile();
-                L.m("executing task from onCreate");
-            }
-        }
-
-        mAdapter.setWifiList(mListWifi);
-
-        return layout;
     }
 
 
@@ -158,7 +169,11 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_wifi_list_main, menu);
+        inflater.inflate(R.menu.menu_wifi_main_fragment, menu);
+
+        final MenuItem item = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.setOnQueryTextListener(this);
     }
 
     @Override
@@ -228,6 +243,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         MainActivity.makeSnackbar(snackbarMessage);
         L.m("copyToClipboard:\n" + clipData.toString());
     }
+
 
     //Retrieve wpa_supplicant Path from Settings
     private void getPath() {
@@ -310,5 +326,43 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
             } //Else Dismissed
         }
+    }
+
+
+    /********************************************************/
+    /******************** Search Methods ********************/
+    /********************************************************/
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        Log.d("SEARCH", "onQueryTextSubmit");
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String query) {
+        Log.d("SEARCH", "onQueryTextChange");
+
+        //filter logic
+        final ArrayList<WifiEntry> filteredWifiList = filter(mListWifi, query);
+        mAdapter.animateTo(filteredWifiList);
+        mRecyclerView.scrollToPosition(0);
+        return true;
+    }
+
+    public ArrayList<WifiEntry> filter(ArrayList<WifiEntry> listWifi, String query) {
+        Log.d("SEARCH", "filter");
+        query = query.toLowerCase();
+
+        final ArrayList<WifiEntry> filteredWifiList = new ArrayList<>();
+
+        for(WifiEntry entry : listWifi) {
+            final String title = entry.getTitle().toLowerCase();
+            if(title.contains(query)) {
+                filteredWifiList.add(entry);
+            }
+        }
+
+        return filteredWifiList;
     }
 }
