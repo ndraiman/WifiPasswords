@@ -34,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     //TODO Implement "Hidden" table.
-    //TODO App Design - Implement Drawer Layout to swap between activities and settings
 
 
     @Override
@@ -60,8 +59,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(mToolbar);
 
         mRoot = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
-
-        setupFAB();
 
         mainWifiFragment = MainWifiFragment.newInstance();
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, mainWifiFragment).commit();
@@ -110,20 +107,6 @@ public class MainActivity extends AppCompatActivity {
     /********************************************************/
     /****************** Additional Methods ******************/
     /********************************************************/
-
-    private void setupFAB() {
-
-        mFAB = (FloatingActionButton) findViewById(R.id.fab);
-        mFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO Implement Search
-                L.t(getBaseContext(), "FAB Search");
-            }
-        });
-
-    }
-
 
     //Custom Snackbar
     public static void makeSnackbar(String message) {

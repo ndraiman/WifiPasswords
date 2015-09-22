@@ -66,7 +66,8 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
         notifyDataSetChanged();
     }
 
-    /*****************************************/
+    /********************************************/
+    /********************************************/
 
     public WifiEntry removeItem(int position) {
         Log.d("RecyclerAdapter", "removeItem");
@@ -87,6 +88,9 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
         mListWifi.add(toPosition, entry);
         notifyItemMoved(fromPosition, toPosition);
     }
+
+    /********************************************/
+    /********************************************/
 
     public void animateTo(ArrayList<WifiEntry> listWifi) {
         Log.d("RecyclerAdapter", "animateTo");
@@ -126,7 +130,8 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
             }
         }
     }
-    /*****************************************/
+    /********************************************/
+    /********************************************/
 
     //TODO Delete the non-used ViewHolder
     /*****************************************/
@@ -146,6 +151,8 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
             wifiPassword = (TextView) itemView.findViewById(R.id.password_wifi);
 
         }
+
+
     }
 
     /*****************************************************************************/
@@ -214,6 +221,8 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
 
             data.add(current);
         }
+
+
 
         return data;
     }

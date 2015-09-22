@@ -26,6 +26,22 @@ public class PasswordDB {
 
     }
 
+    public void insertEntry(WifiEntry entry, boolean isHidden) {
+
+        String table = isHidden ? PasswordHelper.TABLE_PASSWORDS_HIDDEN : PasswordHelper.TABLE_PASSWORDS_MAIN;
+        L.m("insertEntry - isHidden=" + isHidden + " table=" + table);
+
+        String title = entry.getTitle();
+        String password = entry.getPassword();
+
+        String query = "INSERT INTO " + table + "("
+                + PasswordHelper.COLUMN_TITLE + ", "
+                + PasswordHelper.COLUMN_PASSWORD + ") VALUES ('"
+                + title + "', '" + password + "');";
+
+        mDatabase.execSQL(query);
+    }
+
     public void insertWifiEntries(ArrayList<WifiEntry> listWifi, boolean isHidden) {
 
         String table = isHidden ? PasswordHelper.TABLE_PASSWORDS_HIDDEN : PasswordHelper.TABLE_PASSWORDS_MAIN;

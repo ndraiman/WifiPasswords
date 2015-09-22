@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.gmail.ndraiman.wifipasswords.R;
 import com.gmail.ndraiman.wifipasswords.activities.MainActivity;
 import com.gmail.ndraiman.wifipasswords.activities.SettingsActivity;
+import com.gmail.ndraiman.wifipasswords.database.PasswordDB;
 import com.gmail.ndraiman.wifipasswords.extras.L;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
@@ -343,6 +344,14 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         WifiEntry entry = new WifiEntry(title, password);
         mAdapter.addItem(0, entry);
         mRecyclerView.scrollToPosition(0);
+        addToDatabase(entry, false);
+    }
+
+    private void addToDatabase(WifiEntry entry, boolean isHidden) {
+        L.m("addToDatabase");
+        PasswordDB db = MyApplication.getWritableDatabase();
+        db.insertEntry(entry, isHidden);
+        MyApplication.closeDatabase();
     }
 
     private void showAddWifiDialog() {
