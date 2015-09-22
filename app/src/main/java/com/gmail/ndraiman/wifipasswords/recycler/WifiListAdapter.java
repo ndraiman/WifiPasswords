@@ -12,10 +12,12 @@ import com.gmail.ndraiman.wifipasswords.R;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
-public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyViewHolder> {
+public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyViewHolder>
+        implements ItemTouchHelperAdapter {
 
     private LayoutInflater layoutInflater;
     private List<WifiEntry> mListWifi;
@@ -130,6 +132,32 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
             }
         }
     }
+
+    /********************************************/
+    /********************************************/
+
+    @Override
+    public boolean onItemMove(int fromPosition, int toPosition) {
+
+        if (fromPosition < toPosition) {
+            for (int i = fromPosition; i < toPosition; i++) {
+                Collections.swap(mListWifi, i, i + 1);
+            }
+        } else {
+            for(int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(mListWifi, i, i-1);
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition);
+
+        return true;
+    }
+
+    @Override
+    public void onItemDismiss(int position) {
+        removeItem(position);
+
+    }
     /********************************************/
     /********************************************/
 
@@ -221,7 +249,6 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
 
             data.add(current);
         }
-
 
 
         return data;

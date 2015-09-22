@@ -20,6 +20,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -38,6 +39,7 @@ import com.gmail.ndraiman.wifipasswords.database.PasswordDB;
 import com.gmail.ndraiman.wifipasswords.extras.L;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
+import com.gmail.ndraiman.wifipasswords.recycler.CustomItemTouchHelper;
 import com.gmail.ndraiman.wifipasswords.recycler.RecyclerTouchListener;
 import com.gmail.ndraiman.wifipasswords.recycler.WifiListAdapter;
 import com.gmail.ndraiman.wifipasswords.recycler.WifiListLoadedListener;
@@ -49,7 +51,7 @@ import me.zhanghai.android.materialprogressbar.IndeterminateProgressDrawable;
 
 
 public class MainWifiFragment extends Fragment implements WifiListLoadedListener,
-        CustomAlertDialogListener , SearchView.OnQueryTextListener, InputDialogListener {
+        SearchView.OnQueryTextListener, CustomAlertDialogListener, InputDialogListener {
 
     private static final String STATE_WIFI_ENTRIES = "state_wifi_entries"; //Parcel key
     private static final String COPIED_WIFI_ENTRY = "copied_wifi_entry"; //Clipboard Label
@@ -267,6 +269,10 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         mAdapter = new WifiListAdapter(getActivity());
         mRecyclerView.setAdapter(mAdapter);
 
+        //Item Touch Helper
+        ItemTouchHelper.Callback callback = new CustomItemTouchHelper(mAdapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+        touchHelper.attachToRecyclerView(mRecyclerView);
 
         //Setup RecyclerTouchListener
         mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
