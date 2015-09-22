@@ -75,13 +75,13 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
 
 
         //Set Animation
-//        if (position > mPreviousPosition) {
-//            AnimationUtils.translateY(holder, true);
-//
-//        } else {
-//            AnimationUtils.translateY(holder, false);
-//        }
-//        mPreviousPosition = position;
+        if (position > mPreviousPosition) {
+            AnimationUtils.translateY(holder, true);
+
+        } else {
+            AnimationUtils.translateY(holder, false);
+        }
+        mPreviousPosition = position;
 
     }
 
@@ -122,23 +122,6 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
         notifyItemMoved(fromPosition, toPosition);
     }
 
-    /*****************************************************/
-    /************ Animate LayoutManager Change ***********/
-    /*****************************************************/
-
-    public void removeEachItem() {
-        Log.d(LOG_TAG, "removeEachItem");
-        for (int i = 0; i < mListWifi.size(); i++) {
-            notifyItemRemoved(i);
-        }
-    }
-
-    public void addEachItem() {
-        Log.d(LOG_TAG, "addEachItem");
-        for (int i = 0; i < mListWifi.size(); i++) {
-            notifyItemInserted(i);
-        }
-    }
 
     /*********************************************/
     /************ Animate Search Query ***********/
@@ -242,7 +225,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     }
 
     /*****************************************************************************/
-    //Testing Custom Animation ViewHolder - add "compile 'jp.wasabeef:recyclerview-animators:1.2.0@aar' " to gradle
+    //Testing Custom Animation ViewHolder - add "compile 'jp.wasabeef:recyclerview-animators:1.3.0' " to gradle
     /*****************************************************************************/
 //    class MyCustomViewHolder extends AnimateViewHolder {
 //

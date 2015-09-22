@@ -5,6 +5,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -143,6 +144,21 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         return layout;
     }
 
+    //TODO Testing Grid layout as Landscape
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        L.m("onResume");
+
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            mViewAsList = true;
+            changeRecyclerLayout();
+        } else {
+            mViewAsList = false;
+            changeRecyclerLayout();
+        }
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -200,6 +216,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
             shareWifiList();
 
         } else if (id == R.id.action_layout_change) {
+            //TODO Delete this menu button - Layout will Change according to device orientation
             changeRecyclerLayout();
         }
 
@@ -301,7 +318,6 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         L.m("changeRecyclerLayout");
         mViewAsList = !mViewAsList;
 
-        mAdapter.removeEachItem(); //animate layout change
 
         mRecyclerView.setLayoutManager(mViewAsList ?
                 new LinearLayoutManager(getActivity()) : new GridLayoutManager(getActivity(), 2));
@@ -311,8 +327,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         mItemTouchHelper = new ItemTouchHelper(mCallback);
         mItemTouchHelper.attachToRecyclerView(mRecyclerView);
 
-        mAdapter.addEachItem(); //animate layout change
-
+        mAdapter.setWifiList(mListWifi);
         getActivity().invalidateOptionsMenu();
     }
 
