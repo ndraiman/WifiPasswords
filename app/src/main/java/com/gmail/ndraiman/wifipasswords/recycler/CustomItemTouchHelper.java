@@ -1,5 +1,6 @@
 package com.gmail.ndraiman.wifipasswords.recycler;
 
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
@@ -17,10 +18,20 @@ public class CustomItemTouchHelper extends ItemTouchHelper.Callback {
 
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-        int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-        int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
 
-        return makeMovementFlags(dragFlags, swipeFlags);
+        if (recyclerView.getLayoutManager() instanceof GridLayoutManager) {
+            Log.d(LOG_TAG, "getMovementFlags - GridLayout");
+            final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
+            final int swipeFlags = 0;
+            return makeMovementFlags(dragFlags, swipeFlags);
+
+        } else {
+            Log.d(LOG_TAG, "getMovementFlags - LinearLayout");
+            int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+            int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+
+            return makeMovementFlags(dragFlags, swipeFlags);
+        }
     }
 
     @Override
@@ -37,7 +48,7 @@ public class CustomItemTouchHelper extends ItemTouchHelper.Callback {
     }
 
 
-
+    //used for ItemTouchHelperAdapter
     @Override
     public boolean isLongPressDragEnabled() {
         return false;
@@ -47,5 +58,6 @@ public class CustomItemTouchHelper extends ItemTouchHelper.Callback {
     public boolean isItemViewSwipeEnabled() {
         return true;
     }
+
 
 }

@@ -17,6 +17,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -68,8 +69,9 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     private SearchView mSearchView;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private ItemTouchHelper mItemTouchHelper;
-    private Menu mMenu;
+    private ItemTouchHelper.Callback mCallback;
     private boolean mSortModeOn = false;
+    private boolean mViewAsList = true;
 
     public static TextView textNoRoot;
 
@@ -167,12 +169,17 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_wifi_main_fragment, menu);
-
-        mMenu = menu;
+        L.m("onCreateOptionsMenu");
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
 
         setupSearch(searchItem);
+
+        menu.setGroupVisible(R.id.menu_group_main, !mSortModeOn);
+        menu.setGroupVisible(R.id.menu_group_sort, mSortModeOn);
+
+        menu.findItem(R.id.action_layout_change)
+                .setTitle(mViewAsList ? R.string.action_layout_grid : R.string.action_layout_linear);
     }
 
 
@@ -182,25 +189,22 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
         if (id == R.id.action_reload_from_file) {
             showReloadWarningDialog();
-        }
 
-        else if (id == R.id.action_sort_start) {
+        } else if (id == R.id.action_sort_start) {
             sortMode(true);
 
-        }
-
-        else if (id == R.id.action_sort_done) {
+        } else if (id == R.id.action_sort_done) {
             sortMode(false);
 
-        }
-
-        else if (id == R.id.action_share) {
+        } else if (id == R.id.action_share) {
             shareWifiList();
+
+        } else if (id == R.id.action_layout_change) {
+            changeRecyclerLayout();
         }
 
         return true;
     }
-
 
 
     /********************************************************/
@@ -215,7 +219,6 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         for (int i = 0; i < mListWifi.size(); i++) {
 
             WifiEntry current = mListWifi.get(i);
-
             textToShare += "Wifi Name: " + current.getTitle() + "\n"
                     + "Password: " + current.getPassword() + "\n\n";
         }
@@ -281,10 +284,10 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         mAppBarLayout.setExpanded(!isOn);
         mRecyclerView.setNestedScrollingEnabled(!isOn);
         mAdapter.showDragHandler(isOn);
-        MenuItem done = mMenu.findItem(R.id.action_sort_done);
-        done.setVisible(isOn);
 
         mSortModeOn = isOn;
+
+        getActivity().invalidateOptionsMenu();
     }
 
     //Return Sort Mode Status - used OnBackPressed in MainActivity
@@ -292,6 +295,26 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         return mSortModeOn;
     }
 
+
+    //Change RecyclerView layout manager
+    private void changeRecyclerLayout() {
+        L.m("changeRecyclerLayout");
+        mViewAsList = !mViewAsList;
+
+        mAdapter.removeEachItem(); //animate layout change
+
+        mRecyclerView.setLayoutManager(mViewAsList ?
+                new LinearLayoutManager(getActivity()) : new GridLayoutManager(getActivity(), 2));
+
+        //Reset ItemTouchHelper to handle new layout
+        mCallback = new CustomItemTouchHelper(mAdapter);
+        mItemTouchHelper = new ItemTouchHelper(mCallback);
+        mItemTouchHelper.attachToRecyclerView(mRecyclerView);
+
+        mAdapter.addEachItem(); //animate layout change
+
+        getActivity().invalidateOptionsMenu();
+    }
 
     /********************************************************/
     /******************** Setup Methods *********************/
@@ -304,8 +327,8 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         mRecyclerView.setAdapter(mAdapter);
 
         //Item Touch Helper
-        ItemTouchHelper.Callback callback = new CustomItemTouchHelper(mAdapter);
-        mItemTouchHelper = new ItemTouchHelper(callback);
+        mCallback = new CustomItemTouchHelper(mAdapter);
+        mItemTouchHelper = new ItemTouchHelper(mCallback);
         mItemTouchHelper.attachToRecyclerView(mRecyclerView);
 
         //Setup RecyclerTouchListener

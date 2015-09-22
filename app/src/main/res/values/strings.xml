@@ -18,6 +18,8 @@
     <string name="action_search">Search</string>
     <string name="action_sort_start">Sort Mode</string>
     <string name="action_sort_done">Done Sorting</string>
+    <string name="action_layout_linear">View as List</string>
+    <string name="action_layout_grid">View as Grid</string>
 
     <!-- Preference Activity -->
     <string name="pref_path_default">/data/misc/wifi/wpa_supplicant.conf</string>
@@ -62,6 +64,7 @@
     <string name="dialog_add_error_empty">One or More fields are blank</string>
     <string name="dialog_add_title_empty">Title cannot be empty</string>
     <string name="dialog_add_password_empty">Password cannot be empty</string>
+
     <string-array name="dialog_add_buttons">
         <item>Add</item>
         <item>Cancel</item>

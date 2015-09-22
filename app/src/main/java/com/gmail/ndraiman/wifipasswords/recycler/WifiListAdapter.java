@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gmail.ndraiman.wifipasswords.R;
+import com.gmail.ndraiman.wifipasswords.extras.L;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     private ItemDragListener mDragListener;
     private int mPreviousPosition = -1;
     private boolean mShowDragHandler;
+    private static final String LOG_TAG = "RecyclerAdapter";
 
     public WifiListAdapter(Context context, ItemDragListener dragListener) {
         layoutInflater = LayoutInflater.from(context);
@@ -64,7 +66,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
         });
 
         //Drag Handler Visibility
-        if(mShowDragHandler) {
+        if (mShowDragHandler) {
             holder.dragHandler.setVisibility(View.VISIBLE);
 
         } else {
@@ -73,13 +75,13 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
 
 
         //Set Animation
-        if (position > mPreviousPosition) {
-            AnimationUtils.translateY(holder, true);
-
-        } else {
-            AnimationUtils.translateY(holder, false);
-        }
-        mPreviousPosition = position;
+//        if (position > mPreviousPosition) {
+//            AnimationUtils.translateY(holder, true);
+//
+//        } else {
+//            AnimationUtils.translateY(holder, false);
+//        }
+//        mPreviousPosition = position;
 
     }
 
@@ -90,40 +92,60 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
 
 
     public void setWifiList(ArrayList<WifiEntry> listWifi) {
-        Log.d("RecyclerAdapter", "setWifiList");
+        Log.d(LOG_TAG, "setWifiList");
         mListWifi = new ArrayList<>(listWifi);
         mPreviousPosition = -1; //fix load animation on new data loaded
         notifyDataSetChanged();
     }
 
-    /********************************************/
-    /********************************************/
+    /**********************************************/
+    /************ Items Changed Methods ***********/
+    /**********************************************/
 
     public WifiEntry removeItem(int position) {
-        Log.d("RecyclerAdapter", "removeItem");
+        Log.d(LOG_TAG, "removeItem");
         final WifiEntry entry = mListWifi.remove(position);
         notifyItemRemoved(position);
         return entry;
     }
 
     public void addItem(int position, WifiEntry entry) {
-        Log.d("RecyclerAdapter", "addItem");
+        Log.d(LOG_TAG, "addItem");
         mListWifi.add(position, entry);
         notifyItemInserted(position);
     }
 
     public void moveItem(int fromPosition, int toPosition) {
-        Log.d("RecyclerAdapter", "moveItem");
+        Log.d(LOG_TAG, "moveItem");
         final WifiEntry entry = mListWifi.remove(fromPosition);
         mListWifi.add(toPosition, entry);
         notifyItemMoved(fromPosition, toPosition);
     }
 
-    /********************************************/
-    /********************************************/
+    /*****************************************************/
+    /************ Animate LayoutManager Change ***********/
+    /*****************************************************/
+
+    public void removeEachItem() {
+        Log.d(LOG_TAG, "removeEachItem");
+        for (int i = 0; i < mListWifi.size(); i++) {
+            notifyItemRemoved(i);
+        }
+    }
+
+    public void addEachItem() {
+        Log.d(LOG_TAG, "addEachItem");
+        for (int i = 0; i < mListWifi.size(); i++) {
+            notifyItemInserted(i);
+        }
+    }
+
+    /*********************************************/
+    /************ Animate Search Query ***********/
+    /*********************************************/
 
     public void animateTo(ArrayList<WifiEntry> listWifi) {
-        Log.d("RecyclerAdapter", "animateTo");
+        Log.d(LOG_TAG, "animateTo");
         //Order is important
         applyAndAnimateRemovals(listWifi);
         applyAndAnimateAdditions(listWifi);
@@ -131,7 +153,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     }
 
     private void applyAndAnimateRemovals(ArrayList<WifiEntry> newListWifi) {
-        Log.d("RecyclerAdapter", "applyAndAnimateRemovals");
+        Log.d(LOG_TAG, "applyAndAnimateRemovals");
         for (int i = mListWifi.size() - 1; i >= 0; i--) {
             final WifiEntry entry = mListWifi.get(i);
             if (!newListWifi.contains(entry)) {
@@ -141,7 +163,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     }
 
     private void applyAndAnimateAdditions(ArrayList<WifiEntry> newListWifi) {
-        Log.d("RecyclerAdapter", "applyAndAnimateAdditions");
+        Log.d(LOG_TAG, "applyAndAnimateAdditions");
         for (int i = 0, count = newListWifi.size(); i < count; i++) {
             final WifiEntry entry = newListWifi.get(i);
             if (!mListWifi.contains(entry)) {
@@ -151,7 +173,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     }
 
     private void applyAndAnimateMovedItems(ArrayList<WifiEntry> newListWifi) {
-        Log.d("RecyclerAdapter", "applyAndAnimateMovedItems");
+        Log.d(LOG_TAG, "applyAndAnimateMovedItems");
         for (int toPosition = newListWifi.size() - 1; toPosition >= 0; toPosition--) {
             final WifiEntry entry = newListWifi.get(toPosition);
             final int fromPosition = mListWifi.indexOf(entry);
@@ -161,8 +183,9 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
         }
     }
 
-    /********************************************/
-    /********************************************/
+    /*****************************************************/
+    /************** ItemTouchHelper Methods***************/
+    /*****************************************************/
 
     @Override
     public boolean onItemMove(int fromPosition, int toPosition) {
@@ -183,8 +206,9 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
 
     @Override
     public void onItemDismiss(int position) {
-        removeItem(position);
-
+//        removeItem(position);
+        //TODO add swipe menu
+        L.m("onItemDismiss");
     }
 
     public void showDragHandler(boolean show) {
@@ -215,8 +239,6 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
             dragHandler = (ImageView) itemView.findViewById(R.id.drag_handler);
 
         }
-
-
     }
 
     /*****************************************************************************/

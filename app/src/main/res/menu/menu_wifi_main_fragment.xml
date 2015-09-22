@@ -3,40 +3,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
 
-    <item
-        android:id="@+id/action_search"
-        android:icon="@drawable/ic_search_open_light"
-        android:orderInCategory="100"
-        android:title="@string/action_search"
-        app:actionViewClass="android.support.v7.widget.SearchView"
-        app:showAsAction="always|collapseActionView" />
-
-    <item
-        android:id="@+id/action_share"
-        android:icon="@drawable/ic_share_light"
-        android:orderInCategory="200"
-        android:title="@string/action_share"
-        app:showAsAction="ifRoom" />
-
-    <item
-        android:id="@+id/action_reload_from_file"
-        android:orderInCategory="300"
-        android:title="@string/action_reload_from_file"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_sort_start"
-        android:orderInCategory="400"
-        android:title="@string/action_sort_start"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_sort_done"
-        android:orderInCategory="150"
-        android:icon="@drawable/ic_done_light"
-        android:title="@string/action_sort_done"
-        app:showAsAction="always"
-        android:visible="false" />
+    <group android:id="@+id/menu_group_main">
+        <item
+            android:id="@+id/action_search"
+            android:icon="@drawable/ic_search_open_light"
+            android:orderInCategory="100"
+            android:title="@string/action_search"
+            app:actionViewClass="android.support.v7.widget.SearchView"
+            app:showAsAction="always|collapseActionView" />
 
 
+        <item
+            android:id="@+id/action_share"
+            android:icon="@drawable/ic_share_light"
+            android:orderInCategory="200"
+            android:title="@string/action_share"
+            app:showAsAction="ifRoom" />
+
+        <item
+            android:id="@+id/action_reload_from_file"
+            android:orderInCategory="300"
+            android:title="@string/action_reload_from_file"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/action_sort_start"
+            android:orderInCategory="400"
+            android:title="@string/action_sort_start"
+            app:showAsAction="never" />
+
+        <item
+            android:id="@+id/action_layout_change"
+            android:orderInCategory="500"
+            android:title="@string/action_layout_grid"
+            app:showAsAction="never" />
+
+    </group>
+
+    <group android:id="@+id/menu_group_sort">
+
+        <item
+            android:id="@+id/action_sort_done"
+            android:icon="@drawable/ic_done_light"
+            android:orderInCategory="150"
+            android:title="@string/action_sort_done"
+            android:visible="false"
+            app:showAsAction="always" />
+
+    </group>
 </menu>
