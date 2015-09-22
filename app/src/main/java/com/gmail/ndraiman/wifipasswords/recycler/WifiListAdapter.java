@@ -1,11 +1,14 @@
 package com.gmail.ndraiman.wifipasswords.recycler;
 
 import android.content.Context;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gmail.ndraiman.wifipasswords.R;
@@ -21,11 +24,15 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
 
     private LayoutInflater layoutInflater;
     private List<WifiEntry> mListWifi;
+    private ItemDragListener mDragListener;
     private int mPreviousPosition = -1;
+    private boolean mShowDragHandler;
 
-    public WifiListAdapter(Context context) {
+    public WifiListAdapter(Context context, ItemDragListener dragListener) {
         layoutInflater = LayoutInflater.from(context);
+        mDragListener = dragListener;
         mListWifi = new ArrayList<>();
+        mShowDragHandler = false;
 
         //TODO Delete once SQLite database is implemented
         //mListWifi = placeholderData();
@@ -39,10 +46,31 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(final MyViewHolder holder, int position) {
         WifiEntry currentEntry = mListWifi.get(position);
+
         holder.wifiTitle.setText(currentEntry.getTitle());
         holder.wifiPassword.setText(currentEntry.getPassword());
+
+        holder.dragHandler.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (MotionEventCompat.getActionMasked(event) ==
+                        MotionEvent.ACTION_DOWN) {
+                    mDragListener.onStartDrag(holder);
+                }
+                return false;
+            }
+        });
+
+        //Drag Handler Visibility
+        if(mShowDragHandler) {
+            holder.dragHandler.setVisibility(View.VISIBLE);
+
+        } else {
+            holder.dragHandler.setVisibility(View.GONE);
+        }
+
 
         //Set Animation
         if (position > mPreviousPosition) {
@@ -144,8 +172,8 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
                 Collections.swap(mListWifi, i, i + 1);
             }
         } else {
-            for(int i = fromPosition; i > toPosition; i--) {
-                Collections.swap(mListWifi, i, i-1);
+            for (int i = fromPosition; i > toPosition; i--) {
+                Collections.swap(mListWifi, i, i - 1);
             }
         }
         notifyItemMoved(fromPosition, toPosition);
@@ -158,6 +186,12 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
         removeItem(position);
 
     }
+
+    public void showDragHandler(boolean show) {
+        mShowDragHandler = show;
+        notifyDataSetChanged();
+    }
+
     /********************************************/
     /********************************************/
 
@@ -171,12 +205,14 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
 
         private TextView wifiTitle;
         private TextView wifiPassword;
+        private ImageView dragHandler;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
             wifiTitle = (TextView) itemView.findViewById(R.id.title_wifi);
             wifiPassword = (TextView) itemView.findViewById(R.id.password_wifi);
+            dragHandler = (ImageView) itemView.findViewById(R.id.drag_handler);
 
         }
 

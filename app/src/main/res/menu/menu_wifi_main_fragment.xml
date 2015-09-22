@@ -19,9 +19,24 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/action_refresh_from_file"
+        android:id="@+id/action_reload_from_file"
         android:orderInCategory="300"
-        android:title="@string/action_refresh_from_file"
+        android:title="@string/action_reload_from_file"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_sort_start"
+        android:orderInCategory="400"
+        android:title="@string/action_sort_start"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_sort_done"
+        android:orderInCategory="150"
+        android:icon="@drawable/ic_done_light"
+        android:title="@string/action_sort_done"
+        app:showAsAction="always"
+        android:visible="false" />
+
 
 </menu>

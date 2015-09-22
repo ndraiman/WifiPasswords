@@ -65,6 +65,14 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        if(mainWifiFragment.isVisible() && mainWifiFragment.getSortModeStatus()) {
+            mainWifiFragment.sortMode(false);
+            return;
+        }
+        super.onBackPressed();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -40,6 +40,7 @@ import com.gmail.ndraiman.wifipasswords.extras.L;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
 import com.gmail.ndraiman.wifipasswords.recycler.CustomItemTouchHelper;
+import com.gmail.ndraiman.wifipasswords.recycler.ItemDragListener;
 import com.gmail.ndraiman.wifipasswords.recycler.RecyclerTouchListener;
 import com.gmail.ndraiman.wifipasswords.recycler.WifiListAdapter;
 import com.gmail.ndraiman.wifipasswords.recycler.WifiListLoadedListener;
@@ -51,7 +52,8 @@ import me.zhanghai.android.materialprogressbar.IndeterminateProgressDrawable;
 
 
 public class MainWifiFragment extends Fragment implements WifiListLoadedListener,
-        SearchView.OnQueryTextListener, CustomAlertDialogListener, InputDialogListener {
+        SearchView.OnQueryTextListener, CustomAlertDialogListener, InputDialogListener,
+        ItemDragListener {
 
     private static final String STATE_WIFI_ENTRIES = "state_wifi_entries"; //Parcel key
     private static final String COPIED_WIFI_ENTRY = "copied_wifi_entry"; //Clipboard Label
@@ -65,6 +67,9 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     private FloatingActionButton mFAB;
     private SearchView mSearchView;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
+    private ItemTouchHelper mItemTouchHelper;
+    private Menu mMenu;
+    private boolean mSortModeOn = false;
 
     public static TextView textNoRoot;
 
@@ -163,24 +168,36 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_wifi_main_fragment, menu);
 
+        mMenu = menu;
+
         MenuItem searchItem = menu.findItem(R.id.action_search);
 
         setupSearch(searchItem);
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_refresh_from_file) {
+        if (id == R.id.action_reload_from_file) {
             showReloadWarningDialog();
         }
 
-        if (id == R.id.action_share) {
+        else if (id == R.id.action_sort_start) {
+            sortMode(true);
+
+        }
+
+        else if (id == R.id.action_sort_done) {
+            sortMode(false);
+
+        }
+
+        else if (id == R.id.action_share) {
             shareWifiList();
         }
+
         return true;
     }
 
@@ -245,7 +262,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String prefListChoice = sharedPreferences.getString(getString(R.string.pref_path_list_key), getString(R.string.pref_path_default));
 
-        if(prefListChoice.equals(getString(R.string.pref_path_list_manual)))
+        if (prefListChoice.equals(getString(R.string.pref_path_list_manual)))
             mPath = sharedPreferences.getString(getString(R.string.pref_path_manual_key), getString(R.string.pref_path_default));
         else
             mPath = prefListChoice;
@@ -258,6 +275,23 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
     }
 
+    //Toggle Sort Mode
+    public void sortMode(boolean isOn) {
+        L.m("sortMode - isOn = " + isOn);
+        mAppBarLayout.setExpanded(!isOn);
+        mRecyclerView.setNestedScrollingEnabled(!isOn);
+        mAdapter.showDragHandler(isOn);
+        MenuItem done = mMenu.findItem(R.id.action_sort_done);
+        done.setVisible(isOn);
+
+        mSortModeOn = isOn;
+    }
+
+    //Return Sort Mode Status - used OnBackPressed in MainActivity
+    public boolean getSortModeStatus() {
+        return mSortModeOn;
+    }
+
 
     /********************************************************/
     /******************** Setup Methods *********************/
@@ -266,13 +300,13 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     private void setupRecyclerView() {
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mAdapter = new WifiListAdapter(getActivity());
+        mAdapter = new WifiListAdapter(getActivity(), this);
         mRecyclerView.setAdapter(mAdapter);
 
         //Item Touch Helper
         ItemTouchHelper.Callback callback = new CustomItemTouchHelper(mAdapter);
-        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
-        touchHelper.attachToRecyclerView(mRecyclerView);
+        mItemTouchHelper = new ItemTouchHelper(callback);
+        mItemTouchHelper.attachToRecyclerView(mRecyclerView);
 
         //Setup RecyclerTouchListener
         mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
@@ -295,7 +329,11 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         }));
     }
 
-
+    @Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+        L.m("onStartDrag");
+        mItemTouchHelper.startDrag(viewHolder);
+    }
 
     private void setupSearch(MenuItem searchItem) {
 
@@ -402,9 +440,9 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         Resources resources = getResources();
 
         //Handle Path Error Dialog
-        if(requestCode == R.integer.dialog_error_code) {
+        if (requestCode == R.integer.dialog_error_code) {
 
-            if(resultCode == R.integer.dialog_confirm) {
+            if (resultCode == R.integer.dialog_confirm) {
                 L.m("Dialog Error - Confirm");
                 FragmentActivity parent = getActivity();
                 ActivityOptionsCompat compat = ActivityOptionsCompat.makeSceneTransitionAnimation(parent, null);
@@ -419,7 +457,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         //Handle LoadFromFile Warning Dialog
         if (requestCode == R.integer.dialog_warning_code) {
 
-            if(resultCode == R.integer.dialog_confirm) {
+            if (resultCode == R.integer.dialog_confirm) {
                 L.m("Dialog Warning - Confirm");
                 loadFromFile();
 
@@ -455,9 +493,9 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
         final ArrayList<WifiEntry> filteredWifiList = new ArrayList<>();
 
-        for(WifiEntry entry : listWifi) {
+        for (WifiEntry entry : listWifi) {
             final String title = entry.getTitle().toLowerCase();
-            if(title.contains(query)) {
+            if (title.contains(query)) {
                 filteredWifiList.add(entry);
             }
         }
