@@ -5,14 +5,13 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -30,18 +29,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.gmail.ndraiman.wifipasswords.R;
-import com.gmail.ndraiman.wifipasswords.activities.MainActivity;
 import com.gmail.ndraiman.wifipasswords.activities.SettingsActivity;
 import com.gmail.ndraiman.wifipasswords.database.PasswordDB;
 import com.gmail.ndraiman.wifipasswords.extras.L;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
 import com.gmail.ndraiman.wifipasswords.recycler.CustomItemTouchHelper;
+import com.gmail.ndraiman.wifipasswords.recycler.DividerItemDecoration;
 import com.gmail.ndraiman.wifipasswords.recycler.ItemDragListener;
 import com.gmail.ndraiman.wifipasswords.recycler.RecyclerTouchListener;
 import com.gmail.ndraiman.wifipasswords.recycler.WifiListAdapter;
@@ -68,9 +68,11 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     private AppBarLayout mAppBarLayout;
     private FloatingActionButton mFAB;
     private SearchView mSearchView;
+    private RecyclerView.OnItemTouchListener mRecyclerTouchListener;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private ItemTouchHelper mItemTouchHelper;
     private ItemTouchHelper.Callback mCallback;
+    private FrameLayout mRoot;
     private boolean mSortModeOn = false;
     private boolean mViewAsList = true;
 
@@ -102,6 +104,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         textNoRoot = (TextView) layout.findViewById(R.id.text_no_root);
         mRecyclerView = (RecyclerView) layout.findViewById(R.id.main_wifi_list_recycler);
         mProgressBar = (ProgressBar) layout.findViewById(R.id.progress_bar);
+        mRoot = (FrameLayout) layout.findViewById(R.id.fragment_main_container);
 
         //get Activity Views
         mFAB = (FloatingActionButton) getActivity().findViewById(R.id.fab);
@@ -144,21 +147,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         return layout;
     }
 
-    //TODO Testing Grid layout as Landscape
-    @Override
-    public void onResume() {
-        super.onResume();
 
-        L.m("onResume");
-
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            mViewAsList = true;
-            changeRecyclerLayout();
-        } else {
-            mViewAsList = false;
-            changeRecyclerLayout();
-        }
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -216,7 +205,8 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
             shareWifiList();
 
         } else if (id == R.id.action_layout_change) {
-            //TODO Delete this menu button - Layout will Change according to device orientation
+            //TODO Fix Grid Layout Height before is usable.
+            //TODO if not, delete!!!
             changeRecyclerLayout();
         }
 
@@ -257,7 +247,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         mAdapter.setWifiList(new ArrayList<WifiEntry>());
         mProgressBar.setVisibility(View.VISIBLE); //Show Progress Bar
         L.m("loadFromFile");
-        MainActivity.makeSnackbar("Loading Data From File");
+        Snackbar.make(mRoot, R.string.snackbar_load_from_file, Snackbar.LENGTH_SHORT).show();
         new TaskLoadWifiEntries(mPath, mFileName, this, this).execute();
 
     }
@@ -271,7 +261,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         ClipData clipData = ClipData.newPlainText(copiedLabel, copiedText);
         clipboardManager.setPrimaryClip(clipData);
 
-        MainActivity.makeSnackbar(snackbarMessage);
+        Snackbar.make(mRoot, snackbarMessage, Snackbar.LENGTH_SHORT).show();
         L.m("copyToClipboard:\n" + clipData.toString());
     }
 
@@ -301,6 +291,13 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         mAppBarLayout.setExpanded(!isOn);
         mRecyclerView.setNestedScrollingEnabled(!isOn);
         mAdapter.showDragHandler(isOn);
+
+        //Disable Touch actions while in sort mode
+        if(isOn) {
+            mRecyclerView.removeOnItemTouchListener(mRecyclerTouchListener);
+        } else {
+            mRecyclerView.addOnItemTouchListener(mRecyclerTouchListener);
+        }
 
         mSortModeOn = isOn;
 
@@ -341,13 +338,16 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         mAdapter = new WifiListAdapter(getActivity(), this);
         mRecyclerView.setAdapter(mAdapter);
 
+        //Divider for non-CardView layout.
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+
         //Item Touch Helper
         mCallback = new CustomItemTouchHelper(mAdapter);
         mItemTouchHelper = new ItemTouchHelper(mCallback);
         mItemTouchHelper.attachToRecyclerView(mRecyclerView);
 
         //Setup RecyclerTouchListener
-        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
+        mRecyclerTouchListener = new RecyclerTouchListener(getActivity(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
                 Toast.makeText(getActivity(), "onClick " + position, Toast.LENGTH_SHORT).show();  //placeholder
@@ -360,11 +360,13 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
                 WifiEntry entry = mListWifi.get(position);
                 String textToCopy = "Wifi Name: " + entry.getTitle() + "\n"
                         + "Password: " + entry.getPassword();
-                String snackbarMessage = getResources().getString(R.string.snackbar_wifi_copy);
+                String snackbarMessage = getString(R.string.snackbar_wifi_copy);
 
                 copyToClipboard(COPIED_WIFI_ENTRY, textToCopy, snackbarMessage);
             }
-        }));
+        });
+
+        mRecyclerView.addOnItemTouchListener(mRecyclerTouchListener);
     }
 
     @Override
@@ -475,7 +477,6 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     //Handle Dialog Result Codes
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Resources resources = getResources();
 
         //Handle Path Error Dialog
         if (requestCode == R.integer.dialog_error_code) {

@@ -6,20 +6,15 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
 import com.gmail.ndraiman.wifipasswords.R;
 import com.gmail.ndraiman.wifipasswords.extras.L;
@@ -28,7 +23,6 @@ import com.gmail.ndraiman.wifipasswords.fragments.MainWifiFragment;
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
-    private static CoordinatorLayout mRoot;
     private MainWifiFragment mainWifiFragment;
     private FloatingActionButton mFAB;
 
@@ -57,8 +51,6 @@ public class MainActivity extends AppCompatActivity {
         //Transparent Background for CollapsingToolbar Parallax
         mToolbar.setBackgroundColor(ContextCompat.getColor(this, android.R.color.transparent));
         setSupportActionBar(mToolbar);
-
-        mRoot = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
 
         mainWifiFragment = MainWifiFragment.newInstance();
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, mainWifiFragment).commit();
@@ -104,33 +96,11 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onDestroy() {
-//        L.T(this, "Destroying Database");
-//        MyApplication.getWritableDatabase().deleteAll(false);
-        super.onDestroy();
-    }
-
 
     /********************************************************/
     /****************** Additional Methods ******************/
     /********************************************************/
 
-    //Custom Snackbar
-    public static void makeSnackbar(String message) {
-
-        Snackbar mSnackbar = Snackbar.make(mRoot, message, Snackbar.LENGTH_SHORT);
-        View snackbarView = mSnackbar.getView();
-
-        //snackbarView.setBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimary));
-
-        TextView snackbarText = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
-        //snackbarText.setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
-        snackbarText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
-
-        mSnackbar.show();
-
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
