@@ -6,8 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
+import android.util.Log;
 
-import com.gmail.ndraiman.wifipasswords.extras.L;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
 
 import java.util.ArrayList;
@@ -18,6 +18,7 @@ public class PasswordDB {
 
     private PasswordHelper mHelper;
     private SQLiteDatabase mDatabase;
+    private static final String LOG_TAG = "PasswordDB";
 
 
     public PasswordDB(Context context) {
@@ -29,7 +30,7 @@ public class PasswordDB {
     public void insertEntry(WifiEntry entry, boolean isHidden) {
 
         String table = isHidden ? PasswordHelper.TABLE_PASSWORDS_HIDDEN : PasswordHelper.TABLE_PASSWORDS_MAIN;
-        L.m("insertEntry - isHidden=" + isHidden + " table=" + table);
+        Log.d(LOG_TAG, "insertEntry - isHidden=" + isHidden + " table=" + table);
 
         String title = entry.getTitle();
         String password = entry.getPassword();
@@ -45,7 +46,7 @@ public class PasswordDB {
     public void insertWifiEntries(ArrayList<WifiEntry> listWifi, boolean isHidden) {
 
         String table = isHidden ? PasswordHelper.TABLE_PASSWORDS_HIDDEN : PasswordHelper.TABLE_PASSWORDS_MAIN;
-        L.m("insertWifiEntries - isHidden=" + isHidden + " table=" + table);
+        Log.d(LOG_TAG, "insertWifiEntries - isHidden=" + isHidden + " table=" + table);
 
         //create a sql prepared statement
         String sql = "INSERT INTO " + table + " VALUES (?,?,?);";
@@ -65,7 +66,7 @@ public class PasswordDB {
         }
 
         //set the transaction as successful and end the transaction
-        L.m("inserting entries " + listWifi.size() + new Date(System.currentTimeMillis()));
+        Log.d(LOG_TAG, "inserting entries " + listWifi.size() + new Date(System.currentTimeMillis()));
         mDatabase.setTransactionSuccessful();
         mDatabase.endTransaction();
     }
@@ -73,7 +74,7 @@ public class PasswordDB {
     public ArrayList<WifiEntry> getAllWifiEntries(boolean isHidden) {
 
         String table = isHidden ? PasswordHelper.TABLE_PASSWORDS_HIDDEN : PasswordHelper.TABLE_PASSWORDS_MAIN;
-        L.m("getAllWifiEntries - isHidden=" + isHidden + " table=" + table);
+        Log.d(LOG_TAG, "getAllWifiEntries - isHidden=" + isHidden + " table=" + table);
 
         ArrayList<WifiEntry> listWifi = new ArrayList<>();
 
@@ -85,7 +86,7 @@ public class PasswordDB {
         Cursor cursor = mDatabase.query(table, columns, null, null, null, null, null);
 
         if(cursor != null && cursor.moveToFirst()) {
-            L.m("loading entries " + cursor.getCount() + new Date(System.currentTimeMillis()));
+            Log.d(LOG_TAG, "loading entries " + cursor.getCount() + new Date(System.currentTimeMillis()));
 
             do {
 
@@ -108,7 +109,7 @@ public class PasswordDB {
     public void deleteAll(boolean isHidden) {
 
         String table = isHidden ? PasswordHelper.TABLE_PASSWORDS_HIDDEN : PasswordHelper.TABLE_PASSWORDS_MAIN;
-        L.m("deleteAll - isHidden=" + isHidden + " table=" + table);
+        Log.d(LOG_TAG, "deleteAll - isHidden=" + isHidden + " table=" + table);
 
         mDatabase.delete(table, null, null);
     }
@@ -161,12 +162,12 @@ public class PasswordDB {
 
             try {
                 db.execSQL(CREATE_TABLE_MAIN);
-                L.m("create table main executed");
+                Log.d(LOG_TAG, "create table main executed");
                 db.execSQL(CREATE_TABLE_HIDDEN);
-                L.m("create table hidden executed");
+                Log.d(LOG_TAG, "create table hidden executed");
 
             } catch (SQLiteException e) {
-                L.e("ERROR: Helper onCreate - " + e);
+                Log.e(LOG_TAG, "ERROR: Helper onCreate - " + e);
             }
 
         }
@@ -175,13 +176,13 @@ public class PasswordDB {
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
             try {
-                L.e("upgrade table box office executed");
+                Log.e(LOG_TAG, "upgrade table box office executed");
                 db.execSQL("DROP TABLE " + TABLE_PASSWORDS_MAIN + " IF EXISTS;");
                 db.execSQL("DROP TABLE " + TABLE_PASSWORDS_HIDDEN + " IF EXISTS;");
                 onCreate(db);
 
             } catch (SQLiteException e) {
-                L.e("ERROR: Helper onUpgrade - " + e);
+                Log.e(LOG_TAG, "ERROR: Helper onUpgrade - " + e);
             }
 
         }

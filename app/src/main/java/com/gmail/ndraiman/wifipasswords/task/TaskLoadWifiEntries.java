@@ -8,7 +8,6 @@ import android.view.View;
 
 import com.gmail.ndraiman.wifipasswords.database.PasswordDB;
 import com.gmail.ndraiman.wifipasswords.extras.ExecuteAsRootBase;
-import com.gmail.ndraiman.wifipasswords.extras.L;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
 import com.gmail.ndraiman.wifipasswords.extras.RootCheck;
 import com.gmail.ndraiman.wifipasswords.fragments.CustomAlertDialogListener;
@@ -87,7 +86,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
 
         //Update RecyclerView
         if(mListListener != null) {
-            L.m("OnPost Execute \n" + wifiEntries.toString());
+            Log.d(LOG_TAG, "OnPost Execute \n" + wifiEntries.toString());
             mListListener.onWifiListLoaded(wifiEntries);
         }
     }
@@ -101,7 +100,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
             MainWifiFragment.textNoRoot.setVisibility(View.VISIBLE);
 
             if(mListListener != null) {
-                L.m("OnCancelled Execute \n");
+                Log.d(LOG_TAG, "OnCancelled Execute \n");
                 //return empty list
                 mListListener.onWifiListLoaded(new ArrayList<WifiEntry>());
             }

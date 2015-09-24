@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.gmail.ndraiman.wifipasswords.R;
-import com.gmail.ndraiman.wifipasswords.extras.L;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
 
 import java.util.ArrayList;
@@ -195,8 +194,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     @Override
     public void onItemDismiss(int position) {
 //        removeItem(position);
-        //TODO add swipe menu
-        L.m("onItemDismiss");
+        Log.d(LOG_TAG, "onItemDismiss");
     }
 
     public void showDragHandler(boolean show) {

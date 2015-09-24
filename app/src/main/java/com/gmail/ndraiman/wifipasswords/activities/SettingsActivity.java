@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,7 +23,6 @@ import android.view.ViewGroup;
 
 import com.gmail.ndraiman.wifipasswords.R;
 import com.gmail.ndraiman.wifipasswords.extras.AppCompatPreferenceActivity;
-import com.gmail.ndraiman.wifipasswords.extras.L;
 
 import java.util.List;
 
@@ -30,30 +30,7 @@ import java.util.List;
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
     private Toolbar mToolbar;
-    //Setup Listener
-//    private static Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener
-//            = new Preference.OnPreferenceChangeListener() {
-//        @Override
-//        public boolean onPreferenceChange(Preference preference, Object newValue) {
-//
-//            String stringValue = newValue.toString();
-//            L.m("onPreferenceChange: " + stringValue);
-//
-//            if (preference instanceof EditTextPreference) {
-//
-//                preference.setSummary(stringValue);
-//
-//            }
-//
-//            if (preference instanceof ListPreference) {
-//
-//                preference.setSummary(stringValue);
-//
-//            }
-//
-//            return true;
-//        }
-//    };
+    private static final String LOG_TAG = "SettingsActivity";
 
 
     @Override
@@ -84,7 +61,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     @Override
     public void onBuildHeaders(List<Header> target) {
-        L.m("SettingsActivity onBuildHeaders");
+        Log.d(LOG_TAG, "SettingsActivity onBuildHeaders");
 
         //loadHeadersFromResource(R.xml.pref_header, target);
 
@@ -117,22 +94,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         return super.onOptionsItemSelected(item);
     }
 
-//    private static void bindPreferenceSummaryToValue(Preference preference) {
-//        L.m("bindPreferenceSummaryToValue");
-//        // Set the listener to watch for value changes.
-//        preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
-//
-//        // Trigger the listener immediately with the preference's
-//        // current value.
-//        sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
-//                PreferenceManager
-//                        .getDefaultSharedPreferences(preference.getContext())
-//                        .getString(preference.getKey(), ""));
-//    }
-
-
-
-
 
 
     /***************************************************************/
@@ -140,6 +101,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     /***************************************************************/
     public static class SettingsFragment extends PreferenceFragment {
 
+        private static final String LOG_TAG = "SettingsFragment";
 
         private Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener
                 = new Preference.OnPreferenceChangeListener() {
@@ -149,7 +111,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 getActivity().setResult(RESULT_OK);
 
                 String stringValue = newValue.toString();
-                L.m("onPreferenceChange: " + stringValue);
+                Log.d(LOG_TAG, "onPreferenceChange: " + stringValue);
 
                 if (preference instanceof EditTextPreference) {
 
@@ -178,7 +140,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         };
 
         private void bindPreferenceSummaryToValue(Preference preference) {
-            L.m("bindPreferenceSummaryToValue");
+            Log.d(LOG_TAG, "bindPreferenceSummaryToValue");
             // Set the listener to watch for value changes.
             preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 
@@ -193,7 +155,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            L.m("SettingsFragment - onCreate");
+            Log.d(LOG_TAG, "SettingsFragment - onCreate");
 
             getActivity().setTheme(R.style.AppTheme); //TODO theme according to preference
             setHasOptionsMenu(true);
@@ -220,7 +182,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             if (layout != null) {
 
                 //Adding Toolbar to fragment
-                L.m("SettingsFragment onCreateView");
+                Log.d(LOG_TAG, "SettingsFragment onCreateView");
                 AppCompatPreferenceActivity sActivity = (AppCompatPreferenceActivity) getActivity();
                 Toolbar sToolbar = (Toolbar) layout.findViewById(R.id.app_bar);
                 sActivity.setSupportActionBar(sToolbar);
@@ -260,7 +222,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         //Restore wpa_supplicant path to default
         private void resetPathPref() {
-            L.m("resetPathPref");
+            Log.d(LOG_TAG, "resetPathPref");
 
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
             SharedPreferences.Editor editor = settings.edit();

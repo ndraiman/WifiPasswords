@@ -46,7 +46,7 @@
     <ImageView
         android:id="@+id/drag_handler"
         android:layout_width="wrap_content"
-        android:layout_height="?android:listPreferredItemHeight"
+        android:layout_height="72dp"
         android:layout_gravity="top|end"
         android:padding="16dp"
         android:scaleType="center"

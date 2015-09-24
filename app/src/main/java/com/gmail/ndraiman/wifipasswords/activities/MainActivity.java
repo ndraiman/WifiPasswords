@@ -13,11 +13,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.gmail.ndraiman.wifipasswords.R;
-import com.gmail.ndraiman.wifipasswords.extras.L;
 import com.gmail.ndraiman.wifipasswords.fragments.MainWifiFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private MainWifiFragment mainWifiFragment;
     private static final String MAIN_FRAGMENT_TAG = "main_fragment_tag";
+    private static final String LOG_TAG = "MainActivity";
     private FloatingActionButton mFAB;
 
 
@@ -119,11 +120,11 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == resources.getInteger(R.integer.settings_activity_code)) {
 
             if (resultCode == Activity.RESULT_OK) {
-                L.m("Return from Settings - Loading from file");
+                Log.d(LOG_TAG, "Return from Settings - Loading from file");
                 if(mainWifiFragment.isVisible())
                     mainWifiFragment.loadFromFile();
             } else {
-                L.m("Return from Settings - didn't change anything");
+                Log.d(LOG_TAG, "Return from Settings - didn't change anything");
             }
         }
     }
