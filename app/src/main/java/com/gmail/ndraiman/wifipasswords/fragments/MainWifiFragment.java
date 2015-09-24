@@ -153,6 +153,12 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     public void onDestroy() {
         super.onDestroy();
 
+        //Update database with changes made to wifi list.
+        PasswordDB db = MyApplication.getWritableDatabase();
+        db.deleteAll(false);
+        db.insertWifiEntries(mListWifi, false);
+        MyApplication.closeDatabase();
+
     }
 
     @Override
