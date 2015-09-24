@@ -42,7 +42,4 @@ public class MyApplication extends Application {
         }
 
     }
-
-    //TODO Test if the addition of AtomicInteger helps with SQLiteDB remaining open error
-    //TODO if not, remove it and remove "closeDatabase()" method from PasswordDB.java
 }

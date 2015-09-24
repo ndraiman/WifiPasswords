@@ -384,7 +384,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
             @Override
             public void onLongClick(View view, int position) {
-                //TODO replace with Swipe Menu
+                //TODO replace with Context Menu?
                 Log.d(LOG_TAG, "RecyclerView - onLongClick " + position);
 
                 WifiEntry entry = mListWifi.get(position);
