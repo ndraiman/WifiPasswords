@@ -41,7 +41,6 @@ import com.gmail.ndraiman.wifipasswords.extras.L;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
 import com.gmail.ndraiman.wifipasswords.recycler.CustomItemTouchHelper;
-import com.gmail.ndraiman.wifipasswords.recycler.DividerItemDecoration;
 import com.gmail.ndraiman.wifipasswords.recycler.ItemDragListener;
 import com.gmail.ndraiman.wifipasswords.recycler.RecyclerTouchListener;
 import com.gmail.ndraiman.wifipasswords.recycler.WifiListAdapter;
@@ -68,6 +67,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     private AppBarLayout mAppBarLayout;
     private FloatingActionButton mFAB;
     private SearchView mSearchView;
+    private ArrayList<WifiEntry> mSearchSavedList; //saves list for SearchView Live Search
     private RecyclerView.OnItemTouchListener mRecyclerTouchListener;
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private ItemTouchHelper mItemTouchHelper;
@@ -95,9 +95,10 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        L.m("onCreateView");
         View layout = inflater.inflate(R.layout.fragment_main_wifi, container, false);
         setHasOptionsMenu(true);
+        setRetainInstance(true);
 
         //Init local Views
         mListWifi = new ArrayList<>();
@@ -131,6 +132,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
             mListWifi = savedInstanceState.getParcelableArrayList(STATE_WIFI_ENTRIES);
 
         } else {
+            L.m("getting WifiEntries from database");
             //if starts for the first time, load the list of wifi from a database
             mListWifi = MyApplication.getWritableDatabase().getAllWifiEntries(false);
             MyApplication.closeDatabase();
@@ -147,14 +149,21 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         return layout;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
 
+    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        L.m("onSaveInstanceState");
         //save the wifi list to a parcelable prior to rotation or configuration change
         outState.putParcelableArrayList(STATE_WIFI_ENTRIES, mListWifi);
     }
+
+
 
 
     //WifiListLoadedListener method - called from TaskLoadWifiEntries
@@ -167,7 +176,8 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         }
 
         L.m("onWifiListLoaded");
-        mListWifi = listWifi;
+        mListWifi = new ArrayList<>(listWifi);
+
         mAdapter.setWifiList(listWifi);
     }
 
@@ -339,14 +349,14 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         mRecyclerView.setAdapter(mAdapter);
 
         //Divider for non-CardView layout.
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+//        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
 
-        //Item Touch Helper
+        //Setup ItemTouchHelper
         mCallback = new CustomItemTouchHelper(mAdapter);
         mItemTouchHelper = new ItemTouchHelper(mCallback);
         mItemTouchHelper.attachToRecyclerView(mRecyclerView);
 
-        //Setup RecyclerTouchListener
+        //Setup OnItemTouchListener
         mRecyclerTouchListener = new RecyclerTouchListener(getActivity(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
@@ -355,14 +365,14 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
             @Override
             public void onLongClick(View view, int position) {
+                //TODO replace with Swipe Menu
                 L.m("RecyclerView - onLongClick " + position);
 
                 WifiEntry entry = mListWifi.get(position);
                 String textToCopy = "Wifi Name: " + entry.getTitle() + "\n"
                         + "Password: " + entry.getPassword();
-                String snackbarMessage = getString(R.string.snackbar_wifi_copy);
 
-                copyToClipboard(COPIED_WIFI_ENTRY, textToCopy, snackbarMessage);
+                copyToClipboard(COPIED_WIFI_ENTRY, textToCopy, getString(R.string.snackbar_wifi_copy));
             }
         });
 
@@ -386,6 +396,8 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
                 mCollapsingToolbarLayout.setCollapsedTitleTextColor(Color.TRANSPARENT);
                 mRecyclerView.setNestedScrollingEnabled(false);
 
+                mSearchSavedList = new ArrayList<WifiEntry>(mListWifi);
+
                 return true;
             }
 
@@ -396,6 +408,9 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
                 mRecyclerView.setNestedScrollingEnabled(true);
                 mCollapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
                 mAppBarLayout.setExpanded(true);
+
+                mListWifi = mSearchSavedList;
+
                 return true;
             }
         });
@@ -520,7 +535,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         Log.d("SEARCH", "onQueryTextChange");
 
         //filter logic
-        final ArrayList<WifiEntry> filteredWifiList = filter(mListWifi, query);
+        final ArrayList<WifiEntry> filteredWifiList = filter(mSearchSavedList, query);
         mAdapter.animateTo(filteredWifiList);
         mRecyclerView.scrollToPosition(0);
         return true;

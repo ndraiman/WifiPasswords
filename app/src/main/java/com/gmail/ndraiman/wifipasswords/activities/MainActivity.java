@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private MainWifiFragment mainWifiFragment;
+    private static final String MAIN_FRAGMENT_TAG = "main_fragment_tag";
     private FloatingActionButton mFAB;
 
 
@@ -52,8 +53,15 @@ public class MainActivity extends AppCompatActivity {
         mToolbar.setBackgroundColor(ContextCompat.getColor(this, android.R.color.transparent));
         setSupportActionBar(mToolbar);
 
-        mainWifiFragment = MainWifiFragment.newInstance();
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, mainWifiFragment).commit();
+        if(savedInstanceState == null) {
+            mainWifiFragment = MainWifiFragment.newInstance();
+
+        } else {
+            mainWifiFragment = (MainWifiFragment) getSupportFragmentManager().findFragmentByTag(MAIN_FRAGMENT_TAG);
+        }
+
+        getSupportFragmentManager().beginTransaction().replace
+                (R.id.content_frame, mainWifiFragment, MAIN_FRAGMENT_TAG).commit();
 
     }
 
@@ -120,4 +128,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
 }

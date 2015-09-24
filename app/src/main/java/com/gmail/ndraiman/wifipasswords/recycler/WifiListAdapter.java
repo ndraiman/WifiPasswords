@@ -37,12 +37,12 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
         mShowDragHandler = false;
 
         //TODO Delete once SQLite database is implemented
-        //mListWifi = placeholderData();
+        //mListWifi = placeholderData(); //Use for Virtual Device
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int i) {
-        View view = layoutInflater.inflate(R.layout.wifi_entry_row_nocard, parent, false);
+        View view = layoutInflater.inflate(R.layout.wifi_entry_row, parent, false);
 
         return new MyViewHolder(view);
     }
@@ -75,13 +75,13 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
 
 
         //Set Animation
-        if (position > mPreviousPosition) {
-            AnimationUtils.translateY(holder, true);
-
-        } else {
-            AnimationUtils.translateY(holder, false);
-        }
-        mPreviousPosition = position;
+//        if (position > mPreviousPosition) {
+//            AnimationUtils.translateY(holder, true);
+//
+//        } else {
+//            AnimationUtils.translateY(holder, false);
+//        }
+//        mPreviousPosition = position;
 
     }
 
@@ -93,10 +93,15 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
 
     public void setWifiList(ArrayList<WifiEntry> listWifi) {
         Log.d(LOG_TAG, "setWifiList");
-        mListWifi = new ArrayList<>(listWifi);
+        mListWifi = listWifi; //new ArrayList<>(listWifi);
         mPreviousPosition = -1; //fix load animation on new data loaded
         notifyDataSetChanged();
     }
+
+//    public List<WifiEntry> getWifiList() {
+//        Log.d(LOG_TAG, "getWifiList");
+//        return mListWifi;
+//    }
 
     /**********************************************/
     /************ Items Changed Methods ***********/
@@ -272,9 +277,9 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     /*****************************************/
     /************ PlaceHolder Data ***********/
     /*****************************************/
-    public static List<WifiEntry> placeholderData() {
+    public static ArrayList<WifiEntry> placeholderData() {
 
-        List<WifiEntry> data = new ArrayList<>();
+        ArrayList<WifiEntry> data = new ArrayList<>();
 
         String[] titles = {"Wifi 1", "Wifi 2", "Wifi 3", "Wifi 4", "Wifi 5", "Wifi 6", "Wifi 7"
                 , "Wifi 8", "Wifi 9", "Wifi 10"};
