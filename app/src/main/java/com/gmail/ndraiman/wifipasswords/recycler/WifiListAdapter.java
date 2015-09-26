@@ -49,7 +49,6 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
-        Log.d(LOG_TAG, "onBindViewHolder");
         WifiEntry currentEntry = mListWifi.get(position);
 
         holder.wifiTitle.setText(currentEntry.getTitle());
@@ -61,8 +60,6 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
         } else {
             holder.wifiBackground.setBackgroundResource(R.drawable.wifi_entry_bg);
         }
-
-        Log.d(LOG_TAG, "mSelectedItems.get = " + mSelectedItems.get(position, false));
 
         //Drag Icon
         holder.dragHandler.setOnTouchListener(new View.OnTouchListener() {

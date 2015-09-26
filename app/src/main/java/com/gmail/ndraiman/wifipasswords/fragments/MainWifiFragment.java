@@ -58,6 +58,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
     private static final String LOG_TAG = "MainWifiFragment";
     private static final String STATE_WIFI_ENTRIES = "state_wifi_entries"; //Parcel key
+    private static final String STATE_SEARCH_QUERY = "state_search_query"; //
     private static final String COPIED_WIFI_ENTRY = "copied_wifi_entry"; //Clipboard Label
 
     private ArrayList<WifiEntry> mListWifi;
@@ -88,6 +89,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     //SearchView
     private SearchView mSearchView;
     private ArrayList<WifiEntry> mSearchSavedList; //saves list for SearchView Live Search
+    private String mSearchSavedQuery = ""; //saves query for configuration change
 
     //Context Action Mode
     private ActionMode mActionMode;
@@ -147,6 +149,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
             Log.d(LOG_TAG, "extracting mListWifi from Parcelable");
             //if starts after a rotation or configuration change, load the existing Wifi list from a parcelable
             mListWifi = savedInstanceState.getParcelableArrayList(STATE_WIFI_ENTRIES);
+            mSearchSavedQuery = savedInstanceState.getString(STATE_SEARCH_QUERY);
 
         } else {
             Log.d(LOG_TAG, "getting WifiEntries from database");
@@ -168,6 +171,16 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
 
     @Override
+    public void onResume() {
+        super.onResume();
+
+        if(mSortModeOn) {
+            sortMode(true);
+        }
+    }
+
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
 
@@ -184,7 +197,13 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         super.onSaveInstanceState(outState);
         Log.d(LOG_TAG, "onSaveInstanceState");
         //save the wifi list to a parcelable prior to rotation or configuration change
-        outState.putParcelableArrayList(STATE_WIFI_ENTRIES, mListWifi);
+        outState.putParcelableArrayList(STATE_WIFI_ENTRIES,
+                mSearchView.isIconified() ? mListWifi : mSearchSavedList);
+
+        if(mSearchView != null) {
+            mSearchSavedQuery = mSearchView.getQuery().toString();
+            outState.putString(STATE_SEARCH_QUERY, mSearchSavedQuery);
+        }
     }
 
 
@@ -196,7 +215,6 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         if (mProgressBar.getVisibility() == View.VISIBLE) {
             mProgressBar.setVisibility(View.GONE);
         }
-
         Log.d(LOG_TAG, "onWifiListLoaded");
         mListWifi = new ArrayList<>(listWifi);
 
@@ -211,6 +229,13 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         MenuItem searchItem = menu.findItem(R.id.action_search);
 
         setupSearch(searchItem);
+
+        //Restore SearchView state
+        if(!mSearchSavedQuery.isEmpty()) {
+            searchItem.expandActionView();
+            mSearchView.setQuery(mSearchSavedQuery, true);
+            mSearchView.clearFocus();
+        }
 
         //Disable\Enable menu items according to SortMode
         menu.setGroupVisible(R.id.menu_group_main, !mSortModeOn);
@@ -400,7 +425,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
                 Log.d(LOG_TAG, "RecyclerView - onLongClick " + position);
 
                 //Invoking Context Action Mode
-                if (mActionMode != null) {
+                if (mActionMode != null || mSortModeOn) {
                     return;
                 }
                 mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(mActionModeCallback);
