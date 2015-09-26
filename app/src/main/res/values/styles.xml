@@ -10,7 +10,11 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorControlHighlight">@color/colorHighlight</item>
-        <item name="android:windowBackground">@android:color/white</item>
+        <!--<item name="android:windowBackground">@android:color/white</item>-->
+
+        <!-- Context Action Mode will Overlay Toolbar -->
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeBackground">@color/colorPrimary</item>
 
     </style>
 
@@ -27,10 +31,5 @@
         <item name="android:layout_marginRight">8dp</item>
         <item name="android:layout_marginBottom">0dp</item>
     </style>
-
-    <!--<style name="myCustomToolbarTheme" parent="ThemeOverlay.AppCompat.Light">-->
-    <!--<item name="android:textColorPrimary">#F00</item>-->
-    <!--<item name="android:textColorSecondary">#00F</item>-->
-    <!--</style>-->
 
 </resources>

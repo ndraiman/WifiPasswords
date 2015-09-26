@@ -4,11 +4,13 @@ import android.content.Context;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gmail.ndraiman.wifipasswords.R;
@@ -22,12 +24,13 @@ import java.util.List;
 public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyViewHolder>
         implements ItemTouchHelperAdapter {
 
+    private static final String LOG_TAG = "RecyclerAdapter";
     private LayoutInflater layoutInflater;
     private List<WifiEntry> mListWifi;
     private ItemDragListener mDragListener;
-    private int mPreviousPosition = -1;
+    private int mPreviousPosition = -1; //used for Item Animation
     private boolean mShowDragHandler;
-    private static final String LOG_TAG = "RecyclerAdapter";
+    private SparseBooleanArray mSelectedItems = new SparseBooleanArray();
 
     public WifiListAdapter(Context context, ItemDragListener dragListener) {
         layoutInflater = LayoutInflater.from(context);
@@ -43,13 +46,25 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
         return new MyViewHolder(view);
     }
 
+
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
+        Log.d(LOG_TAG, "onBindViewHolder");
         WifiEntry currentEntry = mListWifi.get(position);
 
         holder.wifiTitle.setText(currentEntry.getTitle());
         holder.wifiPassword.setText(currentEntry.getPassword());
 
+        //Selected Background
+        if(mSelectedItems.get(position, false)) {
+            holder.wifiBackground.setBackgroundResource(R.color.colorHighlight);
+        } else {
+            holder.wifiBackground.setBackgroundResource(R.drawable.wifi_entry_bg);
+        }
+
+        Log.d(LOG_TAG, "mSelectedItems.get = " + mSelectedItems.get(position, false));
+
+        //Drag Icon
         holder.dragHandler.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -94,6 +109,15 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
         notifyDataSetChanged();
     }
 
+    public void toggleSelection(int position) {
+        Log.d(LOG_TAG, "toggleSelection");
+        if(mSelectedItems.get(position, false)) {
+            mSelectedItems.delete(position);
+        } else {
+            mSelectedItems.put(position, true);
+        }
+        notifyItemChanged(position);
+    }
 
     /**********************************************/
     /************ Items Changed Methods ***********/
@@ -205,6 +229,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
         private TextView wifiTitle;
         private TextView wifiPassword;
         private ImageView dragHandler;
+        private LinearLayout wifiBackground;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -212,6 +237,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
             wifiTitle = (TextView) itemView.findViewById(R.id.title_wifi);
             wifiPassword = (TextView) itemView.findViewById(R.id.password_wifi);
             dragHandler = (ImageView) itemView.findViewById(R.id.drag_handler);
+            wifiBackground = (LinearLayout) itemView.findViewById(R.id.wifi_entry_layout);
 
         }
     }

@@ -5,7 +5,6 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -18,6 +17,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,7 +34,6 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.gmail.ndraiman.wifipasswords.R;
 import com.gmail.ndraiman.wifipasswords.activities.SettingsActivity;
@@ -59,32 +59,48 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     private static final String LOG_TAG = "MainWifiFragment";
     private static final String STATE_WIFI_ENTRIES = "state_wifi_entries"; //Parcel key
     private static final String COPIED_WIFI_ENTRY = "copied_wifi_entry"; //Clipboard Label
-    private RecyclerView mRecyclerView;
-    private WifiListAdapter mAdapter;
+
     private ArrayList<WifiEntry> mListWifi;
-    private ProgressBar mProgressBar;
-    private String mPath;
-    private String mFileName;
-    private AppBarLayout mAppBarLayout;
-    private FloatingActionButton mFAB;
-    private SearchView mSearchView;
-    private ArrayList<WifiEntry> mSearchSavedList; //saves list for SearchView Live Search
-    private RecyclerView.OnItemTouchListener mRecyclerTouchListener;
-    private CollapsingToolbarLayout mCollapsingToolbarLayout;
-    private ItemTouchHelper mItemTouchHelper;
-    private ItemTouchHelper.Callback mCallback;
-    private FrameLayout mRoot;
+
+    private boolean isAppBarExpanded;
     private boolean mSortModeOn = false;
     private boolean mViewAsList = true;
 
+    //Layout
+    private FrameLayout mRoot;
+    private AppBarLayout mAppBarLayout;
+    private CollapsingToolbarLayout mCollapsingToolbarLayout;
+    private FloatingActionButton mFAB;
+    private ProgressBar mProgressBar;
     public static TextView textNoRoot;
+
+    //wpa_supplicant file
+    private String mPath;
+    private String mFileName;
+
+    //RecyclerView
+    private RecyclerView mRecyclerView;
+    private WifiListAdapter mAdapter;
+    private RecyclerView.OnItemTouchListener mRecyclerTouchListener;
+    private ItemTouchHelper mItemTouchHelper;
+    private ItemTouchHelper.Callback mCallback;
+
+    //SearchView
+    private SearchView mSearchView;
+    private ArrayList<WifiEntry> mSearchSavedList; //saves list for SearchView Live Search
+
+    //Context Action Mode
+    private ActionMode mActionMode;
+    private int mActionModePosition;
+    private ActionMode.Callback mActionModeCallback;
+    private WifiEntry mRemovedEntry;
 
 
     public static MainWifiFragment newInstance() {
         MainWifiFragment fragment = new MainWifiFragment();
-        Bundle args = new Bundle();
+//        Bundle args = new Bundle();
         //put any extra arguments that you may want to supply to this fragment
-        fragment.setArguments(args);
+//        fragment.setArguments(args);
         return fragment;
     }
 
@@ -152,17 +168,6 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            
-        } else {
-            
-        }
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
 
@@ -181,8 +186,6 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         //save the wifi list to a parcelable prior to rotation or configuration change
         outState.putParcelableArrayList(STATE_WIFI_ENTRIES, mListWifi);
     }
-
-
 
 
     //WifiListLoadedListener method - called from TaskLoadWifiEntries
@@ -209,9 +212,11 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
         setupSearch(searchItem);
 
+        //Disable\Enable menu items according to SortMode
         menu.setGroupVisible(R.id.menu_group_main, !mSortModeOn);
         menu.setGroupVisible(R.id.menu_group_sort, mSortModeOn);
 
+        //TODO Delete if removing Layout Change
         menu.findItem(R.id.action_layout_change)
                 .setTitle(mViewAsList ? R.string.action_layout_grid : R.string.action_layout_linear);
     }
@@ -317,12 +322,11 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     //Toggle Sort Mode
     public void sortMode(boolean isOn) {
         Log.d(LOG_TAG, "sortMode - isOn = " + isOn);
-        mAppBarLayout.setExpanded(!isOn);
-        mRecyclerView.setNestedScrollingEnabled(!isOn);
+        collapseAppBarLayout(isOn);
         mAdapter.showDragHandler(isOn);
 
         //Disable Touch actions while in sort mode
-        if(isOn) {
+        if (isOn) {
             mRecyclerView.removeOnItemTouchListener(mRecyclerTouchListener);
         } else {
             mRecyclerView.addOnItemTouchListener(mRecyclerTouchListener);
@@ -339,6 +343,14 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     }
 
 
+    public void collapseAppBarLayout(boolean collapse) {
+
+        mAppBarLayout.setExpanded(!collapse);
+        mRecyclerView.setNestedScrollingEnabled(!collapse);
+
+    }
+
+    //TODO Delete if removing Layout Change
     //Change RecyclerView layout manager
     private void changeRecyclerLayout() {
         Log.d(LOG_TAG, "changeRecyclerLayout");
@@ -364,46 +376,110 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     private void setupRecyclerView() {
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRecyclerView.setHasFixedSize(true);
         mAdapter = new WifiListAdapter(getActivity(), this);
         mRecyclerView.setAdapter(mAdapter);
-
-        //Divider for non-CardView layout.
-//        mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
 
         //Setup ItemTouchHelper
         mCallback = new CustomItemTouchHelper(mAdapter);
         mItemTouchHelper = new ItemTouchHelper(mCallback);
         mItemTouchHelper.attachToRecyclerView(mRecyclerView);
 
+        //Setup Context Action Mode
+        setupActionModeCallback();
+
         //Setup OnItemTouchListener
         mRecyclerTouchListener = new RecyclerTouchListener(getActivity(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                Toast.makeText(getActivity(), "onClick " + position, Toast.LENGTH_SHORT).show();  //placeholder
+                Log.d(LOG_TAG, "RecyclerView - onClick " + position);
             }
 
             @Override
             public void onLongClick(View view, int position) {
-                //TODO replace with Context Menu?
                 Log.d(LOG_TAG, "RecyclerView - onLongClick " + position);
 
-                WifiEntry entry = mListWifi.get(position);
-                String textToCopy = "Wifi Name: " + entry.getTitle() + "\n"
-                        + "Password: " + entry.getPassword();
-
-                copyToClipboard(COPIED_WIFI_ENTRY, textToCopy, getString(R.string.snackbar_wifi_copy));
+                //Invoking Context Action Mode
+                if (mActionMode != null) {
+                    return;
+                }
+                mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(mActionModeCallback);
+                mAdapter.toggleSelection(position);
+                mRecyclerView.scrollToPosition(position);
+                mActionModePosition = position;
             }
         });
 
         mRecyclerView.addOnItemTouchListener(mRecyclerTouchListener);
     }
 
+    //Setup Context Action Mode
+    public void setupActionModeCallback() {
+
+        mActionModeCallback = new ActionMode.Callback() {
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                MenuInflater menuInflater = mode.getMenuInflater();
+                menuInflater.inflate(R.menu.menu_context, menu);
+
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                collapseAppBarLayout(true);
+                return true;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.menu_context_delete:
+                        mRemovedEntry = mAdapter.removeItem(mActionModePosition);
+                        mode.finish();
+
+                        Snackbar.make(mRoot, R.string.snackbar_wifi_delete, Snackbar.LENGTH_LONG)
+                                .setAction(R.string.snackbar_undo, new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        mAdapter.addItem(mActionModePosition, mRemovedEntry);
+                                    }
+                                })
+                                .show();
+                        return true;
+
+                    case R.id.menu_context_copy:
+                        WifiEntry entry = mListWifi.get(mActionModePosition);
+                        String textToCopy = "Wifi Name: " + entry.getTitle() + "\n"
+                                + "Password: " + entry.getPassword();
+
+                        copyToClipboard(COPIED_WIFI_ENTRY, textToCopy, getString(R.string.snackbar_wifi_copy));
+                        mode.finish();
+                        return true;
+
+                    default:
+                        return false;
+                }
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+                mAdapter.toggleSelection(mActionModePosition);
+                mRecyclerView.setNestedScrollingEnabled(true);
+                mActionMode = null;
+            }
+        };
+
+    }
+
+    //Sort Mode Method - sort via drag
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
         Log.d(LOG_TAG, "onStartDrag");
         mItemTouchHelper.startDrag(viewHolder);
     }
 
+    //Setup SearchView
     private void setupSearch(MenuItem searchItem) {
 
         MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
@@ -411,9 +487,8 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
                 Log.d(LOG_TAG, "Search - onMenuItemActionExpand");
-                mAppBarLayout.setExpanded(false);
+                collapseAppBarLayout(true);
                 mCollapsingToolbarLayout.setCollapsedTitleTextColor(Color.TRANSPARENT);
-                mRecyclerView.setNestedScrollingEnabled(false);
 
                 mSearchSavedList = new ArrayList<WifiEntry>(mListWifi);
 
@@ -424,10 +499,8 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 Log.d(LOG_TAG, "Search - onMenuItemActionCollapse");
-                mRecyclerView.setNestedScrollingEnabled(true);
                 mCollapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
-                mAppBarLayout.setExpanded(true);
-
+                collapseAppBarLayout(false);
                 mListWifi = mSearchSavedList;
 
                 return true;
