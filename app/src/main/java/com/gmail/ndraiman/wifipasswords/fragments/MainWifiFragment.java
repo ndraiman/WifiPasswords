@@ -475,6 +475,8 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                WifiEntry entry;
+
                 switch (item.getItemId()) {
                     case R.id.menu_context_delete:
                         mRemovedEntry = mAdapter.removeItem(mActionModePosition);
@@ -491,12 +493,24 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
                         return true;
 
                     case R.id.menu_context_copy:
-                        WifiEntry entry = mListWifi.get(mActionModePosition);
+                        entry = mListWifi.get(mActionModePosition);
                         String textToCopy = "Wifi Name: " + entry.getTitle() + "\n"
                                 + "Password: " + entry.getPassword();
 
                         copyToClipboard(COPIED_WIFI_ENTRY, textToCopy, getString(R.string.snackbar_wifi_copy));
                         mode.finish();
+                        return true;
+
+                    case R.id.menu_context_share:
+                        entry = mListWifi.get(mActionModePosition);
+                        String textToShare = "Wifi Name: " + entry.getTitle() + "\n"
+                                + "Password: " + entry.getPassword();
+
+                        Intent sendIntent = new Intent();
+                        sendIntent.setAction(Intent.ACTION_SEND);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, textToShare);
+                        sendIntent.setType("text/plain");
+                        startActivity(sendIntent);
                         return true;
 
                     default:

@@ -5,6 +5,10 @@
         android:title="Copy"
         android:icon="@drawable/ic_action_context_copy" />
 
+    <item android:id="@+id/menu_context_share"
+        android:title="Share"
+        android:icon="@drawable/ic_share_light" />
+
     <item android:id="@+id/menu_context_delete"
         android:title="Delete"
         android:icon="@drawable/ic_action_context_delete" />
