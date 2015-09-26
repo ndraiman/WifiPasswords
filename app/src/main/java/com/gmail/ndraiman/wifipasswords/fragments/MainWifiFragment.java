@@ -87,7 +87,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     private WifiListAdapter mAdapter;
     private RecyclerView.OnItemTouchListener mRecyclerTouchListener;
     private ItemTouchHelper mItemTouchHelper;
-    private ItemTouchHelper.Callback mCallback;
+    private ItemTouchHelper.Callback mTouchHelperCallback;
 
     //SearchView
     private SearchView mSearchView;
@@ -401,8 +401,8 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
                 new LinearLayoutManager(getActivity()) : new GridLayoutManager(getActivity(), 2));
 
         //Reset ItemTouchHelper to handle new layout
-        mCallback = new CustomItemTouchHelper(mAdapter);
-        mItemTouchHelper = new ItemTouchHelper(mCallback);
+        mTouchHelperCallback = new CustomItemTouchHelper(mAdapter);
+        mItemTouchHelper = new ItemTouchHelper(mTouchHelperCallback);
         mItemTouchHelper.attachToRecyclerView(mRecyclerView);
 
         mAdapter.setWifiList(mListWifi);
@@ -421,8 +421,8 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         mRecyclerView.setAdapter(mAdapter);
 
         //Setup ItemTouchHelper
-        mCallback = new CustomItemTouchHelper(mAdapter);
-        mItemTouchHelper = new ItemTouchHelper(mCallback);
+        mTouchHelperCallback = new CustomItemTouchHelper(mAdapter);
+        mItemTouchHelper = new ItemTouchHelper(mTouchHelperCallback);
         mItemTouchHelper.attachToRecyclerView(mRecyclerView);
 
         //Setup Context Action Mode
