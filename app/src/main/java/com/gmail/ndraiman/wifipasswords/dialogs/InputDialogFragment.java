@@ -1,4 +1,4 @@
-package com.gmail.ndraiman.wifipasswords.fragments;
+package com.gmail.ndraiman.wifipasswords.dialogs;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

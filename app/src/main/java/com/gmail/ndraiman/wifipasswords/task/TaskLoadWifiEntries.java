@@ -10,7 +10,7 @@ import com.gmail.ndraiman.wifipasswords.database.PasswordDB;
 import com.gmail.ndraiman.wifipasswords.extras.ExecuteAsRootBase;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
 import com.gmail.ndraiman.wifipasswords.extras.RootCheck;
-import com.gmail.ndraiman.wifipasswords.fragments.CustomAlertDialogListener;
+import com.gmail.ndraiman.wifipasswords.dialogs.CustomAlertDialogListener;
 import com.gmail.ndraiman.wifipasswords.fragments.MainWifiFragment;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
 import com.gmail.ndraiman.wifipasswords.recycler.WifiListLoadedListener;

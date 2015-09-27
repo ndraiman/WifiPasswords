@@ -1,4 +1,4 @@
-package com.gmail.ndraiman.wifipasswords.fragments;
+package com.gmail.ndraiman.wifipasswords.dialogs;
 
 
 public interface CustomAlertDialogListener {

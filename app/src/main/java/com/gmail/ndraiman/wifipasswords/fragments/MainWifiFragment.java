@@ -38,6 +38,10 @@ import android.widget.TextView;
 import com.gmail.ndraiman.wifipasswords.R;
 import com.gmail.ndraiman.wifipasswords.activities.SettingsActivity;
 import com.gmail.ndraiman.wifipasswords.database.PasswordDB;
+import com.gmail.ndraiman.wifipasswords.dialogs.CustomAlertDialogFragment;
+import com.gmail.ndraiman.wifipasswords.dialogs.CustomAlertDialogListener;
+import com.gmail.ndraiman.wifipasswords.dialogs.InputDialogFragment;
+import com.gmail.ndraiman.wifipasswords.dialogs.InputDialogListener;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
 import com.gmail.ndraiman.wifipasswords.recycler.CustomItemTouchHelper;
@@ -66,7 +70,6 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
     //OnSavedInstance Keys
     private static final String STATE_WIFI_ENTRIES = "state_wifi_entries"; //Parcel key
-    private static final String STATE_SEARCH_QUERY = "state_search_query"; //
     private static final String STATE_ACTION_MODE = "state_action_mode";
     private static final String STATE_ACTION_MODE_POSITION = "state_action_mode_position";
 
@@ -153,7 +156,6 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
             Log.d(LOG_TAG, "extracting mListWifi from Parcelable");
             //if starts after a rotation or configuration change, load the existing Wifi list from a parcelable
             mListWifi = savedInstanceState.getParcelableArrayList(STATE_WIFI_ENTRIES);
-            mSearchSavedQuery = savedInstanceState.getString(STATE_SEARCH_QUERY);
             mIsActionModeOn = savedInstanceState.getBoolean(STATE_ACTION_MODE);
             mActionModePosition = savedInstanceState.getInt(STATE_ACTION_MODE_POSITION);
 
@@ -214,7 +216,6 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
         if(mSearchView != null) {
             mSearchSavedQuery = mSearchView.getQuery().toString();
-            outState.putString(STATE_SEARCH_QUERY, mSearchSavedQuery);
         }
 
         outState.putBoolean(STATE_ACTION_MODE, mIsActionModeOn);
@@ -237,20 +238,9 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_wifi_main_fragment, menu);
-        Log.d(LOG_TAG, "onCreateOptionsMenu");
-
-        MenuItem searchItem = menu.findItem(R.id.action_search);
-
-        setupSearch(searchItem);
-
-        //Restore SearchView state
-        if(!mSearchSavedQuery.isEmpty()) {
-            searchItem.expandActionView();
-            mSearchView.setQuery(mSearchSavedQuery, true);
-            mSearchView.clearFocus();
-        }
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        Log.d(LOG_TAG, "onPrepareOptionsMenu");
 
         //Disable\Enable menu items according to SortMode
         menu.setGroupVisible(R.id.menu_group_main, !mIsSortModeOn);
@@ -259,6 +249,23 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         //TODO Delete if removing Layout Change
         menu.findItem(R.id.action_layout_change)
                 .setTitle(mViewAsList ? R.string.action_layout_grid : R.string.action_layout_linear);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_wifi_main_fragment, menu);
+        Log.d(LOG_TAG, "onCreateOptionsMenu");
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+
+        setupSearch(searchItem);
+        Log.d(LOG_TAG, "mSearchSavedQuery = " + mSearchSavedQuery);
+        //Restore SearchView state
+        if(!mSearchSavedQuery.isEmpty()) {
+            MenuItemCompat.expandActionView(searchItem);
+            mSearchView.setQuery(mSearchSavedQuery, true);
+            mSearchView.clearFocus();
+        }
     }
 
 
@@ -390,6 +397,13 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
     }
 
+    //Sort Mode Method - sort via drag
+    @Override
+    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+        Log.d(LOG_TAG, "onStartDrag");
+        mItemTouchHelper.startDrag(viewHolder);
+    }
+
     //TODO Delete if removing Layout Change
     //Change RecyclerView layout manager
     private void changeRecyclerLayout() {
@@ -414,6 +428,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     /********************************************************/
 
     private void setupRecyclerView() {
+        Log.d(LOG_TAG, "setupRecyclerView");
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setHasFixedSize(true);
@@ -455,7 +470,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
     //Setup Context Action Mode
     public void setupActionModeCallback() {
-
+        Log.d(LOG_TAG, "setupActionModeCallback");
         mActionModeCallback = new ActionMode.Callback() {
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -529,16 +544,9 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
     }
 
-    //Sort Mode Method - sort via drag
-    @Override
-    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
-        Log.d(LOG_TAG, "onStartDrag");
-        mItemTouchHelper.startDrag(viewHolder);
-    }
-
     //Setup SearchView
     private void setupSearch(MenuItem searchItem) {
-
+        Log.d(LOG_TAG, "setupSearch");
         MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
             //on Search - Collapse Toolbar & disable expanding, hide title;
             @Override
@@ -557,6 +565,8 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
             public boolean onMenuItemActionCollapse(MenuItem item) {
                 Log.d(LOG_TAG, "Search - onMenuItemActionCollapse");
                 mCollapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
+                mSearchView.setQuery("", false);
+                mSearchSavedQuery = "";
                 collapseAppBarLayout(false);
                 mListWifi = mSearchSavedList;
 
@@ -570,7 +580,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
 
     private void setupFAB() {
-
+        Log.d(LOG_TAG, "setupFAB");
         mFAB.setImageResource(R.drawable.ic_add_light);
         mFAB.setOnClickListener(new View.OnClickListener() {
             @Override
