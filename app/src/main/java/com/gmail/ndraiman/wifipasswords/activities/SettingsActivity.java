@@ -81,15 +81,17 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == android.R.id.home) {
-            onBackPressed();
-            return true;
-        }
+        switch (id) {
 
-        if (id == R.id.action_help) {
-            return true;
-        }
+            case android.R.id.home:
+                onBackPressed();
+                return true;
 
+            case R.id.action_help:
+                //TODO call "Help & Feedback" fragment - same as in MainActivity
+                return true;
+
+        }
 
         return super.onOptionsItemSelected(item);
     }

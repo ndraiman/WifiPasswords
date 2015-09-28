@@ -90,16 +90,18 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            //Start Settings with Transition
-            ActivityOptionsCompat compat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, null);
-            startActivity(new Intent(this, SettingsActivity.class), compat.toBundle());
-            return true;
-        }
+        switch (id) {
 
-        if (id == R.id.action_help) {
-            //TODO implement "Help & Feedback" fragment
-            return true;
+            case R.id.action_settings:
+                //Start Settings with Transition
+                ActivityOptionsCompat compat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, null);
+                startActivity(new Intent(this, SettingsActivity.class), compat.toBundle());
+                return true;
+
+            case R.id.action_help:
+                //TODO implement "Help & Feedback" fragment
+                return true;
+
         }
 
         return super.onOptionsItemSelected(item);

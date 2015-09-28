@@ -4,6 +4,7 @@
     tools:context=".MainActivity">
 
     <group android:id="@+id/menu_group_main">
+
         <item
             android:id="@+id/action_search"
             android:icon="@drawable/ic_search_open_light"
@@ -11,7 +12,6 @@
             android:title="@string/action_search"
             app:actionViewClass="android.support.v7.widget.SearchView"
             app:showAsAction="always|collapseActionView" />
-
 
         <item
             android:id="@+id/action_share"
@@ -40,7 +40,7 @@
 
     </group>
 
-    <group android:id="@+id/menu_group_sort">
+    <group android:id="@+id/menu_group_sort_mode">
 
         <item
             android:id="@+id/action_sort_done"
@@ -51,4 +51,5 @@
             app:showAsAction="always" />
 
     </group>
+
 </menu>
