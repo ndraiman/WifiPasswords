@@ -76,6 +76,17 @@ public class PasswordDB {
         String table = isHidden ? PasswordHelper.TABLE_PASSWORDS_HIDDEN : PasswordHelper.TABLE_PASSWORDS_MAIN;
         Log.d(TAG, "getAllWifiEntries - isHidden=" + isHidden + " table=" + table);
 
+        String selection = null;
+        String[] selectionArgs = null;
+
+        if(!isHidden) {
+            selection = PasswordHelper.COLUMN_TITLE + " NOT IN (SELECT "
+                    + PasswordHelper.COLUMN_TITLE
+                    + " FROM " + PasswordHelper.TABLE_PASSWORDS_HIDDEN + ")";
+//            selectionArgs = new String[]{PasswordHelper.TABLE_PASSWORDS_HIDDEN};
+
+        }
+
         ArrayList<WifiEntry> listWifi = new ArrayList<>();
 
         String[] columns = {PasswordHelper.COLUMN_UID,
@@ -83,7 +94,7 @@ public class PasswordDB {
                 PasswordHelper.COLUMN_PASSWORD};
 
         //TODO modify query to return entries NOT IN hidden table
-        Cursor cursor = mDatabase.query(table, columns, null, null, null, null, null);
+        Cursor cursor = mDatabase.query(table, columns, selection, selectionArgs, null, null, null);
 
         if(cursor != null && cursor.moveToFirst()) {
             Log.d(TAG, "loading entries " + cursor.getCount() + new Date(System.currentTimeMillis()));
