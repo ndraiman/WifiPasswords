@@ -17,7 +17,7 @@ import com.gmail.ndraiman.wifipasswords.R;
 
 public class InputDialogFragment extends DialogFragment {
 
-    private static final String LOG_TAG = "InputDialogFragment";
+    private static final String TAG = "InputDialogFragment";
     private EditText mTitle, mPassword;
     private Button mCancel, mConfirm;
     private LinearLayout mRoot;
@@ -35,7 +35,7 @@ public class InputDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d(LOG_TAG, "onCreateView");
+        Log.d(TAG, "onCreateView");
         View layout = inflater.inflate(R.layout.dialog_add_entry, container);
 
         mTitle = (EditText) layout.findViewById(R.id.input_title);
@@ -47,7 +47,7 @@ public class InputDialogFragment extends DialogFragment {
         mConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(LOG_TAG, "mConfirm - onClick");
+                Log.d(TAG, "mConfirm - onClick");
 
                 if (hasErrors())
                     return; //return to dialog
@@ -61,7 +61,7 @@ public class InputDialogFragment extends DialogFragment {
         mCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(LOG_TAG, "mCancel - onClick");
+                Log.d(TAG, "mCancel - onClick");
                 dismiss();
             }
         });
@@ -74,7 +74,7 @@ public class InputDialogFragment extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(LOG_TAG, "onResume");
+        Log.d(TAG, "onResume");
 
         //Set Dialog Dimensions
         getDialog().getWindow().setLayout(

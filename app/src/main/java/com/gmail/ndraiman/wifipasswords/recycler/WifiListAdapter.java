@@ -24,7 +24,7 @@ import java.util.List;
 public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyViewHolder>
         implements ItemTouchHelperAdapter {
 
-    private static final String LOG_TAG = "RecyclerAdapter";
+    private static final String TAG = "RecyclerAdapter";
     private LayoutInflater layoutInflater;
     private List<WifiEntry> mListWifi;
     private ItemDragListener mDragListener;
@@ -100,14 +100,14 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
 
 
     public void setWifiList(ArrayList<WifiEntry> listWifi) {
-        Log.d(LOG_TAG, "setWifiList");
+        Log.d(TAG, "setWifiList");
         mListWifi = listWifi; //new ArrayList<>(listWifi);
         mPreviousPosition = -1; //fix load animation on new data loaded
         notifyDataSetChanged();
     }
 
     public void toggleSelection(int position) {
-        Log.d(LOG_TAG, "toggleSelection");
+        Log.d(TAG, "toggleSelection");
         if(mSelectedItems.get(position, false)) {
             mSelectedItems.delete(position);
         } else {
@@ -121,20 +121,20 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     /**********************************************/
 
     public WifiEntry removeItem(int position) {
-        Log.d(LOG_TAG, "removeItem");
+        Log.d(TAG, "removeItem");
         final WifiEntry entry = mListWifi.remove(position);
         notifyItemRemoved(position);
         return entry;
     }
 
     public void addItem(int position, WifiEntry entry) {
-        Log.d(LOG_TAG, "addItem");
+        Log.d(TAG, "addItem");
         mListWifi.add(position, entry);
         notifyItemInserted(position);
     }
 
     public void moveItem(int fromPosition, int toPosition) {
-        Log.d(LOG_TAG, "moveItem");
+        Log.d(TAG, "moveItem");
         final WifiEntry entry = mListWifi.remove(fromPosition);
         mListWifi.add(toPosition, entry);
         notifyItemMoved(fromPosition, toPosition);
@@ -146,7 +146,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     /*********************************************/
 
     public void animateTo(ArrayList<WifiEntry> listWifi) {
-        Log.d(LOG_TAG, "animateTo");
+        Log.d(TAG, "animateTo");
         //Order is important
         applyAndAnimateRemovals(listWifi);
         applyAndAnimateAdditions(listWifi);
@@ -154,7 +154,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     }
 
     private void applyAndAnimateRemovals(ArrayList<WifiEntry> newListWifi) {
-        Log.d(LOG_TAG, "applyAndAnimateRemovals");
+        Log.d(TAG, "applyAndAnimateRemovals");
         for (int i = mListWifi.size() - 1; i >= 0; i--) {
             final WifiEntry entry = mListWifi.get(i);
             if (!newListWifi.contains(entry)) {
@@ -164,7 +164,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     }
 
     private void applyAndAnimateAdditions(ArrayList<WifiEntry> newListWifi) {
-        Log.d(LOG_TAG, "applyAndAnimateAdditions");
+        Log.d(TAG, "applyAndAnimateAdditions");
         for (int i = 0, count = newListWifi.size(); i < count; i++) {
             final WifiEntry entry = newListWifi.get(i);
             if (!mListWifi.contains(entry)) {
@@ -174,7 +174,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     }
 
     private void applyAndAnimateMovedItems(ArrayList<WifiEntry> newListWifi) {
-        Log.d(LOG_TAG, "applyAndAnimateMovedItems");
+        Log.d(TAG, "applyAndAnimateMovedItems");
         for (int toPosition = newListWifi.size() - 1; toPosition >= 0; toPosition--) {
             final WifiEntry entry = newListWifi.get(toPosition);
             final int fromPosition = mListWifi.indexOf(entry);
@@ -208,7 +208,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     @Override
     public void onItemDismiss(int position) {
 //        removeItem(position);
-        Log.d(LOG_TAG, "onItemDismiss");
+        Log.d(TAG, "onItemDismiss");
     }
 
     public void showDragHandler(boolean show) {

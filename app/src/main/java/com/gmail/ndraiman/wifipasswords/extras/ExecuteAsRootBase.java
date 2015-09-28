@@ -10,6 +10,9 @@ import java.util.ArrayList;
 
 public abstract class ExecuteAsRootBase
 {
+    
+    private static final String TAG = "ROOT";
+    
     public static boolean canRunRootCommands()
     {
         boolean retval = false;
@@ -34,19 +37,19 @@ public abstract class ExecuteAsRootBase
                 {
                     retval = false;
                     exitSu = false;
-                    Log.d("ROOT", "Can't get root access or denied by user");
+                    Log.d(TAG, "Can't get root access or denied by user");
                 }
                 else if (true == currUid.contains("uid=0"))
                 {
                     retval = true;
                     exitSu = true;
-                    Log.d("ROOT", "Root access granted");
+                    Log.d(TAG, "Root access granted");
                 }
                 else
                 {
                     retval = false;
                     exitSu = true;
-                    Log.d("ROOT", "Root access rejected: " + currUid);
+                    Log.d(TAG, "Root access rejected: " + currUid);
                 }
 
                 if (exitSu)
@@ -62,7 +65,7 @@ public abstract class ExecuteAsRootBase
             // Probably broken pipe exception on trying to write to output stream (os) after su failed, meaning that the device is not rooted
 
             retval = false;
-            Log.d("ROOT", "Root access rejected [" + e.getClass().getName() + "] : " + e.getMessage());
+            Log.d(TAG, "Root access rejected [" + e.getClass().getName() + "] : " + e.getMessage());
         }
 
         return retval;

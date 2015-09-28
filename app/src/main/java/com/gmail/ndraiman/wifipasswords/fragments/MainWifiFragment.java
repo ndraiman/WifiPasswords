@@ -60,7 +60,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         SearchView.OnQueryTextListener, CustomAlertDialogListener, InputDialogListener,
         ItemDragListener {
 
-    private static final String LOG_TAG = "MainWifiFragment";
+    private static final String TAG = "MainWifiFragment";
     private static final String COPIED_WIFI_ENTRY = "copied_wifi_entry"; //Clipboard Label
 
     private ArrayList<WifiEntry> mListWifi;
@@ -121,7 +121,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d(LOG_TAG, "onCreateView");
+        Log.d(TAG, "onCreateView");
         View layout = inflater.inflate(R.layout.fragment_main_wifi, container, false);
         setHasOptionsMenu(true);
         setRetainInstance(true);
@@ -153,14 +153,14 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         //Determine if Activity runs for first time
         if (savedInstanceState != null) {
 
-            Log.d(LOG_TAG, "extracting mListWifi from Parcelable");
+            Log.d(TAG, "extracting mListWifi from Parcelable");
             //if starts after a rotation or configuration change, load the existing Wifi list from a parcelable
             mListWifi = savedInstanceState.getParcelableArrayList(STATE_WIFI_ENTRIES);
             mIsActionModeOn = savedInstanceState.getBoolean(STATE_ACTION_MODE);
             mActionModePosition = savedInstanceState.getInt(STATE_ACTION_MODE_POSITION);
 
         } else {
-            Log.d(LOG_TAG, "getting WifiEntries from database");
+            Log.d(TAG, "getting WifiEntries from database");
             //if starts for the first time, load the list of wifi from a database
             mListWifi = MyApplication.getWritableDatabase().getAllWifiEntries(false);
             MyApplication.closeDatabase();
@@ -168,7 +168,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
             if (mListWifi.isEmpty()) {
 
                 loadFromFile();
-                Log.d(LOG_TAG, "executing task from onCreate");
+                Log.d(TAG, "executing task from onCreate");
             }
         }
 
@@ -209,7 +209,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Log.d(LOG_TAG, "onSaveInstanceState");
+        Log.d(TAG, "onSaveInstanceState");
         //save the wifi list to a parcelable prior to rotation or configuration change
         outState.putParcelableArrayList(STATE_WIFI_ENTRIES,
                 mSearchView.isIconified() ? mListWifi : mSearchSavedList);
@@ -231,7 +231,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         if (mProgressBar.getVisibility() == View.VISIBLE) {
             mProgressBar.setVisibility(View.GONE);
         }
-        Log.d(LOG_TAG, "onWifiListLoaded");
+        Log.d(TAG, "onWifiListLoaded");
         mListWifi = new ArrayList<>(listWifi);
 
         mAdapter.setWifiList(listWifi);
@@ -240,7 +240,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
-        Log.d(LOG_TAG, "onPrepareOptionsMenu");
+        Log.d(TAG, "onPrepareOptionsMenu");
 
         //Disable\Enable menu items according to SortMode
         menu.setGroupVisible(R.id.menu_group_main, !mIsSortModeOn);
@@ -254,12 +254,12 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.menu_wifi_main_fragment, menu);
-        Log.d(LOG_TAG, "onCreateOptionsMenu");
+        Log.d(TAG, "onCreateOptionsMenu");
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
 
         setupSearch(searchItem);
-        Log.d(LOG_TAG, "mSearchSavedQuery = " + mSearchSavedQuery);
+        Log.d(TAG, "mSearchSavedQuery = " + mSearchSavedQuery);
         //Restore SearchView state
         if(!mSearchSavedQuery.isEmpty()) {
             MenuItemCompat.expandActionView(searchItem);
@@ -327,7 +327,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
         mAdapter.setWifiList(new ArrayList<WifiEntry>());
         mProgressBar.setVisibility(View.VISIBLE); //Show Progress Bar
-        Log.d(LOG_TAG, "loadFromFile");
+        Log.d(TAG, "loadFromFile");
         Snackbar.make(mRoot, R.string.snackbar_load_from_file, Snackbar.LENGTH_SHORT).show();
         new TaskLoadWifiEntries(mPath, mFileName, this, this).execute();
 
@@ -343,7 +343,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         clipboardManager.setPrimaryClip(clipData);
 
         Snackbar.make(mRoot, snackbarMessage, Snackbar.LENGTH_SHORT).show();
-        Log.d(LOG_TAG, "copyToClipboard:\n" + clipData.toString());
+        Log.d(TAG, "copyToClipboard:\n" + clipData.toString());
     }
 
 
@@ -362,13 +362,13 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         mFileName = mPath.substring(mPath.lastIndexOf("/") + 1);
         mPath = mPath.substring(0, mPath.lastIndexOf("/") + 1);
 
-        Log.d(LOG_TAG, "getPath() - path = " + mPath + "\n filename = " + mFileName);
+        Log.d(TAG, "getPath() - path = " + mPath + "\n filename = " + mFileName);
 
     }
 
     //Toggle Sort Mode
     public void sortMode(boolean isOn) {
-        Log.d(LOG_TAG, "sortMode - isOn = " + isOn);
+        Log.d(TAG, "sortMode - isOn = " + isOn);
         collapseAppBarLayout(isOn);
         mAdapter.showDragHandler(isOn);
 
@@ -400,14 +400,14 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     //Sort Mode Method - sort via drag
     @Override
     public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
-        Log.d(LOG_TAG, "onStartDrag");
+        Log.d(TAG, "onStartDrag");
         mItemTouchHelper.startDrag(viewHolder);
     }
 
     //TODO Delete if removing Layout Change
     //Change RecyclerView layout manager
     private void changeRecyclerLayout() {
-        Log.d(LOG_TAG, "changeRecyclerLayout");
+        Log.d(TAG, "changeRecyclerLayout");
         mViewAsList = !mViewAsList;
 
 
@@ -428,7 +428,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     /********************************************************/
 
     private void setupRecyclerView() {
-        Log.d(LOG_TAG, "setupRecyclerView");
+        Log.d(TAG, "setupRecyclerView");
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setHasFixedSize(true);
@@ -447,12 +447,12 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         mRecyclerTouchListener = new RecyclerTouchListener(getActivity(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                Log.d(LOG_TAG, "RecyclerView - onClick " + position);
+                Log.d(TAG, "RecyclerView - onClick " + position);
             }
 
             @Override
             public void onLongClick(View view, int position) {
-                Log.d(LOG_TAG, "RecyclerView - onLongClick " + position);
+                Log.d(TAG, "RecyclerView - onLongClick " + position);
 
                 //Invoking Context Action Mode
                 if (mActionMode != null || mIsSortModeOn) {
@@ -470,7 +470,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
     //Setup Context Action Mode
     public void setupActionModeCallback() {
-        Log.d(LOG_TAG, "setupActionModeCallback");
+        Log.d(TAG, "setupActionModeCallback");
         mActionModeCallback = new ActionMode.Callback() {
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -546,12 +546,12 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
     //Setup SearchView
     private void setupSearch(MenuItem searchItem) {
-        Log.d(LOG_TAG, "setupSearch");
+        Log.d(TAG, "setupSearch");
         MenuItemCompat.setOnActionExpandListener(searchItem, new MenuItemCompat.OnActionExpandListener() {
             //on Search - Collapse Toolbar & disable expanding, hide title;
             @Override
             public boolean onMenuItemActionExpand(MenuItem item) {
-                Log.d(LOG_TAG, "Search - onMenuItemActionExpand");
+                Log.d(TAG, "Search - onMenuItemActionExpand");
                 collapseAppBarLayout(true);
                 mCollapsingToolbarLayout.setCollapsedTitleTextColor(Color.TRANSPARENT);
 
@@ -563,7 +563,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
             //on Close - Expand Toolbar & enable expanding, show title;
             @Override
             public boolean onMenuItemActionCollapse(MenuItem item) {
-                Log.d(LOG_TAG, "Search - onMenuItemActionCollapse");
+                Log.d(TAG, "Search - onMenuItemActionCollapse");
                 mCollapsingToolbarLayout.setCollapsedTitleTextColor(Color.WHITE);
                 mSearchView.setQuery("", false);
                 mSearchSavedQuery = "";
@@ -580,7 +580,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
 
     private void setupFAB() {
-        Log.d(LOG_TAG, "setupFAB");
+        Log.d(TAG, "setupFAB");
         mFAB.setImageResource(R.drawable.ic_add_light);
         mFAB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -598,7 +598,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
     @Override
     public void onSubmitInputDialog(String title, String password) {
-        Log.d(LOG_TAG, "onSubmitInputDialog");
+        Log.d(TAG, "onSubmitInputDialog");
         WifiEntry entry = new WifiEntry(title, password);
         mAdapter.addItem(0, entry);
         mRecyclerView.scrollToPosition(0);
@@ -606,14 +606,14 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     }
 
     private void addToDatabase(WifiEntry entry, boolean isHidden) {
-        Log.d(LOG_TAG, "addToDatabase");
+        Log.d(TAG, "addToDatabase");
         PasswordDB db = MyApplication.getWritableDatabase();
         db.insertEntry(entry, isHidden);
         MyApplication.closeDatabase();
     }
 
     private void showAddWifiDialog() {
-        Log.d(LOG_TAG, "showAddWifiDialog");
+        Log.d(TAG, "showAddWifiDialog");
 
         InputDialogFragment fragment = InputDialogFragment.getInstance();
         fragment.setTargetFragment(this, R.integer.dialog_add_code);
@@ -622,7 +622,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     }
 
     private void showReloadWarningDialog() {
-        Log.d(LOG_TAG, "showReloadWarningDialog");
+        Log.d(TAG, "showReloadWarningDialog");
 
         String title = getString(R.string.dialog_warning_title);
         String message = getString(R.string.dialog_warning_message);
@@ -637,7 +637,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     //TaskLoadWifiEntries creating PathError Dialog.
     @Override
     public void showPathErrorDialog() {
-        Log.d(LOG_TAG, "showPathErrorDialog");
+        Log.d(TAG, "showPathErrorDialog");
 
         String title = getString(R.string.dialog_error_title);
         String message = getString(R.string.dialog_error_message);
@@ -656,7 +656,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         if (requestCode == R.integer.dialog_error_code) {
 
             if (resultCode == R.integer.dialog_confirm) {
-                Log.d(LOG_TAG, "Dialog Error - Confirm");
+                Log.d(TAG, "Dialog Error - Confirm");
                 FragmentActivity parent = getActivity();
                 ActivityOptionsCompat compat = ActivityOptionsCompat.makeSceneTransitionAnimation(parent, null);
                 parent.startActivityForResult(
@@ -671,7 +671,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         if (requestCode == R.integer.dialog_warning_code) {
 
             if (resultCode == R.integer.dialog_confirm) {
-                Log.d(LOG_TAG, "Dialog Warning - Confirm");
+                Log.d(TAG, "Dialog Warning - Confirm");
                 loadFromFile();
 
             } //Else Dismissed

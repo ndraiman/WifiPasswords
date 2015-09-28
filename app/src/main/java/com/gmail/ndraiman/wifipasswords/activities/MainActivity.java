@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar mToolbar;
     private MainWifiFragment mainWifiFragment;
     private static final String MAIN_FRAGMENT_TAG = "main_fragment_tag";
-    private static final String LOG_TAG = "MainActivity";
+    private static final String TAG = "MainActivity";
     private FloatingActionButton mFAB;
 
 
@@ -120,11 +120,11 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == resources.getInteger(R.integer.settings_activity_code)) {
 
             if (resultCode == Activity.RESULT_OK) {
-                Log.d(LOG_TAG, "Return from Settings - Loading from file");
+                Log.d(TAG, "Return from Settings - Loading from file");
                 if(mainWifiFragment.isVisible())
                     mainWifiFragment.loadFromFile();
             } else {
-                Log.d(LOG_TAG, "Return from Settings - didn't change anything");
+                Log.d(TAG, "Return from Settings - didn't change anything");
             }
         }
     }

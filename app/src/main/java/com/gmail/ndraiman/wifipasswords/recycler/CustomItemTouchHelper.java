@@ -9,7 +9,7 @@ import android.util.Log;
 public class CustomItemTouchHelper extends ItemTouchHelper.Callback {
 
     private final ItemTouchHelperAdapter mAdapter;
-    private static final String LOG_TAG = "CustomItemTouchHelper";
+    private static final String TAG = "CustomItemTouchHelper";
 
     public CustomItemTouchHelper(ItemTouchHelperAdapter adapter) {
         mAdapter = adapter;
@@ -20,13 +20,13 @@ public class CustomItemTouchHelper extends ItemTouchHelper.Callback {
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
 
         if (recyclerView.getLayoutManager() instanceof GridLayoutManager) {
-            Log.d(LOG_TAG, "getMovementFlags - GridLayout");
+            Log.d(TAG, "getMovementFlags - GridLayout");
             final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
             final int swipeFlags = 0;
             return makeMovementFlags(dragFlags, swipeFlags);
 
         } else {
-            Log.d(LOG_TAG, "getMovementFlags - LinearLayout");
+            Log.d(TAG, "getMovementFlags - LinearLayout");
             int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
             int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
 
@@ -36,14 +36,14 @@ public class CustomItemTouchHelper extends ItemTouchHelper.Callback {
 
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-        Log.d(LOG_TAG, "onMove");
+        Log.d(TAG, "onMove");
         mAdapter.onItemMove(viewHolder.getAdapterPosition(), target.getAdapterPosition());
         return true;
     }
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-        Log.d(LOG_TAG, "onSwiped");
+        Log.d(TAG, "onSwiped");
         mAdapter.onItemDismiss(viewHolder.getAdapterPosition());
     }
 

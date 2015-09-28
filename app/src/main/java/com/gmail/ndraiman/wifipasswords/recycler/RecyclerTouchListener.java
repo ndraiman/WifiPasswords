@@ -13,12 +13,13 @@ import android.view.View;
 /*****************************************************************************************/
 public class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
 
+    private static final String TAG = "TouchListener";
     private GestureDetector gestureDetector;
     private ClickListener clickListener;
 
 
     public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final ClickListener clickListener) {
-        Log.d("TouchListener", "constructor invoked");
+        Log.d(TAG, "constructor invoked");
         this.clickListener = clickListener;
 
 
@@ -28,7 +29,7 @@ public class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
 
             @Override
             public boolean onSingleTapUp(MotionEvent e) {
-                Log.d("TouchListener", "onSingleTap " + e);
+                Log.d(TAG, "onSingleTap " + e);
                 return true;
             }
 
@@ -38,7 +39,7 @@ public class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
                 if(child != null && clickListener != null) {
                     clickListener.onLongClick(child, recyclerView.getChildAdapterPosition(child));
                 }
-                Log.d("TouchListener", "onLongPress "+ e);
+                Log.d(TAG, "onLongPress "+ e);
                 super.onLongPress(e);
             }
         });
