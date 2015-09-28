@@ -41,11 +41,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         if(Build.VERSION.SDK_INT >= 21) {
 
             TransitionInflater transitionInflater = TransitionInflater.from(this);
-            Transition slide_in = transitionInflater.inflateTransition(R.transition.activity_slide_in);
-            Transition slide_out = transitionInflater.inflateTransition(R.transition.activity_slide_out);
+            Transition slideFromRight = transitionInflater.inflateTransition(R.transition.activity_slide_right);
+            Transition slideFromLeft = transitionInflater.inflateTransition(R.transition.activity_slide_left);
 
-            getWindow().setEnterTransition(slide_in);
-            getWindow().setExitTransition(slide_out);
+            getWindow().setEnterTransition(slideFromLeft);
+            getWindow().setExitTransition(slideFromRight);
 
         }
 
@@ -177,7 +177,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
             if(Build.VERSION.SDK_INT >= 21)
-                setEnterTransition(TransitionInflater.from(getActivity()).inflateTransition(R.transition.activity_slide_in));
+                setEnterTransition(TransitionInflater.from(getActivity()).inflateTransition(R.transition.activity_slide_left));
 
             View layout = inflater.inflate(R.layout.fragment_settings, container, false);
 

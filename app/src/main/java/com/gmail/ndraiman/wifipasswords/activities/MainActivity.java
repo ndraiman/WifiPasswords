@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         //Set Activity Transition - Lollipop+
         if(Build.VERSION.SDK_INT >= 21) {
             TransitionInflater transitionInflater = TransitionInflater.from(this);
-            Transition transition = transitionInflater.inflateTransition(R.transition.activity_slide_out);
+            Transition transition = transitionInflater.inflateTransition(R.transition.activity_slide_left);
             getWindow().setExitTransition(transition);
 
         }

@@ -3,7 +3,7 @@
 <objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
     android:duration="350"
     android:propertyName="x"
-    android:valueFrom="1500"
+    android:valueFrom="-1500"
     android:valueTo="0"
     android:valueType="floatType" />
 
