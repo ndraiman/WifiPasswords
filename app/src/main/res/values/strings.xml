@@ -2,11 +2,12 @@
 
     <string name="text_placeholder">NA</string>
     <string name="text_no_root">No Root Access</string>
-    <string name="snackbar_wifi_copy">WIFI Data Copied to Clipboard</string>
+    <string name="snackbar_wifi_copy">Wifi Data Copied to Clipboard</string>
     <string name="snackbar_dismiss">Dismiss</string>
     <string name="snackbar_undo">Undo</string>
     <string name="snackbar_load_from_file">Loading Data From File</string>
     <string name="snackbar_wifi_delete">Wifi Entry Deleted</string>
+    <string name="snackbar_wifi_delete_multiple">Wifi Entries Deleted</string>
 
     <!-- Titles -->
     <string name="app_name">Wifi Passwords</string>

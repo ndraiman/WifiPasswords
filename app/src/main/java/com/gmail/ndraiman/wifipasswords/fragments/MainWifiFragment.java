@@ -52,6 +52,7 @@ import com.gmail.ndraiman.wifipasswords.recycler.WifiListLoadedListener;
 import com.gmail.ndraiman.wifipasswords.task.TaskLoadWifiEntries;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import me.zhanghai.android.materialprogressbar.IndeterminateProgressDrawable;
 
@@ -175,7 +176,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         mAdapter.setWifiList(mListWifi);
 
 
-        if(mIsActionModeOn) {
+        if (mIsActionModeOn) {
             mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(mActionModeCallback);
             mAdapter.toggleSelection(mActionModePosition);
         }
@@ -188,7 +189,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     public void onResume() {
         super.onResume();
 
-        if(mIsSortModeOn) {
+        if (mIsSortModeOn) {
             sortMode(true);
         }
     }
@@ -214,7 +215,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         outState.putParcelableArrayList(STATE_WIFI_ENTRIES,
                 mSearchView.isIconified() ? mListWifi : mSearchSavedList);
 
-        if(mSearchView != null) {
+        if (mSearchView != null) {
             mSearchSavedQuery = mSearchView.getQuery().toString();
         }
 
@@ -261,7 +262,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         setupSearch(searchItem);
         Log.d(TAG, "mSearchSavedQuery = " + mSearchSavedQuery);
         //Restore SearchView state
-        if(!mSearchSavedQuery.isEmpty()) {
+        if (!mSearchSavedQuery.isEmpty()) {
             MenuItemCompat.expandActionView(searchItem);
             mSearchView.setQuery(mSearchSavedQuery, true);
             mSearchView.clearFocus();
@@ -455,12 +456,15 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
                 Log.d(TAG, "RecyclerView - onLongClick " + position);
 
                 //Invoking Context Action Mode
+                mAdapter.toggleSelection(position);
+                mRecyclerView.scrollToPosition(position);
+
                 if (mActionMode != null || mIsSortModeOn) {
                     return;
                 }
                 mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(mActionModeCallback);
-                mAdapter.toggleSelection(position);
-                mRecyclerView.scrollToPosition(position);
+//                mAdapter.toggleSelection(position);
+//                mRecyclerView.scrollToPosition(position);
                 mActionModePosition = position;
             }
         });
@@ -490,42 +494,63 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                WifiEntry entry;
+                Log.d(TAG, "onActionItemClicked");
+                final List<WifiEntry> entries = new ArrayList<>();
+                final List<Integer> selectedItemsPositions = mAdapter.getSelectedItems();
+                for (int i = 0; i < selectedItemsPositions.size(); i++) {
+                    entries.add(mListWifi.get(selectedItemsPositions.get(i)));
+                }
 
                 switch (item.getItemId()) {
                     case R.id.menu_context_delete:
-                        mRemovedEntry = mAdapter.removeItem(mActionModePosition);
+                        for (int i = selectedItemsPositions.size() - 1; i >= 0; i--) {
+                            //Starting removal from end of list so Indexes wont change when item is removed
+                            mAdapter.removeItem(selectedItemsPositions.get(i));
+                        }
                         mode.finish();
 
-                        Snackbar.make(mRoot, R.string.snackbar_wifi_delete, Snackbar.LENGTH_LONG)
+                        Snackbar.make(mRoot,
+                                selectedItemsPositions.size() > 1 ? R.string.snackbar_wifi_delete_multiple
+                                        : R.string.snackbar_wifi_delete, Snackbar.LENGTH_LONG)
                                 .setAction(R.string.snackbar_undo, new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        mAdapter.addItem(mActionModePosition, mRemovedEntry);
+
+                                        for (int i = 0; i < selectedItemsPositions.size(); i++) {
+                                            mAdapter.addItem(selectedItemsPositions.get(i), entries.get(i));
+                                        }
+                                        mRecyclerView.scrollToPosition(selectedItemsPositions.get(0));
                                     }
                                 })
                                 .show();
                         return true;
 
                     case R.id.menu_context_copy:
-                        entry = mListWifi.get(mActionModePosition);
-                        String textToCopy = "Wifi Name: " + entry.getTitle() + "\n"
-                                + "Password: " + entry.getPassword();
+                        StringBuilder textToCopy = new StringBuilder();
 
-                        copyToClipboard(COPIED_WIFI_ENTRY, textToCopy, getString(R.string.snackbar_wifi_copy));
+                        for (WifiEntry entry : entries) {
+                            textToCopy.append("Wifi Name: " + entry.getTitle() + "\n"
+                                    + "Password: " + entry.getPassword() + "\n\n");
+                        }
+
+                        copyToClipboard(COPIED_WIFI_ENTRY, textToCopy.toString(), getString(R.string.snackbar_wifi_copy));
                         mode.finish();
                         return true;
 
                     case R.id.menu_context_share:
-                        entry = mListWifi.get(mActionModePosition);
-                        String textToShare = "Wifi Name: " + entry.getTitle() + "\n"
-                                + "Password: " + entry.getPassword();
+                        StringBuilder textToShare = new StringBuilder();
+
+                        for (WifiEntry entry : entries) {
+                            textToShare.append("Wifi Name: " + entry.getTitle() + "\n"
+                                    + "Password: " + entry.getPassword() + "\n\n");
+                        }
 
                         Intent sendIntent = new Intent();
                         sendIntent.setAction(Intent.ACTION_SEND);
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, textToShare);
+                        sendIntent.putExtra(Intent.EXTRA_TEXT, textToShare.toString());
                         sendIntent.setType("text/plain");
                         startActivity(sendIntent);
+
                         return true;
 
                     default:
@@ -535,7 +560,8 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
             @Override
             public void onDestroyActionMode(ActionMode mode) {
-                mAdapter.toggleSelection(mActionModePosition);
+
+                mAdapter.clearSelection();
                 mRecyclerView.setNestedScrollingEnabled(true);
                 mIsActionModeOn = false;
                 mActionMode = null;

@@ -55,7 +55,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
         holder.wifiPassword.setText(currentEntry.getPassword());
 
         //Selected Background
-        if(mSelectedItems.get(position, false)) {
+        if (mSelectedItems.get(position, false)) {
             holder.wifiBackground.setBackgroundResource(R.color.colorHighlight);
         } else {
             holder.wifiBackground.setBackgroundResource(R.drawable.wifi_entry_bg);
@@ -106,9 +106,13 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
         notifyDataSetChanged();
     }
 
+    /*******************************************************/
+    /************ Contextual Action Mode Methods ***********/
+    /*******************************************************/
+
     public void toggleSelection(int position) {
         Log.d(TAG, "toggleSelection");
-        if(mSelectedItems.get(position, false)) {
+        if (mSelectedItems.get(position, false)) {
             mSelectedItems.delete(position);
         } else {
             mSelectedItems.put(position, true);
@@ -116,25 +120,41 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
         notifyItemChanged(position);
     }
 
+    public void clearSelection() {
+        Log.d(TAG, "clearSelection");
+        mSelectedItems.clear();
+        notifyDataSetChanged();
+    }
+
+    public List<Integer> getSelectedItems() {
+        Log.d(TAG, "getSelectedItems");
+        List<Integer> items = new ArrayList<>(mSelectedItems.size());
+
+        for (int i = 0; i < mSelectedItems.size(); i++) {
+            items.add(mSelectedItems.keyAt(i));
+        }
+        return items;
+    }
+
     /**********************************************/
     /************ Items Changed Methods ***********/
     /**********************************************/
 
     public WifiEntry removeItem(int position) {
-        Log.d(TAG, "removeItem");
+        Log.d(TAG, "removeItem - position = " + position);
         final WifiEntry entry = mListWifi.remove(position);
         notifyItemRemoved(position);
         return entry;
     }
 
     public void addItem(int position, WifiEntry entry) {
-        Log.d(TAG, "addItem");
+        Log.d(TAG, "addItem - position = " + position);
         mListWifi.add(position, entry);
         notifyItemInserted(position);
     }
 
     public void moveItem(int fromPosition, int toPosition) {
-        Log.d(TAG, "moveItem");
+        Log.d(TAG, "moveItem - from " + fromPosition + " to " + toPosition);
         final WifiEntry entry = mListWifi.remove(fromPosition);
         mListWifi.add(toPosition, entry);
         notifyItemMoved(fromPosition, toPosition);
