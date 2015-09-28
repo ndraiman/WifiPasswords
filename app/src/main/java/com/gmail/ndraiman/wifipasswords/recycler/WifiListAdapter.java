@@ -126,9 +126,9 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
         notifyDataSetChanged();
     }
 
-    public List<Integer> getSelectedItems() {
+    public ArrayList<Integer> getSelectedItems() {
         Log.d(TAG, "getSelectedItems");
-        List<Integer> items = new ArrayList<>(mSelectedItems.size());
+        ArrayList<Integer> items = new ArrayList<>(mSelectedItems.size());
 
         for (int i = 0; i < mSelectedItems.size(); i++) {
             items.add(mSelectedItems.keyAt(i));

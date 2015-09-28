@@ -72,7 +72,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     //OnSavedInstance Keys
     private static final String STATE_WIFI_ENTRIES = "state_wifi_entries"; //Parcel key
     private static final String STATE_ACTION_MODE = "state_action_mode";
-    private static final String STATE_ACTION_MODE_POSITION = "state_action_mode_position";
+    private static final String STATE_ACTION_MODE_SELECTIONS = "state_action_mode_selections";
 
     //Layout
     private FrameLayout mRoot;
@@ -100,18 +100,14 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
     //Context Action Mode
     private ActionMode mActionMode;
-    private int mActionModePosition;
+    private ArrayList<Integer> mActionModeSelections;
     private ActionMode.Callback mActionModeCallback;
-    private WifiEntry mRemovedEntry;
     private boolean mIsActionModeOn = false;
 
 
     public static MainWifiFragment newInstance() {
-        MainWifiFragment fragment = new MainWifiFragment();
-//        Bundle args = new Bundle();
-        //put any extra arguments that you may want to supply to this fragment
-//        fragment.setArguments(args);
-        return fragment;
+
+        return new MainWifiFragment();
     }
 
 
@@ -158,7 +154,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
             //if starts after a rotation or configuration change, load the existing Wifi list from a parcelable
             mListWifi = savedInstanceState.getParcelableArrayList(STATE_WIFI_ENTRIES);
             mIsActionModeOn = savedInstanceState.getBoolean(STATE_ACTION_MODE);
-            mActionModePosition = savedInstanceState.getInt(STATE_ACTION_MODE_POSITION);
+            mActionModeSelections = savedInstanceState.getIntegerArrayList(STATE_ACTION_MODE_SELECTIONS);
 
         } else {
             Log.d(TAG, "getting WifiEntries from database");
@@ -178,7 +174,9 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
         if (mIsActionModeOn) {
             mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(mActionModeCallback);
-            mAdapter.toggleSelection(mActionModePosition);
+            for (int i = 0; i < mActionModeSelections.size(); i++) {
+                mAdapter.toggleSelection(mActionModeSelections.get(i));
+            }
         }
 
         return layout;
@@ -220,7 +218,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         }
 
         outState.putBoolean(STATE_ACTION_MODE, mIsActionModeOn);
-        outState.putInt(STATE_ACTION_MODE_POSITION, mActionModePosition);
+        outState.putIntegerArrayList(STATE_ACTION_MODE_SELECTIONS, mAdapter.getSelectedItems());
     }
 
 
@@ -274,22 +272,29 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_reload_from_file) {
-            showReloadWarningDialog();
+        switch (id) {
 
-        } else if (id == R.id.action_sort_start) {
-            sortMode(true);
+            case R.id.action_reload_from_file:
+                showReloadWarningDialog();
+                break;
 
-        } else if (id == R.id.action_sort_done) {
-            sortMode(false);
+            case R.id.action_sort_start:
+                sortMode(true);
+                break;
 
-        } else if (id == R.id.action_share) {
-            shareWifiList();
+            case R.id.action_sort_done:
+                sortMode(false);
+                break;
 
-        } else if (id == R.id.action_layout_change) {
-            //TODO Fix Grid Layout Height before is usable.
-            //TODO if not, delete!!!
-            changeRecyclerLayout();
+            case R.id.action_share:
+                shareWifiList();
+                break;
+
+            case R.id.action_layout_change:
+                //TODO Fix Grid Layout Height before is usable.
+                //TODO if not, delete!!!
+                changeRecyclerLayout();
+                break;
         }
 
         return true;
@@ -463,9 +468,6 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
                     return;
                 }
                 mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(mActionModeCallback);
-//                mAdapter.toggleSelection(position);
-//                mRecyclerView.scrollToPosition(position);
-                mActionModePosition = position;
             }
         });
 
@@ -495,31 +497,32 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 Log.d(TAG, "onActionItemClicked");
-                final List<WifiEntry> entries = new ArrayList<>();
-                final List<Integer> selectedItemsPositions = mAdapter.getSelectedItems();
-                for (int i = 0; i < selectedItemsPositions.size(); i++) {
-                    entries.add(mListWifi.get(selectedItemsPositions.get(i)));
+                final List<WifiEntry> selectedEntries = new ArrayList<>();
+                final ArrayList<Integer> selectedItems = mAdapter.getSelectedItems();
+
+                for (int i = 0; i < selectedItems.size(); i++) {
+                    selectedEntries.add(mListWifi.get(selectedItems.get(i)));
                 }
 
                 switch (item.getItemId()) {
                     case R.id.menu_context_delete:
-                        for (int i = selectedItemsPositions.size() - 1; i >= 0; i--) {
+                        for (int i = selectedItems.size() - 1; i >= 0; i--) {
                             //Starting removal from end of list so Indexes wont change when item is removed
-                            mAdapter.removeItem(selectedItemsPositions.get(i));
+                            mAdapter.removeItem(selectedItems.get(i));
                         }
                         mode.finish();
 
                         Snackbar.make(mRoot,
-                                selectedItemsPositions.size() > 1 ? R.string.snackbar_wifi_delete_multiple
+                                selectedItems.size() > 1 ? R.string.snackbar_wifi_delete_multiple
                                         : R.string.snackbar_wifi_delete, Snackbar.LENGTH_LONG)
                                 .setAction(R.string.snackbar_undo, new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
 
-                                        for (int i = 0; i < selectedItemsPositions.size(); i++) {
-                                            mAdapter.addItem(selectedItemsPositions.get(i), entries.get(i));
+                                        for (int i = 0; i < selectedItems.size(); i++) {
+                                            mAdapter.addItem(selectedItems.get(i), selectedEntries.get(i));
                                         }
-                                        mRecyclerView.scrollToPosition(selectedItemsPositions.get(0));
+                                        mRecyclerView.scrollToPosition(selectedItems.get(0));
                                     }
                                 })
                                 .show();
@@ -528,7 +531,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
                     case R.id.menu_context_copy:
                         StringBuilder textToCopy = new StringBuilder();
 
-                        for (WifiEntry entry : entries) {
+                        for (WifiEntry entry : selectedEntries) {
                             textToCopy.append("Wifi Name: " + entry.getTitle() + "\n"
                                     + "Password: " + entry.getPassword() + "\n\n");
                         }
@@ -540,7 +543,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
                     case R.id.menu_context_share:
                         StringBuilder textToShare = new StringBuilder();
 
-                        for (WifiEntry entry : entries) {
+                        for (WifiEntry entry : selectedEntries) {
                             textToShare.append("Wifi Name: " + entry.getTitle() + "\n"
                                     + "Password: " + entry.getPassword() + "\n\n");
                         }
@@ -581,7 +584,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
                 collapseAppBarLayout(true);
                 mCollapsingToolbarLayout.setCollapsedTitleTextColor(Color.TRANSPARENT);
 
-                mSearchSavedList = new ArrayList<WifiEntry>(mListWifi);
+                mSearchSavedList = new ArrayList<>(mListWifi);
 
                 return true;
             }
@@ -677,30 +680,31 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     //Handle Dialog Result Codes
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult");
 
-        //Handle Path Error Dialog
-        if (requestCode == R.integer.dialog_error_code) {
+        switch (requestCode) {
 
-            if (resultCode == R.integer.dialog_confirm) {
-                Log.d(TAG, "Dialog Error - Confirm");
-                FragmentActivity parent = getActivity();
-                ActivityOptionsCompat compat = ActivityOptionsCompat.makeSceneTransitionAnimation(parent, null);
-                parent.startActivityForResult(
-                        new Intent(parent, SettingsActivity.class),
-                        R.integer.settings_activity_code,
-                        compat.toBundle());
+            case R.integer.dialog_error_code:  //Handle Path Error Dialog
 
-            } //Else Dismissed
-        }
+                if (resultCode == R.integer.dialog_confirm) {
+                    Log.d(TAG, "Dialog Error - Confirm");
+                    FragmentActivity parent = getActivity();
+                    ActivityOptionsCompat compat = ActivityOptionsCompat.makeSceneTransitionAnimation(parent, null);
+                    parent.startActivityForResult(
+                            new Intent(parent, SettingsActivity.class),
+                            R.integer.settings_activity_code,
+                            compat.toBundle());
+                } //Else Dismissed
+                break;
 
-        //Handle LoadFromFile Warning Dialog
-        if (requestCode == R.integer.dialog_warning_code) {
+            case R.integer.dialog_warning_code: //Handle LoadFromFile Warning Dialog
 
-            if (resultCode == R.integer.dialog_confirm) {
-                Log.d(TAG, "Dialog Warning - Confirm");
-                loadFromFile();
+                if (resultCode == R.integer.dialog_confirm) {
+                    Log.d(TAG, "Dialog Warning - Confirm");
+                    loadFromFile();
 
-            } //Else Dismissed
+                } //Else Dismissed
+                break;
         }
     }
 
