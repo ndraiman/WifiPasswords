@@ -104,6 +104,8 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     private ArrayList<Integer> mActionModeSelections;
     private ActionMode.Callback mActionModeCallback;
     private boolean mIsActionModeOn = false;
+    //Checks if Delete was pressed - will not call clearSelection to preserve animations
+    private boolean mActionModeDeletePressed = false;
 
 
     public static MainWifiFragment newInstance() {
@@ -172,7 +174,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
         mAdapter.setWifiList(mListWifi);
 
-
+        //Restore Context Action Bar state
         if (mIsActionModeOn) {
             mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(mActionModeCallback);
             for (int i = 0; i < mActionModeSelections.size(); i++) {
@@ -526,26 +528,32 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
                 switch (item.getItemId()) {
                     case R.id.menu_context_delete:
+                        mActionModeDeletePressed = true;
+
                         for (int i = selectedItems.size() - 1; i >= 0; i--) {
                             //Starting removal from end of list so Indexes wont change when item is removed
                             mAdapter.removeItem(selectedItems.get(i));
                         }
                         mode.finish();
 
-                        Snackbar.make(mRoot,
-                                selectedItems.size() > 1 ? R.string.snackbar_wifi_delete_multiple
-                                        : R.string.snackbar_wifi_delete, Snackbar.LENGTH_LONG)
-                                .setAction(R.string.snackbar_undo, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
+                        if(selectedItems.size() > 0) {
 
-                                        for (int i = 0; i < selectedItems.size(); i++) {
-                                            mAdapter.addItem(selectedItems.get(i), selectedEntries.get(i));
+                            Snackbar.make(mRoot,
+                                    selectedItems.size() > 1 ? R.string.snackbar_wifi_delete_multiple
+                                            : R.string.snackbar_wifi_delete, Snackbar.LENGTH_LONG)
+                                    .setAction(R.string.snackbar_undo, new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+
+                                            for (int i = 0; i < selectedItems.size(); i++) {
+                                                mAdapter.addItem(selectedItems.get(i), selectedEntries.get(i));
+                                                mAdapter.toggleSelection(selectedItems.get(i));
+                                            }
+                                            mRecyclerView.scrollToPosition(selectedItems.get(0));
                                         }
-                                        mRecyclerView.scrollToPosition(selectedItems.get(0));
-                                    }
-                                })
-                                .show();
+                                    })
+                                    .show();
+                        }
                         return true;
 
                     case R.id.menu_context_copy:
@@ -584,7 +592,10 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
             @Override
             public void onDestroyActionMode(ActionMode mode) {
 
-                mAdapter.clearSelection();
+                if(!mActionModeDeletePressed) {
+                    mAdapter.clearSelection();
+                }
+                mActionModeDeletePressed = false;
                 mRecyclerView.setNestedScrollingEnabled(true);
                 mIsActionModeOn = false;
                 mActionMode = null;

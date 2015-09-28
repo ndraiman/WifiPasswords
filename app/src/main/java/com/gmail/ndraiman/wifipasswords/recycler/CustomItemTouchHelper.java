@@ -20,7 +20,7 @@ public class CustomItemTouchHelper extends ItemTouchHelper.Callback {
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
 
         if (recyclerView.getLayoutManager() instanceof GridLayoutManager) {
-            Log.d(TAG, "getMovementFlags - GridLayout");
+            Log.d(TAG, "getMovementFlags - GridLayout"); //TODO Remove GridLayout
             final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
             final int swipeFlags = 0;
             return makeMovementFlags(dragFlags, swipeFlags);
