@@ -239,7 +239,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         Log.d(TAG, "onWifiListLoaded");
         mListWifi = new ArrayList<>(listWifi);
 
-        mAdapter.setWifiList(listWifi);
+        mAdapter.setWifiList(mListWifi);
     }
 
     @Override
@@ -479,6 +479,12 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
             @Override
             public void onClick(View view, int position) {
                 Log.d(TAG, "RecyclerView - onClick " + position);
+
+                //while in ActionMode - regular clicks will also select items
+                if(mIsActionModeOn) {
+                    mAdapter.toggleSelection(position);
+                    mRecyclerView.scrollToPosition(position);
+                }
             }
 
             @Override
@@ -554,7 +560,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
                                             for (int i = 0; i < selectedItems.size(); i++) {
                                                 mAdapter.addItem(selectedItems.get(i), selectedEntries.get(i));
-                                                mAdapter.toggleSelection(selectedItems.get(i));
+//                                                mAdapter.toggleSelection(selectedItems.get(i));
                                             }
                                             mRecyclerView.scrollToPosition(selectedItems.get(0));
                                             db.deleteWifiEntries(selectedEntries, true);
