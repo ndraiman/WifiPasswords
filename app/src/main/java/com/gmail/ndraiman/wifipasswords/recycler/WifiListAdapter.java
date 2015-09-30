@@ -83,13 +83,13 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
 
 
         //Set Animation
-        if (position > mPreviousPosition) {
-            AnimationUtils.translateY(holder, true);
-
-        } else {
-            AnimationUtils.translateY(holder, false);
-        }
-        mPreviousPosition = position;
+//        if (position > mPreviousPosition) {
+//            AnimationUtils.translateY(holder, true);
+//
+//        } else {
+//            AnimationUtils.translateY(holder, false);
+//        }
+//        mPreviousPosition = position;
 
     }
 

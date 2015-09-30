@@ -13,6 +13,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.gmail.ndraiman.wifipasswords.R;
+import com.gmail.ndraiman.wifipasswords.database.PasswordDB;
+import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
+import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
+
+import java.util.ArrayList;
 
 
 public class InputDialogFragment extends DialogFragment {
@@ -92,7 +97,7 @@ public class InputDialogFragment extends DialogFragment {
 
         if(isEmptyTitle && isEmptyPassword) {
             Snackbar.make(mRoot, getString(R.string.dialog_add_error_empty), Snackbar.LENGTH_SHORT)
-                    .setAction(getString(R.string.snackbar_dismiss), new View.OnClickListener() {
+                    .setAction(R.string.snackbar_dismiss, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             //Dismisses Snackbar
@@ -110,6 +115,30 @@ public class InputDialogFragment extends DialogFragment {
             mPassword.setError(getString(R.string.dialog_add_password_empty));
             hasError = true;
 
+        } else {
+
+            String title = mTitle.getText().toString().toLowerCase();
+
+            PasswordDB db = MyApplication.getWritableDatabase();
+            String whereClause = PasswordDB.PasswordHelper.COLUMN_TITLE + " = ?";
+            String[] whereArgs = new String[]{title};
+            ArrayList<WifiEntry> checkList = db.getWifiEntries(whereClause, whereArgs, false);
+            MyApplication.closeDatabase();
+
+            for(WifiEntry entry : checkList) {
+                if(entry.getTitle().toLowerCase().equals(title)) {
+                    hasError = true;
+                    break; //no need to check further
+                }
+            }
+
+            Snackbar.make(mRoot, R.string.snackbar_wifi_exists, Snackbar.LENGTH_SHORT)
+                    .setAction(R.string.snackbar_dismiss, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //Dismisses Snackbar
+                        }
+                    }).show();
         }
 
         return hasError;

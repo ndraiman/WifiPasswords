@@ -141,7 +141,9 @@ public class HiddenWifiActivity extends AppCompatActivity implements ItemDragLis
                 setResult(RESULT_OK);
 
                 WifiEntry deleted = mAdapter.onItemDismiss(viewHolder.getAdapterPosition());
-                MyApplication.getWritableDatabase().deleteWifiEntry(deleted, true);
+                ArrayList<WifiEntry> deletions = new ArrayList<>();
+                deletions.add(deleted);
+                MyApplication.getWritableDatabase().deleteWifiEntries(deletions, true);
                 MyApplication.closeDatabase();
 
                 Snackbar.make(mRoot,

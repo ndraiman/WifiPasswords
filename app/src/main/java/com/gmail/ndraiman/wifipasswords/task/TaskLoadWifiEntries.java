@@ -88,14 +88,15 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         }
 
         db.insertWifiEntries(wifiEntries, false);
-        MyApplication.closeDatabase();
-
 
         //Update RecyclerView
         if(mListListener != null) {
             Log.d(TAG, "OnPost Execute \n" + wifiEntries.toString());
+            wifiEntries = new ArrayList<>(db.getAllWifiEntries(false)); //re-read list from database as it removes duplicates
             mListListener.onWifiListLoaded(wifiEntries);
         }
+
+        MyApplication.closeDatabase();
     }
 
     @Override

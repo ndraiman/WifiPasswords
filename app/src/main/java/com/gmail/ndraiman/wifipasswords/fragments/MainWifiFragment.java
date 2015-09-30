@@ -648,13 +648,17 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         WifiEntry entry = new WifiEntry(title, password);
         mAdapter.addItem(0, entry);
         mRecyclerView.scrollToPosition(0);
-        addToDatabase(entry, false);
+        addToDatabase(entry);
     }
 
-    private void addToDatabase(WifiEntry entry, boolean isHidden) {
+    private void addToDatabase(WifiEntry entry) {
         Log.d(TAG, "addToDatabase");
         PasswordDB db = MyApplication.getWritableDatabase();
-        db.insertEntry(entry, isHidden);
+
+        ArrayList<WifiEntry> entries = new ArrayList<>();
+        entries.add(entry);
+
+        db.insertWifiEntries(entries, false);
         MyApplication.closeDatabase();
     }
 

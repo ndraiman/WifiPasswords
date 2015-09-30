@@ -1,11 +1,11 @@
 package com.gmail.ndraiman.wifipasswords.database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.database.sqlite.SQLiteStatement;
 import android.util.Log;
 
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
@@ -33,50 +33,48 @@ public class PasswordDB {
     /****************** Insert Methods ********************/
     /******************************************************/
 
-    public void insertEntry(WifiEntry entry, boolean isHidden) {
-
-        String table = isHidden ? PasswordHelper.TABLE_PASSWORDS_HIDDEN : PasswordHelper.TABLE_PASSWORDS_MAIN;
-        Log.d(TAG, "insertEntry - isHidden=" + isHidden + " table=" + table);
-
-        String title = entry.getTitle();
-        String password = entry.getPassword();
-
-        String query = "INSERT INTO " + table + "("
-                + PasswordHelper.COLUMN_TITLE + ", "
-                + PasswordHelper.COLUMN_PASSWORD + ") VALUES ('"
-                + title + "', '" + password + "');";
-
-        mDatabase.execSQL(query);
-    }
-
-    //TODO modify method to insert New Entries from file, while ignoring entries with the same name already found
-    //TODO if 2 entries with same name, prefer newest - in file bottom entry = newest
     public void insertWifiEntries(ArrayList<WifiEntry> listWifi, boolean isHidden) {
 
         String table = isHidden ? PasswordHelper.TABLE_PASSWORDS_HIDDEN : PasswordHelper.TABLE_PASSWORDS_MAIN;
         Log.d(TAG, "insertWifiEntries - isHidden=" + isHidden + " table=" + table);
 
-        //create a sql prepared statement
-        String sql = "INSERT INTO " + table + " VALUES (?,?,?);";
+        ContentValues values = new ContentValues();
 
-        //compile the statement and start a transaction
-        SQLiteStatement statement = mDatabase.compileStatement(sql);
-        mDatabase.beginTransaction();
+        String[] columns = new String[]{PasswordHelper.COLUMN_UID, PasswordHelper.COLUMN_TITLE};
+        String selection = PasswordHelper.COLUMN_TITLE + " = ?";
 
         for (int i = 0; i < listWifi.size(); i++) {
             WifiEntry current = listWifi.get(i);
-            statement.clearBindings();
 
-            statement.bindString(2, current.getTitle());
-            statement.bindString(3, current.getPassword());
+            values.clear();
+            values.put(PasswordHelper.COLUMN_TITLE, current.getTitle());
+            values.put(PasswordHelper.COLUMN_PASSWORD, current.getPassword());
 
-            statement.execute();
+            if(!isHidden) {
+                //Main Table - Check for duplicates
+                String[] selectionArgs = new String[]{current.getTitle()};
+                Cursor cursor = mDatabase.query(table, columns, selection, selectionArgs, null, null, null);
+
+                if (cursor.moveToFirst()) {
+                Log.e(TAG, "Updating Entry - " + current.getTitle());
+
+                    int id = cursor.getInt(cursor.getColumnIndex(PasswordHelper.COLUMN_UID));
+                    mDatabase.update(table, values, PasswordHelper.COLUMN_UID + " = ?", new String[]{id + ""});
+
+                } else {
+                Log.e(TAG, "Inserting Entry - " + current.getTitle());
+                    mDatabase.insert(table, null, values);
+
+                }
+
+                cursor.close();
+
+            } else {
+                mDatabase.insert(table, null, values);
+            }
         }
 
-        //set the transaction as successful and end the transaction
         Log.d(TAG, "inserting entries " + listWifi.size() + new Date(System.currentTimeMillis()));
-        mDatabase.setTransactionSuccessful();
-        mDatabase.endTransaction();
     }
 
     /***************************************************/
@@ -110,19 +108,45 @@ public class PasswordDB {
 
             do {
 
-                //create a new WifiEntry object and retrieve the data from the cursor to be stored in this WifiEntry object
                 WifiEntry wifiEntry = new WifiEntry();
-                //each step is a 2 part process, find the index of the column first, find the data of that column using
-                //that index and finally set our blank WifiEntry object to contain our data
+
                 wifiEntry.setTitle(cursor.getString(cursor.getColumnIndex(PasswordHelper.COLUMN_TITLE)));
                 wifiEntry.setPassword(cursor.getString(cursor.getColumnIndex(PasswordHelper.COLUMN_PASSWORD)));
-                //add the WifiEntry to the list of WifiEntry objects which we plan to return
+
                 listWifi.add(wifiEntry);
 
             } while (cursor.moveToNext());
 
             cursor.close();
         }
+        return listWifi;
+    }
+
+    public ArrayList<WifiEntry> getWifiEntries(String whereClause, String[] whereArgs, boolean isHidden) {
+
+        String table = isHidden ? PasswordHelper.TABLE_PASSWORDS_HIDDEN : PasswordHelper.TABLE_PASSWORDS_MAIN;
+        Log.d(TAG, "getWifiEntries - isHidden=" + isHidden + " table=" + table);
+
+        ArrayList<WifiEntry> listWifi = new ArrayList<>();
+
+        Cursor cursor = mDatabase.query(table, null, whereClause, whereArgs, null, null, null);
+
+        if(cursor != null && cursor.moveToFirst()) {
+            Log.d(TAG, "loading entries " + cursor.getCount() + new Date(System.currentTimeMillis()));
+
+            do {
+                WifiEntry entry = new WifiEntry();
+
+                entry.setTitle(cursor.getString(cursor.getColumnIndex(PasswordHelper.COLUMN_TITLE)));
+                entry.setPassword(cursor.getString(cursor.getColumnIndex(PasswordHelper.COLUMN_PASSWORD)));
+
+                listWifi.add(entry);
+
+            }while(cursor.moveToNext());
+
+            cursor.close();
+        }
+
         return listWifi;
     }
 
@@ -138,16 +162,6 @@ public class PasswordDB {
         mDatabase.delete(table, null, null);
     }
 
-    public void deleteWifiEntry(WifiEntry entry, boolean isHidden) {
-
-        String table = isHidden ? PasswordHelper.TABLE_PASSWORDS_HIDDEN : PasswordHelper.TABLE_PASSWORDS_MAIN;
-        Log.d(TAG, "deleteWifiEntry - isHidden=" + isHidden + " table=" + table);
-
-        String whereClause = PasswordHelper.COLUMN_TITLE + " = ?";
-        String[] whereArgs = new String[]{entry.getTitle()};
-
-        mDatabase.delete(table, whereClause,whereArgs);
-    }
 
     public void deleteWifiEntries(ArrayList<WifiEntry> listWifi, boolean isHidden) {
 
@@ -188,7 +202,7 @@ public class PasswordDB {
         public static final String CREATE_TABLE_MAIN = "CREATE TABLE " + TABLE_PASSWORDS_MAIN
                 + " ("
                 + COLUMN_UID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + COLUMN_TITLE + " TEXT,"
+                + COLUMN_TITLE + " TEXT UNIQUE,"
                 + COLUMN_PASSWORD + " TEXT"
                 + ");";
 
