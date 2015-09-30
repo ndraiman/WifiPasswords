@@ -143,6 +143,11 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     public WifiEntry removeItem(int position) {
         Log.d(TAG, "removeItem - position = " + position);
         final WifiEntry entry = mListWifi.remove(position);
+
+        if(mSelectedItems.get(position, false)) {
+            mSelectedItems.delete(position);
+        }
+
         notifyItemRemoved(position);
         return entry;
     }
@@ -226,9 +231,9 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     }
 
     @Override
-    public void onItemDismiss(int position) {
-        removeItem(position);
+    public WifiEntry onItemDismiss(int position) {
         Log.d(TAG, "onItemDismiss");
+        return removeItem(position);
     }
 
     public void showDragHandler(boolean show) {

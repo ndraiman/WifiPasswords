@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <integer name="settings_activity_code">40</integer>
+    <integer name="activity_settings_code">40</integer>
+    <integer name="activity_hidden_code">41</integer>
 
     <integer name="dialog_error_code">51</integer>
     <integer name="dialog_warning_code">52</integer>

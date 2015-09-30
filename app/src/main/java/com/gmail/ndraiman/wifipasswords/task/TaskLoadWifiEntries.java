@@ -80,6 +80,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         //Insert Wifi Entries to database
         PasswordDB db = MyApplication.getWritableDatabase();
         db.deleteAll(false);
+        db.deleteAll(true);
         db.insertWifiEntries(wifiEntries, false);
         MyApplication.closeDatabase();
 

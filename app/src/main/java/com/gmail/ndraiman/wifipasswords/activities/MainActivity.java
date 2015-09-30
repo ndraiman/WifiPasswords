@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         //Set Activity Transition - Lollipop+
-        if(Build.VERSION.SDK_INT >= 21) {
+        if (Build.VERSION.SDK_INT >= 21) {
             TransitionInflater transitionInflater = TransitionInflater.from(this);
             Transition transition = transitionInflater.inflateTransition(R.transition.activity_slide_left);
             getWindow().setExitTransition(transition);
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         mToolbar.setBackgroundColor(ContextCompat.getColor(this, android.R.color.transparent));
         setSupportActionBar(mToolbar);
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             mainWifiFragment = MainWifiFragment.newInstance();
 
         } else {
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(mainWifiFragment.isVisible() && mainWifiFragment.getSortModeStatus()) {
+        if (mainWifiFragment.isVisible() && mainWifiFragment.getSortModeStatus()) {
             mainWifiFragment.sortMode(false);
             return;
         }
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.action_hidden_list:
                 mCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, null);
-                startActivity(new Intent(this, HiddenWifiActivity.class), mCompat.toBundle());
+                startActivityForResult(new Intent(this, HiddenWifiActivity.class), R.integer.activity_hidden_code, mCompat.toBundle());
                 return true;
 
             case R.id.action_settings:
@@ -127,15 +127,23 @@ public class MainActivity extends AppCompatActivity {
         Resources resources = getResources();
 
         //Handles returning from SettingsActivity after Error in Path
-        if (requestCode == resources.getInteger(R.integer.settings_activity_code)) {
+        switch (requestCode) {
 
-            if (resultCode == Activity.RESULT_OK) {
-                Log.d(TAG, "Return from Settings - Loading from file");
-                if(mainWifiFragment.isVisible())
-                    mainWifiFragment.loadFromFile();
-            } else {
-                Log.d(TAG, "Return from Settings - didn't change anything");
-            }
+            case R.integer.activity_settings_code:
+
+                if (resultCode == Activity.RESULT_OK) {
+                    Log.d(TAG, "Return from Settings - Loading from file");
+                    if (mainWifiFragment.isVisible())
+                        mainWifiFragment.loadFromFile();
+                } else {
+                    Log.d(TAG, "Return from Settings - didn't change anything");
+                }
+                break;
+
+            case R.integer.activity_hidden_code:
+                mainWifiFragment.onActivityResult(requestCode, resultCode, data);
+                break;
+
         }
     }
 

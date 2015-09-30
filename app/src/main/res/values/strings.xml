@@ -6,8 +6,9 @@
     <string name="snackbar_dismiss">Dismiss</string>
     <string name="snackbar_undo">Undo</string>
     <string name="snackbar_load_from_file">Loading Data From File</string>
-    <string name="snackbar_wifi_delete">Wifi Entry Deleted</string>
-    <string name="snackbar_wifi_delete_multiple">Wifi Entries Deleted</string>
+    <string name="snackbar_wifi_archive">Wifi Entry Archived</string>
+    <string name="snackbar_wifi_archive_multiple">Wifi Entries Archived</string>
+    <string name="snackbar_wifi_restore">Wifi Entry Restored</string>
 
     <!-- Titles -->
     <string name="app_name">Wifi Passwords</string>

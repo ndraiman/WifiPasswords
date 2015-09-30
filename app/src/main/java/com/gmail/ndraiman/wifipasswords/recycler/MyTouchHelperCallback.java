@@ -6,12 +6,12 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 
 
-public class CustomItemTouchHelper extends ItemTouchHelper.Callback {
+public class MyTouchHelperCallback extends ItemTouchHelper.Callback {
 
     private final ItemTouchHelperAdapter mAdapter;
-    private static final String TAG = "CustomItemTouchHelper";
+    private static final String TAG = "MyTouchHelperCallback";
 
-    public CustomItemTouchHelper(ItemTouchHelperAdapter adapter) {
+    public MyTouchHelperCallback(ItemTouchHelperAdapter adapter) {
         mAdapter = adapter;
     }
 

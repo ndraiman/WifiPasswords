@@ -28,6 +28,11 @@ public class PasswordDB {
 
     }
 
+
+    /******************************************************/
+    /****************** Insert Methods ********************/
+    /******************************************************/
+
     public void insertEntry(WifiEntry entry, boolean isHidden) {
 
         String table = isHidden ? PasswordHelper.TABLE_PASSWORDS_HIDDEN : PasswordHelper.TABLE_PASSWORDS_MAIN;
@@ -72,6 +77,10 @@ public class PasswordDB {
         mDatabase.endTransaction();
     }
 
+    /***************************************************/
+    /****************** Get Methods ********************/
+    /***************************************************/
+
     public ArrayList<WifiEntry> getAllWifiEntries(boolean isHidden) {
 
         String table = isHidden ? PasswordHelper.TABLE_PASSWORDS_HIDDEN : PasswordHelper.TABLE_PASSWORDS_MAIN;
@@ -115,12 +124,27 @@ public class PasswordDB {
         return listWifi;
     }
 
+    /******************************************************/
+    /****************** Delete Methods ********************/
+    /******************************************************/
+
     public void deleteAll(boolean isHidden) {
 
         String table = isHidden ? PasswordHelper.TABLE_PASSWORDS_HIDDEN : PasswordHelper.TABLE_PASSWORDS_MAIN;
         Log.d(TAG, "deleteAll - isHidden=" + isHidden + " table=" + table);
 
         mDatabase.delete(table, null, null);
+    }
+
+    public void deleteWifiEntry(WifiEntry entry, boolean isHidden) {
+
+        String table = isHidden ? PasswordHelper.TABLE_PASSWORDS_HIDDEN : PasswordHelper.TABLE_PASSWORDS_MAIN;
+        Log.d(TAG, "deleteWifiEntry - isHidden=" + isHidden + " table=" + table);
+
+        String whereClause = PasswordHelper.COLUMN_TITLE + " = ?";
+        String[] whereArgs = new String[]{entry.getTitle()};
+
+        mDatabase.delete(table, whereClause,whereArgs);
     }
 
     public void deleteWifiEntries(ArrayList<WifiEntry> listWifi, boolean isHidden) {
@@ -145,7 +169,7 @@ public class PasswordDB {
 
 
     /*************************************************************/
-    /*************************************************************/
+    /****************** Database Helper Class ********************/
     /*************************************************************/
     public static class PasswordHelper extends SQLiteOpenHelper {
 

@@ -1,5 +1,6 @@
 package com.gmail.ndraiman.wifipasswords.fragments;
 
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -44,7 +45,7 @@ import com.gmail.ndraiman.wifipasswords.dialogs.InputDialogFragment;
 import com.gmail.ndraiman.wifipasswords.dialogs.InputDialogListener;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
-import com.gmail.ndraiman.wifipasswords.recycler.CustomItemTouchHelper;
+import com.gmail.ndraiman.wifipasswords.recycler.MyTouchHelperCallback;
 import com.gmail.ndraiman.wifipasswords.recycler.ItemDragListener;
 import com.gmail.ndraiman.wifipasswords.recycler.RecyclerTouchListener;
 import com.gmail.ndraiman.wifipasswords.recycler.WifiListAdapter;
@@ -445,7 +446,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
                 new LinearLayoutManager(getActivity()) : new GridLayoutManager(getActivity(), 2));
 
         //Reset ItemTouchHelper to handle new layout
-        mTouchHelperCallback = new CustomItemTouchHelper(mAdapter);
+        mTouchHelperCallback = new MyTouchHelperCallback(mAdapter);
         mItemTouchHelper = new ItemTouchHelper(mTouchHelperCallback);
         mItemTouchHelper.attachToRecyclerView(mRecyclerView);
 
@@ -466,7 +467,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         mRecyclerView.setAdapter(mAdapter);
 
         //Setup ItemTouchHelper
-        mTouchHelperCallback = new CustomItemTouchHelper(mAdapter);
+        mTouchHelperCallback = new MyTouchHelperCallback(mAdapter);
         mItemTouchHelper = new ItemTouchHelper(mTouchHelperCallback);
         mItemTouchHelper.attachToRecyclerView(mRecyclerView);
 
@@ -545,8 +546,8 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
                         if(selectedItems.size() > 0) {
 
                             Snackbar.make(mRoot,
-                                    selectedItems.size() > 1 ? R.string.snackbar_wifi_delete_multiple
-                                            : R.string.snackbar_wifi_delete, Snackbar.LENGTH_LONG)
+                                    selectedItems.size() > 1 ? R.string.snackbar_wifi_archive_multiple
+                                            : R.string.snackbar_wifi_archive, Snackbar.LENGTH_LONG)
                                     .setAction(R.string.snackbar_undo, new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
@@ -723,6 +724,16 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
         switch (requestCode) {
 
+            case R.integer.activity_hidden_code: //Handle HiddenWifiActivity items restored
+
+                if(resultCode == Activity.RESULT_OK) {
+                    Log.d(TAG, "HiddenWifiActivity - Items Restored");
+                    mListWifi = MyApplication.getWritableDatabase().getAllWifiEntries(false);
+                    MyApplication.closeDatabase();
+                    mAdapter.setWifiList(mListWifi);
+                }
+                break;
+
             case R.integer.dialog_error_code:  //Handle Path Error Dialog
 
                 if (resultCode == R.integer.dialog_confirm) {
@@ -731,7 +742,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
                     ActivityOptionsCompat compat = ActivityOptionsCompat.makeSceneTransitionAnimation(parent, null);
                     parent.startActivityForResult(
                             new Intent(parent, SettingsActivity.class),
-                            R.integer.settings_activity_code,
+                            R.integer.activity_settings_code,
                             compat.toBundle());
                 } //Else Dismissed
                 break;
