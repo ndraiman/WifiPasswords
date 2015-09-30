@@ -49,6 +49,8 @@ public class PasswordDB {
         mDatabase.execSQL(query);
     }
 
+    //TODO modify method to insert New Entries from file, while ignoring entries with the same name already found
+    //TODO if 2 entries with same name, prefer newest - in file bottom entry = newest
     public void insertWifiEntries(ArrayList<WifiEntry> listWifi, boolean isHidden) {
 
         String table = isHidden ? PasswordHelper.TABLE_PASSWORDS_HIDDEN : PasswordHelper.TABLE_PASSWORDS_MAIN;
@@ -100,7 +102,7 @@ public class PasswordDB {
                 PasswordHelper.COLUMN_TITLE,
                 PasswordHelper.COLUMN_PASSWORD};
 
-        //TODO modify query to return entries NOT IN hidden table
+
         Cursor cursor = mDatabase.query(table, columns, selection, null, null, null, null);
 
         if (cursor != null && cursor.moveToFirst()) {

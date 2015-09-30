@@ -97,6 +97,7 @@ public class HiddenWifiActivity extends AppCompatActivity implements ItemDragLis
         mAdapter.setWifiList(mListWifi);
 
         //TODO show dialog to indicate deleting items will return them to main list
+        //TODO dialog will show only on user first time seeing this activity
         
     }
 

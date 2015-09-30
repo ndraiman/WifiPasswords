@@ -32,11 +32,6 @@
             android:title="@string/action_sort_start"
             app:showAsAction="never" />
 
-        <item
-            android:id="@+id/action_layout_change"
-            android:orderInCategory="500"
-            android:title="@string/action_layout_grid"
-            app:showAsAction="never" />
 
     </group>
 

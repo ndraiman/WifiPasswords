@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -27,11 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private MainWifiFragment mainWifiFragment;
     private static final String MAIN_FRAGMENT_TAG = "main_fragment_tag";
     private static final String TAG = "MainActivity";
-    private FloatingActionButton mFAB;
     ActivityOptionsCompat mCompat;
-
-
-    //TODO Implement "Hidden" table.
 
 
     @Override

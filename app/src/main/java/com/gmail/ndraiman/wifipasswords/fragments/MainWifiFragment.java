@@ -20,7 +20,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -45,8 +44,8 @@ import com.gmail.ndraiman.wifipasswords.dialogs.InputDialogFragment;
 import com.gmail.ndraiman.wifipasswords.dialogs.InputDialogListener;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
-import com.gmail.ndraiman.wifipasswords.recycler.MyTouchHelperCallback;
 import com.gmail.ndraiman.wifipasswords.recycler.ItemDragListener;
+import com.gmail.ndraiman.wifipasswords.recycler.MyTouchHelperCallback;
 import com.gmail.ndraiman.wifipasswords.recycler.RecyclerTouchListener;
 import com.gmail.ndraiman.wifipasswords.recycler.WifiListAdapter;
 import com.gmail.ndraiman.wifipasswords.recycler.WifiListLoadedListener;
@@ -251,11 +250,6 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         menu.setGroupVisible(R.id.menu_group_main, !mIsSortModeOn);
         menu.setGroupVisible(R.id.menu_group_sort_mode, mIsSortModeOn);
 
-
-
-        //TODO Delete if removing Layout Change
-        menu.findItem(R.id.action_layout_change)
-                .setTitle(mViewAsList ? R.string.action_layout_grid : R.string.action_layout_linear);
     }
 
     @Override
@@ -299,11 +293,6 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
                 shareWifiList();
                 return true;
 
-            case R.id.action_layout_change:
-                //TODO Fix Grid Layout Height before is usable.
-                //TODO if not, delete!!!
-                changeRecyclerLayout();
-                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -344,7 +333,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         mProgressBar.setVisibility(View.VISIBLE); //Show Progress Bar
         Log.d(TAG, "loadFromFile");
         Snackbar.make(mRoot, R.string.snackbar_load_from_file, Snackbar.LENGTH_SHORT).show();
-        new TaskLoadWifiEntries(mPath, mFileName, this, this).execute();
+        new TaskLoadWifiEntries(mPath, mFileName, true, this, this).execute();
 
     }
 
@@ -435,24 +424,6 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         mItemTouchHelper.startDrag(viewHolder);
     }
 
-    //TODO Delete if removing Layout Change
-    //Change RecyclerView layout manager
-    private void changeRecyclerLayout() {
-        Log.d(TAG, "changeRecyclerLayout");
-        mViewAsList = !mViewAsList;
-
-
-        mRecyclerView.setLayoutManager(mViewAsList ?
-                new LinearLayoutManager(getActivity()) : new GridLayoutManager(getActivity(), 2));
-
-        //Reset ItemTouchHelper to handle new layout
-        mTouchHelperCallback = new MyTouchHelperCallback(mAdapter);
-        mItemTouchHelper = new ItemTouchHelper(mTouchHelperCallback);
-        mItemTouchHelper.attachToRecyclerView(mRecyclerView);
-
-        mAdapter.setWifiList(mListWifi);
-        getActivity().invalidateOptionsMenu();
-    }
 
     /********************************************************/
     /******************** Setup Methods *********************/

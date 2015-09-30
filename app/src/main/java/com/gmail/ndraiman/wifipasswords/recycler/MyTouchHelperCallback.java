@@ -1,6 +1,5 @@
 package com.gmail.ndraiman.wifipasswords.recycler;
 
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
@@ -18,20 +17,11 @@ public class MyTouchHelperCallback extends ItemTouchHelper.Callback {
 
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+        Log.d(TAG, "getMovementFlags - LinearLayout");
+        int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+        int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
 
-        if (recyclerView.getLayoutManager() instanceof GridLayoutManager) {
-            Log.d(TAG, "getMovementFlags - GridLayout"); //TODO Remove GridLayout
-            final int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
-            final int swipeFlags = 0;
-            return makeMovementFlags(dragFlags, swipeFlags);
-
-        } else {
-            Log.d(TAG, "getMovementFlags - LinearLayout");
-            int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-            int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
-
-            return makeMovementFlags(dragFlags, swipeFlags);
-        }
+        return makeMovementFlags(dragFlags, swipeFlags);
     }
 
     @Override

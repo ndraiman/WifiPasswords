@@ -36,12 +36,14 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
     private String mPath;
     private String mFileName;
     private CustomAlertDialogListener mDialogListener;
+    private boolean mResetDB;
 
-    public TaskLoadWifiEntries(String filePath, String fileName, WifiListLoadedListener listListener, CustomAlertDialogListener dialogListener) {
+    public TaskLoadWifiEntries(String filePath, String fileName, boolean reset, WifiListLoadedListener listListener, CustomAlertDialogListener dialogListener) {
         mListListener = listListener;
         mPath = filePath;
         mFileName = fileName;
         mDialogListener = dialogListener;
+        mResetDB = reset;
 
         Log.d(TAG, "Constructor - mPath = " + mPath + "\n mFileName = " + mFileName);
     }
@@ -79,8 +81,12 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
     protected void onPostExecute(ArrayList<WifiEntry> wifiEntries) {
         //Insert Wifi Entries to database
         PasswordDB db = MyApplication.getWritableDatabase();
-        db.deleteAll(false);
-        db.deleteAll(true);
+
+        if(mResetDB) {
+            db.deleteAll(false);
+            db.deleteAll(true);
+        }
+
         db.insertWifiEntries(wifiEntries, false);
         MyApplication.closeDatabase();
 
