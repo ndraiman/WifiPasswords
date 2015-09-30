@@ -101,7 +101,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
 
     public void setWifiList(ArrayList<WifiEntry> listWifi) {
         Log.d(TAG, "setWifiList");
-        mListWifi = listWifi; //new ArrayList<>(listWifi);
+        mListWifi = listWifi;
         mPreviousPosition = -1; //fix load animation on new data loaded
         notifyDataSetChanged();
     }

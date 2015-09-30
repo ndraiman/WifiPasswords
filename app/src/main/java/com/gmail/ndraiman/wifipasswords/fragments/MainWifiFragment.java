@@ -239,7 +239,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         Log.d(TAG, "onWifiListLoaded");
         mListWifi = new ArrayList<>(listWifi);
 
-        mAdapter.setWifiList(listWifi);
+        mAdapter.setWifiList(mListWifi);
     }
 
     @Override
@@ -554,7 +554,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
                                             for (int i = 0; i < selectedItems.size(); i++) {
                                                 mAdapter.addItem(selectedItems.get(i), selectedEntries.get(i));
-                                                mAdapter.toggleSelection(selectedItems.get(i));
+//                                                mAdapter.toggleSelection(selectedItems.get(i));
                                             }
                                             mRecyclerView.scrollToPosition(selectedItems.get(0));
                                             db.deleteWifiEntries(selectedEntries, true);
