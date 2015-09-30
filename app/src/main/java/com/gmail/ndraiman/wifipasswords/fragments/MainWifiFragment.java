@@ -52,7 +52,6 @@ import com.gmail.ndraiman.wifipasswords.recycler.WifiListLoadedListener;
 import com.gmail.ndraiman.wifipasswords.task.TaskLoadWifiEntries;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import me.zhanghai.android.materialprogressbar.IndeterminateProgressDrawable;
 
@@ -73,6 +72,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     private static final String STATE_WIFI_ENTRIES = "state_wifi_entries"; //Parcel key
     private static final String STATE_ACTION_MODE = "state_action_mode";
     private static final String STATE_ACTION_MODE_SELECTIONS = "state_action_mode_selections";
+    private static final String STATE_SORT_MODE = "state_sort_mode";
 
     //Layout
     private FrameLayout mRoot;
@@ -158,6 +158,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
             mListWifi = savedInstanceState.getParcelableArrayList(STATE_WIFI_ENTRIES);
             mIsActionModeOn = savedInstanceState.getBoolean(STATE_ACTION_MODE);
             mActionModeSelections = savedInstanceState.getIntegerArrayList(STATE_ACTION_MODE_SELECTIONS);
+            mIsSortModeOn = savedInstanceState.getBoolean(STATE_SORT_MODE);
 
         } else {
             Log.d(TAG, "getting WifiEntries from database");
@@ -199,7 +200,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     @Override
     public void onDestroy() {
         super.onDestroy();
-
+        Log.d(TAG, "onDestroy");
         //Update database with changes made to wifi list.
         PasswordDB db = MyApplication.getWritableDatabase();
         db.deleteAll(false);
@@ -220,6 +221,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
             mSearchSavedQuery = mSearchView.getQuery().toString();
         }
 
+        outState.putBoolean(STATE_SORT_MODE, mIsSortModeOn);
         outState.putBoolean(STATE_ACTION_MODE, mIsActionModeOn);
         outState.putIntegerArrayList(STATE_ACTION_MODE_SELECTIONS, mAdapter.getSelectedItems());
     }
@@ -519,7 +521,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
             @Override
             public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
                 Log.d(TAG, "onActionItemClicked");
-                final List<WifiEntry> selectedEntries = new ArrayList<>();
+                final ArrayList<WifiEntry> selectedEntries = new ArrayList<>();
                 final ArrayList<Integer> selectedItems = mAdapter.getSelectedItems();
 
                 for (int i = 0; i < selectedItems.size(); i++) {
@@ -534,6 +536,10 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
                             //Starting removal from end of list so Indexes wont change when item is removed
                             mAdapter.removeItem(selectedItems.get(i));
                         }
+
+                        final PasswordDB db = MyApplication.getWritableDatabase();
+                        db.insertWifiEntries(selectedEntries, true);
+
                         mode.finish();
 
                         if(selectedItems.size() > 0) {
@@ -550,10 +556,12 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
                                                 mAdapter.toggleSelection(selectedItems.get(i));
                                             }
                                             mRecyclerView.scrollToPosition(selectedItems.get(0));
+                                            db.deleteWifiEntries(selectedEntries, true);
                                         }
                                     })
                                     .show();
                         }
+                        MyApplication.closeDatabase();
                         return true;
 
                     case R.id.menu_context_copy:

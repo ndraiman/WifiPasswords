@@ -23,6 +23,10 @@
             android:label="@string/action_settings"
             android:parentActivityName=".activities.MainActivity">
         </activity>
+        <activity android:name=".fragments.HiddenWifiActivity"
+            android:label="@string/activity_title_hidden_wifi"
+            android:parentActivityName=".activities.MainActivity">
+        </activity>
     </application>
 
 </manifest>

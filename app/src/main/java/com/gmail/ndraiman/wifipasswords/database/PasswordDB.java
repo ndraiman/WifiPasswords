@@ -20,6 +20,7 @@ public class PasswordDB {
     private SQLiteDatabase mDatabase;
     private static final String TAG = "PasswordDB";
 
+    //TODO try switching all methods to use ContentValues
 
     public PasswordDB(Context context) {
         mHelper = new PasswordHelper(context);
@@ -77,14 +78,11 @@ public class PasswordDB {
         Log.d(TAG, "getAllWifiEntries - isHidden=" + isHidden + " table=" + table);
 
         String selection = null;
-        String[] selectionArgs = null;
 
-        if(!isHidden) {
+        if (!isHidden) {
             selection = PasswordHelper.COLUMN_TITLE + " NOT IN (SELECT "
                     + PasswordHelper.COLUMN_TITLE
                     + " FROM " + PasswordHelper.TABLE_PASSWORDS_HIDDEN + ")";
-//            selectionArgs = new String[]{PasswordHelper.TABLE_PASSWORDS_HIDDEN};
-
         }
 
         ArrayList<WifiEntry> listWifi = new ArrayList<>();
@@ -94,9 +92,9 @@ public class PasswordDB {
                 PasswordHelper.COLUMN_PASSWORD};
 
         //TODO modify query to return entries NOT IN hidden table
-        Cursor cursor = mDatabase.query(table, columns, selection, selectionArgs, null, null, null);
+        Cursor cursor = mDatabase.query(table, columns, selection, null, null, null, null);
 
-        if(cursor != null && cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             Log.d(TAG, "loading entries " + cursor.getCount() + new Date(System.currentTimeMillis()));
 
             do {
@@ -110,7 +108,7 @@ public class PasswordDB {
                 //add the WifiEntry to the list of WifiEntry objects which we plan to return
                 listWifi.add(wifiEntry);
 
-            } while(cursor.moveToNext());
+            } while (cursor.moveToNext());
 
             cursor.close();
         }
@@ -123,6 +121,22 @@ public class PasswordDB {
         Log.d(TAG, "deleteAll - isHidden=" + isHidden + " table=" + table);
 
         mDatabase.delete(table, null, null);
+    }
+
+    public void deleteWifiEntries(ArrayList<WifiEntry> listWifi, boolean isHidden) {
+
+        String table = isHidden ? PasswordHelper.TABLE_PASSWORDS_HIDDEN : PasswordHelper.TABLE_PASSWORDS_MAIN;
+        Log.d(TAG, "deleteWifiEntries - isHidden=" + isHidden + " table=" + table);
+
+        String whereClause = PasswordHelper.COLUMN_TITLE + " = ?";
+        String[] whereArgs;
+
+        for (int i = 0; i < listWifi.size(); i++) {
+            WifiEntry current = listWifi.get(i);
+            whereArgs = new String[]{current.getTitle()};
+            mDatabase.delete(table, whereClause, whereArgs);
+        }
+
     }
 
     public void close() {

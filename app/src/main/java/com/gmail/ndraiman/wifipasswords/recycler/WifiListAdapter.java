@@ -227,7 +227,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
 
     @Override
     public void onItemDismiss(int position) {
-//        removeItem(position);
+        removeItem(position);
         Log.d(TAG, "onItemDismiss");
     }
 

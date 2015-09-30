@@ -18,6 +18,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.gmail.ndraiman.wifipasswords.R;
+import com.gmail.ndraiman.wifipasswords.fragments.HiddenWifiActivity;
 import com.gmail.ndraiman.wifipasswords.fragments.MainWifiFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String MAIN_FRAGMENT_TAG = "main_fragment_tag";
     private static final String TAG = "MainActivity";
     private FloatingActionButton mFAB;
+    ActivityOptionsCompat mCompat;
 
 
     //TODO Implement "Hidden" table.
@@ -72,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
             mainWifiFragment.sortMode(false);
             return;
         }
+
         super.onBackPressed();
     }
 
@@ -92,10 +95,15 @@ public class MainActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         switch (id) {
 
+            case R.id.action_hidden_list:
+                mCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, null);
+                startActivity(new Intent(this, HiddenWifiActivity.class), mCompat.toBundle());
+                return true;
+
             case R.id.action_settings:
                 //Start Settings with Transition
-                ActivityOptionsCompat compat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, null);
-                startActivity(new Intent(this, SettingsActivity.class), compat.toBundle());
+                mCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, null);
+                startActivity(new Intent(this, SettingsActivity.class), mCompat.toBundle());
                 return true;
 
             case R.id.action_help:

@@ -4,6 +4,12 @@
     tools:context=".MainActivity">
 
     <item
+        android:id="@+id/action_hidden_list"
+        android:orderInCategory="200"
+        android:title="@string/action_hidden_list"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="500"
         android:title="@string/action_settings"
