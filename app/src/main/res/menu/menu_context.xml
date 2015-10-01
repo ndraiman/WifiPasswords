@@ -9,8 +9,8 @@
         android:title="Share"
         android:icon="@drawable/ic_share_light" />
 
-    <item android:id="@+id/menu_context_delete"
+    <item android:id="@+id/menu_context_archive"
         android:title="Delete"
-        android:icon="@drawable/ic_action_context_delete" />
+        android:icon="@drawable/ic_action_context_archive" />
 
 </menu>

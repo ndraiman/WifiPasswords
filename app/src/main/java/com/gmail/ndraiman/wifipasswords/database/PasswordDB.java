@@ -20,7 +20,6 @@ public class PasswordDB {
     private SQLiteDatabase mDatabase;
     private static final String TAG = "PasswordDB";
 
-    //TODO try switching all methods to use ContentValues
 
     public PasswordDB(Context context) {
         mHelper = new PasswordHelper(context);

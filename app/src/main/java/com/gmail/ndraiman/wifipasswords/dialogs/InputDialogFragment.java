@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -82,9 +84,12 @@ public class InputDialogFragment extends DialogFragment {
         Log.d(TAG, "onResume");
 
         //Set Dialog Dimensions
-        getDialog().getWindow().setLayout(
+        Window dialogWindow = getDialog().getWindow();
+        dialogWindow.setLayout(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        dialogWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
     private boolean hasErrors() {

@@ -38,12 +38,12 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
     private CustomAlertDialogListener mDialogListener;
     private boolean mResetDB;
 
-    public TaskLoadWifiEntries(String filePath, String fileName, boolean reset, WifiListLoadedListener listListener, CustomAlertDialogListener dialogListener) {
+    public TaskLoadWifiEntries(String filePath, String fileName, boolean resetDB, WifiListLoadedListener listListener, CustomAlertDialogListener dialogListener) {
         mListListener = listListener;
         mPath = filePath;
         mFileName = fileName;
         mDialogListener = dialogListener;
-        mResetDB = reset;
+        mResetDB = resetDB;
 
         Log.d(TAG, "Constructor - mPath = " + mPath + "\n mFileName = " + mFileName);
     }

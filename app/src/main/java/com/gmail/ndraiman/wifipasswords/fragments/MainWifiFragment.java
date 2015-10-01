@@ -97,15 +97,14 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     private SearchView mSearchView;
     private ArrayList<WifiEntry> mSearchSavedList; //saves list for SearchView Live Search
     private String mSearchSavedQuery = ""; //saves query for configuration change
-    private boolean mIsSearchModeOn = false;
 
     //Context Action Mode
     private ActionMode mActionMode;
     private ArrayList<Integer> mActionModeSelections;
     private ActionMode.Callback mActionModeCallback;
     private boolean mIsActionModeOn = false;
-    //Checks if Delete was pressed - will not call clearSelection to preserve animations
-    private boolean mActionModeDeletePressed = false;
+    //Checks if Archive was pressed - will not call clearSelection to preserve animations
+    private boolean mActionModeArchivePressed = false;
 
 
     public static MainWifiFragment newInstance() {
@@ -373,7 +372,6 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     //Toggle Search Mode
     public void searchMode(Menu menu, boolean isOn) {
         Log.d(TAG, "searchMode - isOn = " + isOn);
-        mIsSearchModeOn = isOn;
 
         collapseAppBarLayout(isOn);
         mCollapsingToolbarLayout.setCollapsedTitleTextColor(isOn ? Color.TRANSPARENT : Color.WHITE);
@@ -507,8 +505,8 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
                 }
 
                 switch (item.getItemId()) {
-                    case R.id.menu_context_delete:
-                        mActionModeDeletePressed = true;
+                    case R.id.menu_context_archive:
+                        mActionModeArchivePressed = true;
 
                         for (int i = selectedItems.size() - 1; i >= 0; i--) {
                             //Starting removal from end of list so Indexes wont change when item is removed
@@ -578,10 +576,10 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
             @Override
             public void onDestroyActionMode(ActionMode mode) {
 
-                if(!mActionModeDeletePressed) {
+                if(!mActionModeArchivePressed) {
                     mAdapter.clearSelection();
                 }
-                mActionModeDeletePressed = false;
+                mActionModeArchivePressed = false;
                 mRecyclerView.setNestedScrollingEnabled(true);
                 mIsActionModeOn = false;
                 mActionMode = null;
@@ -671,7 +669,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
     }
 
-    private void showReloadWarningDialog() {
+    public void showReloadWarningDialog() {
         Log.d(TAG, "showReloadWarningDialog");
 
         String title = getString(R.string.dialog_warning_title);
