@@ -13,4 +13,7 @@
 
     <integer name="reset_to_default">999</integer>
 
+    <!-- Animations -->
+    <integer name="config_slide_time">600</integer>
+
 </resources>

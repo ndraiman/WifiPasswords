@@ -2,6 +2,7 @@ package com.gmail.ndraiman.wifipasswords.recycler;
 
 import android.content.Context;
 import android.support.v4.view.MotionEventCompat;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseBooleanArray;
@@ -30,10 +31,12 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     private ItemDragListener mDragListener;
     private int mPreviousPosition = -1; //used for Item Animation
     private boolean mShowDragHandler;
+    private Context mContext;
     private SparseBooleanArray mSelectedItems = new SparseBooleanArray();
 
     public WifiListAdapter(Context context, ItemDragListener dragListener) {
         layoutInflater = LayoutInflater.from(context);
+        mContext = context;
         mDragListener = dragListener;
         mListWifi = new ArrayList<>();
         mShowDragHandler = false;
@@ -81,17 +84,11 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
             holder.dragHandler.setVisibility(View.GONE);
         }
 
-
         //Set Animation
-//        if (position > mPreviousPosition) {
-//            AnimationUtils.translateY(holder, true);
-//
-//        } else {
-//            AnimationUtils.translateY(holder, false);
-//        }
-//        mPreviousPosition = position;
+        setAnimation(holder.container, position);
 
     }
+
 
     @Override
     public int getItemCount() {
@@ -242,6 +239,23 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     }
 
 
+    private void setAnimation(View viewToAnimate, int position)
+    {
+        // If the bound view wasn't previously displayed on screen, it's animated
+        if (position > mPreviousPosition)
+        {
+            //Alternating Slide Animation - Glitchy when fast scrolling
+//            Animation animation = android.view.animation.AnimationUtils
+//                    .loadAnimation(mContext,
+//                            position%2 == 0 ? R.anim.slide_up_left : R.anim.slide_up_right);
+//            viewToAnimate.startAnimation(animation);
+
+            AnimationUtils.translateY(viewToAnimate, true);
+            mPreviousPosition = position;
+        }
+    }
+
+
     /*****************************************/
     /********** View Holder Sub-Class ********/
     /*****************************************/
@@ -252,6 +266,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
         private TextView wifiPassword;
         private ImageView dragHandler;
         private LinearLayout wifiBackground;
+        private CardView container;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -260,6 +275,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
             wifiPassword = (TextView) itemView.findViewById(R.id.password_wifi);
             dragHandler = (ImageView) itemView.findViewById(R.id.drag_handler);
             wifiBackground = (LinearLayout) itemView.findViewById(R.id.wifi_entry_layout);
+            container = (CardView) itemView.findViewById(R.id.wifi_entry_container);
 
         }
     }
