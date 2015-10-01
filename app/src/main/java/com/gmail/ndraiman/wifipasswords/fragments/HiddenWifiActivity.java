@@ -71,8 +71,6 @@ public class HiddenWifiActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_hidden_wifi);
 
-        setResult(RESULT_CANCELED, null);
-
         mListWifi = new ArrayList<>();
 
         mRoot = (CoordinatorLayout) findViewById(R.id.activity_hidden_wifi_container);
@@ -107,6 +105,9 @@ public class HiddenWifiActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         Log.d(TAG, "onPause()");
+
+        MyApplication.getWritableDatabase().deleteWifiEntries(mEntriesDeleted, true);
+        MyApplication.closeDatabase();
     }
 
     @Override
@@ -158,12 +159,6 @@ public class HiddenWifiActivity extends AppCompatActivity {
                 Intent data = getIntent();
                 data.putParcelableArrayListExtra(STATE_RESTORED_ENTRIES, mEntriesDeleted);
                 setResult(RESULT_OK, data);
-
-
-                ArrayList<WifiEntry> deletions = new ArrayList<>();
-                deletions.add(deleted);
-                MyApplication.getWritableDatabase().deleteWifiEntries(deletions, true);
-                MyApplication.closeDatabase();
 
                 Snackbar.make(mRoot,
                         deleted.getTitle() + " " + getString(R.string.snackbar_wifi_restore),
