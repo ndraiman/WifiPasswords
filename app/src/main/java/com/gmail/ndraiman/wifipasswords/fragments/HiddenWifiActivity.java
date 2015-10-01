@@ -1,5 +1,6 @@
 package com.gmail.ndraiman.wifipasswords.fragments;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -28,6 +29,7 @@ public class HiddenWifiActivity extends AppCompatActivity implements ItemDragLis
     private static final String TAG = "HiddenWifiActivity";
 
     private static final String STATE_HIDDEN_ENTRIES = "state_hidden_entries";
+    private static final String STATE_RESTORED_ENTRIES = "state_restored_entries";
 
     private ArrayList<WifiEntry> mListWifi;
 
@@ -40,6 +42,7 @@ public class HiddenWifiActivity extends AppCompatActivity implements ItemDragLis
     private ItemTouchHelper mItemTouchHelper;
     private ItemTouchHelper.Callback mTouchHelperCallback;
 
+    private ArrayList<WifiEntry> mEntriesDeleted;
 
     //TODO show dialog to indicate deleting items will return them to main list
     //TODO dialog will show only on user first time seeing this activity
@@ -69,7 +72,7 @@ public class HiddenWifiActivity extends AppCompatActivity implements ItemDragLis
         }
         setContentView(R.layout.activity_hidden_wifi);
 
-        setResult(RESULT_CANCELED);
+        setResult(RESULT_CANCELED, null);
 
         mListWifi = new ArrayList<>();
 
@@ -96,10 +99,30 @@ public class HiddenWifiActivity extends AppCompatActivity implements ItemDragLis
             MyApplication.closeDatabase();
         }
 
+        mEntriesDeleted = new ArrayList<>();
 
         mAdapter.setWifiList(mListWifi);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause()");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop()");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG, "onDestroy()");
+
+
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -137,8 +160,6 @@ public class HiddenWifiActivity extends AppCompatActivity implements ItemDragLis
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                 Log.d(TAG, "onSwiped");
 
-                setResult(RESULT_OK);
-
                 WifiEntry deleted = mAdapter.onItemDismiss(viewHolder.getAdapterPosition());
                 ArrayList<WifiEntry> deletions = new ArrayList<>();
                 deletions.add(deleted);
@@ -149,6 +170,12 @@ public class HiddenWifiActivity extends AppCompatActivity implements ItemDragLis
                         deleted.getTitle() + " " + getString(R.string.snackbar_wifi_restore),
                         Snackbar.LENGTH_SHORT)
                         .show();
+
+                mEntriesDeleted.add(deleted);
+
+                Intent data = new Intent();
+                data.putParcelableArrayListExtra(STATE_RESTORED_ENTRIES, mEntriesDeleted);
+                setResult(RESULT_OK, data);
             }
         };
 

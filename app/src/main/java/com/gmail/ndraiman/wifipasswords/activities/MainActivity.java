@@ -2,7 +2,6 @@ package com.gmail.ndraiman.wifipasswords.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -118,13 +117,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult");
 
-        Resources resources = getResources();
-
-        //Handles returning from SettingsActivity after Error in Path
         switch (requestCode) {
 
-            case R.integer.activity_settings_code:
+            case R.integer.activity_settings_code: //Handles returning from SettingsActivity after Error in Path
 
                 if (resultCode == Activity.RESULT_OK) {
                     Log.d(TAG, "Return from Settings - Loading from file");
@@ -136,10 +133,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.integer.activity_hidden_code: //return from HiddenWifiActivity
+                Log.d(TAG, "Return from HiddenWifiActivity - resultCode = " + resultCode);
                 mainWifiFragment.onActivityResult(requestCode, resultCode, data);
                 break;
 
-            case R.integer.reset_to_default:
+            case R.integer.reset_to_default: //Return from Settings Activity - Reset to Default
                 if (resultCode == R.integer.reset_to_default) {
                     Log.d(TAG, "Return from Settings - Reset to Default");
                     mainWifiFragment.loadFromFile(true);

@@ -73,6 +73,8 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     private static final String STATE_ACTION_MODE_SELECTIONS = "state_action_mode_selections";
     private static final String STATE_SORT_MODE = "state_sort_mode";
 
+    private static final String STATE_RESTORED_ENTRIES = "state_restored_entries";
+
     //Layout
     private FrameLayout mRoot;
     private AppBarLayout mAppBarLayout;
@@ -185,10 +187,23 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         return layout;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause()");
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop()");
+    }
 
     @Override
     public void onResume() {
         super.onResume();
+        Log.d(TAG, "onResume()");
 
         if (isSortModeOn) {
             sortMode(true);
@@ -336,10 +351,10 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         isLoadingFromFile = true;
         getActivity().invalidateOptionsMenu();
 
-        if(resetDB) {
-            mAdapter.setWifiList(new ArrayList<WifiEntry>());
-            mProgressBar.setVisibility(View.VISIBLE); //Show Progress Bar
-        }
+//        if (resetDB) {
+        mAdapter.setWifiList(new ArrayList<WifiEntry>());
+        mProgressBar.setVisibility(View.VISIBLE); //Show Progress Bar
+//        }
 
         Snackbar.make(mRoot, R.string.snackbar_load_from_file, Snackbar.LENGTH_SHORT).show();
         new TaskLoadWifiEntries(mPath, mFileName, resetDB, this, this).execute();
@@ -386,10 +401,10 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         collapseAppBarLayout(isOn);
         mCollapsingToolbarLayout.setCollapsedTitleTextColor(isOn ? Color.TRANSPARENT : Color.WHITE);
 
-        for(int i=0; i < menu.size(); i++) {
+        for (int i = 0; i < menu.size(); i++) {
 
             MenuItem item = menu.getItem(i);
-            if(item.getGroupId() != R.id.menu_group_sort_mode) {
+            if (item.getGroupId() != R.id.menu_group_sort_mode) {
                 item.setVisible(!isOn);
             }
         }
@@ -460,7 +475,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
                 Log.d(TAG, "RecyclerView - onClick " + position);
 
                 //while in ActionMode - regular clicks will also select items
-                if(isActionModeOn) {
+                if (isActionModeOn) {
                     mAdapter.toggleSelection(position);
                     mRecyclerView.scrollToPosition(position);
                 }
@@ -528,7 +543,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
                         mode.finish();
 
-                        if(selectedItems.size() > 0) {
+                        if (selectedItems.size() > 0) {
 
                             Snackbar.make(mRoot,
                                     selectedItems.size() > 1 ? R.string.snackbar_wifi_archive_multiple
@@ -586,7 +601,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
             @Override
             public void onDestroyActionMode(ActionMode mode) {
 
-                if(!mActionModeArchivePressed) {
+                if (!mActionModeArchivePressed) {
                     mAdapter.clearSelection();
                 }
                 mActionModeArchivePressed = false;
@@ -706,7 +721,6 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         fragment.show(getFragmentManager(), getString(R.string.dialog_error_tag));
     }
 
-    //Handle Dialog Result Codes
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "onActivityResult");
@@ -715,11 +729,17 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
             case R.integer.activity_hidden_code: //Handle HiddenWifiActivity items restored
 
-                if(resultCode == Activity.RESULT_OK) {
+                if (resultCode == Activity.RESULT_OK) {
                     Log.d(TAG, "HiddenWifiActivity - Items Restored");
-                    mListWifi = MyApplication.getWritableDatabase().getAllWifiEntries(false);
-                    MyApplication.closeDatabase();
-                    mAdapter.setWifiList(mListWifi);
+                    if (data != null) {
+
+                        ArrayList<WifiEntry> itemsRestored = data.getParcelableArrayListExtra(STATE_RESTORED_ENTRIES);
+                        for (int i = 0; i < itemsRestored.size(); i++) {
+                            WifiEntry entry = itemsRestored.get(i);
+                            mAdapter.addItem(i, entry);
+                        }
+                        mRecyclerView.scrollToPosition(0);
+                    }
                 }
                 break;
 
