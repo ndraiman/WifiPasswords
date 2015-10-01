@@ -43,7 +43,9 @@ public class InputDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
-        View layout = inflater.inflate(R.layout.dialog_add_entry, container);
+        View layout = inflater.inflate(R.layout.dialog_input, container);
+
+        getDialog().setTitle(R.string.dialog_add_title);
 
         mTitle = (EditText) layout.findViewById(R.id.input_title);
         mPassword = (EditText) layout.findViewById(R.id.input_password);
@@ -89,7 +91,7 @@ public class InputDialogFragment extends DialogFragment {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        dialogWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        dialogWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
     private boolean hasErrors() {
