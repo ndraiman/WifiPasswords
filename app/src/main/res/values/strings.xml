@@ -22,7 +22,7 @@
     <!-- Settings Menu -->
     <string name="action_hidden_list">Archived Wifi Entries</string>
     <string name="action_settings">Settings</string>
-    <string name="action_reload_from_file">Reload From File</string>
+    <string name="action_add_from_file">Add From File</string>
     <string name="action_help">Help &amp; Feedback</string>
     <string name="action_share">Share</string>
     <string name="action_search">Search</string>
@@ -30,14 +30,20 @@
     <string name="action_sort_done">Done Sorting</string>
 
     <!-- Preference Activity -->
+    <string name="pref_category_behavior">Behavior</string>
     <string name="pref_path_default">/data/misc/wifi/wpa_supplicant.conf</string>
     <string name="pref_path_manual_key">pref_path_manual</string>
     <string name="pref_path_manual_title">Manual Location</string>
     <string name="pref_path_list_key">pref_path_list</string>
-    <string name="pref_path_list_title">wpa_supplicant Location</string>
-    <string name="pref_reset_key">pref_reset</string>
-    <string name="pref_reset_summary">restore wpa_supplicant path</string>
-    <string name="pref_reset_title">Reset to Default</string>
+    <string name="pref_path_list_title">File Location</string>
+    <string name="pref_reset_manual_key">pref_reset_manual</string>
+    <string name="pref_reset_manual_summary">restore default path</string>
+    <string name="pref_reset_manual_title">Reset Manual Location</string>
+
+    <string name="pref_category_default">Reset to Default</string>
+    <string name="pref_default_key">pref_default</string>
+    <string name="pref_default_title">Reload From File</string>
+    <string name="pref_default_summary">Delete all the data and reloads it from file</string>
 
     <string-array name="wpa_supplicant_locations">
         <item>/data/misc/wifi/wpa_supplicant.conf</item>

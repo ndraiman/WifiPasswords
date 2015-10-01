@@ -2,26 +2,40 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:title="Settings">
 
-    <ListPreference android:key="@string/pref_path_list_key"
-        android:title="@string/pref_path_list_title"
-        android:defaultValue="@string/pref_path_default"
-        android:entries="@array/wpa_supplicant_locations"
-        android:entryValues="@array/wpa_supplicant_locations"
-        android:summary="@string/pref_path_default"
-        android:order="200"/>
+    <PreferenceCategory android:title="@string/pref_category_behavior">
 
-    <EditTextPreference
-        android:defaultValue="@string/pref_path_default"
-        android:key="@string/pref_path_manual_key"
-        android:summary="@string/pref_path_default"
-        android:title="@string/pref_path_manual_title"
-        android:order="210"/>
+        <ListPreference
+            android:defaultValue="@string/pref_path_default"
+            android:entries="@array/wpa_supplicant_locations"
+            android:entryValues="@array/wpa_supplicant_locations"
+            android:key="@string/pref_path_list_key"
+            android:order="200"
+            android:summary="@string/pref_path_default"
+            android:title="@string/pref_path_list_title" />
 
-    <Preference
-        android:key="@string/pref_reset_key"
-        android:summary="@string/pref_reset_summary"
-        android:title="@string/pref_reset_title"
-        android:order="220"/>
+        <EditTextPreference
+            android:defaultValue="@string/pref_path_default"
+            android:key="@string/pref_path_manual_key"
+            android:order="210"
+            android:summary="@string/pref_path_default"
+            android:title="@string/pref_path_manual_title" />
+
+        <Preference
+            android:key="@string/pref_reset_manual_key"
+            android:order="220"
+            android:summary="@string/pref_reset_manual_summary"
+            android:title="@string/pref_reset_manual_title" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_category_default">
+
+        <Preference android:key="@string/pref_default_key"
+            android:order="400"
+            android:summary="@string/pref_default_summary"
+            android:title="@string/pref_default_title" />
+
+    </PreferenceCategory>
 
 
 </PreferenceScreen>

@@ -21,9 +21,9 @@
             app:showAsAction="ifRoom" />
 
         <item
-            android:id="@+id/action_reload_from_file"
+            android:id="@+id/action_add_from_file"
             android:orderInCategory="300"
-            android:title="@string/action_reload_from_file"
+            android:title="@string/action_add_from_file"
             app:showAsAction="never" />
 
         <item

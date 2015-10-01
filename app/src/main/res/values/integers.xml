@@ -11,4 +11,6 @@
     <integer name="dialog_confirm">0</integer>
     <integer name="dialog_cancel">1</integer>
 
+    <integer name="reset_to_default">999</integer>
+
 </resources>

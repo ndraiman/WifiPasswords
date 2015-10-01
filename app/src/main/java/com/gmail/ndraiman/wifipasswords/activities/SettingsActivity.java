@@ -1,5 +1,6 @@
 package com.gmail.ndraiman.wifipasswords.activities;
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
@@ -129,10 +131,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     if(stringValue.equals(getString(R.string.pref_path_list_manual))) {
 
                         findPreference(getString(R.string.pref_path_manual_key)).setEnabled(true);
-                        findPreference(getString(R.string.pref_reset_key)).setEnabled(true);
+                        findPreference(getString(R.string.pref_reset_manual_key)).setEnabled(true);
                     } else {
                         findPreference(getString(R.string.pref_path_manual_key)).setEnabled(false);
-                        findPreference(getString(R.string.pref_reset_key)).setEnabled(false);
+                        findPreference(getString(R.string.pref_reset_manual_key)).setEnabled(false);
                     }
 
                 }
@@ -206,7 +208,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.preferences);
 
-            findPreference(getString(R.string.pref_reset_key)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            findPreference(getString(R.string.pref_reset_manual_key)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     resetPathPref();
@@ -214,6 +216,13 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 }
             });
 
+            findPreference(getString(R.string.pref_default_key)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    showResetWarningDialog();
+                    return true;
+                }
+            });
 
             //Summary to Value
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_path_manual_key)));
@@ -239,6 +248,35 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             loadPreferences();
 
         }
+
+
+        private void showResetWarningDialog() {
+            Log.d(TAG, "showResetWarningDialog");
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.CustomErrorDialog);
+            builder.setMessage(R.string.dialog_warning_message)
+                    .setTitle(R.string.dialog_warning_title);
+
+            String[] buttons = getResources().getStringArray(R.array.dialog_warning_buttons);
+
+            //Send Result Codes to target fragment according to button clicked
+            builder.setPositiveButton(buttons[0], new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    getActivity().setResult(R.integer.reset_to_default);
+                    getActivity().finish();
+                }
+            }).setNegativeButton(buttons[1], new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //Dismiss Dialog
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+
 
     }
 }

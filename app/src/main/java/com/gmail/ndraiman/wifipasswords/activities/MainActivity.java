@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_settings:
                 //Start Settings with Transition
                 mCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, null);
-                startActivity(new Intent(this, SettingsActivity.class), mCompat.toBundle());
+                startActivityForResult(new Intent(this, SettingsActivity.class), R.integer.reset_to_default, mCompat.toBundle());
                 return true;
 
             case R.id.action_help:
@@ -129,16 +129,23 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == Activity.RESULT_OK) {
                     Log.d(TAG, "Return from Settings - Loading from file");
                     if (mainWifiFragment.isVisible())
-                        mainWifiFragment.loadFromFile();
+                        mainWifiFragment.loadFromFile(true);
                 } else {
                     Log.d(TAG, "Return from Settings - didn't change anything");
                 }
                 break;
 
-            case R.integer.activity_hidden_code:
+            case R.integer.activity_hidden_code: //return from HiddenWifiActivity
                 mainWifiFragment.onActivityResult(requestCode, resultCode, data);
                 break;
 
+            case R.integer.reset_to_default:
+                if (resultCode == R.integer.reset_to_default) {
+                    Log.d(TAG, "Return from Settings - Reset to Default");
+                    mainWifiFragment.loadFromFile(true);
+
+                }
+                break;
         }
     }
 
