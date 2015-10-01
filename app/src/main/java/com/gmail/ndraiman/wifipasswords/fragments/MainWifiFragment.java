@@ -62,6 +62,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
     private static final String TAG = "MainWifiFragment";
     private static final String COPIED_WIFI_ENTRY = "copied_wifi_entry"; //Clipboard Label
+    private static final String STATE_RESTORED_ENTRIES = "state_restored_entries"; //HiddenActivityWifi intent.extra key
 
     private ArrayList<WifiEntry> mListWifi;
 
@@ -72,8 +73,6 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     private static final String STATE_ACTION_MODE = "state_action_mode";
     private static final String STATE_ACTION_MODE_SELECTIONS = "state_action_mode_selections";
     private static final String STATE_SORT_MODE = "state_sort_mode";
-
-    private static final String STATE_RESTORED_ENTRIES = "state_restored_entries";
 
     //Layout
     private FrameLayout mRoot;
@@ -93,7 +92,6 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     private WifiListAdapter mAdapter;
     private RecyclerView.OnItemTouchListener mRecyclerTouchListener;
     private ItemTouchHelper mItemTouchHelper;
-    private ItemTouchHelper.Callback mTouchHelperCallback;
 
     //SearchView
     private SearchView mSearchView;
@@ -105,8 +103,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     private ArrayList<Integer> mActionModeSelections;
     private ActionMode.Callback mActionModeCallback;
     private boolean isActionModeOn = false;
-    //Checks if Archive was pressed - will not call clearSelection to preserve animations
-    private boolean mActionModeArchivePressed = false;
+    private boolean mActionModeArchivePressed = false; //Checks if Archive was pressed - will not call clearSelection to preserve animations
 
 
     public static MainWifiFragment newInstance() {
@@ -127,23 +124,11 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         setHasOptionsMenu(true);
         setRetainInstance(true);
 
-        //Init local Views
         mListWifi = new ArrayList<>();
-        textNoRoot = (TextView) layout.findViewById(R.id.text_no_root);
-        mRecyclerView = (RecyclerView) layout.findViewById(R.id.main_wifi_list_recycler);
-        mProgressBar = (ProgressBar) layout.findViewById(R.id.progress_bar);
-        mRoot = (FrameLayout) layout.findViewById(R.id.fragment_main_container);
 
-        //get Activity Views
-        mFAB = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-        mCollapsingToolbarLayout = (CollapsingToolbarLayout) getActivity().findViewById(R.id.collapsing_layout);
-        mAppBarLayout = (AppBarLayout) getActivity().findViewById(R.id.app_bar_layout);
+        bindViews(layout);
 
-
-        //backward compatible MaterialProgressBar - https://github.com/DreaminginCodeZH/MaterialProgressBar
-        IndeterminateProgressDrawable progressDrawable = new IndeterminateProgressDrawable(getActivity());
-        progressDrawable.setTint(ContextCompat.getColor(getActivity(), R.color.colorPrimary)); //Change Color
-        mProgressBar.setIndeterminateDrawable(progressDrawable);
+        setupProgressBar();
 
         //Setup RecyclerView & Adapter
         setupRecyclerView();
@@ -151,26 +136,27 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         //Setup Floating Action Button
         setupFAB();
 
-        //Determine if Activity runs for first time
+
         if (savedInstanceState != null) {
 
-            Log.d(TAG, "extracting mListWifi from Parcelable");
-            //if starts after a rotation or configuration change, load the existing Wifi list from a parcelable
+            Log.d(TAG, "restoring from savedInstanceState");
+
             mListWifi = savedInstanceState.getParcelableArrayList(STATE_WIFI_ENTRIES);
             isActionModeOn = savedInstanceState.getBoolean(STATE_ACTION_MODE);
             mActionModeSelections = savedInstanceState.getIntegerArrayList(STATE_ACTION_MODE_SELECTIONS);
             isSortModeOn = savedInstanceState.getBoolean(STATE_SORT_MODE);
 
         } else {
+
             Log.d(TAG, "getting WifiEntries from database");
-            //if starts for the first time, load the list of wifi from a database
+
             mListWifi = MyApplication.getWritableDatabase().getAllWifiEntries(false);
             MyApplication.closeDatabase();
-            //if the database is empty, trigger an AsyncTask to get wifi list from the wpa_supplicant
+
             if (mListWifi.isEmpty()) {
 
                 loadFromFile(true);
-                Log.d(TAG, "executing task from onCreate");
+                Log.d(TAG, "executing task from onCreateView");
             }
         }
 
@@ -187,18 +173,6 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         return layout;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause()");
-
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        Log.d(TAG, "onStop()");
-    }
 
     @Override
     public void onResume() {
@@ -308,7 +282,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
                 return true;
 
             case R.id.action_share:
-                shareWifiList();
+                shareWifiList(mListWifi);
                 return true;
 
         }
@@ -317,29 +291,57 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     }
 
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(TAG, "onActivityResult");
+
+        switch (requestCode) {
+
+            case R.integer.activity_hidden_code: //Handle HiddenWifiActivity items restored
+
+                if (resultCode == Activity.RESULT_OK) {
+                    Log.d(TAG, "HiddenWifiActivity - Items Restored");
+                    if( data != null) {
+
+                        ArrayList<WifiEntry> itemsRestored =  data.getParcelableArrayListExtra(STATE_RESTORED_ENTRIES);
+                        for (int i = 0; i < itemsRestored.size(); i++) {
+                            WifiEntry entry = itemsRestored.get(i);
+                            mAdapter.addItem(i, entry);
+                        }
+                        mRecyclerView.scrollToPosition(0);
+                    }
+                }
+                break;
+
+            case R.integer.dialog_error_code:  //Handle Path Error Dialog
+
+                if (resultCode == R.integer.dialog_confirm) {
+                    Log.d(TAG, "Dialog Error - Confirm");
+                    FragmentActivity parent = getActivity();
+                    ActivityOptionsCompat compat = ActivityOptionsCompat.makeSceneTransitionAnimation(parent, null);
+                    parent.startActivityForResult(
+                            new Intent(parent, SettingsActivity.class),
+                            R.integer.activity_settings_code,
+                            compat.toBundle());
+                } //Else Dismissed
+                break;
+
+            case R.integer.dialog_warning_code: //Handle LoadFromFile Warning Dialog
+
+                if (resultCode == R.integer.dialog_confirm) {
+                    Log.d(TAG, "Dialog Warning - Confirm");
+                    loadFromFile(true);
+
+                } //Else Dismissed
+                break;
+        }
+    }
+
+
     /********************************************************/
     /****************** Additional Methods ******************/
     /********************************************************/
-
-    //Share entire wifi list
-    private void shareWifiList() {
-
-        String textToShare = "";
-
-        for (int i = 0; i < mListWifi.size(); i++) {
-
-            WifiEntry current = mListWifi.get(i);
-            textToShare += "Wifi Name: " + current.getTitle() + "\n"
-                    + "Password: " + current.getPassword() + "\n\n";
-        }
-
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, textToShare);
-        sendIntent.setType("text/plain");
-        startActivity(sendIntent);
-
-    }
 
 
     //Copy wpa_supplicant and extract data from it via AsyncTask
@@ -358,6 +360,27 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
         Snackbar.make(mRoot, R.string.snackbar_load_from_file, Snackbar.LENGTH_SHORT).show();
         new TaskLoadWifiEntries(mPath, mFileName, resetDB, this, this).execute();
+
+    }
+
+
+    //Share entire wifi list
+    private void shareWifiList(ArrayList<WifiEntry> listWifi) {
+
+        String textToShare = "";
+
+        for (int i = 0; i < listWifi.size(); i++) {
+
+            WifiEntry current = listWifi.get(i);
+            textToShare += "Wifi Name: " + current.getTitle() + "\n"
+                    + "Password: " + current.getPassword() + "\n\n";
+        }
+
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, textToShare);
+        sendIntent.setType("text/plain");
+        startActivity(sendIntent);
 
     }
 
@@ -448,9 +471,33 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     }
 
 
-    /********************************************************/
-    /******************** Setup Methods *********************/
-    /********************************************************/
+    /***************************************************************/
+    /******************** Layout Setup Methods *********************/
+    /***************************************************************/
+
+    private void bindViews(View layout) {
+
+        //Init local Views
+        textNoRoot = (TextView) layout.findViewById(R.id.text_no_root);
+        mRecyclerView = (RecyclerView) layout.findViewById(R.id.main_wifi_list_recycler);
+        mProgressBar = (ProgressBar) layout.findViewById(R.id.progress_bar);
+        mRoot = (FrameLayout) layout.findViewById(R.id.fragment_main_container);
+
+        //get Activity Views
+        mFAB = (FloatingActionButton) getActivity().findViewById(R.id.fab);
+        mCollapsingToolbarLayout = (CollapsingToolbarLayout) getActivity().findViewById(R.id.collapsing_layout);
+        mAppBarLayout = (AppBarLayout) getActivity().findViewById(R.id.app_bar_layout);
+
+    }
+
+    private void setupProgressBar() {
+
+        //backward compatible MaterialProgressBar - https://github.com/DreaminginCodeZH/MaterialProgressBar
+        IndeterminateProgressDrawable progressDrawable = new IndeterminateProgressDrawable(getActivity());
+        progressDrawable.setTint(ContextCompat.getColor(getActivity(), R.color.colorPrimary)); //Change Color
+        mProgressBar.setIndeterminateDrawable(progressDrawable);
+
+    }
 
     private void setupRecyclerView() {
         Log.d(TAG, "setupRecyclerView");
@@ -461,7 +508,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         mRecyclerView.setAdapter(mAdapter);
 
         //Setup ItemTouchHelper
-        mTouchHelperCallback = new MyTouchHelperCallback(mAdapter);
+        ItemTouchHelper.Callback mTouchHelperCallback = new MyTouchHelperCallback(mAdapter);
         mItemTouchHelper = new ItemTouchHelper(mTouchHelperCallback);
         mItemTouchHelper.attachToRecyclerView(mRecyclerView);
 
@@ -554,7 +601,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
                                             for (int i = 0; i < selectedItems.size(); i++) {
                                                 mAdapter.addItem(selectedItems.get(i), selectedEntries.get(i));
-//                                                mAdapter.toggleSelection(selectedItems.get(i));
+
                                             }
                                             mRecyclerView.scrollToPosition(selectedItems.get(0));
                                             db.deleteWifiEntries(selectedEntries, true);
@@ -578,20 +625,10 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
                         return true;
 
                     case R.id.menu_context_share:
-                        StringBuilder textToShare = new StringBuilder();
 
-                        for (WifiEntry entry : selectedEntries) {
-                            textToShare.append("Wifi Name: " + entry.getTitle() + "\n"
-                                    + "Password: " + entry.getPassword() + "\n\n");
-                        }
-
-                        Intent sendIntent = new Intent();
-                        sendIntent.setAction(Intent.ACTION_SEND);
-                        sendIntent.putExtra(Intent.EXTRA_TEXT, textToShare.toString());
-                        sendIntent.setType("text/plain");
-                        startActivity(sendIntent);
-
+                        shareWifiList(selectedEntries);
                         return true;
+
 
                     default:
                         return false;
@@ -719,52 +756,6 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
         CustomAlertDialogFragment fragment = CustomAlertDialogFragment.getInstance(title, message, buttons);
         fragment.setTargetFragment(this, R.integer.dialog_error_code);
         fragment.show(getFragmentManager(), getString(R.string.dialog_error_tag));
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "onActivityResult");
-
-        switch (requestCode) {
-
-            case R.integer.activity_hidden_code: //Handle HiddenWifiActivity items restored
-
-                if (resultCode == Activity.RESULT_OK) {
-                    Log.d(TAG, "HiddenWifiActivity - Items Restored");
-                     if( data != null) {
-
-                        ArrayList<WifiEntry> itemsRestored =  data.getParcelableArrayListExtra(STATE_RESTORED_ENTRIES);
-                         for (int i = 0; i < itemsRestored.size(); i++) {
-                            WifiEntry entry = itemsRestored.get(i);
-                            mAdapter.addItem(i, entry);
-                        }
-                        mRecyclerView.scrollToPosition(0);
-                    }
-                }
-                break;
-
-            case R.integer.dialog_error_code:  //Handle Path Error Dialog
-
-                if (resultCode == R.integer.dialog_confirm) {
-                    Log.d(TAG, "Dialog Error - Confirm");
-                    FragmentActivity parent = getActivity();
-                    ActivityOptionsCompat compat = ActivityOptionsCompat.makeSceneTransitionAnimation(parent, null);
-                    parent.startActivityForResult(
-                            new Intent(parent, SettingsActivity.class),
-                            R.integer.activity_settings_code,
-                            compat.toBundle());
-                } //Else Dismissed
-                break;
-
-            case R.integer.dialog_warning_code: //Handle LoadFromFile Warning Dialog
-
-                if (resultCode == R.integer.dialog_confirm) {
-                    Log.d(TAG, "Dialog Warning - Confirm");
-                    loadFromFile(true);
-
-                } //Else Dismissed
-                break;
-        }
     }
 
 
