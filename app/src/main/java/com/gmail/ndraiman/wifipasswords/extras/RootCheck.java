@@ -5,9 +5,7 @@ import android.util.Log;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 
-/**
- * Created by ND88 on 16/09/2015.
- */
+
 public class RootCheck {
     
     private static final String TAG = "ROOT";

@@ -56,11 +56,11 @@ import java.util.ArrayList;
 import me.zhanghai.android.materialprogressbar.IndeterminateProgressDrawable;
 
 
-public class MainWifiFragment extends Fragment implements WifiListLoadedListener,
+public class WifiListFragment extends Fragment implements WifiListLoadedListener,
         SearchView.OnQueryTextListener, CustomAlertDialogListener, InputDialogListener,
         ItemDragListener {
 
-    private static final String TAG = "MainWifiFragment";
+    private static final String TAG = "WifiListFragment";
     private static final String COPIED_WIFI_ENTRY = "copied_wifi_entry"; //Clipboard Label
     private static final String STATE_RESTORED_ENTRIES = "state_restored_entries"; //HiddenActivityWifi intent.extra key
 
@@ -106,13 +106,13 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     private boolean mActionModeArchivePressed = false; //Checks if Archive was pressed - will not call clearSelection to preserve animations
 
 
-    public static MainWifiFragment newInstance() {
+    public static WifiListFragment newInstance() {
 
-        return new MainWifiFragment();
+        return new WifiListFragment();
     }
 
 
-    public MainWifiFragment() {
+    public WifiListFragment() {
 
     }
 
@@ -120,7 +120,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
-        View layout = inflater.inflate(R.layout.fragment_main_wifi, container, false);
+        View layout = inflater.inflate(R.layout.fragment_wifi_list, container, false);
         setHasOptionsMenu(true);
         setRetainInstance(true);
 
@@ -246,7 +246,7 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_wifi_main_fragment, menu);
+        inflater.inflate(R.menu.menu_wifi_list_fragment, menu);
         Log.d(TAG, "onCreateOptionsMenu");
 
         MenuItem searchItem = menu.findItem(R.id.action_search);

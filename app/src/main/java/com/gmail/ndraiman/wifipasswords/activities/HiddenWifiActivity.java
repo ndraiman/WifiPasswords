@@ -1,4 +1,4 @@
-package com.gmail.ndraiman.wifipasswords.fragments;
+package com.gmail.ndraiman.wifipasswords.activities;
 
 import android.content.Intent;
 import android.os.Build;

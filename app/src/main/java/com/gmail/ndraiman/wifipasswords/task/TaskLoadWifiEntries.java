@@ -7,11 +7,10 @@ import android.util.Log;
 import android.view.View;
 
 import com.gmail.ndraiman.wifipasswords.database.PasswordDB;
-import com.gmail.ndraiman.wifipasswords.extras.ExecuteAsRootBase;
+import com.gmail.ndraiman.wifipasswords.dialogs.CustomAlertDialogListener;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
 import com.gmail.ndraiman.wifipasswords.extras.RootCheck;
-import com.gmail.ndraiman.wifipasswords.dialogs.CustomAlertDialogListener;
-import com.gmail.ndraiman.wifipasswords.fragments.MainWifiFragment;
+import com.gmail.ndraiman.wifipasswords.fragments.WifiListFragment;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
 import com.gmail.ndraiman.wifipasswords.recycler.WifiListLoadedListener;
 
@@ -54,8 +53,8 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         super.onPreExecute();
 
         //Remove "No Root Access" error
-        if(MainWifiFragment.textNoRoot.getVisibility() == View.VISIBLE && hasRootAccess) {
-            MainWifiFragment.textNoRoot.setVisibility(View.GONE);
+        if(WifiListFragment.textNoRoot.getVisibility() == View.VISIBLE && hasRootAccess) {
+            WifiListFragment.textNoRoot.setVisibility(View.GONE);
         }
     }
 
@@ -105,7 +104,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
 
         //Show "No Root Access" error
         if(!hasRootAccess) {
-            MainWifiFragment.textNoRoot.setVisibility(View.VISIBLE);
+            WifiListFragment.textNoRoot.setVisibility(View.VISIBLE);
 
             if(mListListener != null) {
                 Log.d(TAG, "OnCancelled Execute \n");
@@ -137,7 +136,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
     }
 
     private void copyFile() {
-        if (!ExecuteAsRootBase.canRunRootCommands()) {
+        if (!RootCheck.canRunRootCommands()) {
             return;
         }
 

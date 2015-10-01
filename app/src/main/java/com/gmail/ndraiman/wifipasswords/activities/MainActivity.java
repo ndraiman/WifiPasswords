@@ -16,13 +16,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.gmail.ndraiman.wifipasswords.R;
-import com.gmail.ndraiman.wifipasswords.fragments.HiddenWifiActivity;
-import com.gmail.ndraiman.wifipasswords.fragments.MainWifiFragment;
+import com.gmail.ndraiman.wifipasswords.fragments.WifiListFragment;
 
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
-    private MainWifiFragment mainWifiFragment;
+    private WifiListFragment mainWifiFragment;
     private static final String MAIN_FRAGMENT_TAG = "main_fragment_tag";
     private static final String TAG = "MainActivity";
     ActivityOptionsCompat mCompat;
@@ -53,10 +52,10 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             Log.d(TAG, "savedInstanceState = null");
-            mainWifiFragment = MainWifiFragment.newInstance();
+            mainWifiFragment = WifiListFragment.newInstance();
 
         } else {
-            mainWifiFragment = (MainWifiFragment) getSupportFragmentManager().findFragmentByTag(MAIN_FRAGMENT_TAG);
+            mainWifiFragment = (WifiListFragment) getSupportFragmentManager().findFragmentByTag(MAIN_FRAGMENT_TAG);
         }
 
         getSupportFragmentManager().beginTransaction().replace
