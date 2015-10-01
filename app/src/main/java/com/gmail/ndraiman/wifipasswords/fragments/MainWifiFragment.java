@@ -731,10 +731,10 @@ public class MainWifiFragment extends Fragment implements WifiListLoadedListener
 
                 if (resultCode == Activity.RESULT_OK) {
                     Log.d(TAG, "HiddenWifiActivity - Items Restored");
-                    if (data != null) {
+                     if( data != null) {
 
-                        ArrayList<WifiEntry> itemsRestored = data.getParcelableArrayListExtra(STATE_RESTORED_ENTRIES);
-                        for (int i = 0; i < itemsRestored.size(); i++) {
+                        ArrayList<WifiEntry> itemsRestored =  data.getParcelableArrayListExtra(STATE_RESTORED_ENTRIES);
+                         for (int i = 0; i < itemsRestored.size(); i++) {
                             WifiEntry entry = itemsRestored.get(i);
                             mAdapter.addItem(i, entry);
                         }

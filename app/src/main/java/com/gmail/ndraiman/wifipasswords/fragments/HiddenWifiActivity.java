@@ -18,13 +18,12 @@ import android.util.Log;
 import com.gmail.ndraiman.wifipasswords.R;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
-import com.gmail.ndraiman.wifipasswords.recycler.ItemDragListener;
 import com.gmail.ndraiman.wifipasswords.recycler.WifiListAdapter;
 
 import java.util.ArrayList;
 
 
-public class HiddenWifiActivity extends AppCompatActivity implements ItemDragListener {
+public class HiddenWifiActivity extends AppCompatActivity {
 
     private static final String TAG = "HiddenWifiActivity";
 
@@ -132,19 +131,12 @@ public class HiddenWifiActivity extends AppCompatActivity implements ItemDragLis
         outState.putParcelableArrayList(STATE_HIDDEN_ENTRIES, mListWifi);
     }
 
-    //Sort Mode Method - sort via drag
-    @Override
-    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
-        Log.d(TAG, "onStartDrag");
-        mItemTouchHelper.startDrag(viewHolder);
-    }
-
     private void setupRecyclerView() {
         Log.d(TAG, "setupRecyclerView");
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setHasFixedSize(true);
-        mAdapter = new WifiListAdapter(this, this);
+        mAdapter = new WifiListAdapter(this, null);
         mRecyclerView.setAdapter(mAdapter);
 
         //Setup ItemTouchHelper
@@ -161,6 +153,13 @@ public class HiddenWifiActivity extends AppCompatActivity implements ItemDragLis
                 Log.d(TAG, "onSwiped");
 
                 WifiEntry deleted = mAdapter.onItemDismiss(viewHolder.getAdapterPosition());
+
+                mEntriesDeleted.add(deleted);
+                Intent data = getIntent();
+                data.putParcelableArrayListExtra(STATE_RESTORED_ENTRIES, mEntriesDeleted);
+                setResult(RESULT_OK, data);
+
+
                 ArrayList<WifiEntry> deletions = new ArrayList<>();
                 deletions.add(deleted);
                 MyApplication.getWritableDatabase().deleteWifiEntries(deletions, true);
@@ -170,12 +169,6 @@ public class HiddenWifiActivity extends AppCompatActivity implements ItemDragLis
                         deleted.getTitle() + " " + getString(R.string.snackbar_wifi_restore),
                         Snackbar.LENGTH_SHORT)
                         .show();
-
-                mEntriesDeleted.add(deleted);
-
-                Intent data = new Intent();
-                data.putParcelableArrayListExtra(STATE_RESTORED_ENTRIES, mEntriesDeleted);
-                setResult(RESULT_OK, data);
             }
         };
 
