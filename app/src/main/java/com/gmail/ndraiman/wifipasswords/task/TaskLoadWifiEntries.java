@@ -78,19 +78,22 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
 
     @Override
     protected void onPostExecute(ArrayList<WifiEntry> wifiEntries) {
+        Log.d(TAG, "OnPost Execute \n" + wifiEntries.toString());
+
         //Insert Wifi Entries to database
         PasswordDB db = MyApplication.getWritableDatabase();
 
         if(mResetDB) {
+            Log.d(TAG, "Resetting Database");
             db.deleteAll(false);
             db.deleteAll(true);
         }
 
-        db.insertWifiEntries(wifiEntries, false);
+        db.insertWifiEntries(wifiEntries, mResetDB, false); //keep Tags according to mResetDB
 
         //Update RecyclerView
         if(mListListener != null) {
-            Log.d(TAG, "OnPost Execute \n" + wifiEntries.toString());
+
             wifiEntries = new ArrayList<>(db.getAllWifiEntries(false)); //re-read list from database as it removes duplicates
             mListListener.onWifiListLoaded(wifiEntries);
         }

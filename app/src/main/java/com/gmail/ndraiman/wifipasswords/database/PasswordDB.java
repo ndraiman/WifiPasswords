@@ -41,8 +41,6 @@ public class PasswordDB {
         String selection = PasswordHelper.COLUMN_TITLE + " = ?";
         String[] selectionArgs = new String[listWifi.size()];
 
-        Log.d(TAG, "selectionArgs size = " + selectionArgs.length);
-
         for (int i = 0; i < selectionArgs.length; i++) {
 
             if(i > 0) {
@@ -52,7 +50,6 @@ public class PasswordDB {
             Log.d(TAG, "selectionArgs[" + i + "] = " + selectionArgs[i]);
         }
 
-        Log.d(TAG, "selection = " + selection);
 
         Cursor cursor = mDatabase.query(PasswordHelper.TABLE_MAIN, columns, selection, selectionArgs, null, null, null);
 
@@ -76,7 +73,7 @@ public class PasswordDB {
     /****************** Insert Methods ********************/
     /******************************************************/
 
-    public void insertWifiEntries(ArrayList<WifiEntry> listWifi, boolean isHidden) {
+    public void insertWifiEntries(ArrayList<WifiEntry> listWifi, boolean updateTags, boolean isHidden) {
 
         String table = isHidden ? PasswordHelper.TABLE_HIDDEN : PasswordHelper.TABLE_MAIN;
         Log.d(TAG, "insertWifiEntries - isHidden=" + isHidden + " table=" + table);
@@ -92,7 +89,11 @@ public class PasswordDB {
             values.clear();
             values.put(PasswordHelper.COLUMN_TITLE, current.getTitle());
             values.put(PasswordHelper.COLUMN_PASSWORD, current.getPassword());
-            values.put(PasswordHelper.COLUMN_TAG, current.getTag());
+
+            if(updateTags) {
+                values.put(PasswordHelper.COLUMN_TAG, current.getTag());
+
+            }
 
             if(!isHidden) {
                 //Main Table - Check for duplicates
@@ -153,7 +154,7 @@ public class PasswordDB {
                 wifiEntry.setTitle(cursor.getString(cursor.getColumnIndex(PasswordHelper.COLUMN_TITLE)));
                 wifiEntry.setPassword(cursor.getString(cursor.getColumnIndex(PasswordHelper.COLUMN_PASSWORD)));
                 wifiEntry.setTag(cursor.getString(cursor.getColumnIndex(PasswordHelper.COLUMN_TAG)));
-
+                Log.e(TAG, "tag = " + wifiEntry.getTag());
                 listWifi.add(wifiEntry);
 
             } while (cursor.moveToNext());

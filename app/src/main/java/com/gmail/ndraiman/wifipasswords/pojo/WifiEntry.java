@@ -56,7 +56,7 @@ public class WifiEntry implements Parcelable {
 
     @Override
     public String toString() {
-        return "Wifi: " + title + ", pass: " + password + "\n";
+        return "Wifi: " + title + ", pass: " + password + ", tag: " + tag + "\n";
     }
 
     /************************************************************/

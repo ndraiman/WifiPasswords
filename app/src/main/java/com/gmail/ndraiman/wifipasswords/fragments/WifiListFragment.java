@@ -190,11 +190,8 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy");
-        //Update database with changes made to wifi list.
-        PasswordDB db = MyApplication.getWritableDatabase();
-        db.deleteAll(false);
-        db.insertWifiEntries(mListWifi, false);
-        MyApplication.closeDatabase();
+
+        updateDatabase();
 
     }
 
@@ -240,7 +237,8 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         Log.d(TAG, "onPrepareOptionsMenu");
 
         //Disable\Enable menu items according to SortMode
-        menu.setGroupVisible(R.id.menu_group_main, !isSortModeOn && !isLoadingFromFile);
+        menu.setGroupEnabled(R.id.menu_group_main, !isLoadingFromFile);
+        menu.setGroupVisible(R.id.menu_group_main, !isSortModeOn);
         menu.setGroupVisible(R.id.menu_group_sort_mode, isSortModeOn);
 
     }
@@ -348,19 +346,34 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     public void loadFromFile(boolean resetDB) {
         Log.d(TAG, "loadFromFile");
 
+        if (!resetDB) {
+            updateDatabase();
+        }
+
         getPath();
 
         isLoadingFromFile = true;
         getActivity().invalidateOptionsMenu();
 
-//        if (resetDB) {
         mAdapter.setWifiList(new ArrayList<WifiEntry>());
         mProgressBar.setVisibility(View.VISIBLE); //Show Progress Bar
-//        }
+
 
         Snackbar.make(mRoot, R.string.snackbar_load_from_file, Snackbar.LENGTH_SHORT).show();
         new TaskLoadWifiEntries(mPath, mFileName, resetDB, this, this).execute();
 
+    }
+
+
+    //Update database with changes made to wifi list.
+
+    private void updateDatabase() {
+
+        Log.d(TAG, "updateDatabase()");
+        PasswordDB db = MyApplication.getWritableDatabase();
+        db.deleteAll(false);
+        db.insertWifiEntries(mListWifi, true, false);
+        MyApplication.closeDatabase();
     }
 
 
@@ -591,7 +604,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                         }
 
                         final PasswordDB db = MyApplication.getWritableDatabase();
-                        db.insertWifiEntries(selectedEntries, true);
+                        db.insertWifiEntries(selectedEntries, true, true);
 
                         mode.finish();
 
@@ -741,7 +754,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         ArrayList<WifiEntry> entries = new ArrayList<>();
         entries.add(entry);
 
-        db.insertWifiEntries(entries, false);
+        db.insertWifiEntries(entries, true, false);
         MyApplication.closeDatabase();
     }
 
