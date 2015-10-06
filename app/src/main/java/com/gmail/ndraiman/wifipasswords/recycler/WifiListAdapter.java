@@ -56,7 +56,8 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
 
         holder.mTitle.setText(currentEntry.getTitle());
         holder.mPassword.setText(currentEntry.getPassword());
-        holder.mTag.setText(currentEntry.getTag());
+        holder.mTagText.setText(currentEntry.getTag());
+
 
         //Selected Background
         if (mSelectedItems.get(position, false)) {
@@ -77,23 +78,15 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
             }
         });
 
-        //Drag Handler Visibility
-        if (mShowDragHandler) {
-            holder.mDragHandler.setVisibility(View.VISIBLE);
-            holder.mTagLayout.setVisibility(View.GONE);
 
-        } else {
-            holder.mDragHandler.setVisibility(View.GONE);
-
-            if(!holder.mTag.getText().toString().isEmpty()) {
-                holder.mTagLayout.setVisibility(View.VISIBLE);
-            }
-        }
-
+        //Tag & Drag Handler Visibility
+        toggleTagAndDrag(holder);
+        
         //Set Animation
         setAnimation(holder.mContainer, position);
 
     }
+
 
 
     @Override
@@ -107,6 +100,24 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
         mListWifi = listWifi;
         mPreviousPosition = -1; //fix load animation on new data loaded
         notifyDataSetChanged();
+    }
+
+
+    private void toggleTagAndDrag(MyViewHolder holder) {
+        if (mShowDragHandler) {
+            holder.mDragHandler.setVisibility(View.VISIBLE);
+            holder.mTagText.setVisibility(View.GONE);
+
+        } else {
+            holder.mDragHandler.setVisibility(View.GONE);
+
+            if(!holder.mTagText.getText().toString().replace(" ", "").isEmpty()) {
+                holder.mTagText.setVisibility(View.VISIBLE);
+
+            } else {
+                holder.mTagText.setVisibility(View.GONE);
+            }
+        }
     }
 
     /*******************************************************/
@@ -273,8 +284,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
         private ImageView mDragHandler;
         private LinearLayout mBackground;
         private CardView mContainer;
-        private LinearLayout mTagLayout;
-        private TextView mTag;
+        private TextView mTagText;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -284,8 +294,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
             mDragHandler = (ImageView) itemView.findViewById(R.id.drag_handler);
             mBackground = (LinearLayout) itemView.findViewById(R.id.wifi_entry_layout);
             mContainer = (CardView) itemView.findViewById(R.id.wifi_entry_container);
-            mTagLayout = (LinearLayout) itemView.findViewById(R.id.tag_wifi_layout);
-            mTag = (TextView) itemView.findViewById(R.id.tag_wifi_text);
+            mTagText = (TextView) itemView.findViewById(R.id.tag_wifi_text);
 
         }
     }

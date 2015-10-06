@@ -41,10 +41,18 @@ public class PasswordDB {
         String selection = PasswordHelper.COLUMN_TITLE + " = ?";
         String[] selectionArgs = new String[listWifi.size()];
 
-        for (int i = 0; i < listWifi.size(); i++) {
+        Log.d(TAG, "selectionArgs size = " + selectionArgs.length);
 
+        for (int i = 0; i < selectionArgs.length; i++) {
+
+            if(i > 0) {
+                selection += " OR " + PasswordHelper.COLUMN_TITLE + " = ?";
+            }
             selectionArgs[i] = listWifi.get(i).getTitle();
+            Log.d(TAG, "selectionArgs[" + i + "] = " + selectionArgs[i]);
         }
+
+        Log.d(TAG, "selection = " + selection);
 
         Cursor cursor = mDatabase.query(PasswordHelper.TABLE_MAIN, columns, selection, selectionArgs, null, null, null);
 

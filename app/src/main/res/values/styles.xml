@@ -1,9 +1,5 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <!--<style name="AppTheme" parent="AppTheme.Base">-->
-        <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
-    <!--</style>-->
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -17,8 +13,6 @@
         <!--<item name="actionModeBackground">@color/colorPrimary</item>-->
 
     </style>
-
-    <style name="AppTheme_Dark" parent="Theme.AppCompat.NoActionBar" />
 
     <style name="CustomErrorDialog" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorAccent">@color/colorPrimary</item>

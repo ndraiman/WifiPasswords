@@ -51,35 +51,25 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/size_list_item"
         android:layout_gravity="top|end"
+        android:contentDescription="@string/drag_handler_description"
         android:padding="16dp"
         android:scaleType="center"
         android:src="@drawable/ic_drag_dark"
         android:tint="@color/colorHighlight" />
 
-    <LinearLayout
-        android:id="@+id/tag_wifi_layout"
+
+    <TextView
+        android:id="@+id/tag_wifi_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:orientation="horizontal"
-        android:visibility="visible">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="4dp"
-            android:src="@drawable/ic_action_tag"
-            android:tint="@color/colorHighlight" />
-
-        <TextView
-            android:id="@+id/tag_wifi_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ems="5"
-            android:padding="4dp"
-            android:singleLine="true"
-            android:text=""/>
-
-    </LinearLayout>
+        android:layout_gravity="end|bottom"
+        android:drawableLeft="@drawable/ic_action_tag"
+        android:drawablePadding="4dp"
+        android:drawableStart="@drawable/ic_action_tag"
+        android:ems="5"
+        android:padding="4dp"
+        android:singleLine="true"
+        android:text="@string/text_placeholder"
+        android:textColor="@color/colorSecondaryText" />
 
 </android.support.v7.widget.CardView>

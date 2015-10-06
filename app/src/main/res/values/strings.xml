@@ -17,7 +17,11 @@
     <string name="app_name">Wifi Passwords</string>
     <string name="activity_title_settings">Settings</string>
     <string name="activity_title_hidden_wifi">Archived Entries</string>
+
+    <!-- Content Descriptions -->
     <string name="collapsing_header_description">collapsing header</string>
+    <string name="drag_handler_description">Drag Icon</string>
+    <string name="tag_wifi_icon_description">Tag Icon</string>
 
     <!-- Settings Menu -->
     <string name="action_hidden_list">Archived Wifi Entries</string>
@@ -83,8 +87,8 @@
         <item>Cancel</item>
     </string-array>
 
-    <string name="dialog_tag_title">Add Tag</string>
-    <string name="dialog_tag_tag">dialog_input_tag</string>
+    <string name="dialog_tag_title">Modify Tag</string>
+    <string name="dialog_tag_key">dialog_input_tag</string>
     <string name="dialog_tag_error">Tag cannot be empty</string>
     <string name="dialog_tag_hint">Tag</string>
     <string name="dialog_tag_button">Save</string>

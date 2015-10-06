@@ -22,9 +22,10 @@ public class MainActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private WifiListFragment mainWifiFragment;
-    public static final String MAIN_FRAGMENT_TAG = "main_fragment_tag";
     private static final String TAG = "MainActivity";
-    ActivityOptionsCompat mCompat;
+    private ActivityOptionsCompat mCompat;
+
+    public static final String MAIN_FRAGMENT_TAG = "main_fragment_tag";
 
 
     @Override

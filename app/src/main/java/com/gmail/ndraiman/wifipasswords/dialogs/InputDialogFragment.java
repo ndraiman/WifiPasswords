@@ -107,14 +107,18 @@ public class InputDialogFragment extends DialogFragment {
                 final ArrayList<WifiEntry> listWifi = bundle.getParcelableArrayList(ENTRIES_KEY);
                 final ArrayList<Integer> indexWifi = bundle.getIntegerArrayList(POSITIONS_LEY);
 
+                if(listWifi != null && listWifi.size() == 1) {
+                    mTitle.setText(listWifi.get(0).getTag());
+                    mTitle.setSelection(mTitle.getText().toString().length());
+                }
 
                 mConfirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Log.d(TAG, "mConfirm - onClick");
 
-                        if (mTitle.getText() == null || mTitle.getText().toString().isEmpty()) {
-                            mTitle.setError(getString(R.string.dialog_tag_error));
+                        if (mTitle.getText() == null) {
+                            Log.e(TAG, "mTitle.getText() = null");
                             return; //return to dialog
                         }
 
@@ -127,8 +131,6 @@ public class InputDialogFragment extends DialogFragment {
                 break;
 
         }
-
-
 
         mCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,6 +145,8 @@ public class InputDialogFragment extends DialogFragment {
         return layout;
     }
 
+
+
     @Override
     public void onResume() {
         super.onResume();
@@ -156,6 +160,8 @@ public class InputDialogFragment extends DialogFragment {
 
         dialogWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
+
+
 
     private boolean hasErrors() {
         boolean hasError = false;

@@ -639,6 +639,13 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                         Bundle bundle = new Bundle();
                         bundle.putParcelableArrayList(InputDialogFragment.ENTRIES_KEY, selectedEntries);
                         bundle.putIntegerArrayList(InputDialogFragment.POSITIONS_LEY, selectedItems);
+
+                        //add current tag to InputDialog text field
+//                        String[] currentTags = new String[selectedEntries.size()];
+//                        for (int i = 0; i < currentTags.length; i++) {
+//                            currentTags[i] = selectedEntries.get(i).getTag();
+//                        }
+
                         InputDialogFragment fragment = InputDialogFragment.getInstance(InputDialogFragment.INPUT_TAG, bundle);
                         fragment.setTargetFragment(getFragmentManager().findFragmentByTag(MainActivity.MAIN_FRAGMENT_TAG), R.integer.dialog_tag_code);
                         fragment.show(getFragmentManager(), getString(R.string.dialog_add_key));
