@@ -7,6 +7,7 @@
     <integer name="dialog_error_code">51</integer>
     <integer name="dialog_warning_code">52</integer>
     <integer name="dialog_add_code">53</integer>
+    <integer name="dialog_tag_code">54</integer>
 
     <integer name="dialog_confirm">0</integer>
     <integer name="dialog_cancel">1</integer>

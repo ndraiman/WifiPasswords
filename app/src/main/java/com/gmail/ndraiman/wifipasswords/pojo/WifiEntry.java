@@ -20,6 +20,7 @@ public class WifiEntry implements Parcelable {
 
     private String title;
     private String password;
+    private String tag = "";
 
     public WifiEntry() {}
 
@@ -45,6 +46,14 @@ public class WifiEntry implements Parcelable {
         this.password = password;
     }
 
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
+
     @Override
     public String toString() {
         return "Wifi: " + title + ", pass: " + password + "\n";
@@ -59,6 +68,7 @@ public class WifiEntry implements Parcelable {
     protected WifiEntry(Parcel in) {
         title = in.readString();
         password = in.readString();
+        tag = in.readString();
     }
 
 
@@ -72,5 +82,6 @@ public class WifiEntry implements Parcelable {
         //Log.d(LOG_TAG, "writeToParcel WifiEntry");
         dest.writeString(title);
         dest.writeString(password);
+        dest.writeString(tag);
     }
 }

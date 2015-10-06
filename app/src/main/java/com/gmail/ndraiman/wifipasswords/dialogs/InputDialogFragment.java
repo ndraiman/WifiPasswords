@@ -3,6 +3,7 @@ package com.gmail.ndraiman.wifipasswords.dialogs;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,13 +26,29 @@ import java.util.ArrayList;
 public class InputDialogFragment extends DialogFragment {
 
     private static final String TAG = "InputDialogFragment";
+    private static final String TYPE_KEY = "type_key";
+
+    public static final String ENTRIES_KEY = "entries_key";
+    public static final String POSITIONS_LEY = "positions_key";
+
+    public static final int INPUT_ENTRY = 0;
+    public static final int INPUT_TAG = 1;
+
     private EditText mTitle, mPassword;
     private Button mCancel, mConfirm;
     private LinearLayout mRoot;
 
-    public static InputDialogFragment getInstance() {
+    public static InputDialogFragment getInstance(int type, Bundle bundle) {
+        InputDialogFragment fragment = new InputDialogFragment();
 
-        return new InputDialogFragment();
+        if(bundle == null) {
+            Log.d(TAG, "getInstance() called with bundle = null");
+            bundle = new Bundle();
+        }
+        bundle.putInt(TYPE_KEY, type);
+        fragment.setArguments(bundle);
+
+        return fragment;
     }
 
 
@@ -39,13 +56,16 @@ public class InputDialogFragment extends DialogFragment {
 
     }
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Log.d(TAG, "onCreateView");
         View layout = inflater.inflate(R.layout.dialog_input, container);
 
-        getDialog().setTitle(R.string.dialog_add_title);
+        final Bundle bundle = getArguments();
+        int type = bundle.getInt(TYPE_KEY);
+        Log.d(TAG, "type = " + type);
 
         mTitle = (EditText) layout.findViewById(R.id.input_title);
         mPassword = (EditText) layout.findViewById(R.id.input_password);
@@ -53,19 +73,62 @@ public class InputDialogFragment extends DialogFragment {
         mCancel = (Button) layout.findViewById(R.id.input_cancel);
         mRoot = (LinearLayout) layout.findViewById(R.id.dialog_add_container);
 
-        mConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d(TAG, "mConfirm - onClick");
+        final InputDialogListener listener = (InputDialogListener) getTargetFragment();
 
-                if (hasErrors())
-                    return; //return to dialog
+        switch (type) {
 
-                InputDialogListener listener = (InputDialogListener) getTargetFragment();
-                listener.onSubmitInputDialog(mTitle.getText().toString(), mPassword.getText().toString());
-                dismiss();
-            }
-        });
+            case INPUT_ENTRY:
+                Log.d(TAG, "type = INPUT_ENTRY");
+                getDialog().setTitle(R.string.dialog_add_title);
+                mConfirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d(TAG, "mConfirm - onClick");
+
+                        if (hasErrors())
+                            return; //return to dialog
+
+                        listener.onSubmitAddDialog(mTitle.getText().toString(), mPassword.getText().toString());
+                        dismiss();
+                    }
+                });
+
+                break;
+
+            case INPUT_TAG:
+                Log.d(TAG, "type = INPUT_TAG");
+                getDialog().setTitle(R.string.dialog_tag_title);
+                mPassword.setVisibility(View.GONE);
+                mTitle.setHint(R.string.dialog_tag_hint);
+                TextInputLayout input = (TextInputLayout) layout.findViewById(R.id.input_title_layout);
+                input.setHint("");
+                mConfirm.setText(R.string.dialog_tag_button);
+
+                final ArrayList<WifiEntry> listWifi = bundle.getParcelableArrayList(ENTRIES_KEY);
+                final ArrayList<Integer> indexWifi = bundle.getIntegerArrayList(POSITIONS_LEY);
+
+
+                mConfirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d(TAG, "mConfirm - onClick");
+
+                        if (mTitle.getText() == null || mTitle.getText().toString().isEmpty()) {
+                            mTitle.setError(getString(R.string.dialog_tag_error));
+                            return; //return to dialog
+                        }
+
+                        listener.onSubmitTagDialog(mTitle.getText().toString(),
+                                listWifi, indexWifi);
+                        dismiss();
+                    }
+                });
+
+                break;
+
+        }
+
+
 
         mCancel.setOnClickListener(new View.OnClickListener() {
             @Override

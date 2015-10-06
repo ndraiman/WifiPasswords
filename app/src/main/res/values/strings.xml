@@ -71,9 +71,9 @@
         <item>Cancel</item>
     </string-array>
 
-    <string name="dialog_input_title_hint">Title</string>
-    <string name="dialog_input_password_hint">Password</string>
-    <string name="dialog_add_tag">dialog_add</string>
+    <string name="dialog_add_title_hint">Title</string>
+    <string name="dialog_add_password_hint">Password</string>
+    <string name="dialog_add_key">dialog_input_add</string>
     <string name="dialog_add_title">Add Wifi Entry</string>
     <string name="dialog_add_error_empty">One or More fields are blank</string>
     <string name="dialog_add_title_empty">Title cannot be empty</string>
@@ -82,5 +82,12 @@
         <item>Add</item>
         <item>Cancel</item>
     </string-array>
+
+    <string name="dialog_tag_title">Add Tag</string>
+    <string name="dialog_tag_tag">dialog_input_tag</string>
+    <string name="dialog_tag_error">Tag cannot be empty</string>
+    <string name="dialog_tag_hint">Tag</string>
+    <string name="dialog_tag_button">Save</string>
+
 
 </resources>

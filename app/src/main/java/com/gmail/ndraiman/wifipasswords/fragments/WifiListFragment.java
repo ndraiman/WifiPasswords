@@ -36,6 +36,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.gmail.ndraiman.wifipasswords.R;
+import com.gmail.ndraiman.wifipasswords.activities.MainActivity;
 import com.gmail.ndraiman.wifipasswords.activities.SettingsActivity;
 import com.gmail.ndraiman.wifipasswords.database.PasswordDB;
 import com.gmail.ndraiman.wifipasswords.dialogs.CustomAlertDialogFragment;
@@ -291,7 +292,6 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     }
 
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "onActivityResult");
@@ -302,9 +302,9 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
                 if (resultCode == Activity.RESULT_OK) {
                     Log.d(TAG, "HiddenWifiActivity - Items Restored");
-                    if( data != null) {
+                    if (data != null) {
 
-                        ArrayList<WifiEntry> itemsRestored =  data.getParcelableArrayListExtra(STATE_RESTORED_ENTRIES);
+                        ArrayList<WifiEntry> itemsRestored = data.getParcelableArrayListExtra(STATE_RESTORED_ENTRIES);
                         for (int i = 0; i < itemsRestored.size(); i++) {
                             WifiEntry entry = itemsRestored.get(i);
                             mAdapter.addItem(i, entry);
@@ -555,6 +555,11 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                 MenuInflater menuInflater = mode.getMenuInflater();
                 menuInflater.inflate(R.menu.menu_context, menu);
 
+                //Fix for CAB forcing icons into overflow menu - doing this via XML doesnt work.
+                for (int i = 0; i < menu.size(); i++) {
+                    menu.getItem(i).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+                }
+
                 isActionModeOn = true;
 
                 return true;
@@ -627,6 +632,17 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                     case R.id.menu_context_share:
 
                         shareWifiList(selectedEntries);
+                        return true;
+
+                    case R.id.menu_context_tag:
+                        //TODO EditText Dialog to write Tag
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelableArrayList(InputDialogFragment.ENTRIES_KEY, selectedEntries);
+                        bundle.putIntegerArrayList(InputDialogFragment.POSITIONS_LEY, selectedItems);
+                        InputDialogFragment fragment = InputDialogFragment.getInstance(InputDialogFragment.INPUT_TAG, bundle);
+                        fragment.setTargetFragment(getFragmentManager().findFragmentByTag(MainActivity.MAIN_FRAGMENT_TAG), R.integer.dialog_tag_code);
+                        fragment.show(getFragmentManager(), getString(R.string.dialog_add_key));
+
                         return true;
 
 
@@ -703,8 +719,8 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     /********************************************************/
 
     @Override
-    public void onSubmitInputDialog(String title, String password) {
-        Log.d(TAG, "onSubmitInputDialog");
+    public void onSubmitAddDialog(String title, String password) {
+        Log.d(TAG, "onSubmitAddDialog");
         WifiEntry entry = new WifiEntry(title, password);
         mAdapter.addItem(0, entry);
         mRecyclerView.scrollToPosition(0);
@@ -725,10 +741,26 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     private void showAddWifiDialog() {
         Log.d(TAG, "showAddWifiDialog");
 
-        InputDialogFragment fragment = InputDialogFragment.getInstance();
+        InputDialogFragment fragment = InputDialogFragment
+                .getInstance(InputDialogFragment.INPUT_ENTRY, null);
         fragment.setTargetFragment(this, R.integer.dialog_add_code);
-        fragment.show(getFragmentManager(), getString(R.string.dialog_add_tag));
+        fragment.show(getFragmentManager(), getString(R.string.dialog_add_key));
 
+    }
+
+    @Override
+    public void onSubmitTagDialog(String tag, ArrayList<WifiEntry> listWifi, ArrayList<Integer> positions) {
+        Log.d(TAG, "onSubmitTagDialog() called with: " + "tag = [" + tag + "]");
+
+        for (int i = 0; i < positions.size(); i++) {
+
+            mListWifi.get(positions.get(i)).setTag(tag);
+        }
+
+        mActionMode.finish();
+        mAdapter.notifyDataSetChanged();
+        MyApplication.getWritableDatabase().insertWifiTags(listWifi, tag);
+        MyApplication.closeDatabase();
     }
 
     private void showReloadWarningDialog() {

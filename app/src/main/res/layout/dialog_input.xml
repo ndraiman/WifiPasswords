@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:hint="@string/dialog_input_title_hint" />
+            android:hint="@string/dialog_add_title_hint" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:hint="@string/dialog_input_password_hint" />
+            android:hint="@string/dialog_add_password_hint" />
 
     </android.support.design.widget.TextInputLayout>
 
