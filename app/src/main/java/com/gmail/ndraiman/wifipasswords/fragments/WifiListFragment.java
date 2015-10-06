@@ -766,7 +766,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
         mActionMode.finish();
         mAdapter.notifyDataSetChanged();
-        MyApplication.getWritableDatabase().insertWifiTags(listWifi, tag);
+        MyApplication.getWritableDatabase().updateWifiTags(listWifi, tag);
         MyApplication.closeDatabase();
     }
 
@@ -827,7 +827,9 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
         for (WifiEntry entry : listWifi) {
             final String title = entry.getTitle().toLowerCase();
-            if (title.contains(query)) {
+            final String tag = entry.getTag().toLowerCase();
+
+            if (title.contains(query) || tag.contains(query)) {
                 filteredWifiList.add(entry);
             }
         }

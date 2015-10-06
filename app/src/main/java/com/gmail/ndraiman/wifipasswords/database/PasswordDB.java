@@ -31,7 +31,7 @@ public class PasswordDB {
     /****************** Update Methods ********************/
     /******************************************************/
 
-    public void insertWifiTags(ArrayList<WifiEntry> listWifi, String tag) {
+    public void updateWifiTags(ArrayList<WifiEntry> listWifi, String tag) {
 
         ContentValues values = new ContentValues();
 
