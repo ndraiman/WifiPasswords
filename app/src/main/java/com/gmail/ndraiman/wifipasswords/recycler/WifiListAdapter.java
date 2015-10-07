@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gmail.ndraiman.wifipasswords.R;
+import com.gmail.ndraiman.wifipasswords.extras.AnimationUtils;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
 
 import java.util.ArrayList;

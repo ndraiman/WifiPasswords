@@ -5,9 +5,9 @@
     android:layout_height="?attr/actionBarSize"
     android:background="@color/colorPrimary"
     android:paddingTop="@dimen/app_bar_top_padding"
+    app:layout_collapseMode="pin"
     app:layout_scrollFlags="scroll|enterAlways"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-    app:layout_collapseMode="pin"
     app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
 

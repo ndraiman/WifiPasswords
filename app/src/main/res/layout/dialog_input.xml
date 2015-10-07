@@ -3,6 +3,7 @@
     android:id="@+id/dialog_add_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:elevation="8dp"
     android:orientation="vertical">
 
     <android.support.design.widget.TextInputLayout

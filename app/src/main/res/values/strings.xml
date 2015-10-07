@@ -34,7 +34,7 @@
     <string name="action_sort_done">Done Sorting</string>
 
     <!-- Preference Activity -->
-    <string name="pref_category_behavior">Behavior</string>
+    <string name="pref_category_general">General</string>
     <string name="pref_path_default">/data/misc/wifi/wpa_supplicant.conf</string>
     <string name="pref_path_manual_key">pref_path_manual</string>
     <string name="pref_path_manual_title">Manual Location</string>

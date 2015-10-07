@@ -1,4 +1,4 @@
-package com.gmail.ndraiman.wifipasswords.recycler;
+package com.gmail.ndraiman.wifipasswords.extras;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
