@@ -1,32 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.gmail.ndraiman.wifipasswords" >
+    package="com.gmail.ndraiman.wifipasswords">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name=".extras.MyApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".activities.MainActivity"
-            android:label="@string/app_name"
-            android:launchMode="singleInstance">
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.SettingsActivity"
-            android:label="@string/action_settings"
-            android:parentActivityName=".activities.MainActivity">
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:label="@string/action_settings">
         </activity>
-        <activity android:name=".activities.HiddenWifiActivity"
-            android:label="@string/activity_title_hidden_wifi"
-            android:parentActivityName=".activities.MainActivity">
+        <activity
+            android:name=".activities.HiddenWifiActivity"
+            android:label="@string/activity_title_hidden_wifi">
         </activity>
     </application>
 

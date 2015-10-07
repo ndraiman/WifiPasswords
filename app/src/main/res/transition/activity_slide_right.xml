@@ -2,7 +2,8 @@
 <transitionSet xmlns:android="http://schemas.android.com/apk/res/android">
     <slide
         android:duration="350"
-        android:slideEdge="right">
+        android:slideEdge="right"
+        android:interpolator="@android:interpolator/anticipate">
 
         <targets>
             <target android:excludeId="@android:id/statusBarBackground" />
@@ -11,7 +12,8 @@
 
     </slide>
 
-    <fade>
+    <fade
+        android:duration="350">
         <targets>
             <target android:excludeId="@android:id/statusBarBackground" />
             <target android:excludeId="@android:id/navigationBarBackground"/>

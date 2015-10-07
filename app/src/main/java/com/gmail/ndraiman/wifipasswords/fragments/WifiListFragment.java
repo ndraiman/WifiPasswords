@@ -621,7 +621,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                                                 mAdapter.addItem(selectedItems.get(i), selectedEntries.get(i));
 
                                             }
-                                            mRecyclerView.scrollToPosition(selectedItems.get(0));
+//                                            mRecyclerView.scrollToPosition(selectedItems.get(0));
                                             db.deleteWifiEntries(selectedEntries, true);
                                         }
                                     })
