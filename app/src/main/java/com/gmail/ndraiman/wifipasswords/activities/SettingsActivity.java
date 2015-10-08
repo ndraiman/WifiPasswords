@@ -132,7 +132,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     preference.setSummary(stringValue);
 
                     //Toggle Manual location entry according to List Choice
-                    if(stringValue.equals(getString(R.string.pref_path_list_manual))) {
+                    if (stringValue.equals(getString(R.string.pref_path_list_manual))) {
 
                         findPreference(getString(R.string.pref_path_manual_key)).setEnabled(true);
                         findPreference(getString(R.string.pref_reset_manual_key)).setEnabled(true);
@@ -182,7 +182,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-            if(Build.VERSION.SDK_INT >= 21)
+            if (Build.VERSION.SDK_INT >= 21)
                 setEnterTransition(TransitionInflater.from(getActivity()).inflateTransition(R.transition.activity_slide_left));
 
             View layout = inflater.inflate(R.layout.fragment_settings, container, false);
@@ -233,7 +233,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_path_list_key)));
 
         }
-        
+
 
         //Restore wpa_supplicant path to default
         private void resetPathPref() {
@@ -257,28 +257,28 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         private void showResetWarningDialog() {
             Log.d(TAG, "showResetWarningDialog");
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialogTheme);
-            builder.setMessage(R.string.dialog_warning_message)
-                    .setTitle(R.string.dialog_warning_title);
-
             String[] buttons = getResources().getStringArray(R.array.dialog_warning_buttons);
 
-            //Send Result Codes to target fragment according to button clicked
-            builder.setPositiveButton(buttons[0], new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    getActivity().setResult(R.integer.reset_to_default);
-                    getActivity().finish();
-                }
-            }).setNegativeButton(buttons[1], new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //Dismiss Dialog
-                }
-            });
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialogTheme);
 
-            AlertDialog dialog = builder.create();
-            dialog.show();
+            //Send Result Codes to target fragment according to button clicked
+            builder.setMessage(R.string.dialog_warning_message)
+                    .setTitle(R.string.dialog_warning_title)
+                    .setPositiveButton(buttons[0], new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            getActivity().setResult(R.integer.reset_to_default);
+                            getActivity().finish();
+                        }
+                    })
+                    .setNegativeButton(buttons[1], new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //Dismiss Dialog
+                        }
+                    });
+
+            builder.create().show();
         }
 
 

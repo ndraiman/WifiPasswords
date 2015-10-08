@@ -29,7 +29,7 @@
         android:id="@+id/hidden_wifi_list_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layoutAnimation="@anim/layout_right_to_left_slide"
+        android:layoutAnimation="@anim/layout_left_to_right_slide"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </android.support.design.widget.CoordinatorLayout>

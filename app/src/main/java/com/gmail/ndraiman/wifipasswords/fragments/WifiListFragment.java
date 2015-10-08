@@ -517,7 +517,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setHasFixedSize(true);
-        mAdapter = new WifiListAdapter(getActivity(), this);
+        mAdapter = new WifiListAdapter(getActivity(), true, this);
         mRecyclerView.setAdapter(mAdapter);
 
         //Setup ItemTouchHelper
@@ -792,7 +792,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
         CustomAlertDialogFragment fragment = CustomAlertDialogFragment.getInstance(title, message, buttons);
         fragment.setTargetFragment(this, R.integer.dialog_warning_code);
-        fragment.show(getFragmentManager(), getString(R.string.dialog_warning_tag));
+        fragment.show(getFragmentManager(), getString(R.string.dialog_warning_key));
 
     }
 
@@ -807,7 +807,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
         CustomAlertDialogFragment fragment = CustomAlertDialogFragment.getInstance(title, message, buttons);
         fragment.setTargetFragment(this, R.integer.dialog_error_code);
-        fragment.show(getFragmentManager(), getString(R.string.dialog_error_tag));
+        fragment.show(getFragmentManager(), getString(R.string.dialog_error_key));
     }
 
 

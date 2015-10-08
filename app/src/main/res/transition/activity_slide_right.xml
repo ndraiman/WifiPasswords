@@ -12,13 +12,13 @@
 
     </slide>
 
-    <fade
-        android:duration="@integer/activity_animation_duration"
-        android:interpolator="@android:interpolator/accelerate_cubic">
-        <targets>
-            <target android:excludeId="@android:id/statusBarBackground" />
-            <target android:excludeId="@android:id/navigationBarBackground"/>
-        </targets>
-    </fade>
+    <!--<fade-->
+        <!--android:duration="@integer/activity_animation_duration"-->
+        <!--android:interpolator="@android:interpolator/accelerate_cubic">-->
+        <!--<targets>-->
+            <!--<target android:excludeId="@android:id/statusBarBackground" />-->
+            <!--<target android:excludeId="@android:id/navigationBarBackground"/>-->
+        <!--</targets>-->
+    <!--</fade>-->
 
 </transitionSet>

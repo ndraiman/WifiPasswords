@@ -138,7 +138,7 @@ public class HiddenWifiActivity extends AppCompatActivity {
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setHasFixedSize(true);
-        mAdapter = new WifiListAdapter(this, null);
+        mAdapter = new WifiListAdapter(this, false, null);
         mRecyclerView.setAdapter(mAdapter);
 
         //Setup ItemTouchHelper
@@ -188,9 +188,4 @@ public class HiddenWifiActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(R.anim.left_in, R.anim.right_out);
-    }
 }

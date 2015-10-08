@@ -32,15 +32,17 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     private ItemDragListener mDragListener;
     private int mPreviousPosition = -1; //used for Item Animation
     private boolean mShowDragHandler;
+    private boolean isAnimated;
     private Context mContext;
     private SparseBooleanArray mSelectedItems = new SparseBooleanArray();
 
-    public WifiListAdapter(Context context, ItemDragListener dragListener) {
+    public WifiListAdapter(Context context, boolean isAnimated, ItemDragListener dragListener) {
         layoutInflater = LayoutInflater.from(context);
         mContext = context;
         mDragListener = dragListener;
         mListWifi = new ArrayList<>();
         mShowDragHandler = false;
+        this.isAnimated = isAnimated;
     }
 
     @Override
@@ -84,7 +86,9 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
         toggleTagAndDrag(holder);
         
         //Set Animation
-        setAnimation(holder.mContainer, position);
+        if(isAnimated) {
+            setAnimation(holder.mContainer, position);
+        }
 
     }
 

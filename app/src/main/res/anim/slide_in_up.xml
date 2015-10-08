@@ -11,11 +11,4 @@
         android:fromAlpha="0.0"
         android:toAlpha="1.0" />
 
-    <rotate
-        android:duration="@integer/config_slide_time"
-        android:fromDegrees="25"
-        android:pivotX="0"
-        android:pivotY="0"
-        android:toDegrees="0" />
-
 </set>

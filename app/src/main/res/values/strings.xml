@@ -58,8 +58,8 @@
     <string name="pref_path_list_manual">Manual</string>
 
 
-    <!-- Dialog Fragment -->
-    <string name="dialog_error_tag">dialog_error</string>
+    <!-- Alert Dialogs -->
+    <string name="dialog_error_key">dialog_error</string>
     <string name="dialog_error_title">Error!</string>
     <string name="dialog_error_message">Could not locate File \n would you like to change path settings?</string>
     <string-array name="dialog_error_buttons">
@@ -67,7 +67,7 @@
         <item>Dismiss</item>
     </string-array>
 
-    <string name="dialog_warning_tag">dialog_warning</string>
+    <string name="dialog_warning_key">dialog_warning</string>
     <string name="dialog_warning_title">Warning!</string>
     <string name="dialog_warning_message">Reloading data from file will erase current database</string>
     <string-array name="dialog_warning_buttons">
@@ -75,6 +75,15 @@
         <item>Cancel</item>
     </string-array>
 
+    <string name="dialog_exit_key">dialog_exit</string>
+    <string name="dialog_exit_title">Exit</string>
+    <string name="dialog_exit_message">Are you sure you want to close Wifi Passwords?</string>
+    <string-array name="dialog_exit_buttons">
+        <item>Yes</item>
+        <item>No</item>
+    </string-array>
+
+    <!-- Dialog Fragment -->
     <string name="dialog_add_title_hint">Title</string>
     <string name="dialog_add_password_hint">Password</string>
     <string name="dialog_add_key">dialog_input_add</string>

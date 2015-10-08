@@ -4,18 +4,11 @@
     <translate
         android:duration="@integer/config_slide_time"
         android:fromYDelta="0"
-        android:toYDelta="-100%p" />
+        android:toYDelta="100%p" />
 
     <alpha
         android:duration="@integer/config_slide_time"
         android:fromAlpha="1.0"
         android:toAlpha="0.0" />
-
-    <rotate
-        android:duration="@integer/config_slide_time"
-        android:fromDegrees="0"
-        android:pivotX="0"
-        android:pivotY="0"
-        android:toDegrees="-25" />
 
 </set>

@@ -1,12 +1,14 @@
 package com.gmail.ndraiman.wifipasswords.activities;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.Transition;
@@ -72,7 +74,29 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        super.onBackPressed();
+        //Dialog to confirm Exit
+
+        String[] buttons = getResources().getStringArray(R.array.dialog_exit_buttons);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
+        builder.setTitle(R.string.dialog_exit_title)
+                .setMessage(R.string.dialog_exit_message)
+                .setPositiveButton(buttons[0], new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
+                    }
+                })
+                .setNegativeButton(buttons[1], new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Dismiss Dialog
+                    }
+                });
+
+
+        builder.create().show();
     }
 
     @Override
@@ -102,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_settings:
                 //Start Settings with Transition
 //                mCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, null);
-                mCompat = ActivityOptionsCompat.makeCustomAnimation(this,R.anim.right_in, R.anim.left_out);
+                mCompat = ActivityOptionsCompat.makeCustomAnimation(this, R.anim.right_in, R.anim.left_out);
                 startActivityForResult(new Intent(this, SettingsActivity.class), R.integer.reset_to_default, mCompat.toBundle());
                 return true;
 
