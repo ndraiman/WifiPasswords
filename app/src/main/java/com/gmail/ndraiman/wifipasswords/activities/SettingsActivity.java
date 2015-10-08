@@ -257,7 +257,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         private void showResetWarningDialog() {
             Log.d(TAG, "showResetWarningDialog");
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialogTheme);
             builder.setMessage(R.string.dialog_warning_message)
                     .setTitle(R.string.dialog_warning_title);
 
