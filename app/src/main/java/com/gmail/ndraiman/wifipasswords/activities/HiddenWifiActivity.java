@@ -1,6 +1,7 @@
 package com.gmail.ndraiman.wifipasswords.activities;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -10,6 +11,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.MenuItem;
 
@@ -57,16 +60,16 @@ public class HiddenWifiActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate");
 
         //Set Activity Transition - Lollipop+
-//        if(Build.VERSION.SDK_INT >= 21) {
-//
-//            TransitionInflater transitionInflater = TransitionInflater.from(this);
-//            Transition slideFromRight = transitionInflater.inflateTransition(R.transition.activity_slide_right);
-//            Transition slideFromLeft = transitionInflater.inflateTransition(R.transition.activity_slide_left);
-//
-//            getWindow().setEnterTransition(slideFromLeft);
-//            getWindow().setExitTransition(slideFromRight);
-//
-//        }
+        if(Build.VERSION.SDK_INT >= 21) {
+
+            TransitionInflater transitionInflater = TransitionInflater.from(this);
+            Transition slideFromRight = transitionInflater.inflateTransition(R.transition.activity_slide_right);
+            Transition slideFromLeft = transitionInflater.inflateTransition(R.transition.activity_slide_left);
+
+            getWindow().setEnterTransition(slideFromLeft);
+            getWindow().setExitTransition(slideFromRight);
+
+        }
         setContentView(R.layout.activity_hidden_wifi);
 
         mListWifi = new ArrayList<>();

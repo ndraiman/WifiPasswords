@@ -648,7 +648,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                         return true;
 
                     case R.id.menu_context_tag:
-                        //TODO EditText Dialog to write Tag
+
                         Bundle bundle = new Bundle();
                         bundle.putParcelableArrayList(InputDialogFragment.ENTRIES_KEY, selectedEntries);
                         bundle.putIntegerArrayList(InputDialogFragment.POSITIONS_LEY, selectedItems);
