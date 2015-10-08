@@ -13,7 +13,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,22 +39,22 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         super.onCreate(savedInstanceState);
 
         //Set Activity Transition - Lollipop+
-        if(Build.VERSION.SDK_INT >= 21) {
-
-            TransitionInflater transitionInflater = TransitionInflater.from(this);
-            Transition slideFromRight = transitionInflater.inflateTransition(R.transition.activity_slide_right);
-            Transition slideFromLeft = transitionInflater.inflateTransition(R.transition.activity_slide_left);
-
-            getWindow().setEnterTransition(slideFromLeft);
-            getWindow().setExitTransition(slideFromRight);
-
-        }
+//        if(Build.VERSION.SDK_INT >= 21) {
+//
+//            TransitionInflater transitionInflater = TransitionInflater.from(this);
+//            Transition slideFromRight = transitionInflater.inflateTransition(R.transition.activity_slide_right);
+//            Transition slideFromLeft = transitionInflater.inflateTransition(R.transition.activity_slide_left);
+//
+//            getWindow().setEnterTransition(slideFromLeft);
+//            getWindow().setExitTransition(slideFromRight);
+//
+//        }
 
         setContentView(R.layout.activity_settings);
 
         // Display the fragment as the main content
         getFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.fragment_slide_in, R.anim.fragment_slide_out, R.anim.fragment_slide_in, R.anim.fragment_slide_out)
+//                .setCustomAnimations(R.anim.fragment_slide_in, R.anim.fragment_slide_out, R.anim.fragment_slide_in, R.anim.fragment_slide_out)
                 .replace(R.id.settings_frame, new SettingsFragment()).commit();
 
     }
@@ -98,6 +97,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.left_in, R.anim.right_out);
+    }
 
 
     /***************************************************************/

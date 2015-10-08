@@ -2,15 +2,12 @@ package com.gmail.ndraiman.wifipasswords.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.transition.Transition;
-import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,12 +31,12 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, "onCreate");
 
         //Set Activity Transition - Lollipop+
-        if (Build.VERSION.SDK_INT >= 21) {
-            TransitionInflater transitionInflater = TransitionInflater.from(this);
-            Transition transition = transitionInflater.inflateTransition(R.transition.activity_slide_left);
-            getWindow().setExitTransition(transition);
-
-        }
+//        if (Build.VERSION.SDK_INT >= 21) {
+//            TransitionInflater transitionInflater = TransitionInflater.from(this);
+//            Transition transition = transitionInflater.inflateTransition(R.transition.activity_slide_left);
+//            getWindow().setExitTransition(transition);
+//
+//        }
 
         setContentView(R.layout.activity_main);
 
@@ -94,13 +91,15 @@ public class MainActivity extends AppCompatActivity {
         switch (id) {
 
             case R.id.action_hidden_list:
-                mCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, null);
+                //mCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, null);
+                mCompat = ActivityOptionsCompat.makeCustomAnimation(this,R.anim.right_in, R.anim.left_out);
                 startActivityForResult(new Intent(this, HiddenWifiActivity.class), R.integer.activity_hidden_code, mCompat.toBundle());
                 return true;
 
             case R.id.action_settings:
                 //Start Settings with Transition
-                mCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, null);
+//                mCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, null);
+                mCompat = ActivityOptionsCompat.makeCustomAnimation(this,R.anim.right_in, R.anim.left_out);
                 startActivityForResult(new Intent(this, SettingsActivity.class), R.integer.reset_to_default, mCompat.toBundle());
                 return true;
 
