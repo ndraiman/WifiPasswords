@@ -45,7 +45,7 @@ public class CustomAlertDialogFragment extends DialogFragment {
         String message = bundle.getString(MESSAGE_KEY);
         String[] buttons = bundle.getStringArray(BUTTONS_KEY);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.CustomErrorDialog);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setMessage(message)
                 .setTitle(title);
 

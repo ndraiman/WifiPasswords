@@ -161,7 +161,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             super.onCreate(savedInstanceState);
             Log.d(TAG, "SettingsFragment - onCreate");
 
-            getActivity().setTheme(R.style.AppTheme); //TODO theme according to preference
+            getActivity().setTheme(R.style.AppTheme);
             setHasOptionsMenu(true);
 
             getActivity().setResult(RESULT_CANCELED);
@@ -253,7 +253,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         private void showResetWarningDialog() {
             Log.d(TAG, "showResetWarningDialog");
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.CustomErrorDialog);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             builder.setMessage(R.string.dialog_warning_message)
                     .setTitle(R.string.dialog_warning_title);
 

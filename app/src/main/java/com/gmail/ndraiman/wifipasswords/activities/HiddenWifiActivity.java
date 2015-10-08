@@ -14,6 +14,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.gmail.ndraiman.wifipasswords.R;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
@@ -172,4 +173,18 @@ public class HiddenWifiActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        switch (id) {
+
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }

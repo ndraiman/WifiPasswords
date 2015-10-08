@@ -12,13 +12,50 @@
         <item name="windowActionModeOverlay">true</item>
         <!--<item name="actionModeBackground">@color/colorPrimary</item>-->
 
-    </style>
-
-    <style name="CustomErrorDialog" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:dialogTheme">@style/InputDialogTheme</item>
+        <item name="android:alertDialogTheme">@style/CustomAlertDialogTheme</item>
 
     </style>
 
+
+    <!-- Alert Dialog Theme -->
+    <style name="CustomAlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowAnimationStyle">@style/CustomAlertDialogTheme.Animation</item>
+
+    </style>
+
+    <style name="CustomAlertDialogTheme.Animation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_up_left</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_up_left</item>
+        <item name="android:interpolator">@android:interpolator/accelerate_decelerate</item>
+    </style>
+
+    <!-- DialogFragment Theme -->
+    <style name="InputDialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <!-- Colors -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorControlHighlight">@color/colorHighlight</item>
+
+        <!-- Windows Properties -->
+        <item name="android:windowNoTitle">false</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+        <item name="android:windowAnimationStyle">@style/InputDialogTheme.Animation</item>
+
+    </style>
+
+
+    <style name="InputDialogTheme.Animation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_up_left</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_up_left</item>
+        <item name="android:interpolator">@android:interpolator/anticipate</item>
+    </style>
+
+    <!-- FAB -->
     <style name="floating_action_button">
         <item name="android:layout_marginLeft">0dp</item>
         <item name="android:layout_marginTop">0dp</item>

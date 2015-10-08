@@ -265,7 +265,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
             //Alternating Slide Animation - Glitchy when fast scrolling
 //            Animation animation = android.view.animation.AnimationUtils
 //                    .loadAnimation(mContext,
-//                            position%2 == 0 ? R.anim.slide_up_left : R.anim.slide_up_right);
+//                            position%2 == 0 ? R.anim.slide_in_up_left : R.anim.slide_in_up_right);
 //            viewToAnimate.startAnimation(animation);
 
             AnimationUtils.translateY(viewToAnimate, true);

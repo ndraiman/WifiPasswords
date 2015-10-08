@@ -15,7 +15,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:hint="@string/dialog_add_title_hint" />
+            android:hint="@string/dialog_add_title_hint"
+            android:imeOptions="actionNext"
+            android:inputType="text"
+            android:singleLine="true" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -29,14 +32,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:hint="@string/dialog_add_password_hint" />
+            android:hint="@string/dialog_add_password_hint"
+            android:imeOptions="actionGo"
+            android:inputType="text"
+            android:singleLine="true" />
 
     </android.support.design.widget.TextInputLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="end">
 
         <Button
             android:id="@+id/input_cancel"
@@ -44,10 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:layout_weight="1"
-            android:background="@android:color/white"
-            android:text="Cancel"
-            android:textColor="@android:color/black" />
+            android:text="Cancel" />
 
         <Button
             android:id="@+id/input_confirm"
@@ -55,10 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:layout_weight="1"
-            android:background="@color/colorPrimary"
-            android:text="Add"
-            android:textColor="@android:color/white" />
+            android:text="Add" />
 
     </LinearLayout>
 
