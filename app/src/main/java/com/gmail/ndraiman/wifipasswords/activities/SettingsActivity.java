@@ -55,7 +55,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         // Display the fragment as the main content
         getFragmentManager().beginTransaction()
-                .setCustomAnimations(R.anim.fragment_slide_in, R.anim.fragment_slide_out)
+                .setCustomAnimations(R.anim.fragment_slide_in, R.anim.fragment_slide_out, R.anim.fragment_slide_in, R.anim.fragment_slide_out)
                 .replace(R.id.settings_frame, new SettingsFragment()).commit();
 
     }
