@@ -2,12 +2,12 @@
 <set xmlns:android="http://schemas.android.com/apk/res/android">
 
     <translate
-        android:duration="@integer/config_slide_time"
+        android:duration="@integer/activity_animation_duration"
         android:fromYDelta="0"
         android:toYDelta="100%p" />
 
     <alpha
-        android:duration="@integer/config_slide_time"
+        android:duration="@integer/activity_animation_duration"
         android:fromAlpha="1.0"
         android:toAlpha="0.0" />
 

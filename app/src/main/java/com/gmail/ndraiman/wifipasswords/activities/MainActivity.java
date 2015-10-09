@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         finish();
-                        overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_down);
+                        overridePendingTransition(R.anim.activity_slide_in_up, R.anim.activity_slide_out_down);
                     }
                 })
                 .setNegativeButton(buttons[1], new DialogInterface.OnClickListener() {
