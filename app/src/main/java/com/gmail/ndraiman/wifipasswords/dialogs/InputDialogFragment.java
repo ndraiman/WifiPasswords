@@ -107,6 +107,7 @@ public class InputDialogFragment extends DialogFragment {
                 final ArrayList<WifiEntry> listWifi = bundle.getParcelableArrayList(ENTRIES_KEY);
                 final ArrayList<Integer> indexWifi = bundle.getIntegerArrayList(POSITIONS_LEY);
 
+                //if single entry then add current tag to InputDialog text field
                 if(listWifi != null && listWifi.size() == 1) {
                     mTitle.setText(listWifi.get(0).getTag());
                     mTitle.setSelection(mTitle.getText().toString().length());

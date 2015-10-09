@@ -77,10 +77,18 @@
 
     <string name="dialog_exit_key">dialog_exit</string>
     <string name="dialog_exit_title">Exit</string>
-    <string name="dialog_exit_message">Are you sure you want to close Wifi Passwords?</string>
+    <string name="dialog_exit_message">Are you sure you want to close Wifi-Passwords?</string>
     <string-array name="dialog_exit_buttons">
         <item>Yes</item>
         <item>No</item>
+    </string-array>
+
+    <string name="dialog_delete_key">dialog_delete</string>
+    <string name="dialog_delete_title">Delete?</string>
+    <string name="dialog_delete_message">Are you sure? Deleting these items will remove them permanently</string>
+    <string-array name="dialog_delete_buttons">
+        <item>Confirm</item>
+        <item>Cancel</item>
     </string-array>
 
     <!-- Dialog Fragment -->

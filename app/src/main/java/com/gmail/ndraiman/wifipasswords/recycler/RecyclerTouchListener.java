@@ -25,7 +25,15 @@ public class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
 
         gestureDetector = new GestureDetector(context, new GestureDetector.SimpleOnGestureListener() {
 
-
+            @Override
+            public boolean onDoubleTap(MotionEvent e) {
+                Log.d(TAG, "onDoubleTap " + e);
+                View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
+                if(child != null && clickListener != null) {
+                    clickListener.onDoubleTap(child, recyclerView.getChildAdapterPosition(child));
+                }
+                return true;
+            }
 
             @Override
             public boolean onSingleTapUp(MotionEvent e) {
@@ -73,5 +81,6 @@ public class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
     public static interface ClickListener {
         public void onClick(View view, int position);
         public void onLongClick(View view, int position);
+        public void onDoubleTap(View view, int position);
     }
 }

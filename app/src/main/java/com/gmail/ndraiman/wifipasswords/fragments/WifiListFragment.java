@@ -134,6 +134,9 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         //Setup RecyclerView & Adapter
         setupRecyclerView();
 
+        //Setup Context Action Mode
+        setupActionModeCallback();
+
         //Setup Floating Action Button
         setupFAB();
 
@@ -525,9 +528,6 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         mItemTouchHelper = new ItemTouchHelper(mTouchHelperCallback);
         mItemTouchHelper.attachToRecyclerView(mRecyclerView);
 
-        //Setup Context Action Mode
-        setupActionModeCallback();
-
         //Setup OnItemTouchListener
         mRecyclerTouchListener = new RecyclerTouchListener(getActivity(), mRecyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
@@ -553,6 +553,21 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                     return;
                 }
                 mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(mActionModeCallback);
+            }
+
+            @Override
+            public void onDoubleTap(View view, int position) {
+                Log.d(TAG, "RecyclerView - onDoubleTap " + position);
+
+                if(isActionModeOn) {
+                    return;
+                }
+                WifiEntry entry = mListWifi.get(position);
+
+                String textToCopy = "Wifi Name: " + entry.getTitle() + "\n"
+                        + "Password: " + entry.getPassword() + "\n";
+
+                copyToClipboard(COPIED_WIFI_ENTRY, textToCopy, getString(R.string.snackbar_wifi_copy));
             }
         });
 
@@ -589,6 +604,10 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                 Log.d(TAG, "onActionItemClicked");
                 final ArrayList<WifiEntry> selectedEntries = new ArrayList<>();
                 final ArrayList<Integer> selectedItems = mAdapter.getSelectedItems();
+
+                if(selectedItems.size() == 0) {
+                    return false;
+                }
 
                 for (int i = 0; i < selectedItems.size(); i++) {
                     selectedEntries.add(mListWifi.get(selectedItems.get(i)));
@@ -653,15 +672,9 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                         bundle.putParcelableArrayList(InputDialogFragment.ENTRIES_KEY, selectedEntries);
                         bundle.putIntegerArrayList(InputDialogFragment.POSITIONS_LEY, selectedItems);
 
-                        //add current tag to InputDialog text field
-//                        String[] currentTags = new String[selectedEntries.size()];
-//                        for (int i = 0; i < currentTags.length; i++) {
-//                            currentTags[i] = selectedEntries.get(i).getTag();
-//                        }
-
                         InputDialogFragment fragment = InputDialogFragment.getInstance(InputDialogFragment.INPUT_TAG, bundle);
                         fragment.setTargetFragment(getFragmentManager().findFragmentByTag(MainActivity.MAIN_FRAGMENT_TAG), R.integer.dialog_tag_code);
-                        fragment.show(getFragmentManager(), getString(R.string.dialog_add_key));
+                        fragment.show(getFragmentManager(), getString(R.string.dialog_tag_key));
 
                         return true;
 

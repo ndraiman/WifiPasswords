@@ -51,10 +51,10 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/size_list_item"
         android:layout_gravity="top|end"
+        android:background="@android:color/white"
         android:contentDescription="@string/drag_handler_description"
         android:padding="16dp"
         android:scaleType="center"
-        android:background="@android:color/white"
         android:src="@drawable/ic_drag_dark"
         android:tint="@color/colorHighlight" />
 

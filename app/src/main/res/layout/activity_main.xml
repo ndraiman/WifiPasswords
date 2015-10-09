@@ -25,7 +25,9 @@
             app:expandedTitleMarginBottom="32dp"
             app:expandedTitleMarginEnd="64dp"
             app:expandedTitleMarginStart="48dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:titleEnabled="false">
+            <!-- remove titleEnabled = false when title disappearing is fixed -->
 
             <ImageView
                 android:id="@+id/collapsing_header"
