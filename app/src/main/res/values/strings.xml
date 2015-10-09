@@ -57,6 +57,10 @@
     </string-array>
     <string name="pref_path_list_manual">Manual</string>
 
+    <string name="pref_warnings_key">pref_warnings</string>
+    <string name="pref_warnings_title">Reset Warnings</string>
+    <string name="pref_warnings_summary">show warning dialogs</string>
+    <string name="pref_warnings_toast">Will show warnings from now on</string>
 
     <!-- Alert Dialogs -->
     <string name="dialog_error_key">dialog_error</string>
@@ -67,10 +71,10 @@
         <item>Dismiss</item>
     </string-array>
 
-    <string name="dialog_warning_key">dialog_warning</string>
-    <string name="dialog_warning_title">Warning!</string>
-    <string name="dialog_warning_message">Reloading data from file will erase current database</string>
-    <string-array name="dialog_warning_buttons">
+    <string name="dialog_warning_reset_key">dialog_warning</string>
+    <string name="dialog_warning_reset_title">Warning!</string>
+    <string name="dialog_warning_reset_message">Reloading data from file will erase current database</string>
+    <string-array name="dialog_warning_reset_buttons">
         <item>Reload</item>
         <item>Cancel</item>
     </string-array>
@@ -90,6 +94,11 @@
         <item>Confirm</item>
         <item>Cancel</item>
     </string-array>
+
+    <string name="dialog_warning_share_key">dialog_share</string>
+    <string name="dialog_warning_share_title">Warning!</string>
+    <string name="dialog_warning_share_message">Sharing a Wifi network password can compromise its security!</string>
+    <string name="dialog_warning_share_button">Ok</string>
 
     <!-- Dialog Fragment -->
     <string name="dialog_add_title_hint">Title</string>

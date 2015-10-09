@@ -21,9 +21,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.gmail.ndraiman.wifipasswords.R;
 import com.gmail.ndraiman.wifipasswords.extras.AppCompatPreferenceActivity;
+import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
 
 import java.util.List;
 
@@ -228,6 +230,15 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 }
             });
 
+            findPreference(getString(R.string.pref_warnings_key)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    //TODO maybe show dialog warning?
+                    resetWarnings();
+                    return true;
+                }
+            });
+
             //Summary to Value
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_path_manual_key)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_path_list_key)));
@@ -257,13 +268,13 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         private void showResetWarningDialog() {
             Log.d(TAG, "showResetWarningDialog");
 
-            String[] buttons = getResources().getStringArray(R.array.dialog_warning_buttons);
+            String[] buttons = getResources().getStringArray(R.array.dialog_warning_reset_buttons);
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.CustomAlertDialogTheme);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
 
             //Send Result Codes to target fragment according to button clicked
-            builder.setMessage(R.string.dialog_warning_message)
-                    .setTitle(R.string.dialog_warning_title)
+            builder.setMessage(R.string.dialog_warning_reset_message)
+                    .setTitle(R.string.dialog_warning_reset_title)
                     .setPositiveButton(buttons[0], new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -281,6 +292,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             builder.create().show();
         }
 
+
+        private void resetWarnings() {
+            Toast.makeText(getActivity(), R.string.pref_warnings_toast, Toast.LENGTH_LONG).show();
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            sharedPreferences.edit().putBoolean(MyApplication.SHARE_DIALOG, true).apply();
+        }
 
     }
 }

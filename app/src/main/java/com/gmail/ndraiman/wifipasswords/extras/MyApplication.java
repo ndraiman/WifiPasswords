@@ -13,6 +13,8 @@ public class MyApplication extends Application {
     private static PasswordDB mPasswordDB;
     private static AtomicInteger mOpenCounter = new AtomicInteger();
 
+    public static final String SHARE_DIALOG = "share_dialog"; //sharedPrefs key
+
     @Override
     public void onCreate() {
         super.onCreate();

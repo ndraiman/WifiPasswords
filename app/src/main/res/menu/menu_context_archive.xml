@@ -6,11 +6,11 @@
         android:icon="@drawable/ic_action_context_copy" />
 
     <item android:id="@+id/menu_context_restore"
-        android:title="Tag"
-        android:icon="@android:drawable/ic_menu_revert" />
+        android:title="Restore"
+        android:icon="@drawable/ic_action_context_restore" />
 
     <item android:id="@+id/menu_context_delete"
-        android:title="Archive"
-        android:icon="@android:drawable/ic_menu_delete" />
+        android:title="Delete"
+        android:icon="@drawable/ic_action_context_delete" />
 
 </menu>

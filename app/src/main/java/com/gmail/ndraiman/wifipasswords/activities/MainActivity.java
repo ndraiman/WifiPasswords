@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
 
         String[] buttons = getResources().getStringArray(R.array.dialog_exit_buttons);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomAlertDialogTheme);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
         builder.setTitle(R.string.dialog_exit_title)
                 .setMessage(R.string.dialog_exit_message)
                 .setPositiveButton(buttons[0], new DialogInterface.OnClickListener() {

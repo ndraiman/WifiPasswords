@@ -17,6 +17,8 @@
     <!-- Animations -->
     <integer name="config_slide_time">200</integer>
     <integer name="activity_animation_duration">350</integer>
+    <integer name="dialog_animation_duration">350</integer>
+    <integer name="fragment_animation_duration">350</integer>
     <integer name="fragment_animation_distance">-1500</integer>
 
 </resources>

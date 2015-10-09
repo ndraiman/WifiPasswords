@@ -13,21 +13,31 @@
         <!--<item name="actionModeBackground">@color/colorPrimary</item>-->
 
         <item name="android:dialogTheme">@style/InputDialogTheme</item>
-        <item name="android:alertDialogTheme">@style/CustomAlertDialogTheme</item>
+        <item name="android:alertDialogTheme">@style/AlertDialogTheme</item>
 
     </style>
 
 
     <!-- Alert Dialog Theme -->
-    <style name="CustomAlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+    <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:windowAnimationStyle">@style/CustomAlertDialogTheme.Animation</item>
-
+        <item name="android:windowAnimationStyle">@style/AlertDialogTheme.Animation</item>
     </style>
 
-    <style name="CustomAlertDialogTheme.Animation">
-        <item name="android:windowEnterAnimation">@anim/slide_in_up_left</item>
-        <item name="android:windowExitAnimation">@anim/slide_out_up_left</item>
+    <style name="AlertDialogTheme.Animation">
+        <item name="android:windowEnterAnimation">@anim/shrink_and_fold_in</item>
+        <item name="android:windowExitAnimation">@anim/shrink_and_fold_out</item>
+        <item name="android:interpolator">@android:interpolator/accelerate_quint</item>
+    </style>
+
+    <style name="DeleteDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowAnimationStyle">@style/DeleteDialogTheme.Animation</item>
+    </style>
+
+    <style name="DeleteDialogTheme.Animation">
+        <item name="android:windowEnterAnimation">@anim/scale_from_top_right_corner</item>
+        <item name="android:windowExitAnimation">@anim/scale_to_top_right_corner</item>
         <item name="android:interpolator">@android:interpolator/accelerate_decelerate</item>
     </style>
 
@@ -50,8 +60,8 @@
 
 
     <style name="InputDialogTheme.Animation">
-        <item name="android:windowEnterAnimation">@anim/dialog_slide_in_up</item>
-        <item name="android:windowExitAnimation">@anim/dialog_slide_out_down</item>
+        <item name="android:windowEnterAnimation">@anim/dialog_slide_in_bottom</item>
+        <item name="android:windowExitAnimation">@anim/dialog_slide_out_bottom</item>
         <item name="android:interpolator">@android:interpolator/anticipate</item>
     </style>
 

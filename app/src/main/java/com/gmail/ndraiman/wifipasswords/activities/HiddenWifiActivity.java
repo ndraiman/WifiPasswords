@@ -42,6 +42,8 @@ public class HiddenWifiActivity extends AppCompatActivity {
 
     private static final String STATE_HIDDEN_ENTRIES = "state_hidden_entries";
     private static final String STATE_RESTORED_ENTRIES = "state_restored_entries";
+    private static final String STATE_ACTION_MODE = "state_action_mode";
+    private static final String STATE_ACTION_MODE_SELECTIONS = "state_action_mode_selections";
 
     private ArrayList<WifiEntry> mListWifi;
 
@@ -110,6 +112,8 @@ public class HiddenWifiActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             Log.d(TAG, "extracting hidden list from parcelable");
             mListWifi = savedInstanceState.getParcelableArrayList(STATE_HIDDEN_ENTRIES);
+            isActionModeOn = savedInstanceState.getBoolean(STATE_ACTION_MODE);
+            mActionModeSelections = savedInstanceState.getIntegerArrayList(STATE_ACTION_MODE_SELECTIONS);
 
         } else {
             Log.d(TAG, "getting hidden list from database");
@@ -120,6 +124,15 @@ public class HiddenWifiActivity extends AppCompatActivity {
         mEntriesDeleted = new ArrayList<>();
 
         mAdapter.setWifiList(mListWifi);
+
+
+        //Restore Context Action Bar state
+        if (isActionModeOn) {
+            mActionMode = startSupportActionMode(mActionModeCallback);
+            for (int i = 0; i < mActionModeSelections.size(); i++) {
+                mAdapter.toggleSelection(mActionModeSelections.get(i));
+            }
+        }
     }
 
     @Override
@@ -151,7 +164,31 @@ public class HiddenWifiActivity extends AppCompatActivity {
         Log.d(TAG, "onSaveInstanceState");
 
         outState.putParcelableArrayList(STATE_HIDDEN_ENTRIES, mListWifi);
+        outState.putBoolean(STATE_ACTION_MODE, isActionModeOn);
+        outState.putIntegerArrayList(STATE_ACTION_MODE_SELECTIONS, mAdapter.getSelectedItems());
+
     }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        switch (id) {
+
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    /***************************************************************/
+    /******************** Layout Setup Methods *********************/
+    /***************************************************************/
 
     private void setupRecyclerView() {
         Log.d(TAG, "setupRecyclerView");
@@ -316,7 +353,7 @@ public class HiddenWifiActivity extends AppCompatActivity {
                         //show Delete confirmation Dialog
                         String[] buttons = getResources().getStringArray(R.array.dialog_delete_buttons);
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(HiddenWifiActivity.this);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(HiddenWifiActivity.this, R.style.DeleteDialogTheme);
 
                         builder.setMessage(R.string.dialog_delete_message)
                                 .setTitle(R.string.dialog_delete_title)
@@ -352,22 +389,9 @@ public class HiddenWifiActivity extends AppCompatActivity {
     }
 
 
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        int id = item.getItemId();
-
-        switch (id) {
-
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
+    /********************************************************/
+    /****************** Additional Methods ******************/
+    /********************************************************/
 
     //Copy to Clipboard Method
     private void copyToClipboard(String copiedLabel, String copiedText, String snackbarMessage) {

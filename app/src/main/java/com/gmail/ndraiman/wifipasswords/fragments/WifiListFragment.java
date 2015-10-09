@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -18,6 +20,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,6 +34,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -105,6 +109,9 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     private ActionMode.Callback mActionModeCallback;
     private boolean isActionModeOn = false;
     private boolean mActionModeArchivePressed = false; //Checks if Archive was pressed - will not call clearSelection to preserve animations
+
+    //Share Warning Dialog
+    private boolean mShowShareDialog = true;
 
 
     public static WifiListFragment newInstance() {
@@ -284,7 +291,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                 return true;
 
             case R.id.action_share:
-                shareWifiList(mListWifi);
+                showShareDialog(mListWifi);
                 return true;
 
         }
@@ -320,7 +327,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                 if (resultCode == R.integer.dialog_confirm) {
                     Log.d(TAG, "Dialog Error - Confirm");
                     FragmentActivity parent = getActivity();
-                    ActivityOptionsCompat compat = ActivityOptionsCompat.makeSceneTransitionAnimation(parent, null);
+                    ActivityOptionsCompat compat = ActivityOptionsCompat.makeCustomAnimation(parent, R.anim.right_in, R.anim.left_out);
                     parent.startActivityForResult(
                             new Intent(parent, SettingsActivity.class),
                             R.integer.activity_settings_code,
@@ -379,9 +386,50 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         MyApplication.closeDatabase();
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
 
     //Share entire wifi list
+    private void showShareDialog(final ArrayList<WifiEntry> listWifi) {
+        Log.d(TAG, "showShareDialog");
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        mShowShareDialog = sharedPreferences.getBoolean(MyApplication.SHARE_DIALOG, true);
+
+        if (mShowShareDialog) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+
+            LayoutInflater inflater = LayoutInflater.from(getActivity());
+            View shareDialogLayout = inflater.inflate(R.layout.dialog_share_warning, null);
+            final CheckBox dontShowShareDialog = (CheckBox) shareDialogLayout.findViewById(R.id.dont_show_checkbox);
+
+            builder.setView(shareDialogLayout)
+                    .setPositiveButton(R.string.dialog_warning_share_button, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (dontShowShareDialog.isChecked()) {
+                                Log.d(TAG, "Don't Show Again is Checked");
+                                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                                sharedPreferences.edit().putBoolean(MyApplication.SHARE_DIALOG, false).apply();
+                            }
+
+                            shareWifiList(listWifi);
+                        }
+                    });
+
+            builder.create().show();
+
+        } else {
+            shareWifiList(listWifi);
+        }
+
+    }
+
     private void shareWifiList(ArrayList<WifiEntry> listWifi) {
+        Log.d(TAG, "shareWifiList");
 
         String textToShare = "";
 
@@ -559,7 +607,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
             public void onDoubleTap(View view, int position) {
                 Log.d(TAG, "RecyclerView - onDoubleTap " + position);
 
-                if(isActionModeOn) {
+                if (isActionModeOn) {
                     return;
                 }
                 WifiEntry entry = mListWifi.get(position);
@@ -605,7 +653,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                 final ArrayList<WifiEntry> selectedEntries = new ArrayList<>();
                 final ArrayList<Integer> selectedItems = mAdapter.getSelectedItems();
 
-                if(selectedItems.size() == 0) {
+                if (selectedItems.size() == 0) {
                     return false;
                 }
 
@@ -663,7 +711,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
                     case R.id.menu_context_share:
 
-                        shareWifiList(selectedEntries);
+                        showShareDialog(selectedEntries);
                         return true;
 
                     case R.id.menu_context_tag:
@@ -799,13 +847,13 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     private void showReloadWarningDialog() {
         Log.d(TAG, "showReloadWarningDialog");
 
-        String title = getString(R.string.dialog_warning_title);
-        String message = getString(R.string.dialog_warning_message);
-        String[] buttons = getResources().getStringArray(R.array.dialog_warning_buttons);
+        String title = getString(R.string.dialog_warning_reset_title);
+        String message = getString(R.string.dialog_warning_reset_message);
+        String[] buttons = getResources().getStringArray(R.array.dialog_warning_reset_buttons);
 
         CustomAlertDialogFragment fragment = CustomAlertDialogFragment.getInstance(title, message, buttons);
         fragment.setTargetFragment(this, R.integer.dialog_warning_code);
-        fragment.show(getFragmentManager(), getString(R.string.dialog_warning_key));
+        fragment.show(getFragmentManager(), getString(R.string.dialog_warning_reset_key));
 
     }
 

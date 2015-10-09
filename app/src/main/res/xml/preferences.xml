@@ -30,7 +30,14 @@
 
     <PreferenceCategory android:title="@string/pref_category_default">
 
-        <Preference android:key="@string/pref_default_key"
+        <Preference
+            android:key="@string/pref_warnings_key"
+            android:order="300"
+            android:summary="@string/pref_warnings_summary"
+            android:title="@string/pref_warnings_title" />
+
+        <Preference
+            android:key="@string/pref_default_key"
             android:order="400"
             android:summary="@string/pref_default_summary"
             android:title="@string/pref_default_title" />
