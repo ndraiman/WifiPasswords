@@ -12,7 +12,7 @@
     <string name="snackbar_wifi_archive_multiple">Wifi Entries Archived</string>
     <string name="snackbar_wifi_restore">Wifi Entry Restored</string>
     <string name="snackbar_wifi_exists">Wifi Entry already exists!</string>
-    <string name="snackbar_wifi_entries_inserted">Wifi Entries Inserted</string>
+    <string name="snackbar_wifi_entries_inserted">new Wifi Entries Inserted</string>
 
     <!-- Titles -->
     <string name="app_name">Wifi Passwords</string>

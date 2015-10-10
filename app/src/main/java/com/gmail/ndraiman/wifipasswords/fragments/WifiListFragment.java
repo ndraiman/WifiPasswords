@@ -237,21 +237,20 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
         mAdapter.setWifiList(mListWifi);
 
-        if(!resetDB) {
+        if (!resetDB && numOfEntries > 0) {
             mAppBarLayout.setExpanded(false);
             mRecyclerView.smoothScrollToPosition(mListWifi.size());
 
-        } else {
-            //Show number of wifi entries inserted
-            Snackbar.make(mRoot, numOfEntries + " " + getString(R.string.snackbar_wifi_entries_inserted), Snackbar.LENGTH_LONG)
-                    .setAction(R.string.snackbar_dismiss, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            //Dismiss
-                        }
-                    })
-                    .show();
         }
+        //Show number of wifi entries inserted
+        Snackbar.make(mRoot, numOfEntries + " " + getString(R.string.snackbar_wifi_entries_inserted), Snackbar.LENGTH_LONG)
+                .setAction(R.string.snackbar_dismiss, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //Dismiss
+                    }
+                })
+                .show();
 
         isLoadingFromFile = false;
         getActivity().invalidateOptionsMenu();
@@ -407,7 +406,6 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
     }
-
 
 
     //Share wifi list

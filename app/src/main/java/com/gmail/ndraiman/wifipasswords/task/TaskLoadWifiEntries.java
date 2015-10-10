@@ -96,7 +96,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         if (mListListener != null) {
 
             wifiEntries = new ArrayList<>(db.getAllWifiEntries(false)); //re-read list from database as it removes duplicates
-            mListListener.onWifiListLoaded(wifiEntries, wifiEntries.size(), mResetDB);
+            mListListener.onWifiListLoaded(wifiEntries, mResetDB ? wifiEntries.size() : PasswordDB.mLastInsertNewEntries, mResetDB);
         }
 
         MyApplication.closeDatabase();

@@ -20,6 +20,9 @@ public class PasswordDB {
     private SQLiteDatabase mDatabase;
     private static final String TAG = "PasswordDB";
 
+    //TODO is adding public static variable to DB class good practice?
+    public static int mLastInsertNewEntries = 0;
+
 
     public PasswordDB(Context context) {
         mHelper = new PasswordHelper(context);
@@ -74,6 +77,7 @@ public class PasswordDB {
     /******************************************************/
 
     public void insertWifiEntries(ArrayList<WifiEntry> listWifi, boolean updateTags, boolean isHidden) {
+        mLastInsertNewEntries = 0;
 
         String table = isHidden ? PasswordHelper.TABLE_HIDDEN : PasswordHelper.TABLE_MAIN;
         Log.d(TAG, "insertWifiEntries - isHidden=" + isHidden + " table=" + table);
@@ -109,7 +113,7 @@ public class PasswordDB {
                 } else {
                 Log.e(TAG, "Inserting Entry - " + current.getTitle());
                     mDatabase.insert(table, null, values);
-
+                    mLastInsertNewEntries++;
                 }
 
                 cursor.close();
