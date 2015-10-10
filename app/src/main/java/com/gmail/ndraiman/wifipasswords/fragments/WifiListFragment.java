@@ -225,7 +225,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
     //WifiListLoadedListener method - called from TaskLoadWifiEntries
     @Override
-    public void onWifiListLoaded(ArrayList<WifiEntry> listWifi) {
+    public void onWifiListLoaded(ArrayList<WifiEntry> listWifi, int numOfEntries, boolean resetDB) {
         Log.d(TAG, "onWifiListLoaded");
 
         //Hide Progress Bar
@@ -236,6 +236,22 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         mListWifi = new ArrayList<>(listWifi);
 
         mAdapter.setWifiList(mListWifi);
+
+        if(!resetDB) {
+            mAppBarLayout.setExpanded(false);
+            mRecyclerView.smoothScrollToPosition(mListWifi.size());
+
+        } else {
+            //Show number of wifi entries inserted
+            Snackbar.make(mRoot, numOfEntries + " " + getString(R.string.snackbar_wifi_entries_inserted), Snackbar.LENGTH_LONG)
+                    .setAction(R.string.snackbar_dismiss, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //Dismiss
+                        }
+                    })
+                    .show();
+        }
 
         isLoadingFromFile = false;
         getActivity().invalidateOptionsMenu();
@@ -317,7 +333,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                             WifiEntry entry = itemsRestored.get(i);
                             mAdapter.addItem(i, entry);
                         }
-                        mRecyclerView.scrollToPosition(0);
+                        mRecyclerView.smoothScrollToPosition(0);
                     }
                 }
                 break;
@@ -358,15 +374,16 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
         if (!resetDB) {
             updateDatabase();
+
+        } else {
+            mAdapter.setWifiList(new ArrayList<WifiEntry>());
+            mProgressBar.setVisibility(View.VISIBLE); //Show Progress Bar
         }
 
         getPath();
 
         isLoadingFromFile = true;
         getActivity().invalidateOptionsMenu();
-
-        mAdapter.setWifiList(new ArrayList<WifiEntry>());
-        mProgressBar.setVisibility(View.VISIBLE); //Show Progress Bar
 
 
         Snackbar.make(mRoot, R.string.snackbar_load_from_file, Snackbar.LENGTH_SHORT).show();
@@ -391,43 +408,9 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         super.onConfigurationChanged(newConfig);
     }
 
-    //Share entire wifi list
-    private void showShareDialog(final ArrayList<WifiEntry> listWifi) {
-        Log.d(TAG, "showShareDialog");
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        mShowShareDialog = sharedPreferences.getBoolean(MyApplication.SHARE_DIALOG, true);
 
-        if (mShowShareDialog) {
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
-
-            LayoutInflater inflater = LayoutInflater.from(getActivity());
-            View shareDialogLayout = inflater.inflate(R.layout.dialog_share_warning, null);
-            final CheckBox dontShowShareDialog = (CheckBox) shareDialogLayout.findViewById(R.id.dont_show_checkbox);
-
-            builder.setView(shareDialogLayout)
-                    .setPositiveButton(R.string.dialog_warning_share_button, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (dontShowShareDialog.isChecked()) {
-                                Log.d(TAG, "Don't Show Again is Checked");
-                                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                                sharedPreferences.edit().putBoolean(MyApplication.SHARE_DIALOG, false).apply();
-                            }
-
-                            shareWifiList(listWifi);
-                        }
-                    });
-
-            builder.create().show();
-
-        } else {
-            shareWifiList(listWifi);
-        }
-
-    }
-
+    //Share wifi list
     private void shareWifiList(ArrayList<WifiEntry> listWifi) {
         Log.d(TAG, "shareWifiList");
 
@@ -585,7 +568,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                 //while in ActionMode - regular clicks will also select items
                 if (isActionModeOn) {
                     mAdapter.toggleSelection(position);
-                    mRecyclerView.scrollToPosition(position);
+                    mRecyclerView.smoothScrollToPosition(position);
                 }
             }
 
@@ -595,7 +578,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
                 //Invoking Context Action Mode
                 mAdapter.toggleSelection(position);
-                mRecyclerView.scrollToPosition(position);
+                mRecyclerView.smoothScrollToPosition(position);
 
                 if (mActionMode != null || isSortModeOn) {
                     return;
@@ -688,7 +671,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                                                 mAdapter.addItem(selectedItems.get(i), selectedEntries.get(i));
 
                                             }
-//                                            mRecyclerView.scrollToPosition(selectedItems.get(0));
+//                                            mRecyclerView.smoothScrollToPosition(selectedItems.get(0));
                                             db.deleteWifiEntries(selectedEntries, true);
                                         }
                                     })
@@ -804,7 +787,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         Log.d(TAG, "onSubmitAddDialog");
         WifiEntry entry = new WifiEntry(title, password);
         mAdapter.addItem(0, entry);
-        mRecyclerView.scrollToPosition(0);
+        mRecyclerView.smoothScrollToPosition(0);
         addToDatabase(entry);
     }
 
@@ -857,18 +840,69 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
     }
 
+
+    private void showShareDialog(final ArrayList<WifiEntry> listWifi) {
+        Log.d(TAG, "showShareDialog");
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        mShowShareDialog = sharedPreferences.getBoolean(MyApplication.SHARE_DIALOG, true);
+
+        if (mShowShareDialog) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+
+            LayoutInflater inflater = LayoutInflater.from(getActivity());
+            View shareDialogLayout = inflater.inflate(R.layout.dialog_share_warning, null);
+            final CheckBox dontShowShareDialog = (CheckBox) shareDialogLayout.findViewById(R.id.dont_show_checkbox);
+
+            builder.setView(shareDialogLayout)
+                    .setPositiveButton(R.string.dialog_warning_share_button, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (dontShowShareDialog.isChecked()) {
+                                Log.d(TAG, "Don't Show Again is Checked");
+                                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                                sharedPreferences.edit().putBoolean(MyApplication.SHARE_DIALOG, false).apply();
+                            }
+
+                            shareWifiList(listWifi);
+                        }
+                    });
+
+            builder.create().show();
+
+        } else {
+            shareWifiList(listWifi);
+        }
+    }
+
+
     //TaskLoadWifiEntries creating PathError Dialog.
     @Override
     public void showPathErrorDialog() {
         Log.d(TAG, "showPathErrorDialog");
 
-        String title = getString(R.string.dialog_error_title);
-        String message = getString(R.string.dialog_error_message);
-        String[] buttons = getResources().getStringArray(R.array.dialog_error_buttons);
+        String title = getString(R.string.dialog_error_path_title);
+        String message = getString(R.string.dialog_error_path_message);
+        String[] buttons = getResources().getStringArray(R.array.dialog_error_path_buttons);
 
         CustomAlertDialogFragment fragment = CustomAlertDialogFragment.getInstance(title, message, buttons);
         fragment.setTargetFragment(this, R.integer.dialog_error_code);
-        fragment.show(getFragmentManager(), getString(R.string.dialog_error_key));
+        fragment.show(getFragmentManager(), getString(R.string.dialog_error_path_key));
+    }
+
+    public void showRootErrorDialog() {
+        Log.d(TAG, "showRootErrorDialog");
+        //TODO add "Don't Show Again" option???
+
+        String title = getString(R.string.dialog_error_root_title);
+        String message = getString(R.string.dialog_error_root_message);
+        String[] buttons = getResources().getStringArray(R.array.dialog_error_root_button);
+
+        CustomAlertDialogFragment fragment = CustomAlertDialogFragment.getInstance(title, message, buttons);
+        fragment.setTargetFragment(this, 0);
+        fragment.show(getFragmentManager(), getString(R.string.dialog_error_root_key));
+
     }
 
 
@@ -889,7 +923,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         //filter logic
         final ArrayList<WifiEntry> filteredWifiList = filter(mSearchSavedList, query);
         mAdapter.animateTo(filteredWifiList);
-        mRecyclerView.scrollToPosition(0);
+        mRecyclerView.smoothScrollToPosition(0);
         return true;
     }
 

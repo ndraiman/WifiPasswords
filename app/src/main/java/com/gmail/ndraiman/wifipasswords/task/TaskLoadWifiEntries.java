@@ -4,13 +4,11 @@ package com.gmail.ndraiman.wifipasswords.task;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
-import android.view.View;
 
 import com.gmail.ndraiman.wifipasswords.database.PasswordDB;
 import com.gmail.ndraiman.wifipasswords.dialogs.CustomAlertDialogListener;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
 import com.gmail.ndraiman.wifipasswords.extras.RootCheck;
-import com.gmail.ndraiman.wifipasswords.fragments.WifiListFragment;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
 import com.gmail.ndraiman.wifipasswords.recycler.WifiListLoadedListener;
 
@@ -53,9 +51,9 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         super.onPreExecute();
 
         //Remove "No Root Access" error
-        if(WifiListFragment.textNoRoot.getVisibility() == View.VISIBLE && hasRootAccess) {
-            WifiListFragment.textNoRoot.setVisibility(View.GONE);
-        }
+//        if(WifiListFragment.textNoRoot.getVisibility() == View.VISIBLE && hasRootAccess) {
+//            WifiListFragment.textNoRoot.setVisibility(View.GONE);
+//        }
     }
 
     @Override
@@ -95,7 +93,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         if(mListListener != null) {
 
             wifiEntries = new ArrayList<>(db.getAllWifiEntries(false)); //re-read list from database as it removes duplicates
-            mListListener.onWifiListLoaded(wifiEntries);
+            mListListener.onWifiListLoaded(wifiEntries, wifiEntries.size(), mResetDB);
         }
 
         MyApplication.closeDatabase();
@@ -107,12 +105,13 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
 
         //Show "No Root Access" error
         if(!hasRootAccess) {
-            WifiListFragment.textNoRoot.setVisibility(View.VISIBLE);
+//            WifiListFragment.textNoRoot.setVisibility(View.VISIBLE);
 
             if(mListListener != null) {
                 Log.d(TAG, "OnCancelled Execute \n");
+                mListListener.showRootErrorDialog();
                 //return empty list
-                mListListener.onWifiListLoaded(new ArrayList<WifiEntry>());
+//                mListListener.onWifiListLoaded(new ArrayList<WifiEntry>());
             }
         }
 

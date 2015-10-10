@@ -49,7 +49,7 @@ public class CustomAlertDialogFragment extends DialogFragment {
         builder.setMessage(message)
                 .setTitle(title);
 
-        if(buttons != null && buttons.length > 1) {
+        if(buttons != null && buttons.length > 0) {
 
             //Send Result Codes to target fragment according to button clicked
             builder.setPositiveButton(buttons[0], new DialogInterface.OnClickListener() {
@@ -57,13 +57,16 @@ public class CustomAlertDialogFragment extends DialogFragment {
                 public void onClick(DialogInterface dialog, int which) {
                     sendResult(R.integer.dialog_confirm, null);
                 }
-            }).setNegativeButton(buttons[1], new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    sendResult(R.integer.dialog_cancel, null);
-                }
             });
 
+            if(buttons.length > 1) {
+                builder.setNegativeButton(buttons[1], new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        sendResult(R.integer.dialog_cancel, null);
+                    }
+                });
+            }
         }
          return builder.create();
     }

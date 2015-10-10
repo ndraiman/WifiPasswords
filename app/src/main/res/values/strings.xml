@@ -12,6 +12,7 @@
     <string name="snackbar_wifi_archive_multiple">Wifi Entries Archived</string>
     <string name="snackbar_wifi_restore">Wifi Entry Restored</string>
     <string name="snackbar_wifi_exists">Wifi Entry already exists!</string>
+    <string name="snackbar_wifi_entries_inserted">Wifi Entries Inserted</string>
 
     <!-- Titles -->
     <string name="app_name">Wifi Passwords</string>
@@ -63,15 +64,15 @@
     <string name="pref_warnings_toast">Will show warnings from now on</string>
 
     <!-- Alert Dialogs -->
-    <string name="dialog_error_key">dialog_error</string>
-    <string name="dialog_error_title">Error!</string>
-    <string name="dialog_error_message">Could not locate File \n would you like to change path settings?</string>
-    <string-array name="dialog_error_buttons">
+    <string name="dialog_error_path_key">dialog_error</string>
+    <string name="dialog_error_path_title">Error!</string>
+    <string name="dialog_error_path_message">Could not locate File \n would you like to change path settings?</string>
+    <string-array name="dialog_error_path_buttons">
         <item>Settings</item>
         <item>Dismiss</item>
     </string-array>
 
-    <string name="dialog_warning_reset_key">dialog_warning</string>
+    <string name="dialog_warning_reset_key">dialog_warning_reset</string>
     <string name="dialog_warning_reset_title">Warning!</string>
     <string name="dialog_warning_reset_message">Reloading data from file will erase current database</string>
     <string-array name="dialog_warning_reset_buttons">
@@ -95,10 +96,18 @@
         <item>Cancel</item>
     </string-array>
 
-    <string name="dialog_warning_share_key">dialog_share</string>
+    <string name="dialog_warning_share_key">dialog_warning_share</string>
     <string name="dialog_warning_share_title">Warning!</string>
     <string name="dialog_warning_share_message">Sharing a Wifi network password can compromise its security!</string>
     <string name="dialog_warning_share_button">Ok</string>
+
+    <string name="dialog_error_root_key">dialog_error_root</string>
+    <string name="dialog_error_root_title">Error! No Root Access!</string>
+    <string name="dialog_error_root_message">The app will not be able to import your wifi passwords, though you may still insert entries manually</string>
+    <string-array name="dialog_error_root_button">
+        <item>Dismiss</item>
+    </string-array>
+
 
     <!-- Dialog Fragment -->
     <string name="dialog_add_title_hint">Title</string>

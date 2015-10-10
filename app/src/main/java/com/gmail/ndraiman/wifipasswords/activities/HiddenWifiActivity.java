@@ -236,7 +236,7 @@ public class HiddenWifiActivity extends AppCompatActivity {
                 //while in ActionMode - regular clicks will also select items
                 if (isActionModeOn) {
                     mAdapter.toggleSelection(position);
-                    mRecyclerView.scrollToPosition(position);
+                    mRecyclerView.smoothScrollToPosition(position);
                 }
             }
 
@@ -246,7 +246,7 @@ public class HiddenWifiActivity extends AppCompatActivity {
 
                 //Invoking Context Action Mode
                 mAdapter.toggleSelection(position);
-                mRecyclerView.scrollToPosition(position);
+                mRecyclerView.smoothScrollToPosition(position);
 
                 if (mActionMode != null) {
                     return;
