@@ -35,6 +35,9 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
     private CustomAlertDialogListener mDialogListener;
     private boolean mResetDB;
 
+    private static final String WPA_PSK = "psk";
+    private static final String WEP_PSK = "auth_alg=OPEN SHARED";
+
     public TaskLoadWifiEntries(String filePath, String fileName, boolean resetDB, WifiListLoadedListener listListener, CustomAlertDialogListener dialogListener) {
         mListListener = listListener;
         mPath = filePath;
@@ -59,7 +62,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
     @Override
     protected ArrayList<WifiEntry> doInBackground(String... params) {
 
-        if(!(hasRootAccess = RootCheck.canRunRootCommands())) {
+        if (!(hasRootAccess = RootCheck.canRunRootCommands())) {
             Log.e(TAG, "No Root Access");
             cancel(true);
         }
@@ -81,7 +84,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         //Insert Wifi Entries to database
         PasswordDB db = MyApplication.getWritableDatabase();
 
-        if(mResetDB) {
+        if (mResetDB) {
             Log.d(TAG, "Resetting Database");
             db.deleteAll(false);
             db.deleteAll(true);
@@ -90,7 +93,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         db.insertWifiEntries(wifiEntries, mResetDB, false); //keep Tags according to mResetDB
 
         //Update RecyclerView
-        if(mListListener != null) {
+        if (mListListener != null) {
 
             wifiEntries = new ArrayList<>(db.getAllWifiEntries(false)); //re-read list from database as it removes duplicates
             mListListener.onWifiListLoaded(wifiEntries, wifiEntries.size(), mResetDB);
@@ -104,10 +107,10 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         super.onCancelled();
 
         //Show "No Root Access" error
-        if(!hasRootAccess) {
+        if (!hasRootAccess) {
 //            WifiListFragment.textNoRoot.setVisibility(View.VISIBLE);
 
-            if(mListListener != null) {
+            if (mListListener != null) {
                 Log.d(TAG, "OnCancelled Execute \n");
                 mListListener.showRootErrorDialog();
                 //return empty list
@@ -116,7 +119,6 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         }
 
     }
-
 
 
     /**************
@@ -187,8 +189,13 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
                     //Log.i(TAG, title + " " + line.substring(6, line.length() - 1));
                     //Log.i(TAG, title + " " + line.substring(1, 4));
 
-                    if ((line.substring(1, 4)).equals("psk")) {
+                    if ((line.substring(1, 4)).equals(WPA_PSK)) {
                         password = line.substring(6, line.length() - 1);
+
+                    } else if ((line = bufferedReader.readLine()).substring(1, line.length()).equals(WEP_PSK)) {
+                        line = bufferedReader.readLine();
+                        password = line.substring(10, line.length() - 1);
+
                     } else {
                         password = "no password";
                     }

@@ -386,7 +386,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         getActivity().invalidateOptionsMenu();
 
 
-        Snackbar.make(mRoot, R.string.snackbar_load_from_file, Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(mRoot, R.string.snackbar_load_from_file, Snackbar.LENGTH_LONG).show();
         new TaskLoadWifiEntries(mPath, mFileName, resetDB, this, this).execute();
 
     }
