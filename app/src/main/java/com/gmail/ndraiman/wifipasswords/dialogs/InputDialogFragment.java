@@ -41,7 +41,7 @@ public class InputDialogFragment extends DialogFragment {
     public static InputDialogFragment getInstance(int type, Bundle bundle) {
         InputDialogFragment fragment = new InputDialogFragment();
 
-        if(bundle == null) {
+        if (bundle == null) {
             Log.d(TAG, "getInstance() called with bundle = null");
             bundle = new Bundle();
         }
@@ -108,7 +108,7 @@ public class InputDialogFragment extends DialogFragment {
                 final ArrayList<Integer> indexWifi = bundle.getIntegerArrayList(POSITIONS_LEY);
 
                 //if single entry then add current tag to InputDialog text field
-                if(listWifi != null && listWifi.size() == 1) {
+                if (listWifi != null && listWifi.size() == 1) {
                     mTitle.setText(listWifi.get(0).getTag());
                     mTitle.setSelection(mTitle.getText().toString().length());
                 }
@@ -142,10 +142,8 @@ public class InputDialogFragment extends DialogFragment {
         });
 
 
-
         return layout;
     }
-
 
 
     @Override
@@ -163,7 +161,6 @@ public class InputDialogFragment extends DialogFragment {
     }
 
 
-
     private boolean hasErrors() {
         boolean hasError = false;
 
@@ -172,7 +169,7 @@ public class InputDialogFragment extends DialogFragment {
         boolean isEmptyPassword = mPassword.getText() == null
                 || mPassword.getText().toString().isEmpty();
 
-        if(isEmptyTitle && isEmptyPassword) {
+        if (isEmptyTitle && isEmptyPassword) {
             Snackbar.make(mRoot, getString(R.string.dialog_add_error_empty), Snackbar.LENGTH_SHORT)
                     .setAction(R.string.snackbar_dismiss, new View.OnClickListener() {
                         @Override
@@ -187,7 +184,7 @@ public class InputDialogFragment extends DialogFragment {
             mPassword.setError(null);
             hasError = true;
 
-        } else if (isEmptyPassword){
+        } else if (isEmptyPassword) {
             mTitle.setError(null);
             mPassword.setError(getString(R.string.dialog_add_password_empty));
             hasError = true;
@@ -202,8 +199,8 @@ public class InputDialogFragment extends DialogFragment {
             ArrayList<WifiEntry> checkList = db.getWifiEntries(whereClause, whereArgs, false);
             MyApplication.closeDatabase();
 
-            for(WifiEntry entry : checkList) {
-                if(entry.getTitle().toLowerCase().equals(title)) {
+            for (WifiEntry entry : checkList) {
+                if (entry.getTitle().toLowerCase().equals(title)) {
                     hasError = true;
                     break; //no need to check further
                 }
