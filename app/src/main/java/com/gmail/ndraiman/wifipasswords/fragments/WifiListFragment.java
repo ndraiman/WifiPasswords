@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -71,7 +70,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
     private ArrayList<WifiEntry> mListWifi;
 
-    private boolean isSortModeOn = false;
+    private boolean mSortModeOn = false;
 
     //OnSavedInstance Keys
     private static final String STATE_WIFI_ENTRIES = "state_wifi_entries"; //Parcel key
@@ -90,7 +89,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     //wpa_supplicant file
     private String mPath;
     private String mFileName;
-    private boolean isLoadingFromFile = false;
+    private boolean mCurrentlyLoading = false;
 
     //RecyclerView
     private RecyclerView mRecyclerView;
@@ -107,8 +106,8 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     private ActionMode mActionMode;
     private ArrayList<Integer> mActionModeSelections;
     private ActionMode.Callback mActionModeCallback;
-    private boolean isActionModeOn = false;
-    private boolean mActionModeArchivePressed = false; //Checks if Archive was pressed - will not call clearSelection to preserve animations
+    private boolean mActionModeOn = false;
+    private boolean mAnimateChanges = false; //Checks if Archive was pressed - will not call clearSelection to preserve animations
 
     //Share Warning Dialog
     private boolean mShowShareDialog = true;
@@ -153,9 +152,9 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
             Log.d(TAG, "restoring from savedInstanceState");
 
             mListWifi = savedInstanceState.getParcelableArrayList(STATE_WIFI_ENTRIES);
-            isActionModeOn = savedInstanceState.getBoolean(STATE_ACTION_MODE);
+            mActionModeOn = savedInstanceState.getBoolean(STATE_ACTION_MODE);
             mActionModeSelections = savedInstanceState.getIntegerArrayList(STATE_ACTION_MODE_SELECTIONS);
-            isSortModeOn = savedInstanceState.getBoolean(STATE_SORT_MODE);
+            mSortModeOn = savedInstanceState.getBoolean(STATE_SORT_MODE);
 
         } else {
 
@@ -174,7 +173,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         mAdapter.setWifiList(mListWifi);
 
         //Restore Context Action Bar state
-        if (isActionModeOn) {
+        if (mActionModeOn) {
             mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(mActionModeCallback);
             for (int i = 0; i < mActionModeSelections.size(); i++) {
                 mAdapter.toggleSelection(mActionModeSelections.get(i));
@@ -190,7 +189,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         super.onResume();
         Log.d(TAG, "onResume()");
 
-        if (isSortModeOn) {
+        if (mSortModeOn) {
             sortMode(true);
         }
     }
@@ -217,8 +216,8 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
             mSearchSavedQuery = mSearchView.getQuery().toString();
         }
 
-        outState.putBoolean(STATE_SORT_MODE, isSortModeOn);
-        outState.putBoolean(STATE_ACTION_MODE, isActionModeOn);
+        outState.putBoolean(STATE_SORT_MODE, mSortModeOn);
+        outState.putBoolean(STATE_ACTION_MODE, mActionModeOn);
         outState.putIntegerArrayList(STATE_ACTION_MODE_SELECTIONS, mAdapter.getSelectedItems());
     }
 
@@ -252,7 +251,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                 })
                 .show();
 
-        isLoadingFromFile = false;
+        mCurrentlyLoading = false;
         getActivity().invalidateOptionsMenu();
     }
 
@@ -262,9 +261,9 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         Log.d(TAG, "onPrepareOptionsMenu");
 
         //Disable\Enable menu items according to SortMode
-        menu.setGroupEnabled(R.id.menu_group_main, !isLoadingFromFile);
-        menu.setGroupVisible(R.id.menu_group_main, !isSortModeOn);
-        menu.setGroupVisible(R.id.menu_group_sort_mode, isSortModeOn);
+        menu.setGroupEnabled(R.id.menu_group_main, !mCurrentlyLoading);
+        menu.setGroupVisible(R.id.menu_group_main, !mSortModeOn);
+        menu.setGroupVisible(R.id.menu_group_sort_mode, mSortModeOn);
 
     }
 
@@ -332,7 +331,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                             WifiEntry entry = itemsRestored.get(i);
                             mAdapter.addItem(i, entry);
                         }
-                        mRecyclerView.smoothScrollToPosition(0);
+                        mRecyclerView.scrollToPosition(0);
                     }
                 }
                 break;
@@ -381,7 +380,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
         getPath();
 
-        isLoadingFromFile = true;
+        mCurrentlyLoading = true;
         getActivity().invalidateOptionsMenu();
 
 
@@ -400,11 +399,6 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         db.deleteAll(false);
         db.insertWifiEntries(mListWifi, true, false);
         MyApplication.closeDatabase();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
     }
 
 
@@ -491,14 +485,14 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
             mRecyclerView.addOnItemTouchListener(mRecyclerTouchListener);
         }
 
-        isSortModeOn = isOn;
+        mSortModeOn = isOn;
 
         getActivity().invalidateOptionsMenu();
     }
 
     //Return Sort Mode Status - used OnBackPressed in MainActivity
     public boolean getSortModeStatus() {
-        return isSortModeOn;
+        return mSortModeOn;
     }
 
 
@@ -564,7 +558,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                 Log.d(TAG, "RecyclerView - onClick " + position);
 
                 //while in ActionMode - regular clicks will also select items
-                if (isActionModeOn) {
+                if (mActionModeOn) {
                     mAdapter.toggleSelection(position);
                     mRecyclerView.smoothScrollToPosition(position);
                 }
@@ -578,7 +572,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                 mAdapter.toggleSelection(position);
                 mRecyclerView.smoothScrollToPosition(position);
 
-                if (mActionMode != null || isSortModeOn) {
+                if (mActionMode != null || mSortModeOn) {
                     return;
                 }
                 mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(mActionModeCallback);
@@ -588,7 +582,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
             public void onDoubleTap(View view, int position) {
                 Log.d(TAG, "RecyclerView - onDoubleTap " + position);
 
-                if (isActionModeOn) {
+                if (mActionModeOn) {
                     return;
                 }
                 WifiEntry entry = mListWifi.get(position);
@@ -617,7 +611,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                     menu.getItem(i).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
                 }
 
-                isActionModeOn = true;
+                mActionModeOn = true;
 
                 return true;
             }
@@ -643,8 +637,9 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                 }
 
                 switch (item.getItemId()) {
+
                     case R.id.menu_context_archive:
-                        mActionModeArchivePressed = true;
+                        mAnimateChanges = true;
 
                         for (int i = selectedItems.size() - 1; i >= 0; i--) {
                             //Starting removal from end of list so Indexes wont change when item is removed
@@ -716,12 +711,12 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
             @Override
             public void onDestroyActionMode(ActionMode mode) {
 
-                if (!mActionModeArchivePressed) {
+                if (!mAnimateChanges) {
                     mAdapter.clearSelection();
                 }
-                mActionModeArchivePressed = false;
+                mAnimateChanges = false;
                 mRecyclerView.setNestedScrollingEnabled(true);
-                isActionModeOn = false;
+                mActionModeOn = false;
                 mActionMode = null;
             }
         };

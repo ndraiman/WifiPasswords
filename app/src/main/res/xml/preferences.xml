@@ -17,6 +17,7 @@
             android:defaultValue="@string/pref_path_default"
             android:key="@string/pref_path_manual_key"
             android:order="210"
+            android:minLines="2"
             android:summary="@string/pref_path_default"
             android:title="@string/pref_path_manual_title" />
 

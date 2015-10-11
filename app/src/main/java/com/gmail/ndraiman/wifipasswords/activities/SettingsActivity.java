@@ -15,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.transition.TransitionInflater;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -294,7 +295,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
 
         private void resetWarnings() {
-            Toast.makeText(getActivity(), R.string.pref_warnings_toast, Toast.LENGTH_LONG).show();
+            Toast toast = Toast.makeText(getActivity(), R.string.pref_warnings_toast, Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
             sharedPreferences.edit().putBoolean(MyApplication.SHARE_DIALOG, true).apply();
         }

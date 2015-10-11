@@ -56,19 +56,15 @@ public class HiddenWifiActivity extends AppCompatActivity {
     private ItemTouchHelper mItemTouchHelper;
     private ItemTouchHelper.Callback mTouchHelperCallback;
 
-    private ArrayList<WifiEntry> mEntriesDeleted;
+    private ArrayList<WifiEntry> mEntriesRestored; //track restored entries to add to main list adapter
 
     //Context Action Mode
     private ActionMode mActionMode;
     private ArrayList<Integer> mActionModeSelections;
     private ActionMode.Callback mActionModeCallback;
-    private boolean isActionModeOn = false;
-    private boolean mActionModeRestorePressed = false; //Checks if Archive was pressed - will not call clearSelection to preserve animations
+    private boolean mActionModeOn = false;
+    private boolean mAnimateChanges = false; //Checks if Archive was pressed - will not call clearSelection to preserve animations
 
-    //TODO show dialog to indicate deleting items will return them to main list
-    //TODO dialog will show only on user first time seeing this activity
-
-    //TODO add way to permanently delete entries???
 
     public HiddenWifiActivity() {
 
@@ -112,22 +108,25 @@ public class HiddenWifiActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             Log.d(TAG, "extracting hidden list from parcelable");
             mListWifi = savedInstanceState.getParcelableArrayList(STATE_HIDDEN_ENTRIES);
-            isActionModeOn = savedInstanceState.getBoolean(STATE_ACTION_MODE);
+            mActionModeOn = savedInstanceState.getBoolean(STATE_ACTION_MODE);
             mActionModeSelections = savedInstanceState.getIntegerArrayList(STATE_ACTION_MODE_SELECTIONS);
+            mEntriesRestored = savedInstanceState.getParcelableArrayList(STATE_RESTORED_ENTRIES);
 
         } else {
             Log.d(TAG, "getting hidden list from database");
             mListWifi = MyApplication.getWritableDatabase().getAllWifiEntries(true);
             MyApplication.closeDatabase();
+
+            mEntriesRestored = new ArrayList<>();
         }
 
-        mEntriesDeleted = new ArrayList<>();
+
 
         mAdapter.setWifiList(mListWifi);
 
 
         //Restore Context Action Bar state
-        if (isActionModeOn) {
+        if (mActionModeOn) {
             mActionMode = startSupportActionMode(mActionModeCallback);
             for (int i = 0; i < mActionModeSelections.size(); i++) {
                 mAdapter.toggleSelection(mActionModeSelections.get(i));
@@ -140,23 +139,10 @@ public class HiddenWifiActivity extends AppCompatActivity {
         super.onPause();
         Log.d(TAG, "onPause()");
 
-        MyApplication.getWritableDatabase().deleteWifiEntries(mEntriesDeleted, true);
+        MyApplication.getWritableDatabase().deleteWifiEntries(mEntriesRestored, true);
         MyApplication.closeDatabase();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.d(TAG, "onStop()");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "onDestroy()");
-
-
-    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -164,11 +150,17 @@ public class HiddenWifiActivity extends AppCompatActivity {
         Log.d(TAG, "onSaveInstanceState");
 
         outState.putParcelableArrayList(STATE_HIDDEN_ENTRIES, mListWifi);
-        outState.putBoolean(STATE_ACTION_MODE, isActionModeOn);
+        outState.putBoolean(STATE_ACTION_MODE, mActionModeOn);
         outState.putIntegerArrayList(STATE_ACTION_MODE_SELECTIONS, mAdapter.getSelectedItems());
+        outState.putParcelableArrayList(STATE_RESTORED_ENTRIES, mEntriesRestored);
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_settings, menu);
+        return true;
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -179,6 +171,10 @@ public class HiddenWifiActivity extends AppCompatActivity {
 
             case android.R.id.home:
                 onBackPressed();
+                return true;
+
+            case R.id.action_help:
+                //TODO implement "Help & Feedback" fragment
                 return true;
         }
 
@@ -195,7 +191,7 @@ public class HiddenWifiActivity extends AppCompatActivity {
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setHasFixedSize(true);
-        mAdapter = new WifiListAdapter(this, false, null);
+        mAdapter = new WifiListAdapter(this, true, null);
         mRecyclerView.setAdapter(mAdapter);
 
         //Setup ItemTouchHelper
@@ -213,9 +209,9 @@ public class HiddenWifiActivity extends AppCompatActivity {
 //
 //                WifiEntry deleted = mAdapter.onItemDismiss(viewHolder.getAdapterPosition());
 //
-//                mEntriesDeleted.add(deleted);
+//                mEntriesRestored.add(deleted);
 //                Intent data = getIntent();
-//                data.putParcelableArrayListExtra(STATE_RESTORED_ENTRIES, mEntriesDeleted);
+//                data.putParcelableArrayListExtra(STATE_RESTORED_ENTRIES, mEntriesRestored);
 //                setResult(RESULT_OK, data);
 //
 //                Snackbar.make(mRoot,
@@ -234,7 +230,7 @@ public class HiddenWifiActivity extends AppCompatActivity {
                 Log.d(TAG, "RecyclerView - onClick " + position);
 
                 //while in ActionMode - regular clicks will also select items
-                if (isActionModeOn) {
+                if (mActionModeOn) {
                     mAdapter.toggleSelection(position);
                     mRecyclerView.smoothScrollToPosition(position);
                 }
@@ -258,7 +254,7 @@ public class HiddenWifiActivity extends AppCompatActivity {
             public void onDoubleTap(View view, int position) {
                 Log.d(TAG, "RecyclerView - onDoubleTap " + position);
 
-                if (isActionModeOn) {
+                if (mActionModeOn) {
                     return;
                 }
                 WifiEntry entry = mListWifi.get(position);
@@ -283,7 +279,7 @@ public class HiddenWifiActivity extends AppCompatActivity {
                 MenuInflater menuInflater = mode.getMenuInflater();
                 menuInflater.inflate(R.menu.menu_context_archive, menu);
 
-                isActionModeOn = true;
+                mActionModeOn = true;
                 return true;
             }
 
@@ -322,7 +318,7 @@ public class HiddenWifiActivity extends AppCompatActivity {
 
 
                     case R.id.menu_context_restore:
-                        mActionModeRestorePressed = true;
+                        mAnimateChanges = true;
 
                         for (int i = selectedItems.size() - 1; i >= 0; i--) {
                             //Starting removal from end of list so Indexes wont change when item is removed
@@ -330,11 +326,11 @@ public class HiddenWifiActivity extends AppCompatActivity {
                         }
 
                         for (int i = 0; i < selectedEntries.size(); i++) {
-                            mEntriesDeleted.add(selectedEntries.get(i));
+                            mEntriesRestored.add(selectedEntries.get(i));
                         }
 
                         Intent data = getIntent();
-                        data.putParcelableArrayListExtra(STATE_RESTORED_ENTRIES, mEntriesDeleted);
+                        data.putParcelableArrayListExtra(STATE_RESTORED_ENTRIES, mEntriesRestored);
                         setResult(RESULT_OK, data);
 
                         Snackbar.make(mRoot,
@@ -350,6 +346,7 @@ public class HiddenWifiActivity extends AppCompatActivity {
 
                     case R.id.menu_context_delete:
                         //TODO should "add from file" get deleted items?
+                        mAnimateChanges = true;
                         //show Delete confirmation Dialog
                         String[] buttons = getResources().getStringArray(R.array.dialog_delete_buttons);
 
@@ -381,8 +378,13 @@ public class HiddenWifiActivity extends AppCompatActivity {
 
             @Override
             public void onDestroyActionMode(ActionMode mode) {
-                mAdapter.clearSelection();
-                isActionModeOn = false;
+
+                if(!mAnimateChanges) {
+                    mAdapter.clearSelection();
+                }
+
+                mAnimateChanges = false;
+                mActionModeOn = false;
                 mActionMode = null;
             }
         };
