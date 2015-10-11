@@ -1,24 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorControlHighlight">@color/colorHighlight</item>
-        <!--<item name="android:windowBackground">@android:color/white</item>-->
-
-        <!-- Context Action Mode will Overlay Toolbar -->
-        <item name="windowActionModeOverlay">true</item>
-        <!--<item name="actionModeBackground">@color/colorPrimary</item>-->
-
-        <item name="android:dialogTheme">@style/InputDialogTheme</item>
-        <item name="android:alertDialogTheme">@style/AlertDialogTheme</item>
-
-        <item name="android:navigationBarColor">@color/colorPrimary</item>
-    </style>
-
-
     <style name="floating_action_button">
         <item name="android:layout_margin">16dp</item>
     </style>
