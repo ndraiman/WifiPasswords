@@ -112,10 +112,13 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     private boolean mAnimateChanges = false; //Checks if Archive was pressed - will not call clearSelection to preserve animations
 
     //Share Warning Dialog
-    private boolean mShowShareDialog = true;
+    private boolean mShowShareDialog;
 
-    private boolean mFirstAppLaunch = true;
+    private boolean mFirstAppLaunch;
     private static final String FIRST_LAUNCH = "first_launch";
+
+    private boolean mRootAccess;
+    private static final String ROOT_ACCESS = "root_access";
 
 
     public static WifiListFragment newInstance() {
@@ -153,6 +156,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         mFirstAppLaunch = sharedPreferences.getBoolean(FIRST_LAUNCH, true);
+        mRootAccess = sharedPreferences.getBoolean(ROOT_ACCESS, true);
 
         if(mFirstAppLaunch) {
             getActivity().startActivityForResult(new Intent(getActivity(), IntroActivity.class), RequestCodes.ACTIVITY_INTRO_CODE);
@@ -176,7 +180,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                 mListWifi = MyApplication.getWritableDatabase().getAllWifiEntries(false);
                 MyApplication.closeDatabase();
 
-                if (mListWifi.isEmpty()) {
+                if (mListWifi.isEmpty() && mRootAccess) {
 
                     loadFromFile(true);
                     Log.d(TAG, "executing task from onCreateView");
@@ -919,6 +923,8 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         CustomAlertDialogFragment fragment = CustomAlertDialogFragment.getInstance(title, message, buttons);
         fragment.setTargetFragment(this, 0);
         fragment.show(getFragmentManager(), getString(R.string.dialog_error_root_key));
+
+        PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putBoolean(ROOT_ACCESS, false).apply();
 
         //Restore Menu functions
         mCurrentlyLoading = false;

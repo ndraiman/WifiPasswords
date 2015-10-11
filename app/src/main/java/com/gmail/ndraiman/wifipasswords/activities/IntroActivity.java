@@ -17,8 +17,12 @@ public class IntroActivity extends AppIntro2 {
     public void init(Bundle savedInstanceState) {
         Log.d(TAG, "init");
 
-        addSlide(AppIntroFragment.newInstance("test title 1", "test desc 1", R.drawable.collapsing_header, ContextCompat.getColor(this, R.color.colorPrimary)));
-        addSlide(AppIntroFragment.newInstance("test title 2", "test desc 2", R.drawable.ic_settings, ContextCompat.getColor(this, R.color.colorAccent)));
+        addSlide(AppIntroFragment.newInstance("Welcome to WifiPasswords", "Let's walkthrough the app features", R.drawable.collapsing_header, ContextCompat.getColor(this, R.color.colorPrimary)));
+        addSlide(AppIntroFragment.newInstance("Root Permission Required", "Please grant Root Access when prompted", R.drawable.collapsing_header, ContextCompat.getColor(this, R.color.colorAccent)));
+        addSlide(AppIntroFragment.newInstance("Data Security", "While sharing wifi passwords is available through this app, please take care of doing so as it might comprise your network's security", R.drawable.collapsing_header, ContextCompat.getColor(this, android.R.color.black)));
+        addSlide(AppIntroFragment.newInstance("Quick Copy", "Double Tap a wifi entry to quickly copy its data to clipboard", R.drawable.collapsing_header, ContextCompat.getColor(this, R.color.colorPrimary)));
+        addSlide(AppIntroFragment.newInstance("Context Action Bar", "Long Click a Wifi Entry to bring it up", R.drawable.collapsing_header, ContextCompat.getColor(this, R.color.colorPrimaryDark)));
+
 
         setDepthAnimation();
     }

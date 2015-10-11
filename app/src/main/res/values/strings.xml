@@ -103,7 +103,10 @@
 
     <string name="dialog_error_root_key">dialog_error_root</string>
     <string name="dialog_error_root_title">Error! No Root Access!</string>
-    <string name="dialog_error_root_message">The app will not be able to import your wifi passwords, though you may still insert entries manually</string>
+    <string name="dialog_error_root_message">
+        The app is not be able to import your wifi passwords without Root
+        \n\nYou may still insert entries manually
+        \n\n(To try again please grant this app Root access and tap \"Add From File\" in the options menu)</string>
     <string-array name="dialog_error_root_button">
         <item>Dismiss</item>
     </string-array>
