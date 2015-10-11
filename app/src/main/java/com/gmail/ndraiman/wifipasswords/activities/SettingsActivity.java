@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.gmail.ndraiman.wifipasswords.R;
 import com.gmail.ndraiman.wifipasswords.extras.AppCompatPreferenceActivity;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
+import com.gmail.ndraiman.wifipasswords.extras.RequestCodes;
 
 import java.util.List;
 
@@ -279,7 +280,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     .setPositiveButton(buttons[0], new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            getActivity().setResult(R.integer.reset_to_default);
+                            getActivity().setResult(RequestCodes.RESET_TO_DEFAULT);
                             getActivity().finish();
                         }
                     })

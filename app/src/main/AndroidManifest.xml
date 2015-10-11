@@ -21,12 +21,13 @@
         </activity>
         <activity
             android:name=".activities.SettingsActivity"
-            android:label="@string/action_settings">
-        </activity>
+            android:label="@string/action_settings" />
         <activity
             android:name=".activities.HiddenWifiActivity"
-            android:label="@string/activity_title_hidden_wifi">
-        </activity>
+            android:label="@string/activity_title_hidden_wifi" />
+        <activity
+            android:name=".activities.IntroActivity"
+            android:label="Intro" />
     </application>
 
 </manifest>

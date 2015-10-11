@@ -18,16 +18,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.gmail.ndraiman.wifipasswords.R;
+import com.gmail.ndraiman.wifipasswords.extras.RequestCodes;
 import com.gmail.ndraiman.wifipasswords.fragments.WifiListFragment;
 
 public class MainActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
-    private WifiListFragment mainWifiFragment;
+    private WifiListFragment mWifiListFragment;
     private static final String TAG = "MainActivity";
     private ActivityOptionsCompat mCompat;
 
-    public static final String MAIN_FRAGMENT_TAG = "main_fragment_tag";
+    public static final String WIFI_LIST_FRAGMENT_TAG = "main_fragment_tag";
 
 
     @Override
@@ -55,22 +56,22 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             Log.d(TAG, "savedInstanceState = null");
-            mainWifiFragment = WifiListFragment.newInstance();
+            mWifiListFragment = WifiListFragment.newInstance();
 
         } else {
-            mainWifiFragment = (WifiListFragment) getSupportFragmentManager().findFragmentByTag(MAIN_FRAGMENT_TAG);
+            mWifiListFragment = (WifiListFragment) getSupportFragmentManager().findFragmentByTag(WIFI_LIST_FRAGMENT_TAG);
         }
 
         getSupportFragmentManager().beginTransaction().replace
-                (R.id.content_frame, mainWifiFragment, MAIN_FRAGMENT_TAG).commit();
+                (R.id.content_frame, mWifiListFragment, WIFI_LIST_FRAGMENT_TAG).commit();
 
     }
 
     @Override
     public void onBackPressed() {
         Log.d(TAG, "onBackPressed");
-        if (mainWifiFragment.isVisible() && mainWifiFragment.getSortModeStatus()) {
-            mainWifiFragment.sortMode(false);
+        if (mWifiListFragment.isVisible() && mWifiListFragment.getSortModeStatus()) {
+            mWifiListFragment.sortMode(false);
             return;
         }
 
@@ -120,18 +121,21 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_hidden_list:
                 mCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, null);
 //                mCompat = ActivityOptionsCompat.makeCustomAnimation(this,R.anim.right_in, R.anim.left_out);
-                startActivityForResult(new Intent(this, HiddenWifiActivity.class), R.integer.activity_hidden_code, mCompat.toBundle());
+                startActivityForResult(new Intent(this, HiddenWifiActivity.class), RequestCodes.ACTIVITY_HIDDEN_CODE, mCompat.toBundle());
                 return true;
 
             case R.id.action_settings:
                 //Start Settings with Transition
 //                mCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, null);
                 mCompat = ActivityOptionsCompat.makeCustomAnimation(this, R.anim.right_in, R.anim.left_out);
-                startActivityForResult(new Intent(this, SettingsActivity.class), R.integer.reset_to_default, mCompat.toBundle());
+                startActivityForResult(new Intent(this, SettingsActivity.class), RequestCodes.RESET_TO_DEFAULT, mCompat.toBundle());
                 return true;
 
             case R.id.action_help:
                 //TODO implement "Help & Feedback" fragment
+
+                //PLACEHOLDER!!!
+                startActivity(new Intent(this, IntroActivity.class));
                 return true;
 
         }
@@ -140,33 +144,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.e(TAG, "onActivityResult");
+        Log.e(TAG, "onActivityResult - requestCode = " + requestCode + ", resultCode = " + resultCode);
 
         switch (requestCode) {
 
-            case R.integer.activity_settings_code: //Handles returning from SettingsActivity after Error in Path
+            case RequestCodes.ACTIVITY_INTRO_CODE:
+                Log.d(TAG, "Returning From IntroApp - resultCode = " + resultCode);
+                mWifiListFragment.onActivityResult(requestCode, resultCode, data);
+                break;
+
+            case RequestCodes.ACTIVITY_SETTINGS_CODE: //Handles returning from SettingsActivity after Error in Path
 
                 if (resultCode == Activity.RESULT_OK) {
                     Log.d(TAG, "Return from Settings - Loading from file");
-                    if (mainWifiFragment.isVisible())
-                        mainWifiFragment.loadFromFile(true);
+                    if (mWifiListFragment.isVisible())
+                        mWifiListFragment.loadFromFile(true);
                 } else {
                     Log.d(TAG, "Return from Settings - didn't change anything");
                 }
                 break;
 
-            case R.integer.activity_hidden_code: //return from HiddenWifiActivity
+            case RequestCodes.ACTIVITY_HIDDEN_CODE: //return from HiddenWifiActivity
                 Log.d(TAG, "Return from HiddenWifiActivity - resultCode = " + resultCode);
-                mainWifiFragment.onActivityResult(requestCode, resultCode, data);
+                mWifiListFragment.onActivityResult(requestCode, resultCode, data);
                 break;
 
-            case R.integer.reset_to_default: //Return from Settings Activity - Reset to Default
-                if (resultCode == R.integer.reset_to_default) {
+            case RequestCodes.RESET_TO_DEFAULT: //Return from Settings Activity - Reset to Default
+                if (resultCode == RequestCodes.RESET_TO_DEFAULT) {
                     Log.d(TAG, "Return from Settings - Reset to Default");
-                    mainWifiFragment.loadFromFile(true);
+                    mWifiListFragment.loadFromFile(true);
 
                 }
                 break;

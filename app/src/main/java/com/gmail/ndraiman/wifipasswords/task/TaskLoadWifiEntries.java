@@ -29,7 +29,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
     private static final String TAG = "TaskLoadWifiEntries";
     private static final String APP_FOLDER = "WifiPasswords";
     private WifiListLoadedListener mListListener;
-    private boolean hasRootAccess = true;
+    private boolean mRootAccess = true;
     private String mPath;
     private String mFileName;
     private CustomAlertDialogListener mDialogListener;
@@ -54,7 +54,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         super.onPreExecute();
 
         //Remove "No Root Access" error
-//        if(WifiListFragment.textNoRoot.getVisibility() == View.VISIBLE && hasRootAccess) {
+//        if(WifiListFragment.textNoRoot.getVisibility() == View.VISIBLE && mRootAccess) {
 //            WifiListFragment.textNoRoot.setVisibility(View.GONE);
 //        }
     }
@@ -62,7 +62,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
     @Override
     protected ArrayList<WifiEntry> doInBackground(String... params) {
 
-        if (!(hasRootAccess = RootCheck.canRunRootCommands())) {
+        if (!(mRootAccess = RootCheck.canRunRootCommands())) {
             Log.e(TAG, "No Root Access");
             cancel(true);
         }
@@ -115,7 +115,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         super.onCancelled();
 
         //Show "No Root Access" error
-        if (!hasRootAccess) {
+        if (!mRootAccess) {
 //            WifiListFragment.textNoRoot.setVisibility(View.VISIBLE);
 
             if (mListListener != null) {
@@ -148,7 +148,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
     }
 
     private void copyFile() {
-        if (!RootCheck.canRunRootCommands()) {
+        if (!mRootAccess) {
             return;
         }
 
@@ -175,7 +175,10 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
             if (!file.exists()) {
                 Log.e(TAG, "readFile - File not found");
                 //Show Error Dialog
-                mDialogListener.showPathErrorDialog();
+
+                if(mRootAccess) {
+                    mDialogListener.showPathErrorDialog();
+                }
                 return new ArrayList<>();
             }
 
