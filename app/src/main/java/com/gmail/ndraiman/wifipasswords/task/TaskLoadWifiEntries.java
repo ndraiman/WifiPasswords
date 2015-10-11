@@ -100,6 +100,14 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         }
 
         MyApplication.closeDatabase();
+
+        //Delete wpa_supplicant file for security reasons
+        File directory = Environment.getExternalStorageDirectory();
+        File file = new File(directory + "/" + APP_FOLDER + "/" + mFileName);
+
+        if(file.delete()) {
+            Log.e(TAG, "file deleted");
+        }
     }
 
     @Override
