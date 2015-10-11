@@ -191,7 +191,7 @@ public class HiddenWifiActivity extends AppCompatActivity {
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setHasFixedSize(true);
-        mAdapter = new WifiListAdapter(this, true, null);
+        mAdapter = new WifiListAdapter(this, false, null);
         mRecyclerView.setAdapter(mAdapter);
 
         //Setup ItemTouchHelper

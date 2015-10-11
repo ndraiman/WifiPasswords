@@ -21,7 +21,7 @@ public class PasswordDB {
     private static final String TAG = "PasswordDB";
 
     //TODO is adding public static variable to DB class good practice?
-    public static int mLastInsertNewEntries = 0;
+    public static int mNewEntriesOnLastInsert = 0;
 
 
     public PasswordDB(Context context) {
@@ -77,7 +77,7 @@ public class PasswordDB {
     /******************************************************/
 
     public void insertWifiEntries(ArrayList<WifiEntry> listWifi, boolean updateTags, boolean isHidden) {
-        mLastInsertNewEntries = 0;
+        mNewEntriesOnLastInsert = 0;
 
         String table = isHidden ? PasswordHelper.TABLE_HIDDEN : PasswordHelper.TABLE_MAIN;
         Log.d(TAG, "insertWifiEntries - isHidden=" + isHidden + " table=" + table);
@@ -113,7 +113,7 @@ public class PasswordDB {
                 } else {
                 Log.e(TAG, "Inserting Entry - " + current.getTitle());
                     mDatabase.insert(table, null, values);
-                    mLastInsertNewEntries++;
+                    mNewEntriesOnLastInsert++;
                 }
 
                 cursor.close();
@@ -157,7 +157,10 @@ public class PasswordDB {
 
                 wifiEntry.setTitle(cursor.getString(cursor.getColumnIndex(PasswordHelper.COLUMN_TITLE)));
                 wifiEntry.setPassword(cursor.getString(cursor.getColumnIndex(PasswordHelper.COLUMN_PASSWORD)));
-                wifiEntry.setTag(cursor.getString(cursor.getColumnIndex(PasswordHelper.COLUMN_TAG)));
+
+                String tag = cursor.getString(cursor.getColumnIndex(PasswordHelper.COLUMN_TAG));
+                wifiEntry.setTag(tag == null ? "" : tag);
+
                 Log.e(TAG, "tag = " + wifiEntry.getTag());
                 listWifi.add(wifiEntry);
 

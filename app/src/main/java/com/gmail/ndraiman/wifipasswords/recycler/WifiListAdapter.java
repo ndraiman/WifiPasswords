@@ -36,7 +36,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     private Context mContext;
     private SparseBooleanArray mSelectedItems = new SparseBooleanArray();
 
-    //TODO remove isAnimated boolean and choice of animation
+
 
     public WifiListAdapter(Context context, boolean isAnimated, ItemDragListener dragListener) {
         layoutInflater = LayoutInflater.from(context);
