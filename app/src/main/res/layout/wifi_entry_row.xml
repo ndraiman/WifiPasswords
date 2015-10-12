@@ -55,7 +55,7 @@
         android:contentDescription="@string/drag_handler_description"
         android:padding="16dp"
         android:scaleType="center"
-        android:src="@drawable/ic_drag_dark"
+        android:src="@drawable/ic_gesture_drag"
         android:tint="@color/colorHighlight" />
 
 

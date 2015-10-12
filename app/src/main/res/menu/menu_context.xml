@@ -11,7 +11,7 @@
 
     <item android:id="@+id/menu_context_share"
         android:title="Share"
-        android:icon="@drawable/ic_share_light" />
+        android:icon="@drawable/ic_action_share" />
 
     <item android:id="@+id/menu_context_archive"
         android:title="Archive"

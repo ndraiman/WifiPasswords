@@ -797,7 +797,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
     private void setupFAB() {
         Log.d(TAG, "setupFAB");
-        mFAB.setImageResource(R.drawable.ic_add_light);
+        mFAB.setImageResource(R.drawable.ic_action_add);
         mFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

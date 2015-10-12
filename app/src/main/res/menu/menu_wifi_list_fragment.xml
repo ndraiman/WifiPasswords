@@ -7,7 +7,7 @@
 
         <item
             android:id="@+id/action_search"
-            android:icon="@drawable/ic_search_open_light"
+            android:icon="@drawable/ic_action_search_open"
             android:orderInCategory="100"
             android:title="@string/action_search"
             app:actionViewClass="android.support.v7.widget.SearchView"
@@ -15,7 +15,7 @@
 
         <item
             android:id="@+id/action_share"
-            android:icon="@drawable/ic_share_light"
+            android:icon="@drawable/ic_action_share"
             android:orderInCategory="200"
             android:title="@string/action_share"
             app:showAsAction="ifRoom" />
@@ -39,7 +39,7 @@
 
         <item
             android:id="@+id/action_sort_done"
-            android:icon="@drawable/ic_done_light"
+            android:icon="@drawable/ic_action_done"
             android:orderInCategory="150"
             android:title="@string/action_sort_done"
             android:visible="false"
