@@ -1,6 +1,7 @@
 package com.gmail.ndraiman.wifipasswords.activities;
 
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -17,14 +18,41 @@ public class IntroActivity extends AppIntro2 {
     public void init(Bundle savedInstanceState) {
         Log.d(TAG, "init");
 
-        addSlide(AppIntroFragment.newInstance("Welcome to WifiPasswords", "Let's walkthrough the app features", R.drawable.collapsing_header, ContextCompat.getColor(this, R.color.colorPrimary)));
-        addSlide(AppIntroFragment.newInstance("Root Permission Required", "Please grant Root Access when prompted", R.drawable.collapsing_header, ContextCompat.getColor(this, R.color.colorAccent)));
-        addSlide(AppIntroFragment.newInstance("Data Security", "While sharing wifi passwords is available through this app, please take care of doing so as it might comprise your network's security", R.drawable.collapsing_header, ContextCompat.getColor(this, android.R.color.black)));
-        addSlide(AppIntroFragment.newInstance("Quick Copy", "Double Tap a wifi entry to quickly copy its data to clipboard", R.drawable.collapsing_header, ContextCompat.getColor(this, R.color.colorPrimary)));
-        addSlide(AppIntroFragment.newInstance("Context Action Bar", "Long Click a Wifi Entry to bring it up", R.drawable.collapsing_header, ContextCompat.getColor(this, R.color.colorPrimaryDark)));
+        addSlide(AppIntroFragment.newInstance(getString(R.string.intro_title_welcome),
+                getString(R.string.intro_message_welcome),
+                R.drawable.intro_app_icon,
+                ContextCompat.getColor(this, R.color.colorPrimary)));
+
+        addSlide(AppIntroFragment.newInstance(getString(R.string.intro_title_disclaimer),
+                getString(R.string.intro_message_disclaimer),
+                R.drawable.intro_disclaimer,
+                ContextCompat.getColor(this, R.color.colorAccent)));
+
+        addSlide(AppIntroFragment.newInstance(getString(R.string.intro_title_root),
+                getString(R.string.intro_message_root),
+                R.drawable.intro_root_permission,
+                ContextCompat.getColor(this, R.color.colorPrimaryDark)));
+
+        addSlide(AppIntroFragment.newInstance(getString(R.string.intro_title_quick_copy),
+                getString(R.string.intro_message_quick_copy),
+                R.drawable.intro_quick_copy,
+                ContextCompat.getColor(this, R.color.colorAccent)));
+
+        addSlide(AppIntroFragment.newInstance(getString(R.string.intro_title_cab),
+                getString(R.string.intro_message_cab),
+                R.drawable.intro_cab,
+                ContextCompat.getColor(this, R.color.colorBlue900)));
+
+        addSlide(AppIntroFragment.newInstance(getString(R.string.intro_title_thank_you),
+                "",
+                R.drawable.intro_thank_you,
+                ContextCompat.getColor(this, R.color.colorPrimary)));
 
 
         setDepthAnimation();
+
+        //lock to Portrait Orientation
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
 

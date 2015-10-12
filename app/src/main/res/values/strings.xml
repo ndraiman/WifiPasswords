@@ -1,7 +1,32 @@
 <resources>
 
     <string name="text_placeholder">NA</string>
-    <string name="text_no_root">No Root Access</string>
+    <string name="toast_root_request">Requesting Root Permission…</string>
+
+
+    <!-- Titles -->
+    <string name="app_name">Wifi Passwords</string>
+    <string name="activity_title_settings">Settings</string>
+    <string name="activity_title_hidden_wifi">Archived Entries</string>
+    <string name="activity_title_intro">Intro</string>
+
+
+    <!-- Intro Messages -->
+    <string name="intro_title_welcome">Welcome to WifiPasswords</string>
+    <string name="intro_message_welcome">Showing you Passwords of saved Wifi Networks</string>
+    <string name="intro_title_disclaimer">Disclaimer</string>
+    <string name="intro_message_disclaimer">Sharing a Wifi Network\'s password can compromise its security
+        \n\nUse at your own discretion!</string>
+    <string name="intro_title_root">Root Permission Required</string>
+    <string name="intro_message_root">The app needs Root Access to import your saved passwords
+        \n\nPlease grant Root Access when prompted</string>
+    <string name="intro_title_quick_copy">Quick Copy</string>
+    <string name="intro_message_quick_copy">Double Tap a wifi entry to quickly copy its data to clipboard</string>
+    <string name="intro_title_cab">Context Action Bar</string>
+    <string name="intro_message_cab">Long Click a Wifi Entry to bring up the Contextual Action Bar
+        \n\nYou can then select multiple entries</string>
+    <string name="intro_title_thank_you">Thank you for choosing WifiPasswords</string>
+
 
     <!-- Snackbar -->
     <string name="snackbar_wifi_copy">Wifi Data Copied to Clipboard</string>
@@ -14,15 +39,12 @@
     <string name="snackbar_wifi_exists">Wifi Entry already exists!</string>
     <string name="snackbar_wifi_entries_inserted">new Wifi Entries Inserted</string>
 
-    <!-- Titles -->
-    <string name="app_name">Wifi Passwords</string>
-    <string name="activity_title_settings">Settings</string>
-    <string name="activity_title_hidden_wifi">Archived Entries</string>
 
     <!-- Content Descriptions -->
     <string name="collapsing_header_description">collapsing header</string>
     <string name="drag_handler_description">Drag Icon</string>
     <string name="tag_wifi_icon_description">Tag Icon</string>
+
 
     <!-- Settings Menu -->
     <string name="action_hidden_list">Archived Wifi Entries</string>
@@ -33,6 +55,7 @@
     <string name="action_search">Search</string>
     <string name="action_sort_start">Sort Mode</string>
     <string name="action_sort_done">Done Sorting</string>
+
 
     <!-- Preference Activity -->
     <string name="pref_category_general">General</string>
@@ -62,6 +85,7 @@
     <string name="pref_warnings_title">Reset Warnings</string>
     <string name="pref_warnings_summary">show warning dialogs</string>
     <string name="pref_warnings_toast">Will show warnings from now on</string>
+
 
     <!-- Alert Dialogs -->
     <string name="dialog_error_path_key">dialog_error</string>
@@ -99,7 +123,7 @@
     <string name="dialog_warning_share_key">dialog_warning_share</string>
     <string name="dialog_warning_share_title">Warning!</string>
     <string name="dialog_warning_share_message">Sharing a Wifi network password can compromise its security!</string>
-    <string name="dialog_warning_share_button">Ok</string>
+    <string name="dialog_warning_share_button">OK</string>
 
     <string name="dialog_error_root_key">dialog_error_root</string>
     <string name="dialog_error_root_title">Error! No Root Access!</string>

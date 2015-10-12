@@ -50,16 +50,6 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
 
 
     @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-
-        //Remove "No Root Access" error
-//        if(WifiListFragment.textNoRoot.getVisibility() == View.VISIBLE && mRootAccess) {
-//            WifiListFragment.textNoRoot.setVisibility(View.GONE);
-//        }
-    }
-
-    @Override
     protected ArrayList<WifiEntry> doInBackground(String... params) {
 
         if (!(mRootAccess = RootCheck.canRunRootCommands())) {
@@ -116,7 +106,6 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
 
         //Show "No Root Access" error
         if (!mRootAccess) {
-//            WifiListFragment.textNoRoot.setVisibility(View.VISIBLE);
 
             if (mListListener != null) {
                 Log.d(TAG, "OnCancelled Execute \n");

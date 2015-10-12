@@ -27,6 +27,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,7 +37,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.gmail.ndraiman.wifipasswords.R;
 import com.gmail.ndraiman.wifipasswords.activities.IntroActivity;
@@ -86,7 +87,6 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private FloatingActionButton mFAB;
     private ProgressBar mProgressBar;
-    public static TextView textNoRoot;
 
     //wpa_supplicant file
     private String mPath;
@@ -189,6 +189,13 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         }
 
         mAdapter.setWifiList(mListWifi);
+
+//        ArrayList<WifiEntry> placeholderData = new ArrayList<>();
+//        for (int i = 0; i < 50; i++) {
+//            WifiEntry current = new WifiEntry("Wifi " + (i+1), "Password " + (i+1));
+//            placeholderData.add(current);
+//        }
+//        mAdapter.setWifiList(placeholderData);
 
         //Restore Context Action Bar state
         if (mActionModeOn) {
@@ -344,6 +351,9 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                 if(resultCode == Activity.RESULT_OK) {
                     Log.d(TAG, "Returning From IntroApp - loading from file");
                     loadFromFile(true);
+                    Toast toast = Toast.makeText(getActivity(), R.string.toast_root_request, Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
                 }
                 break;
 
@@ -525,7 +535,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
 
     public void collapseAppBarLayout(boolean collapse) {
-
+        Log.d(TAG, "collapseAppBarLayout() called with: " + "collapse = [" + collapse + "]");
         mAppBarLayout.setExpanded(!collapse);
         mRecyclerView.setNestedScrollingEnabled(!collapse);
     }
@@ -545,7 +555,6 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     private void bindViews(View layout) {
 
         //Init local Views
-        textNoRoot = (TextView) layout.findViewById(R.id.text_no_root);
         mRecyclerView = (RecyclerView) layout.findViewById(R.id.main_wifi_list_recycler);
         mProgressBar = (ProgressBar) layout.findViewById(R.id.progress_bar);
         mRoot = (FrameLayout) layout.findViewById(R.id.fragment_main_container);
@@ -922,7 +931,14 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
         CustomAlertDialogFragment fragment = CustomAlertDialogFragment.getInstance(title, message, buttons);
         fragment.setTargetFragment(this, 0);
-        fragment.show(getFragmentManager(), getString(R.string.dialog_error_root_key));
+        try {
+            fragment.show(getFragmentManager(), getString(R.string.dialog_error_root_key));
+
+        } catch (IllegalStateException e) {
+
+            Log.e(TAG, "showRootErrorDialog ERROR: " + e.getClass().getName());
+            Toast.makeText(getActivity(), R.string.dialog_error_root_title, Toast.LENGTH_LONG).show();
+        }
 
         PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putBoolean(ROOT_ACCESS, false).apply();
 

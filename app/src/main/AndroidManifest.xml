@@ -27,7 +27,7 @@
             android:label="@string/activity_title_hidden_wifi" />
         <activity
             android:name=".activities.IntroActivity"
-            android:label="Intro" />
+            android:label="@string/activity_title_intro" />
     </application>
 
 </manifest>
