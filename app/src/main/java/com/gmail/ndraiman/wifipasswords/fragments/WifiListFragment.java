@@ -867,9 +867,9 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         String message = getString(R.string.dialog_warning_reset_message);
         String[] buttons = getResources().getStringArray(R.array.dialog_warning_reset_buttons);
 
-        CustomAlertDialogFragment fragment = CustomAlertDialogFragment.getInstance(title, message, buttons);
-        fragment.setTargetFragment(this, RequestCodes.DIALOG_WARNING_CODE);
-        fragment.show(getFragmentManager(), getString(R.string.dialog_warning_reset_key));
+        CustomAlertDialogFragment dialog = CustomAlertDialogFragment.getInstance(title, message, buttons);
+        dialog.setTargetFragment(this, RequestCodes.DIALOG_WARNING_CODE);
+        dialog.show(getFragmentManager(), getString(R.string.dialog_warning_reset_key));
 
     }
 
@@ -919,9 +919,9 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         String message = getString(R.string.dialog_error_path_message);
         String[] buttons = getResources().getStringArray(R.array.dialog_error_path_buttons);
 
-        CustomAlertDialogFragment fragment = CustomAlertDialogFragment.getInstance(title, message, buttons);
-        fragment.setTargetFragment(this, RequestCodes.DIALOG_ERROR_CODE);
-        fragment.show(getFragmentManager(), getString(R.string.dialog_error_path_key));
+        CustomAlertDialogFragment dialog = CustomAlertDialogFragment.getInstance(title, message, buttons);
+        dialog.setTargetFragment(this, RequestCodes.DIALOG_ERROR_CODE);
+        dialog.show(getFragmentManager(), getString(R.string.dialog_error_path_key));
     }
 
     public void showRootErrorDialog() {
@@ -931,10 +931,10 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         String message = getString(R.string.dialog_error_root_message);
         String[] buttons = getResources().getStringArray(R.array.dialog_error_root_button);
 
-        CustomAlertDialogFragment fragment = CustomAlertDialogFragment.getInstance(title, message, buttons);
-        fragment.setTargetFragment(this, 0);
+        CustomAlertDialogFragment dialog = CustomAlertDialogFragment.getInstance(title, message, buttons);
+        dialog.setTargetFragment(this, 0);
         try {
-            fragment.show(getFragmentManager(), getString(R.string.dialog_error_root_key));
+            dialog.show(getFragmentManager(), getString(R.string.dialog_error_root_key));
 
         } catch (IllegalStateException e) {
 

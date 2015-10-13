@@ -27,6 +27,7 @@ import android.view.View;
 
 import com.gmail.ndraiman.wifipasswords.R;
 import com.gmail.ndraiman.wifipasswords.database.PasswordDB;
+import com.gmail.ndraiman.wifipasswords.dialogs.HelpDialogFragment;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
 import com.gmail.ndraiman.wifipasswords.recycler.RecyclerTouchListener;
@@ -174,7 +175,8 @@ public class ArchiveActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_help:
-                //TODO implement "Help & Feedback" fragment
+                HelpDialogFragment dialog = HelpDialogFragment.getInstance();
+                dialog.show(getFragmentManager(), getString(R.string.dialog_about_key));
                 return true;
         }
 

@@ -7,26 +7,46 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:padding="4dp"
-        android:text="About"
+        android:layout_margin="@dimen/dialog_about_margin"
+        android:padding="@dimen/dialog_about_padding"
+        android:text="@string/dialog_about_title"
         android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:padding="4dp"
-        android:text="Version: 1.0"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+        android:layout_margin="@dimen/dialog_about_margin"
+        android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/dialog_about_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dialog_about_padding"
+            android:text="@string/dialog_about_version"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+
+        <TextView
+            android:id="@+id/dialog_about_github"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:longClickable="false"
+            android:padding="@dimen/dialog_about_padding"
+            android:text="@string/dialog_about_github"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+    </LinearLayout>
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/dialog_about_intro"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:padding="4dp"
-        android:text="GitHub repo (turn to hyperlink)"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-
+        android:layout_margin="@dimen/dialog_about_margin"
+        android:clickable="true"
+        android:longClickable="false"
+        android:padding="@dimen/dialog_about_padding"
+        android:text="@string/dialog_about_show_intro"
+        android:textColor="@color/colorAccent" />
 </LinearLayout>

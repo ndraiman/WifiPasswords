@@ -38,15 +38,15 @@ public class InputDialogFragment extends DialogFragment {
     private Button mCancel, mConfirm;
     private LinearLayout mRoot;
 
-    public static InputDialogFragment getInstance(int type, Bundle bundle) {
+    public static InputDialogFragment getInstance(int type, Bundle listWifiBundle) {
         InputDialogFragment fragment = new InputDialogFragment();
 
-        if (bundle == null) {
-            Log.d(TAG, "getInstance() called with bundle = null");
-            bundle = new Bundle();
+        if (listWifiBundle == null) {
+            Log.d(TAG, "getInstance() called with listWifiBundle = null");
+            listWifiBundle = new Bundle();
         }
-        bundle.putInt(TYPE_KEY, type);
-        fragment.setArguments(bundle);
+        listWifiBundle.putInt(TYPE_KEY, type);
+        fragment.setArguments(listWifiBundle);
 
         return fragment;
     }

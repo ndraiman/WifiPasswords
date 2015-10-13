@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.gmail.ndraiman.wifipasswords.R;
+import com.gmail.ndraiman.wifipasswords.dialogs.HelpDialogFragment;
 import com.gmail.ndraiman.wifipasswords.extras.AppCompatPreferenceActivity;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
 import com.gmail.ndraiman.wifipasswords.extras.RequestCodes;
@@ -93,7 +94,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 return true;
 
             case R.id.action_help:
-                //TODO call "Help & Feedback" fragment - same as in MainActivity
+                HelpDialogFragment dialog = HelpDialogFragment.getInstance();
+                dialog.show(getFragmentManager(), getString(R.string.dialog_about_key));
                 return true;
 
         }
