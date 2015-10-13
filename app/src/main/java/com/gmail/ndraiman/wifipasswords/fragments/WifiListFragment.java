@@ -261,7 +261,10 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
         mAdapter.setWifiList(mListWifi);
 
-        if (!resetDB && numOfEntries > 0) {
+        if(resetDB) {
+            mAppBarLayout.setExpanded(true);
+
+        } else if (numOfEntries > 0) {
             mAppBarLayout.setExpanded(false);
             mRecyclerView.smoothScrollToPosition(mListWifi.size());
 
@@ -434,7 +437,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
         Log.d(TAG, "updateDatabase()");
         PasswordDB db = MyApplication.getWritableDatabase();
-        db.deleteAll(false);
+        db.deleteWifiEntries(mListWifi, false);
         db.insertWifiEntries(mListWifi, true, false);
         MyApplication.closeDatabase();
     }
@@ -923,7 +926,6 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
     public void showRootErrorDialog() {
         Log.d(TAG, "showRootErrorDialog");
-        //TODO add "Don't Show Again" option???
 
         String title = getString(R.string.dialog_error_root_title);
         String message = getString(R.string.dialog_error_root_message);

@@ -46,7 +46,7 @@ public class PasswordDB {
 
         for (int i = 0; i < selectionArgs.length; i++) {
 
-            if(i > 0) {
+            if (i > 0) {
                 selection += " OR " + PasswordHelper.COLUMN_TITLE + " = ?";
             }
             selectionArgs[i] = listWifi.get(i).getTitle();
@@ -56,14 +56,14 @@ public class PasswordDB {
 
         Cursor cursor = mDatabase.query(PasswordHelper.TABLE_MAIN, columns, selection, selectionArgs, null, null, null);
 
-        if(cursor != null && cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
 
             do {
 
                 int id = cursor.getInt(cursor.getColumnIndex(PasswordHelper.COLUMN_UID));
                 mDatabase.update(PasswordHelper.TABLE_MAIN, values, PasswordHelper.COLUMN_UID + " = ?", new String[]{id + ""});
 
-            } while(cursor.moveToNext());
+            } while (cursor.moveToNext());
 
             cursor.close();
         }
@@ -94,24 +94,24 @@ public class PasswordDB {
             values.put(PasswordHelper.COLUMN_TITLE, current.getTitle());
             values.put(PasswordHelper.COLUMN_PASSWORD, current.getPassword());
 
-            if(updateTags) {
+            if (updateTags) {
                 values.put(PasswordHelper.COLUMN_TAG, current.getTag());
 
             }
 
-            if(!archive) {
+            if (!archive) {
                 //Main Table - Check for duplicates
                 String[] selectionArgs = new String[]{current.getTitle()};
                 Cursor cursor = mDatabase.query(table, columns, selection, selectionArgs, null, null, null);
 
                 if (cursor.moveToFirst()) {
-                Log.e(TAG, "Updating Entry - " + current.getTitle());
+                    Log.e(TAG, "Updating Entry - " + current.getTitle());
 
                     int id = cursor.getInt(cursor.getColumnIndex(PasswordHelper.COLUMN_UID));
                     mDatabase.update(table, values, PasswordHelper.COLUMN_UID + " = ?", new String[]{id + ""});
 
                 } else {
-                Log.e(TAG, "Inserting Entry - " + current.getTitle());
+                    Log.e(TAG, "Inserting Entry - " + current.getTitle());
                     mDatabase.insert(table, null, values);
                     mNewEntriesOnLastInsert++;
                 }
@@ -126,6 +126,25 @@ public class PasswordDB {
         Log.d(TAG, "inserting entries " + listWifi.size() + new Date(System.currentTimeMillis()));
     }
 
+
+    //Holds Deleted Wifi Entries
+    public void insertDeleted(ArrayList<WifiEntry> listWifi) {
+        Log.d(TAG, "insertDeleted");
+
+        ContentValues values = new ContentValues();
+
+        for (int i = 0; i < listWifi.size(); i++) {
+            WifiEntry current = listWifi.get(i);
+
+            values.clear();
+            values.put(PasswordHelper.COLUMN_TITLE, current.getTitle());
+            values.put(PasswordHelper.COLUMN_PASSWORD, current.getPassword());
+            values.put(PasswordHelper.COLUMN_TAG, current.getTag());
+
+            mDatabase.insert(PasswordHelper.TABLE_DELETED, null, values);
+        }
+    }
+
     /***************************************************/
     /****************** Get Methods ********************/
     /***************************************************/
@@ -135,12 +154,17 @@ public class PasswordDB {
         String table = archive ? PasswordHelper.TABLE_ARCHIVE : PasswordHelper.TABLE_MAIN;
         Log.d(TAG, "getAllWifiEntries - archive=" + archive + " table=" + table);
 
-        String selection = null;
+        String selection;
 
         if (!archive) {
             selection = PasswordHelper.COLUMN_TITLE + " NOT IN (SELECT "
                     + PasswordHelper.COLUMN_TITLE
                     + " FROM " + PasswordHelper.TABLE_ARCHIVE + ")";
+
+        } else {
+            selection = PasswordHelper.COLUMN_TITLE + " NOT IN (SELECT "
+                    + PasswordHelper.COLUMN_TITLE
+                    + " FROM " + PasswordHelper.TABLE_DELETED + ")";
         }
 
         ArrayList<WifiEntry> listWifi = new ArrayList<>();
@@ -161,7 +185,7 @@ public class PasswordDB {
                 String tag = cursor.getString(cursor.getColumnIndex(PasswordHelper.COLUMN_TAG));
                 wifiEntry.setTag(tag == null ? "" : tag);
 
-                Log.e(TAG, "tag = " + wifiEntry.getTag());
+//                Log.e(TAG, "tag = " + wifiEntry.getTag());
                 listWifi.add(wifiEntry);
 
             } while (cursor.moveToNext());
@@ -180,7 +204,7 @@ public class PasswordDB {
 
         Cursor cursor = mDatabase.query(table, null, whereClause, whereArgs, null, null, null);
 
-        if(cursor != null && cursor.moveToFirst()) {
+        if (cursor != null && cursor.moveToFirst()) {
             Log.d(TAG, "loading entries " + cursor.getCount() + new Date(System.currentTimeMillis()));
 
             do {
@@ -192,7 +216,7 @@ public class PasswordDB {
 
                 listWifi.add(entry);
 
-            }while(cursor.moveToNext());
+            } while (cursor.moveToNext());
 
             cursor.close();
         }
@@ -203,6 +227,13 @@ public class PasswordDB {
     /******************************************************/
     /****************** Delete Methods ********************/
     /******************************************************/
+
+    public void purgeDatabase() {
+        Log.d(TAG, "purgeDatabase");
+        deleteAll(false);
+        deleteAll(true);
+        mDatabase.delete(PasswordHelper.TABLE_DELETED, null, null);
+    }
 
     public void deleteAll(boolean archive) {
 
@@ -234,6 +265,42 @@ public class PasswordDB {
     }
 
 
+    /******************************************************/
+    /****************** DEBUG Methods ********************/
+    /******************************************************/
+    //TODO Delete
+    public String printTable(String table) {
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("TABLE: " + table.toUpperCase() + "\n");
+
+        Cursor cursor = mDatabase.query(table, null, null, null, null, null, null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+
+            do {
+
+
+                String title = cursor.getString(cursor.getColumnIndex(PasswordHelper.COLUMN_TITLE));
+                String password = cursor.getString(cursor.getColumnIndex(PasswordHelper.COLUMN_PASSWORD));
+                String tag = cursor.getString(cursor.getColumnIndex(PasswordHelper.COLUMN_TAG));
+                if (tag == null) {
+                    tag = "null";
+                }
+
+                stringBuilder.append(title + " ||| " + password + " ||| " + tag + "\n");
+
+
+            } while (cursor.moveToNext());
+
+
+            cursor.close();
+        }
+
+        return stringBuilder.toString();
+    }
+
+
     /*************************************************************/
     /****************** Database Helper Class ********************/
     /*************************************************************/
@@ -244,6 +311,7 @@ public class PasswordDB {
 
         public static final String TABLE_MAIN = "passwords_main";
         public static final String TABLE_ARCHIVE = "passwords_archive";
+        public static final String TABLE_DELETED = "passwords_deleted";
 
         public static final String COLUMN_UID = "id";
         public static final String COLUMN_TITLE = "title";
@@ -261,7 +329,15 @@ public class PasswordDB {
         public static final String CREATE_TABLE_ARCHIVE = "CREATE TABLE " + TABLE_ARCHIVE
                 + " ("
                 + COLUMN_UID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + COLUMN_TITLE + " TEXT,"
+                + COLUMN_TITLE + " TEXT UNIQUE,"
+                + COLUMN_PASSWORD + " TEXT,"
+                + COLUMN_TAG + " TEXT"
+                + ");";
+
+        public static final String CREATE_TABLE_DELETED = "CREATE TABLE " + TABLE_DELETED
+                + " ("
+                + COLUMN_UID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + COLUMN_TITLE + " TEXT UNIQUE,"
                 + COLUMN_PASSWORD + " TEXT,"
                 + COLUMN_TAG + " TEXT"
                 + ");";
@@ -283,6 +359,8 @@ public class PasswordDB {
                 Log.d(TAG, "create table main executed");
                 db.execSQL(CREATE_TABLE_ARCHIVE);
                 Log.d(TAG, "create table archive executed");
+                db.execSQL(CREATE_TABLE_DELETED);
+                Log.d(TAG, "create table deleted executed");
 
             } catch (SQLiteException e) {
                 Log.e(TAG, "ERROR: Helper onCreate - " + e);
@@ -297,6 +375,7 @@ public class PasswordDB {
                 Log.e(TAG, "upgrade table box office executed");
                 db.execSQL("DROP TABLE " + TABLE_MAIN + " IF EXISTS;");
                 db.execSQL("DROP TABLE " + TABLE_ARCHIVE + " IF EXISTS;");
+                db.execSQL("DROP TABLE " + TABLE_DELETED + " IF EXISTS;");
                 onCreate(db);
 
             } catch (SQLiteException e) {

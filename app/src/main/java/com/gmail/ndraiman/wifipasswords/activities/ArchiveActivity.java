@@ -345,7 +345,7 @@ public class ArchiveActivity extends AppCompatActivity {
                         return true;
 
                     case R.id.menu_context_delete:
-                        //TODO should "add from file" get deleted items?
+
                         mAnimateChanges = true;
                         //show Delete confirmation Dialog
                         String[] buttons = getResources().getStringArray(R.array.dialog_delete_buttons);
@@ -415,10 +415,9 @@ public class ArchiveActivity extends AppCompatActivity {
             //Starting removal from end of list so Indexes wont change when item is removed
             mAdapter.removeItem(selectedItems.get(i));
         }
-        //TODO Currently Add from File should return deleted items.
+
         PasswordDB db = MyApplication.getWritableDatabase();
-        db.deleteWifiEntries(selectedEntries, true);
-        db.deleteWifiEntries(selectedEntries, false);
+        db.insertDeleted(selectedEntries);
         MyApplication.closeDatabase();
     }
 

@@ -76,8 +76,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
 
         if (mResetDB) {
             Log.d(TAG, "Resetting Database");
-            db.deleteAll(false);
-            db.deleteAll(true);
+            db.purgeDatabase();
         }
 
         db.insertWifiEntries(wifiEntries, mResetDB, false); //keep Tags according to mResetDB
