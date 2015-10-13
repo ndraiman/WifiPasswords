@@ -14,7 +14,7 @@
             android:id="@+id/input_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/dialog_input_margin"
             android:hint="@string/dialog_add_title_hint"
             android:imeOptions="actionNext"
             android:inputType="text"
@@ -31,7 +31,7 @@
             android:id="@+id/input_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/dialog_input_margin"
             android:hint="@string/dialog_add_password_hint"
             android:imeOptions="actionGo"
             android:inputType="text"
@@ -50,7 +50,7 @@
             style="?attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/dialog_input_margin"
             android:text="Cancel" />
 
         <Button
@@ -58,7 +58,7 @@
             style="?attr/buttonBarButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
+            android:layout_margin="@dimen/dialog_input_margin"
             android:text="Add" />
 
     </LinearLayout>

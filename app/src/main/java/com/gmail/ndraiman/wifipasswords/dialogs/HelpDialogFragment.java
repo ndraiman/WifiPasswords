@@ -39,13 +39,21 @@ public class HelpDialogFragment extends DialogFragment {
         LayoutInflater inflater = LayoutInflater.from(parent);
         View helpDialogLayout = inflater.inflate(R.layout.dialog_about, null);
 
+        TextView info = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_info);
         TextView version = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_version);
         TextView github = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_github);
-        TextView intro = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_intro);
+        TextView libraryProgressBar = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_library_materialprogressbar);
+        TextView libraryAppIntro = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_library_appintro);
+        TextView helpIntro = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_help_intro);
+        TextView helpReadme = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_help_readme);
 
+        info.setMovementMethod(LinkMovementMethod.getInstance());
         github.setMovementMethod(LinkMovementMethod.getInstance());
+        libraryProgressBar.setMovementMethod(LinkMovementMethod.getInstance());
+        libraryAppIntro.setMovementMethod(LinkMovementMethod.getInstance());
+        helpReadme.setMovementMethod(LinkMovementMethod.getInstance());
 
-        intro.setOnClickListener(new View.OnClickListener() {
+        helpIntro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(v.getContext(), IntroActivity.class));
@@ -62,6 +70,8 @@ public class HelpDialogFragment extends DialogFragment {
 
         version.setText(versionName);
 
+
+        builder.setTitle(getString(R.string.dialog_about_title));
         builder.setView(helpDialogLayout)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override

@@ -13,7 +13,8 @@
     <dimen name="size_text_secondary">14sp</dimen>
     <dimen name="size_list_item">72dp</dimen>
 
-    <dimen name="dialog_about_margin">8dp</dimen>
+    <dimen name="dialog_input_margin">16dp</dimen>
+    <dimen name="dialog_about_margin">16dp</dimen>
     <dimen name="dialog_about_padding">4dp</dimen>
 
 </resources>
