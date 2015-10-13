@@ -11,14 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
-        app:layout_collapseMode="pin">
+        app:layout_behavior="com.gmail.ndraiman.wifipasswords.extras.FlingBehavior">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/app_bar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:paddingTop="@dimen/app_bar_top_padding"
-            app:layout_collapseMode="pin"
+            app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
             app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 

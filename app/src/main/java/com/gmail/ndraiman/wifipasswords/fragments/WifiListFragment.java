@@ -7,11 +7,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -34,6 +32,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ProgressBar;
@@ -53,6 +53,7 @@ import com.gmail.ndraiman.wifipasswords.extras.RequestCodes;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
 import com.gmail.ndraiman.wifipasswords.recycler.ItemDragListener;
 import com.gmail.ndraiman.wifipasswords.recycler.MyTouchHelperCallback;
+import com.gmail.ndraiman.wifipasswords.recycler.RecyclerScrollListener;
 import com.gmail.ndraiman.wifipasswords.recycler.RecyclerTouchListener;
 import com.gmail.ndraiman.wifipasswords.recycler.WifiListAdapter;
 import com.gmail.ndraiman.wifipasswords.recycler.WifiListLoadedListener;
@@ -84,7 +85,6 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     //Layout
     private FrameLayout mRoot;
     private AppBarLayout mAppBarLayout;
-    private CollapsingToolbarLayout mCollapsingToolbarLayout;
     private FloatingActionButton mFAB;
     private ProgressBar mProgressBar;
 
@@ -235,7 +235,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         Log.d(TAG, "onSaveInstanceState");
         //save the wifi list to a parcelable prior to rotation or configuration change
         outState.putParcelableArrayList(STATE_WIFI_ENTRIES,
-                mSearchView.isIconified() ? mListWifi : mSearchSavedList);
+                mSearchView != null && mSearchView.isIconified() ? mListWifi : mSearchSavedList);
 
         if (mSearchView != null) {
             mSearchSavedQuery = mSearchView.getQuery().toString();
@@ -501,8 +501,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     public void searchMode(Menu menu, boolean isOn) {
         Log.d(TAG, "searchMode - isOn = " + isOn);
 
-        collapseAppBarLayout(isOn);
-        mCollapsingToolbarLayout.setCollapsedTitleTextColor(isOn ? Color.TRANSPARENT : Color.WHITE);
+        hideFAB(isOn);
 
         for (int i = 0; i < menu.size(); i++) {
 
@@ -516,7 +515,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     //Toggle Sort Mode
     public void sortMode(boolean isOn) {
         Log.d(TAG, "sortMode - isOn = " + isOn);
-        collapseAppBarLayout(isOn);
+        hideFAB(isOn);
         mAdapter.showDragHandler(isOn);
 
         //Disable Touch actions while in sort mode
@@ -537,10 +536,17 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     }
 
 
-    public void collapseAppBarLayout(boolean collapse) {
-        Log.d(TAG, "collapseAppBarLayout() called with: " + "collapse = [" + collapse + "]");
-        mAppBarLayout.setExpanded(!collapse);
-        mRecyclerView.setNestedScrollingEnabled(!collapse);
+    public void hideFAB(boolean hide) {
+        Log.d(TAG, "hideFAB() called with: " + "hide = [" + hide + "]");
+//        mRecyclerView.setNestedScrollingEnabled(!hide);
+
+        if(hide) {
+            mFAB.hide();
+
+        } else {
+            mFAB.show();
+
+        }
     }
 
     //Sort Mode Method - sort via drag
@@ -564,8 +570,10 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
         //get Activity Views
         mFAB = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-        mCollapsingToolbarLayout = (CollapsingToolbarLayout) getActivity().findViewById(R.id.collapsing_layout);
         mAppBarLayout = (AppBarLayout) getActivity().findViewById(R.id.app_bar_layout);
+
+        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.simple_grow);
+        mFAB.startAnimation(animation);
 
     }
 
@@ -635,6 +643,20 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         });
 
         mRecyclerView.addOnItemTouchListener(mRecyclerTouchListener);
+
+
+        //Setup Scroll Listener
+        mRecyclerView.addOnScrollListener(new RecyclerScrollListener() {
+            @Override
+            public void show() {
+                mFAB.animate().translationY(0).start();
+            }
+
+            @Override
+            public void hide() {
+                mFAB.animate().translationY(mFAB.getHeight() * 2).start();
+            }
+        });
     }
 
     //Setup Context Action Mode
@@ -658,7 +680,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
             @Override
             public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                collapseAppBarLayout(true);
+                hideFAB(true);
                 return true;
             }
 

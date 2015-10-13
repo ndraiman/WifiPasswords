@@ -67,7 +67,7 @@
         android:drawableLeft="@drawable/ic_action_tag"
         android:drawablePadding="4dp"
         android:drawableStart="@drawable/ic_action_tag"
-        android:ems="5"
+        android:ems="8"
         android:padding="4dp"
         android:singleLine="true"
         android:text="@string/text_placeholder"

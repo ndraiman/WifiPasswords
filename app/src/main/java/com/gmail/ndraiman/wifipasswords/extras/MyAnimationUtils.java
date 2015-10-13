@@ -7,7 +7,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 
 
-public class AnimationUtils {
+public class MyAnimationUtils {
 
 
     public static void animateSunblind(View viewToAnimate, boolean goesDown) {

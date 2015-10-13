@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -100,6 +101,7 @@ public class InputDialogFragment extends DialogFragment {
                 getDialog().setTitle(R.string.dialog_tag_title);
                 mPassword.setVisibility(View.GONE);
                 mTitle.setHint(R.string.dialog_tag_hint);
+                mTitle.setImeOptions(EditorInfo.IME_ACTION_GO);
                 TextInputLayout input = (TextInputLayout) layout.findViewById(R.id.input_title_layout);
                 input.setHint("");
                 mConfirm.setText(R.string.dialog_tag_button);

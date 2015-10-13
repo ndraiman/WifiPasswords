@@ -10,12 +10,13 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gmail.ndraiman.wifipasswords.R;
-import com.gmail.ndraiman.wifipasswords.extras.AnimationUtils;
+import com.gmail.ndraiman.wifipasswords.extras.MyAnimationUtils;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
 
 import java.util.ArrayList;
@@ -113,6 +114,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     private void toggleTagAndDrag(MyViewHolder holder) {
         if (mShowDragHandler) {
             holder.mDragHandler.setVisibility(View.VISIBLE);
+            holder.mDragHandler.startAnimation(AnimationUtils.loadAnimation(mContext, R.anim.simple_grow));
             holder.mTagText.setVisibility(View.GONE);
 
         } else {
@@ -274,7 +276,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
 //                            position%2 == 0 ? R.anim.slide_in_up_left : R.anim.slide_in_up_right);
 //            viewToAnimate.startAnimation(animation);
 
-            AnimationUtils.translateY(viewToAnimate, true);
+            MyAnimationUtils.translateY(viewToAnimate, true);
             mPreviousPosition = position;
         }
     }

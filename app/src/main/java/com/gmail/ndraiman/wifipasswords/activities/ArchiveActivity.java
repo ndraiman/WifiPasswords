@@ -88,7 +88,7 @@ public class ArchiveActivity extends AppCompatActivity {
             getWindow().setExitTransition(slideFromRight);
 
         }
-        setContentView(R.layout.activity_hidden_wifi);
+        setContentView(R.layout.activity_archive);
 
         mListWifi = new ArrayList<>();
 
