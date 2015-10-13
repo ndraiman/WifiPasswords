@@ -14,17 +14,22 @@
     <!-- Intro Messages -->
     <string name="intro_title_welcome">Welcome to WifiPasswords</string>
     <string name="intro_message_welcome">Showing you Passwords of saved Wifi Networks</string>
+
     <string name="intro_title_disclaimer">Disclaimer</string>
     <string name="intro_message_disclaimer">Sharing a Wifi Network\'s password can compromise its security
         \n\nUse at your own discretion!</string>
+
     <string name="intro_title_root">Root Permission Required</string>
     <string name="intro_message_root">The app needs Root Access to import your saved passwords
         \n\nPlease grant Root Access when prompted</string>
+
     <string name="intro_title_quick_copy">Quick Copy</string>
     <string name="intro_message_quick_copy">Double Tap a wifi entry to quickly copy its data to clipboard</string>
+
     <string name="intro_title_cab">Context Action Bar</string>
     <string name="intro_message_cab">Long Click a Wifi Entry to bring up the Contextual Action Bar
         \n\nYou can then select multiple entries</string>
+
     <string name="intro_title_thank_you">Thank you for choosing WifiPasswords</string>
 
 
@@ -41,9 +46,9 @@
 
 
     <!-- Content Descriptions -->
-    <string name="collapsing_header_description">collapsing header</string>
-    <string name="drag_handler_description">Drag Icon</string>
-    <string name="tag_wifi_icon_description">Tag Icon</string>
+    <string name="collapsing_header_description" translateable="false">collapsing header</string>
+    <string name="drag_handler_description" translateable="false">Drag Icon</string>
+    <string name="tag_wifi_icon_description" translateable="false">Tag Icon</string>
 
 
     <!-- Settings Menu -->
@@ -59,17 +64,20 @@
 
     <!-- Preference Activity -->
     <string name="pref_category_general">General</string>
-    <string name="pref_path_default">/data/misc/wifi/wpa_supplicant.conf</string>
-    <string name="pref_path_manual_key">pref_path_manual</string>
+
+    <string name="pref_path_default" translateable="false">/data/misc/wifi/wpa_supplicant.conf</string>
+    <string name="pref_path_manual_key" translateable="false">pref_path_manual</string>
     <string name="pref_path_manual_title">Manual Location</string>
-    <string name="pref_path_list_key">pref_path_list</string>
+    <string name="pref_path_list_key" translateable="false">pref_path_list</string>
     <string name="pref_path_list_title">File Location</string>
-    <string name="pref_reset_manual_key">pref_reset_manual</string>
+
+    <string name="pref_reset_manual_key" translateable="false">pref_reset_manual</string>
     <string name="pref_reset_manual_summary">restore default path</string>
     <string name="pref_reset_manual_title">Reset Manual Location</string>
 
     <string name="pref_category_default">Reset to Default</string>
-    <string name="pref_default_key">pref_default</string>
+
+    <string name="pref_default_key" translateable="false">pref_default</string>
     <string name="pref_default_title">Reload From File</string>
     <string name="pref_default_summary">Delete all the data and reloads it from file</string>
 
@@ -81,14 +89,14 @@
     </string-array>
     <string name="pref_path_list_manual">Manual</string>
 
-    <string name="pref_warnings_key">pref_warnings</string>
+    <string name="pref_warnings_key" translateable="false">pref_warnings</string>
     <string name="pref_warnings_title">Reset Warnings</string>
     <string name="pref_warnings_summary">show warning dialogs</string>
     <string name="pref_warnings_toast">Will show warnings from now on</string>
 
 
     <!-- Alert Dialogs -->
-    <string name="dialog_error_path_key">dialog_error</string>
+    <string name="dialog_error_path_key" translateable="false">dialog_error</string>
     <string name="dialog_error_path_title">Error!</string>
     <string name="dialog_error_path_message">Could not locate File \n would you like to change path settings?</string>
     <string-array name="dialog_error_path_buttons">
@@ -96,7 +104,7 @@
         <item>Dismiss</item>
     </string-array>
 
-    <string name="dialog_warning_reset_key">dialog_warning_reset</string>
+    <string name="dialog_warning_reset_key" translateable="false">dialog_warning_reset</string>
     <string name="dialog_warning_reset_title">Warning!</string>
     <string name="dialog_warning_reset_message">Reloading data from file will erase current database</string>
     <string-array name="dialog_warning_reset_buttons">
@@ -104,7 +112,7 @@
         <item>Cancel</item>
     </string-array>
 
-    <string name="dialog_exit_key">dialog_exit</string>
+    <string name="dialog_exit_key" translateable="false">dialog_exit</string>
     <string name="dialog_exit_title">Exit</string>
     <string name="dialog_exit_message">Are you sure you want to close Wifi-Passwords?</string>
     <string-array name="dialog_exit_buttons">
@@ -112,7 +120,7 @@
         <item>No</item>
     </string-array>
 
-    <string name="dialog_delete_key">dialog_delete</string>
+    <string name="dialog_delete_key" translateable="false">dialog_delete</string>
     <string name="dialog_delete_title">Delete?</string>
     <string name="dialog_delete_message">Are you sure? Deleting these items will remove them permanently</string>
     <string-array name="dialog_delete_buttons">
@@ -120,12 +128,12 @@
         <item>Cancel</item>
     </string-array>
 
-    <string name="dialog_warning_share_key">dialog_warning_share</string>
+    <string name="dialog_warning_share_key" translateable="false">dialog_warning_share</string>
     <string name="dialog_warning_share_title">Warning!</string>
     <string name="dialog_warning_share_message">Sharing a Wifi network password can compromise its security!</string>
     <string name="dialog_warning_share_button">OK</string>
 
-    <string name="dialog_error_root_key">dialog_error_root</string>
+    <string name="dialog_error_root_key" translateable="false">dialog_error_root</string>
     <string name="dialog_error_root_title">Error! No Root Access!</string>
     <string name="dialog_error_root_message">
         The app is not be able to import your wifi passwords without Root
@@ -139,7 +147,7 @@
     <!-- Dialog Fragment -->
     <string name="dialog_add_title_hint">Title</string>
     <string name="dialog_add_password_hint">Password</string>
-    <string name="dialog_add_key">dialog_input_add</string>
+    <string name="dialog_add_key" translateable="false">dialog_input_add</string>
     <string name="dialog_add_title">Add Wifi Entry</string>
     <string name="dialog_add_error_empty">One or More fields are blank</string>
     <string name="dialog_add_title_empty">Title cannot be empty</string>
@@ -150,7 +158,7 @@
     </string-array>
 
     <string name="dialog_tag_title">Modify Tag</string>
-    <string name="dialog_tag_key">dialog_input_tag</string>
+    <string name="dialog_tag_key" translateable="false">dialog_input_tag</string>
     <string name="dialog_tag_error">Tag cannot be empty</string>
     <string name="dialog_tag_hint">Tag</string>
     <string name="dialog_tag_button">Save</string>

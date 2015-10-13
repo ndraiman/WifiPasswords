@@ -35,9 +35,9 @@ import com.gmail.ndraiman.wifipasswords.recycler.WifiListAdapter;
 import java.util.ArrayList;
 
 
-public class HiddenWifiActivity extends AppCompatActivity {
+public class ArchiveActivity extends AppCompatActivity {
 
-    private static final String TAG = "HiddenWifiActivity";
+    private static final String TAG = "ArchiveActivity";
     private static final String COPIED_WIFI_ENTRY = "copied_wifi_entry"; //Clipboard Label
 
     private static final String STATE_HIDDEN_ENTRIES = "state_hidden_entries";
@@ -66,7 +66,7 @@ public class HiddenWifiActivity extends AppCompatActivity {
     private boolean mAnimateChanges = false; //Checks if Archive was pressed - will not call clearSelection to preserve animations
 
 
-    public HiddenWifiActivity() {
+    public ArchiveActivity() {
 
     }
 
@@ -350,7 +350,7 @@ public class HiddenWifiActivity extends AppCompatActivity {
                         //show Delete confirmation Dialog
                         String[] buttons = getResources().getStringArray(R.array.dialog_delete_buttons);
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(HiddenWifiActivity.this, R.style.DeleteDialogTheme);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(ArchiveActivity.this, R.style.DeleteDialogTheme);
 
                         builder.setMessage(R.string.dialog_delete_message)
                                 .setTitle(R.string.dialog_delete_title)

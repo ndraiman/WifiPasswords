@@ -100,6 +100,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         }
     }
 
+
     @Override
     protected void onCancelled() {
         super.onCancelled();

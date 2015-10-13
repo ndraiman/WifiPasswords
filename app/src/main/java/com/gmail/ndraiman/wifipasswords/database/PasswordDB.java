@@ -76,11 +76,11 @@ public class PasswordDB {
     /****************** Insert Methods ********************/
     /******************************************************/
 
-    public void insertWifiEntries(ArrayList<WifiEntry> listWifi, boolean updateTags, boolean isHidden) {
+    public void insertWifiEntries(ArrayList<WifiEntry> listWifi, boolean updateTags, boolean archive) {
         mNewEntriesOnLastInsert = 0;
 
-        String table = isHidden ? PasswordHelper.TABLE_HIDDEN : PasswordHelper.TABLE_MAIN;
-        Log.d(TAG, "insertWifiEntries - isHidden=" + isHidden + " table=" + table);
+        String table = archive ? PasswordHelper.TABLE_ARCHIVE : PasswordHelper.TABLE_MAIN;
+        Log.d(TAG, "insertWifiEntries - archive=" + archive + " table=" + table);
 
         ContentValues values = new ContentValues();
 
@@ -99,7 +99,7 @@ public class PasswordDB {
 
             }
 
-            if(!isHidden) {
+            if(!archive) {
                 //Main Table - Check for duplicates
                 String[] selectionArgs = new String[]{current.getTitle()};
                 Cursor cursor = mDatabase.query(table, columns, selection, selectionArgs, null, null, null);
@@ -130,17 +130,17 @@ public class PasswordDB {
     /****************** Get Methods ********************/
     /***************************************************/
 
-    public ArrayList<WifiEntry> getAllWifiEntries(boolean isHidden) {
+    public ArrayList<WifiEntry> getAllWifiEntries(boolean archive) {
 
-        String table = isHidden ? PasswordHelper.TABLE_HIDDEN : PasswordHelper.TABLE_MAIN;
-        Log.d(TAG, "getAllWifiEntries - isHidden=" + isHidden + " table=" + table);
+        String table = archive ? PasswordHelper.TABLE_ARCHIVE : PasswordHelper.TABLE_MAIN;
+        Log.d(TAG, "getAllWifiEntries - archive=" + archive + " table=" + table);
 
         String selection = null;
 
-        if (!isHidden) {
+        if (!archive) {
             selection = PasswordHelper.COLUMN_TITLE + " NOT IN (SELECT "
                     + PasswordHelper.COLUMN_TITLE
-                    + " FROM " + PasswordHelper.TABLE_HIDDEN + ")";
+                    + " FROM " + PasswordHelper.TABLE_ARCHIVE + ")";
         }
 
         ArrayList<WifiEntry> listWifi = new ArrayList<>();
@@ -171,10 +171,10 @@ public class PasswordDB {
         return listWifi;
     }
 
-    public ArrayList<WifiEntry> getWifiEntries(String whereClause, String[] whereArgs, boolean isHidden) {
+    public ArrayList<WifiEntry> getWifiEntries(String whereClause, String[] whereArgs, boolean archive) {
 
-        String table = isHidden ? PasswordHelper.TABLE_HIDDEN : PasswordHelper.TABLE_MAIN;
-        Log.d(TAG, "getWifiEntries - isHidden=" + isHidden + " table=" + table);
+        String table = archive ? PasswordHelper.TABLE_ARCHIVE : PasswordHelper.TABLE_MAIN;
+        Log.d(TAG, "getWifiEntries - archive=" + archive + " table=" + table);
 
         ArrayList<WifiEntry> listWifi = new ArrayList<>();
 
@@ -204,19 +204,19 @@ public class PasswordDB {
     /****************** Delete Methods ********************/
     /******************************************************/
 
-    public void deleteAll(boolean isHidden) {
+    public void deleteAll(boolean archive) {
 
-        String table = isHidden ? PasswordHelper.TABLE_HIDDEN : PasswordHelper.TABLE_MAIN;
-        Log.d(TAG, "deleteAll - isHidden=" + isHidden + " table=" + table);
+        String table = archive ? PasswordHelper.TABLE_ARCHIVE : PasswordHelper.TABLE_MAIN;
+        Log.d(TAG, "deleteAll - archive=" + archive + " table=" + table);
 
         mDatabase.delete(table, null, null);
     }
 
 
-    public void deleteWifiEntries(ArrayList<WifiEntry> listWifi, boolean isHidden) {
+    public void deleteWifiEntries(ArrayList<WifiEntry> listWifi, boolean archive) {
 
-        String table = isHidden ? PasswordHelper.TABLE_HIDDEN : PasswordHelper.TABLE_MAIN;
-        Log.d(TAG, "deleteWifiEntries - isHidden=" + isHidden + " table=" + table);
+        String table = archive ? PasswordHelper.TABLE_ARCHIVE : PasswordHelper.TABLE_MAIN;
+        Log.d(TAG, "deleteWifiEntries - archive=" + archive + " table=" + table);
 
         String whereClause = PasswordHelper.COLUMN_TITLE + " = ?";
         String[] whereArgs;
@@ -243,7 +243,7 @@ public class PasswordDB {
         public static final int DB_VERSION = 1;
 
         public static final String TABLE_MAIN = "passwords_main";
-        public static final String TABLE_HIDDEN = "passwords_hidden";
+        public static final String TABLE_ARCHIVE = "passwords_archive";
 
         public static final String COLUMN_UID = "id";
         public static final String COLUMN_TITLE = "title";
@@ -258,7 +258,7 @@ public class PasswordDB {
                 + COLUMN_TAG + " TEXT"
                 + ");";
 
-        public static final String CREATE_TABLE_HIDDEN = "CREATE TABLE " + TABLE_HIDDEN
+        public static final String CREATE_TABLE_ARCHIVE = "CREATE TABLE " + TABLE_ARCHIVE
                 + " ("
                 + COLUMN_UID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + COLUMN_TITLE + " TEXT,"
@@ -281,8 +281,8 @@ public class PasswordDB {
             try {
                 db.execSQL(CREATE_TABLE_MAIN);
                 Log.d(TAG, "create table main executed");
-                db.execSQL(CREATE_TABLE_HIDDEN);
-                Log.d(TAG, "create table hidden executed");
+                db.execSQL(CREATE_TABLE_ARCHIVE);
+                Log.d(TAG, "create table archive executed");
 
             } catch (SQLiteException e) {
                 Log.e(TAG, "ERROR: Helper onCreate - " + e);
@@ -296,7 +296,7 @@ public class PasswordDB {
             try {
                 Log.e(TAG, "upgrade table box office executed");
                 db.execSQL("DROP TABLE " + TABLE_MAIN + " IF EXISTS;");
-                db.execSQL("DROP TABLE " + TABLE_HIDDEN + " IF EXISTS;");
+                db.execSQL("DROP TABLE " + TABLE_ARCHIVE + " IF EXISTS;");
                 onCreate(db);
 
             } catch (SQLiteException e) {

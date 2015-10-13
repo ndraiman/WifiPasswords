@@ -358,10 +358,10 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                 break;
 
 
-            case RequestCodes.ACTIVITY_HIDDEN_CODE: //Handle HiddenWifiActivity items restored
+            case RequestCodes.ACTIVITY_HIDDEN_CODE: //Handle ArchiveActivity items restored
 
                 if (resultCode == Activity.RESULT_OK) {
-                    Log.d(TAG, "HiddenWifiActivity - Items Restored");
+                    Log.d(TAG, "ArchiveActivity - Items Restored");
                     if (data != null) {
 
                         ArrayList<WifiEntry> itemsRestored = data.getParcelableArrayListExtra(STATE_RESTORED_ENTRIES);
