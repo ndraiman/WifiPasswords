@@ -47,7 +47,7 @@
     <string name="snackbar_wifi_restore">Wifi Password no longer hidden</string>
     <string name="snackbar_wifi_exists">Wifi Password already exists!</string>
     <string name="snackbar_wifi_entries_inserted">new Wifi Passwords</string>
-    <string name="snackbar_wifi_entries_inserted_none">No new Wifi Password</string>
+    <string name="snackbar_wifi_entries_inserted_none">No new Wifi Passwords</string>
 
 
     <!--**********************-->
@@ -167,8 +167,8 @@
     <string name="dialog_error_root_key" translateable="false">dialog_error_root</string>
     <string name="dialog_error_root_title">Error! No Root Permission!</string>
     <string name="dialog_error_root_message">
-        Wifi Passwords cannot access your saved wifi passwords without Root Permission
-        \n\nYou may still insert wifi passwords manually
+        The app cannot access your saved wifi passwords without Root Permission
+        \n\nYou may still add wifi passwords manually
         \n\n(To try again please grant this app Root permission and tap \"Update List\" in the options menu)</string>
     <string-array name="dialog_error_root_button">
         <item>Dismiss</item>

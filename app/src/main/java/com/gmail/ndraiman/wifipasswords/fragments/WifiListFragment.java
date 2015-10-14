@@ -158,7 +158,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         mFirstAppLaunch = sharedPreferences.getBoolean(FIRST_LAUNCH, true);
         mRootAccess = sharedPreferences.getBoolean(ROOT_ACCESS, true);
 
-        if(mFirstAppLaunch) {
+        if (mFirstAppLaunch) {
             getActivity().startActivityForResult(new Intent(getActivity(), IntroActivity.class), RequestCodes.ACTIVITY_INTRO_CODE);
             sharedPreferences.edit().putBoolean(FIRST_LAUNCH, false).apply();
 
@@ -261,16 +261,23 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
         mAdapter.setWifiList(mListWifi);
 
-        if(resetDB) {
-            mAppBarLayout.setExpanded(true);
 
-        } else if (numOfEntries > 0) {
-            mAppBarLayout.setExpanded(false);
-            mRecyclerView.smoothScrollToPosition(mListWifi.size());
+        //Show number of wifi entries inserted
+        String snackbarMessage;
+
+        if (numOfEntries > 0) {
+            snackbarMessage = numOfEntries + " " + getString(R.string.snackbar_wifi_entries_inserted);
+
+            if(!resetDB) {
+                mRecyclerView.smoothScrollToPosition(mListWifi.size());
+            }
+
+        } else {
+            snackbarMessage = getString(R.string.snackbar_wifi_entries_inserted_none);
 
         }
-        //Show number of wifi entries inserted
-        Snackbar.make(mRoot, numOfEntries + " " + getString(R.string.snackbar_wifi_entries_inserted), Snackbar.LENGTH_LONG)
+
+        Snackbar.make(mRoot, snackbarMessage, Snackbar.LENGTH_LONG)
                 .setAction(R.string.snackbar_dismiss, new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -278,6 +285,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                     }
                 })
                 .show();
+
 
         mCurrentlyLoading = false;
         getActivity().invalidateOptionsMenu();
@@ -351,7 +359,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
             case RequestCodes.ACTIVITY_INTRO_CODE:
 
-                if(resultCode == Activity.RESULT_OK) {
+                if (resultCode == Activity.RESULT_OK) {
                     Log.d(TAG, "Returning From IntroApp - loading from file");
                     loadFromFile(true);
                     Toast toast = Toast.makeText(getActivity(), R.string.toast_root_request, Toast.LENGTH_LONG);
@@ -425,7 +433,9 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         getActivity().invalidateOptionsMenu();
 
 
-        Snackbar.make(mRoot, R.string.snackbar_load_from_file, Snackbar.LENGTH_LONG).show();
+//        Snackbar.make(mRoot, R.string.snackbar_load_from_file, Snackbar.LENGTH_LONG).show();
+        //Changed to Toast as subsequent snackbars cause FAB to glitch
+        Toast.makeText(getActivity(), R.string.snackbar_load_from_file, Toast.LENGTH_SHORT).show();
         new TaskLoadWifiEntries(mPath, mFileName, resetDB, this, this).execute();
 
     }
@@ -540,7 +550,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         Log.d(TAG, "hideFAB() called with: " + "hide = [" + hide + "]");
 //        mRecyclerView.setNestedScrollingEnabled(!hide);
 
-        if(hide) {
+        if (hide) {
             mFAB.hide();
 
         } else {
