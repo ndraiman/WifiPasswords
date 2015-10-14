@@ -32,6 +32,7 @@
             android:id="@+id/passcode_logo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/description_passcode_logo"
             android:src="@drawable/passcode_logo" />
 
         <LinearLayout
@@ -153,6 +154,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/highlight_selected"
+                android:contentDescription="@string/description_passcode_digit"
                 android:onClick="buttonClicked"
                 android:src="@android:drawable/btn_star_big_on"
                 android:tint="@color/colorPrimary" />
@@ -163,6 +165,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/highlight_selected"
+                android:contentDescription="@string/description_passcode_digit"
                 android:onClick="buttonClicked"
                 android:src="@android:drawable/btn_star_big_on"
                 android:tint="@color/colorPrimary" />
@@ -173,6 +176,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/highlight_selected"
+                android:contentDescription="@string/description_passcode_digit"
                 android:onClick="buttonClicked"
                 android:src="@android:drawable/btn_star_big_on"
                 android:tint="@color/colorPrimary" />
@@ -193,6 +197,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/highlight_selected"
+                android:contentDescription="@string/description_passcode_digit"
                 android:onClick="buttonClicked"
                 android:src="@android:drawable/btn_star_big_on"
                 android:tint="@color/colorPrimary" />
@@ -203,6 +208,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/highlight_selected"
+                android:contentDescription="@string/description_passcode_digit"
                 android:onClick="buttonClicked"
                 android:src="@android:drawable/btn_star_big_on"
                 android:tint="@color/colorPrimary" />
@@ -213,6 +219,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/highlight_selected"
+                android:contentDescription="@string/description_passcode_digit"
                 android:onClick="buttonClicked"
                 android:src="@android:drawable/btn_star_big_on"
                 android:tint="@color/colorPrimary" />
@@ -233,6 +240,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/highlight_selected"
+                android:contentDescription="@string/description_passcode_digit"
                 android:onClick="buttonClicked"
                 android:src="@android:drawable/btn_star_big_on"
                 android:tint="@color/colorPrimary" />
@@ -243,6 +251,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/highlight_selected"
+                android:contentDescription="@string/description_passcode_digit"
                 android:onClick="buttonClicked"
                 android:src="@android:drawable/btn_star_big_on"
                 android:tint="@color/colorPrimary" />
@@ -253,6 +262,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/highlight_selected"
+                android:contentDescription="@string/description_passcode_digit"
                 android:onClick="buttonClicked"
                 android:src="@android:drawable/btn_star_big_on"
                 android:tint="@color/colorPrimary" />
@@ -272,6 +282,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@android:color/white"
+                android:contentDescription="@string/description_passcode_digit"
                 android:src="@android:drawable/btn_star"
                 android:tint="@android:color/white" />
 
@@ -281,6 +292,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@drawable/highlight_selected"
+                android:contentDescription="@string/description_passcode_digit"
                 android:onClick="buttonClicked"
                 android:src="@android:drawable/btn_star_big_on"
                 android:tint="@color/colorPrimary" />
@@ -292,6 +304,7 @@
                 android:layout_gravity="center|end"
                 android:layout_weight="1"
                 android:background="@drawable/highlight_selected"
+                android:contentDescription="@string/description_passcode_digit"
                 android:onClick="buttonClicked"
                 android:src="@android:drawable/ic_input_delete"
                 android:tint="@color/colorAccent" />

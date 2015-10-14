@@ -49,12 +49,16 @@
     <string name="snackbar_wifi_exists">Wifi Entry already exists!</string>
     <string name="snackbar_wifi_entries_inserted">new Wifi Entries Inserted</string>
 
+
     <!--**********************-->
     <!-- Content Descriptions -->
     <!--**********************-->
-    <string name="collapsing_header_description" translateable="false">collapsing header</string>
-    <string name="drag_handler_description" translateable="false">Drag Icon</string>
-    <string name="tag_wifi_icon_description" translateable="false">Tag Icon</string>
+    <string name="description_collapsing_header" translateable="false">collapsing header</string>
+    <string name="description_drag_handler" translateable="false">Drag Icon</string>
+    <string name="description_tag_wifi_icon" translateable="false">Tag Icon</string>
+    <string name="description_passcode_digit" translateable="false">Digit Button</string>
+    <string name="description_passcode_logo" translateable="false">Passcode Logo</string>
+
 
     <!--**************-->
     <!-- Toolbar Menu -->

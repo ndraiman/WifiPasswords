@@ -52,7 +52,7 @@
         android:layout_height="@dimen/size_list_item"
         android:layout_gravity="top|end"
         android:background="@android:color/white"
-        android:contentDescription="@string/drag_handler_description"
+        android:contentDescription="@string/description_drag_handler"
         android:padding="16dp"
         android:scaleType="center"
         android:src="@drawable/ic_gesture_drag"
