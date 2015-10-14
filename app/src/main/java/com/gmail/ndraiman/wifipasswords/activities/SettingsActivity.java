@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -15,14 +16,12 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.transition.TransitionInflater;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.gmail.ndraiman.wifipasswords.R;
 import com.gmail.ndraiman.wifipasswords.dialogs.HelpDialogFragment;
@@ -43,23 +42,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //Set Activity Transition - Lollipop+
-//        if(Build.VERSION.SDK_INT >= 21) {
-//
-//            TransitionInflater transitionInflater = TransitionInflater.from(this);
-//            Transition slideFromRight = transitionInflater.inflateTransition(R.transition.activity_slide_right);
-//            Transition slideFromLeft = transitionInflater.inflateTransition(R.transition.activity_slide_left);
-//
-//            getWindow().setEnterTransition(slideFromLeft);
-//            getWindow().setExitTransition(slideFromRight);
-//
-//        }
-
         setContentView(R.layout.activity_settings);
 
         // Display the fragment as the main content
         getFragmentManager().beginTransaction()
-//                .setCustomAnimations(R.anim.fragment_slide_in, R.anim.fragment_slide_out, R.anim.fragment_slide_in, R.anim.fragment_slide_out)
                 .replace(R.id.settings_frame, new SettingsFragment()).commit();
 
     }
@@ -131,9 +117,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
                     preference.setSummary(stringValue);
 
-                }
 
-                if (preference instanceof ListPreference) {
+                } else if (preference instanceof ListPreference) {
 
                     preference.setSummary(stringValue);
 
@@ -234,14 +219,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 }
             });
 
-            findPreference(getString(R.string.pref_warnings_key)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    //TODO maybe show dialog warning?
-                    resetWarnings();
-                    return true;
-                }
-            });
+            setupShareWarning();
 
             //Summary to Value
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_path_manual_key)));
@@ -297,14 +275,36 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         }
 
 
-        private void resetWarnings() {
-            Toast toast = Toast.makeText(getActivity(), R.string.pref_warnings_toast, Toast.LENGTH_LONG);
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show();
+        private void setupShareWarning() {
 
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            sharedPreferences.edit().putBoolean(MyApplication.SHARE_DIALOG, true).apply();
+
+            final CheckBoxPreference shareWarning = (CheckBoxPreference) findPreference(getString(R.string.pref_share_warning_key));
+            shareWarning.setChecked(sharedPreferences.getBoolean(MyApplication.SHARE_WARNING, true));
+
+            shareWarning.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    Log.d(TAG, "onPreferenceChange() called with: " + "preference = [" + preference + "], newValue = [" + newValue + "]");
+                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+                    if ((boolean)newValue) {
+                        Log.d(TAG, "isChecked");
+                        preference.setTitle(R.string.pref_share_warning_title_show);
+                        sharedPreferences.edit().putBoolean(MyApplication.SHARE_WARNING, true).apply();
+
+                    } else {
+                        Log.d(TAG, "Not Checked");
+                        preference.setTitle(R.string.pref_share_warning_title_hide);
+                        sharedPreferences.edit().putBoolean(MyApplication.SHARE_WARNING, false).apply();
+
+                    }
+
+                    return true;
+                }
+            });
         }
+
 
     }
 }

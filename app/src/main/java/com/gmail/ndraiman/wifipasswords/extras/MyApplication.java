@@ -13,7 +13,7 @@ public class MyApplication extends Application {
     private static PasswordDB mPasswordDB;
     private static AtomicInteger mOpenCounter = new AtomicInteger();
 
-    public static final String SHARE_DIALOG = "share_dialog"; //sharedPrefs key
+    public static final String SHARE_WARNING = "share_dialog"; //sharedPrefs key
     public static final boolean mPasscodeActivated = false;
 
     @Override

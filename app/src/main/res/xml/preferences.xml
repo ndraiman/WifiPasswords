@@ -29,13 +29,18 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/pref_category_default">
+    <PreferenceCategory android:title="Behaviour">
 
-        <Preference
-            android:key="@string/pref_warnings_key"
+        <CheckBoxPreference
+            android:key="@string/pref_share_warning_key"
             android:order="300"
-            android:summary="@string/pref_warnings_summary"
-            android:title="@string/pref_warnings_title" />
+            android:defaultValue="true"
+            android:summary="@string/pref_share_warning_summary"
+            android:title="@string/pref_share_warning_title_show" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_category_default">
 
         <Preference
             android:key="@string/pref_default_key"

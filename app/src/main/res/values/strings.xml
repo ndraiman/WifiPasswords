@@ -8,7 +8,7 @@
     <!--*****************-->
     <string name="app_name">Wifi Passwords</string>
     <string name="activity_title_settings">Settings</string>
-    <string name="activity_title_hidden_wifi">Archived Entries</string>
+    <string name="activity_title_hidden_wifi">Hidden Passwords</string>
     <string name="activity_title_intro">Intro</string>
     <string name="activity_title_passcode">Passcode</string>
 
@@ -16,38 +16,38 @@
     <!-- Intro Messages -->
     <!--****************-->
     <string name="intro_title_welcome">Welcome to WifiPasswords</string>
-    <string name="intro_message_welcome">Showing you Passwords of saved Wifi Networks</string>
+    <string name="intro_message_welcome">Using this app you can save, tag &amp; share your saved Wifi Passwords</string>
 
-    <string name="intro_title_disclaimer">Disclaimer</string>
+    <string name="intro_title_disclaimer">Be Careful!</string>
     <string name="intro_message_disclaimer">Sharing a Wifi Network\'s password can compromise its security
-        \n\nUse at your own discretion!</string>
+        \n\nDo so at your own discretion!</string>
 
-    <string name="intro_title_root">Root Permission Required</string>
-    <string name="intro_message_root">The app needs Root Access to import your saved passwords
-        \n\nPlease grant Root Access when prompted</string>
+    <string name="intro_title_root">Grant Root Permission</string>
+    <string name="intro_message_root">The app requires Root Permission to access your device saved wifi passwords</string>
 
     <string name="intro_title_quick_copy">Quick Copy</string>
-    <string name="intro_message_quick_copy">Double Tap a wifi entry to quickly copy its data to clipboard</string>
+    <string name="intro_message_quick_copy">To quickly copy a wifi password, simply Double-Tap it.</string>
 
-    <string name="intro_title_cab">Context Action Bar</string>
-    <string name="intro_message_cab">Long Click a Wifi Entry to bring up the Contextual Action Bar
-        \n\nYou can then select multiple entries</string>
+    <string name="intro_title_cab">Tag, Copy, Share, Hide</string>
+    <string name="intro_message_cab">Long press a wifi password &amp; choose your desired action
+        \n\nYou can select multiple wifi passwords</string>
 
-    <string name="intro_title_thank_you">Thank you for choosing WifiPasswords</string>
+    <string name="intro_title_thank_you">Thank you for choosing Wifi Passwords</string>
 
 
     <!--**********-->
     <!-- Snackbar -->
     <!--**********-->
-    <string name="snackbar_wifi_copy">Wifi Data Copied to Clipboard</string>
+    <string name="snackbar_wifi_copy">Wifi Password Copied to Clipboard</string>
     <string name="snackbar_dismiss">Dismiss</string>
     <string name="snackbar_undo">Undo</string>
-    <string name="snackbar_load_from_file">Loading Data From File</string>
-    <string name="snackbar_wifi_archive">Wifi Entry Archived</string>
-    <string name="snackbar_wifi_archive_multiple">Wifi Entries Archived</string>
-    <string name="snackbar_wifi_restore">Wifi Entry Restored</string>
-    <string name="snackbar_wifi_exists">Wifi Entry already exists!</string>
-    <string name="snackbar_wifi_entries_inserted">new Wifi Entries Inserted</string>
+    <string name="snackbar_load_from_file">Updating list</string>
+    <string name="snackbar_wifi_archive">Wifi Password is now hidden</string>
+    <string name="snackbar_wifi_archive_multiple">Wifi Passwords are now hidden</string>
+    <string name="snackbar_wifi_restore">Wifi Password no longer hidden</string>
+    <string name="snackbar_wifi_exists">Wifi Password already exists!</string>
+    <string name="snackbar_wifi_entries_inserted">new Wifi Passwords</string>
+    <string name="snackbar_wifi_entries_inserted_none">No new Wifi Password</string>
 
 
     <!--**********************-->
@@ -63,14 +63,25 @@
     <!--**************-->
     <!-- Toolbar Menu -->
     <!--**************-->
-    <string name="action_hidden_list">Archived Wifi Entries</string>
+    <string name="action_archive">Hidden Passwords</string>
     <string name="action_settings">Settings</string>
-    <string name="action_add_from_file">Add From File</string>
+    <string name="action_add_from_file">Update List</string>
     <string name="action_help">Help &amp; Feedback</string>
     <string name="action_share">Share</string>
     <string name="action_search">Search</string>
-    <string name="action_sort_start">Sort Mode</string>
+    <string name="action_sort_start">Sort List</string>
     <string name="action_sort_done">Done Sorting</string>
+
+
+    <!--********************-->
+    <!-- Context Action Bar -->
+    <!--********************-->
+    <string name="context_tag">Tag</string>
+    <string name="context_copy">Copy</string>
+    <string name="context_share">Share</string>
+    <string name="context_archive">Hide</string>
+    <string name="context_restore">Restore</string>
+    <string name="context_delete">Delete</string>
 
 
     <!--*************-->
@@ -91,8 +102,8 @@
     <string name="pref_category_default">Reset to Default</string>
 
     <string name="pref_default_key" translateable="false">pref_default</string>
-    <string name="pref_default_title">Reload From File</string>
-    <string name="pref_default_summary">Delete all the data and reloads it from file</string>
+    <string name="pref_default_title">Reset Data</string>
+    <string name="pref_default_summary">Delete all the data and reload it from your device</string>
 
     <string-array name="wpa_supplicant_locations">
         <item>/data/misc/wifi/wpa_supplicant.conf</item>
@@ -102,10 +113,11 @@
     </string-array>
     <string name="pref_path_list_manual">Manual</string>
 
-    <string name="pref_warnings_key" translateable="false">pref_warnings</string>
-    <string name="pref_warnings_title">Reset Warnings</string>
-    <string name="pref_warnings_summary">show warning dialogs</string>
-    <string name="pref_warnings_toast">Will show warnings from now on</string>
+    <string name="pref_share_warning_key" translateable="false">pref_share_warning</string>
+    <string name="pref_share_warning_default">true</string>
+    <string name="pref_share_warning_title_show">Show Share Warning</string>
+    <string name="pref_share_warning_title_hide">No Share Warning</string>
+    <string name="pref_share_warning_summary">a warning before sharing wifi passwords</string>
 
 
     <!--***************-->
@@ -113,7 +125,7 @@
     <!--***************-->
     <string name="dialog_error_path_key" translateable="false">dialog_error</string>
     <string name="dialog_error_path_title">Error!</string>
-    <string name="dialog_error_path_message">Could not locate File \n would you like to change path settings?</string>
+    <string name="dialog_error_path_message">Could not find Wifi Password list in the current path \nwould you like to change path settings?</string>
     <string-array name="dialog_error_path_buttons">
         <item>Settings</item>
         <item>Dismiss</item>
@@ -121,7 +133,8 @@
 
     <string name="dialog_warning_reset_key" translateable="false">dialog_warning_reset</string>
     <string name="dialog_warning_reset_title">Warning!</string>
-    <string name="dialog_warning_reset_message">Reloading data from file will erase current database</string>
+    <string name="dialog_warning_reset_message">Reloading data from device will erase current list
+        \n(manually entered passwords will be lost)</string>
     <string-array name="dialog_warning_reset_buttons">
         <item>Reload</item>
         <item>Cancel</item>
@@ -129,15 +142,15 @@
 
     <string name="dialog_exit_key" translateable="false">dialog_exit</string>
     <string name="dialog_exit_title">Exit</string>
-    <string name="dialog_exit_message">Are you sure you want to close Wifi-Passwords?</string>
+    <string name="dialog_exit_message">Are you sure you want to close \nWifi Passwords?</string>
     <string-array name="dialog_exit_buttons">
         <item>Yes</item>
         <item>No</item>
     </string-array>
 
     <string name="dialog_delete_key" translateable="false">dialog_delete</string>
-    <string name="dialog_delete_title">Delete?</string>
-    <string name="dialog_delete_message">Are you sure? Deleting these items will remove them permanently</string>
+    <string name="dialog_delete_title">Delete</string>
+    <string name="dialog_delete_message">Are you sure? \n\nDeleting these passwords will permanently remove them from Wifi Passwords</string>
     <string-array name="dialog_delete_buttons">
         <item>Confirm</item>
         <item>Cancel</item>
@@ -145,15 +158,18 @@
 
     <string name="dialog_warning_share_key" translateable="false">dialog_warning_share</string>
     <string name="dialog_warning_share_title">Warning!</string>
-    <string name="dialog_warning_share_message">Sharing a Wifi network password can compromise its security!</string>
-    <string name="dialog_warning_share_button">OK</string>
+    <string name="dialog_warning_share_message">Sharing a Wifi password can compromise its security!</string>
+    <string-array name="dialog_warning_share_buttons">
+        <item>OK</item>
+        <item>Cancel</item>
+    </string-array>
 
     <string name="dialog_error_root_key" translateable="false">dialog_error_root</string>
-    <string name="dialog_error_root_title">Error! No Root Access!</string>
+    <string name="dialog_error_root_title">Error! No Root Permission!</string>
     <string name="dialog_error_root_message">
-        The app is not be able to import your wifi passwords without Root
-        \n\nYou may still insert entries manually
-        \n\n(To try again please grant this app Root access and tap \"Add From File\" in the options menu)</string>
+        Wifi Passwords cannot access your saved wifi passwords without Root Permission
+        \n\nYou may still insert wifi passwords manually
+        \n\n(To try again please grant this app Root permission and tap \"Update List\" in the options menu)</string>
     <string-array name="dialog_error_root_button">
         <item>Dismiss</item>
     </string-array>
@@ -179,7 +195,7 @@
     <string name="dialog_add_key" translateable="false">dialog_input_add</string>
     <string name="dialog_add_title_hint">Title</string>
     <string name="dialog_add_password_hint">Password</string>
-    <string name="dialog_add_title">Add Wifi Entry</string>
+    <string name="dialog_add_title">Add Wifi Password</string>
     <string name="dialog_add_error_empty">One or More fields are blank</string>
     <string name="dialog_add_title_empty">Title cannot be empty</string>
     <string name="dialog_add_password_empty">Password cannot be empty</string>

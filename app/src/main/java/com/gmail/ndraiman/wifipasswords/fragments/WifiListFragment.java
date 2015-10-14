@@ -900,7 +900,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         Log.d(TAG, "showShareDialog");
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        mShowShareDialog = sharedPreferences.getBoolean(MyApplication.SHARE_DIALOG, true);
+        mShowShareDialog = sharedPreferences.getBoolean(MyApplication.SHARE_WARNING, true);
 
         if (mShowShareDialog) {
 
@@ -910,17 +910,25 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
             View shareDialogLayout = inflater.inflate(R.layout.dialog_share_warning, null);
             final CheckBox dontShowShareDialog = (CheckBox) shareDialogLayout.findViewById(R.id.dont_show_checkbox);
 
+            String[] buttons = getResources().getStringArray(R.array.dialog_warning_share_buttons);
+
             builder.setView(shareDialogLayout)
-                    .setPositiveButton(R.string.dialog_warning_share_button, new DialogInterface.OnClickListener() {
+                    .setPositiveButton(buttons[0], new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             if (dontShowShareDialog.isChecked()) {
                                 Log.d(TAG, "Don't Show Again is Checked");
                                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                                sharedPreferences.edit().putBoolean(MyApplication.SHARE_DIALOG, false).apply();
+                                sharedPreferences.edit().putBoolean(MyApplication.SHARE_WARNING, false).apply();
                             }
 
                             shareWifiList(listWifi);
+                        }
+                    })
+                    .setNegativeButton(buttons[1], new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //Dismiss
                         }
                     });
 

@@ -6,7 +6,7 @@
     <item
         android:id="@+id/action_hidden_list"
         android:orderInCategory="200"
-        android:title="@string/action_hidden_list"
+        android:title="@string/action_archive"
         app:showAsAction="never" />
 
     <item
