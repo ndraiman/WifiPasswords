@@ -69,7 +69,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
         if (mSelectedItems.get(position, false)) {
             holder.mBackground.setBackgroundResource(R.color.colorHighlight);
         } else {
-            holder.mBackground.setBackgroundResource(R.drawable.wifi_entry_bg);
+            holder.mBackground.setBackgroundResource(R.drawable.highlight_selected);
         }
 
         //Drag Icon

@@ -37,7 +37,7 @@ public class HelpDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(parent, R.style.AlertDialogTheme);
 
         LayoutInflater inflater = LayoutInflater.from(parent);
-        View helpDialogLayout = inflater.inflate(R.layout.dialog_about, null);
+        View helpDialogLayout = inflater.inflate(R.layout.dialog_help, null);
 
         TextView info = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_info);
         TextView version = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_version);

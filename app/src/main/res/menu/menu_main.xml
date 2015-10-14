@@ -27,4 +27,9 @@
         android:title="Show Tables"
         app:showAsAction="never" />
 
+    <item android:id="@+id/show_passcode"
+        android:orderInCategory="1000"
+        android:title="Show Passcode"
+        app:showAsAction="never" />
+
 </menu>

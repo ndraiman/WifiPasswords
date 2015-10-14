@@ -12,7 +12,7 @@
         android:id="@+id/wifi_entry_layout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_list_item"
-        android:background="@drawable/wifi_entry_bg"
+        android:background="@drawable/highlight_selected"
         android:clickable="true"
         android:orientation="vertical"
         android:paddingBottom="8dp"

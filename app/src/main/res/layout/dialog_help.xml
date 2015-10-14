@@ -94,7 +94,7 @@
                 android:longClickable="false"
                 android:padding="@dimen/dialog_about_padding"
                 android:text="@string/dialog_about_help_intro"
-                android:textColor="@color/colorAccent" />
+                android:textColor="@color/colorPrimary" />
 
             <TextView
                 android:id="@+id/dialog_about_help_readme"

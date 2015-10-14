@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+
+    <!-- Invisible Edit Text to save inserted Passcode -->
+    <EditText
+        android:id="@+id/edit_text_passcode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:ems="4"
+        android:inputType="number"
+        android:maxLength="4"
+        android:visibility="gone" />
+
+
+    <!--**************-->
+    <!-- Input Layout -->
+    <!--**************-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/passcode_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/passcode_logo" />
+
+        <LinearLayout
+            android:id="@+id/layout_radio_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="4dp"
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+            <!--*********************-->
+            <!-- Error Radio Buttons -->
+            <!--*********************-->
+            <RadioButton
+                android:id="@+id/radioButtonError1"
+                style="@style/PasscodeRadioButtonError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:clickable="false"
+                android:visibility="gone" />
+
+            <RadioButton
+                android:id="@+id/radioButtonError2"
+                style="@style/PasscodeRadioButtonError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:clickable="false"
+                android:visibility="gone" />
+
+            <RadioButton
+                android:id="@+id/radioButtonError3"
+                style="@style/PasscodeRadioButtonError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:clickable="false"
+                android:visibility="gone" />
+
+            <RadioButton
+                android:id="@+id/radioButtonError4"
+                style="@style/PasscodeRadioButtonError"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:clickable="false"
+                android:visibility="gone" />
+
+            <!--*********************-->
+            <!-- Input Radio Buttons -->
+            <!--*********************-->
+            <RadioButton
+                android:id="@+id/radioButton1"
+                style="@style/PasscodeRadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false" />
+
+            <RadioButton
+                android:id="@+id/radioButton2"
+                style="@style/PasscodeRadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false" />
+
+            <RadioButton
+                android:id="@+id/radioButton3"
+                style="@style/PasscodeRadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false" />
+
+            <RadioButton
+                android:id="@+id/radioButton4"
+                style="@style/PasscodeRadioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/passcode_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="4dp"
+            android:text="@string/passcode_description"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="@dimen/size_text_primary" />
+
+    </LinearLayout>
+
+
+    <!--***************-->
+    <!-- Digits Layout -->
+    <!--***************-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="4dp"
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+            <ImageButton
+                android:id="@+id/button_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/highlight_selected"
+                android:onClick="buttonClicked"
+                android:src="@android:drawable/btn_star_big_on"
+                android:tint="@color/colorPrimary" />
+
+            <ImageButton
+                android:id="@+id/button_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/highlight_selected"
+                android:onClick="buttonClicked"
+                android:src="@android:drawable/btn_star_big_on"
+                android:tint="@color/colorPrimary" />
+
+            <ImageButton
+                android:id="@+id/button_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/highlight_selected"
+                android:onClick="buttonClicked"
+                android:src="@android:drawable/btn_star_big_on"
+                android:tint="@color/colorPrimary" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="4dp"
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+            <ImageButton
+                android:id="@+id/button_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/highlight_selected"
+                android:onClick="buttonClicked"
+                android:src="@android:drawable/btn_star_big_on"
+                android:tint="@color/colorPrimary" />
+
+            <ImageButton
+                android:id="@+id/button_5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/highlight_selected"
+                android:onClick="buttonClicked"
+                android:src="@android:drawable/btn_star_big_on"
+                android:tint="@color/colorPrimary" />
+
+            <ImageButton
+                android:id="@+id/button_6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/highlight_selected"
+                android:onClick="buttonClicked"
+                android:src="@android:drawable/btn_star_big_on"
+                android:tint="@color/colorPrimary" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="4dp"
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+            <ImageButton
+                android:id="@+id/button_7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/highlight_selected"
+                android:onClick="buttonClicked"
+                android:src="@android:drawable/btn_star_big_on"
+                android:tint="@color/colorPrimary" />
+
+            <ImageButton
+                android:id="@+id/button_8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/highlight_selected"
+                android:onClick="buttonClicked"
+                android:src="@android:drawable/btn_star_big_on"
+                android:tint="@color/colorPrimary" />
+
+            <ImageButton
+                android:id="@+id/button_9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/highlight_selected"
+                android:onClick="buttonClicked"
+                android:src="@android:drawable/btn_star_big_on"
+                android:tint="@color/colorPrimary" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="4dp"
+            android:orientation="horizontal"
+            android:padding="4dp">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/white"
+                android:src="@android:drawable/btn_star"
+                android:tint="@android:color/white" />
+
+            <ImageButton
+                android:id="@+id/button_0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/highlight_selected"
+                android:onClick="buttonClicked"
+                android:src="@android:drawable/btn_star_big_on"
+                android:tint="@color/colorPrimary" />
+
+            <ImageButton
+                android:id="@+id/button_backspace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|end"
+                android:layout_weight="1"
+                android:background="@drawable/highlight_selected"
+                android:onClick="buttonClicked"
+                android:src="@android:drawable/ic_input_delete"
+                android:tint="@color/colorAccent" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

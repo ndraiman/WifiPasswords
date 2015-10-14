@@ -14,6 +14,7 @@ public class MyApplication extends Application {
     private static AtomicInteger mOpenCounter = new AtomicInteger();
 
     public static final String SHARE_DIALOG = "share_dialog"; //sharedPrefs key
+    public static final boolean mPasscodeActivated = false;
 
     @Override
     public void onCreate() {

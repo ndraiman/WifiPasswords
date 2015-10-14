@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import com.gmail.ndraiman.wifipasswords.R;
 import com.gmail.ndraiman.wifipasswords.database.PasswordDB;
 import com.gmail.ndraiman.wifipasswords.dialogs.HelpDialogFragment;
+import com.gmail.ndraiman.wifipasswords.dialogs.PasscodeActivity;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
 import com.gmail.ndraiman.wifipasswords.extras.RequestCodes;
 import com.gmail.ndraiman.wifipasswords.fragments.WifiListFragment;
@@ -158,6 +159,9 @@ public class MainActivity extends AppCompatActivity {
                 });
                 builder.create().show();
                 break;
+
+            case R.id.show_passcode:
+                startActivity(new Intent(this, PasscodeActivity.class));
 
         }
 
