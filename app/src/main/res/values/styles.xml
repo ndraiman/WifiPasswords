@@ -17,7 +17,7 @@
         <item name="actionModeCloseDrawable">@android:drawable/ic_menu_close_clear_cancel</item>
 
         <item name="android:dialogTheme">@style/InputDialogTheme</item>
-        <item name="android:alertDialogTheme">@style/AlertDialogTheme</item>
+        <!--<item name="android:alertDialogTheme">@style/AlertDialogTheme</item>-->
 
     </style>
 

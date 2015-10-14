@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <style name="AppTheme" parent="AppTheme.Base">
+        <item name="android:alertDialogTheme">@style/AlertDialogTheme</item>
+    </style>
+
     <style name="floating_action_button">
         <item name="android:layout_margin">16dp</item>
     </style>
