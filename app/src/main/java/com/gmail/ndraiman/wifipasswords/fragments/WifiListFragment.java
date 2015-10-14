@@ -786,6 +786,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                 if (!mAnimateChanges) {
                     mAdapter.clearSelection();
                 }
+                hideFAB(false);
                 mAnimateChanges = false;
                 mRecyclerView.setNestedScrollingEnabled(true);
                 mActionModeOn = false;
