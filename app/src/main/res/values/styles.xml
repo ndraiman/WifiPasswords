@@ -21,6 +21,10 @@
 
     </style>
 
+    <style name="ToolbarTitle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">20sp</item>
+    </style>
+
 
     <!-- Alert Dialog Theme -->
     <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">

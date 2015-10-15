@@ -84,9 +84,9 @@
     <string name="context_delete">Delete</string>
 
 
-    <!--*************-->
-    <!-- Preferences -->
-    <!--*************-->
+    <!--*********************-->
+    <!-- General Preferences -->
+    <!--*********************-->
     <string name="pref_category_general">General</string>
     <string name="pref_category_behavior">Behavior</string>
     <string name="pref_category_security">Security</string>
@@ -120,9 +120,22 @@
     <string name="pref_share_warning_title_hide">No Share Warning</string>
     <string name="pref_share_warning_summary">a warning before sharing wifi passwords</string>
 
+
+    <!--**********************-->
+    <!-- Passcode Preferences -->
+    <!--**********************-->
+    <!-- TODO change strings -->
+    <string name="pref_header_passcode_key" translateable="false">passcode_header</string>
     <string name="pref_header_passcode_title">Configure Passcode</string>
-    <string name="pref_header_passcode_key">passcode_header</string>
-    <string name="pref_fragment_passcode_title">Passcode</string>
+    <string name="pref_passcode_toolbar_title">Passcode</string>
+
+    <string name="pref_passcode_toggle_key" translateable="false">pref_passcode_toggle</string>
+    <string name="pref_passcode_toggle_title_on">Turn passcode on</string>
+    <string name="pref_passcode_toggle_title_off">Turn passcode off</string>
+    <string name="pref_passcode_toggle_summary">a four pin number passcode to protect the app</string>
+
+    <string name="pref_passcode_change_key" translateable="false">pref_passcode_change</string>
+    <string name="pref_passcode_change_title">Change passcode</string>
 
 
     <!--***************-->
@@ -221,6 +234,7 @@
     <!--*******************-->
     <string name="passcode_description">Enter your passcode</string>
     <string name="passcode_description_error">Wrong passcode. Please try again</string>
+    <string name="passcode_description_reenter">Re-enter your passcode</string>
 
 
 </resources>

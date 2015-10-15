@@ -1,6 +1,8 @@
 package com.gmail.ndraiman.wifipasswords.activities;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -18,15 +20,21 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.gmail.ndraiman.wifipasswords.R;
+import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
+import com.gmail.ndraiman.wifipasswords.extras.RequestCodes;
 
 
 public class PasscodeActivity extends AppCompatActivity {
 
     private static final String TAG = "PasscodeActivity";
-    private static final String PASSCODE_KEY = "passcode_key";
+    private int mRequestCode;
 
     private EditText mEditTextPasscode;
     private String mPasscode;
+
+    private int mAttemptNum;
+
+    private TextWatcher mPasscodeListener;
 
     private LinearLayout mRadioButtonLayout;
     private TextView mDescription;
@@ -47,17 +55,33 @@ public class PasscodeActivity extends AppCompatActivity {
 
         bindViews();
 
-//        mPasscode = PreferenceManager.getDefaultSharedPreferences(this).getString(PASSCODE_KEY, "0000");
-        mPasscode = "1234";
+        mRequestCode = getIntent().getIntExtra(MyApplication.PASSCODE_REQUEST_CODE, RequestCodes.PASSCODE_ACTIVITY);
 
-        setupPasscode();
+        mAttemptNum = 0;
+
+        mPasscode = PreferenceManager.getDefaultSharedPreferences(this).getString(MyApplication.PASSCODE_KEY, "0000");
+//        mPasscode = "1234";
+
+        if (mRequestCode == RequestCodes.PASSCODE_PREF_ENABLE) {
+            setupPasscodeEnableListener();
+
+        } else {
+            setupCorrectEntryListener();
+
+        }
+
+
+        mEditTextPasscode.addTextChangedListener(mPasscodeListener);
 
     }
 
 
     @Override
     public void onBackPressed() {
-        //Block BackPressed
+        if (mRequestCode == RequestCodes.PASSCODE_ACTIVITY) {
+            return;
+        }
+        super.onBackPressed();
     }
 
     @Override
@@ -65,8 +89,6 @@ public class PasscodeActivity extends AppCompatActivity {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
         super.onResume();
     }
-
-
 
 
     /********************************************************/
@@ -105,9 +127,10 @@ public class PasscodeActivity extends AppCompatActivity {
 
     }
 
-    private void setupPasscode() {
+    private void setupCorrectEntryListener() {
 
-        mEditTextPasscode.addTextChangedListener(new TextWatcher() {
+        mPasscodeListener = new TextWatcher() {
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -159,6 +182,12 @@ public class PasscodeActivity extends AppCompatActivity {
                 if (s.length() == 4) {
 
                     if (submit(s.toString())) {
+                        setResult(RESULT_OK);
+
+                        if(mRequestCode == RequestCodes.PASSCODE_PREF_DISABLE) {
+                            disablePasscode();
+                        }
+
                         finish();
 
                     } else {
@@ -172,7 +201,113 @@ public class PasscodeActivity extends AppCompatActivity {
 
 
             }
-        });
+        };
+
+    }
+
+    private void setupPasscodeEnableListener() {
+
+        mPasscodeListener = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d(TAG, "onTextChanged() called with: " + "s = [" + s + "], start = [" + start + "], before = [" + before + "], count = [" + count + "]");
+
+                if (count > before) { //digit added
+
+                    switch (count) {
+
+                        case 1:
+                            mRadioButton1.setChecked(true);
+                            break;
+
+                        case 2:
+                            mRadioButton2.setChecked(true);
+                            break;
+
+                        case 3:
+                            mRadioButton3.setChecked(true);
+                            break;
+
+                        case 4:
+                            mRadioButton4.setChecked(true);
+                            break;
+                    }
+
+                } else { //digit subtracted
+
+                    switch (before) {
+
+                        case 1:
+                            mRadioButton1.setChecked(false);
+                            break;
+
+                        case 2:
+                            mRadioButton2.setChecked(false);
+                            break;
+
+                        case 3:
+                            mRadioButton3.setChecked(false);
+                            break;
+                    }
+                }
+
+                if (s.length() == 4) {
+
+                    if (mAttemptNum == 0) {
+                        clearRadioButtons();
+                        mDescription.setText(R.string.passcode_description_reenter);
+                        mPasscode = s.toString();
+                        mEditTextPasscode.setText("");
+                        mAttemptNum++;
+
+                    } else {
+
+                        if(submit(s.toString())) {
+                            enablePasscode();
+                            setResult(RESULT_OK);
+                            finish();
+
+                        } else {
+                            wrongPasscode();
+                            mPasscode = "";
+                            mAttemptNum = 0;
+
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+
+        };
+    }
+
+    private void enablePasscode() {
+
+        MyApplication.mPasscodeActivated = true;
+
+        SharedPreferences.Editor prefsEditor = PreferenceManager.getDefaultSharedPreferences(PasscodeActivity.this).edit();
+
+        prefsEditor.putBoolean(MyApplication.PASSCODE_STATE, true);
+        prefsEditor.putString(MyApplication.PASSCODE_KEY, mPasscode);
+        prefsEditor.apply();
+
+    }
+
+
+    private void disablePasscode() {
+
+        MyApplication.mPasscodeActivated = false;
+
+        SharedPreferences.Editor prefsEditor = PreferenceManager.getDefaultSharedPreferences(PasscodeActivity.this).edit();
+
+        prefsEditor.putBoolean(MyApplication.PASSCODE_STATE, false);
+        prefsEditor.putString(MyApplication.PASSCODE_KEY, "");
+        prefsEditor.apply();
 
     }
 

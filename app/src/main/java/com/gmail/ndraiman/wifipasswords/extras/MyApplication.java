@@ -2,6 +2,7 @@ package com.gmail.ndraiman.wifipasswords.extras;
 
 import android.app.Application;
 import android.content.Context;
+import android.preference.PreferenceManager;
 
 import com.gmail.ndraiman.wifipasswords.database.PasswordDB;
 
@@ -13,14 +14,19 @@ public class MyApplication extends Application {
     private static PasswordDB mPasswordDB;
     private static AtomicInteger mOpenCounter = new AtomicInteger();
 
+    public static boolean mPasscodeActivated;
+
     public static final String SHARE_WARNING = "share_dialog"; //sharedPrefs key
-    public static final boolean mPasscodeActivated = false;
+    public static final String PASSCODE_STATE = "passcode_state";
+    public static final String PASSCODE_KEY = "passcode_key";
+    public static final String PASSCODE_REQUEST_CODE = "passcode_request_code";
 
     @Override
     public void onCreate() {
         super.onCreate();
         sInstance = this;
         mPasswordDB = new PasswordDB(this);
+        mPasscodeActivated = PreferenceManager.getDefaultSharedPreferences(this).getBoolean(PASSCODE_STATE, false);
     }
 
     public static MyApplication getInstance() {

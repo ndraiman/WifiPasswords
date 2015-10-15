@@ -1,6 +1,7 @@
 package com.gmail.ndraiman.wifipasswords.activities;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -25,9 +26,11 @@ import com.gmail.ndraiman.wifipasswords.extras.RequestCodes;
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
-    private Toolbar mToolbar;
+    private static Toolbar mToolbar;
     private SettingsFragment mSettingsFragment;
+
     public static final String SETTINGS_FRAGMENT_TAG = "settings_fragment_tag";
+
     private static boolean mPasscodePrefs = false;
     private static final String PASSCODE_PREFS = "passcode_preferences";
     private static final String TAG = "SettingsActivity";
@@ -39,20 +42,19 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         Log.d(TAG, "onCreate() called with: " + "savedInstanceState = [" + savedInstanceState + "]");
         setContentView(R.layout.activity_settings);
 
-        Toolbar mToolbar = (Toolbar) findViewById(R.id.app_bar);
+        mToolbar = (Toolbar) findViewById(R.id.app_bar);
         setSupportActionBar(mToolbar);
 
         ActionBar sBar = getSupportActionBar();
-        if(sBar != null) {
+        if (sBar != null) {
             sBar.setDisplayShowHomeEnabled(true);
             sBar.setDisplayHomeAsUpEnabled(true);
             sBar.setDisplayShowTitleEnabled(true);
 
-//            sBar.setTitle(getResources().getString(R.string.activity_title_settings));
         }
 
 
-        if(savedInstanceState == null) {
+        if (savedInstanceState == null) {
             mSettingsFragment = new SettingsFragment();
 
         } else {
@@ -64,6 +66,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         getFragmentManager().beginTransaction()
                 .replace(R.id.settings_frame, mSettingsFragment, SETTINGS_FRAGMENT_TAG).commit();
 
+
+        if (mPasscodePrefs) {
+            getSupportActionBar().setTitle(getString(R.string.pref_passcode_toolbar_title));
+        }
     }
 
 
@@ -107,7 +113,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         if (mPasscodePrefs) {
             mPasscodePrefs = false;
             mSettingsFragment.setPreferenceScreen(null);
-            mSettingsFragment.loadPreferences();
+            mSettingsFragment.loadGeneralPreferences();
 
         } else {
             super.onBackPressed();
@@ -129,6 +135,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     public static class SettingsFragment extends PreferenceFragment {
 
         private static final String TAG = "SettingsFragment";
+
+        private Preference mPasscodeToggle;
+        private Preference mPasscodeChange;
+
 
         private Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener
                 = new Preference.OnPreferenceChangeListener() {
@@ -181,17 +191,26 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            Log.d(TAG, "SettingsFragment - onCreate");
+            Log.d(TAG, "SettingsFragment - onCreate called with: mPasscodePrefs = " + mPasscodePrefs);
 
             getActivity().setResult(RESULT_CANCELED);
 
-            loadPreferences();
+            if(mPasscodePrefs) {
+                loadPasscodePreferences();
+
+            } else {
+                loadGeneralPreferences();
+
+            }
         }
 
 
         //Helper method for onCreate
-        public void loadPreferences() {
-            Log.d(TAG, "loadPreferences() called with: mPasscodePrefs = " + mPasscodePrefs);
+        public void loadGeneralPreferences() {
+            Log.d(TAG, "loadGeneralPreferences()");
+
+            mToolbar.setTitle(getString(R.string.action_settings));
+
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.preferences);
 
@@ -216,7 +235,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 public boolean onPreferenceClick(Preference preference) {
 
                     setPreferenceScreen(null);
-                    addPreferencesFromResource(R.xml.passcode_prefs);
+                    loadPasscodePreferences();
                     mPasscodePrefs = true;
 
                     return true;
@@ -229,13 +248,79 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_path_manual_key)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_path_list_key)));
 
-            if(mPasscodePrefs) {
-                setPreferenceScreen(null);
-                addPreferencesFromResource(R.xml.passcode_prefs);
+        }
+
+
+        public void loadPasscodePreferences() {
+            Log.d(TAG, "loadPasscodePreferences()");
+
+            mToolbar.setTitle(getString(R.string.pref_passcode_toolbar_title));
+            addPreferencesFromResource(R.xml.passcode_prefs);
+
+
+            mPasscodeToggle = findPreference(getString(R.string.pref_passcode_toggle_key));
+            mPasscodeChange = findPreference(getString(R.string.pref_passcode_change_key));
+
+
+            if(MyApplication.mPasscodeActivated) {
+                mPasscodeToggle.setTitle(R.string.pref_passcode_toggle_title_off);
+                mPasscodeChange.setEnabled(true);
+
+            } else {
+                mPasscodeToggle.setTitle(R.string.pref_passcode_toggle_title_on);
+                mPasscodeChange.setEnabled(false);
+
             }
+
+
+            mPasscodeToggle.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+
+                    if (!MyApplication.mPasscodeActivated) {
+
+                        Intent intent = new Intent(getActivity(), PasscodeActivity.class);
+                        intent.putExtra(MyApplication.PASSCODE_REQUEST_CODE, RequestCodes.PASSCODE_PREF_ENABLE);
+                        startActivityForResult(intent, RequestCodes.PASSCODE_PREF_ENABLE);
+
+
+                    } else {
+                        Intent intent = new Intent(getActivity(), PasscodeActivity.class);
+                        intent.putExtra(MyApplication.PASSCODE_REQUEST_CODE, RequestCodes.PASSCODE_PREF_DISABLE);
+                        startActivityForResult(intent, RequestCodes.PASSCODE_PREF_DISABLE);
+
+                    }
+
+                    return true;
+                }
+            });
+
 
         }
 
+        @Override
+        public void onActivityResult(int requestCode, int resultCode, Intent data) {
+            Log.d(TAG, "onActivityResult() called with: " + "requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
+
+            switch (requestCode) {
+
+                case RequestCodes.PASSCODE_PREF_ENABLE:
+                    if(resultCode == RESULT_OK) {
+                        mPasscodeToggle.setTitle(R.string.pref_passcode_toggle_title_off);
+                        mPasscodeChange.setEnabled(true);
+                    }
+                    break;
+
+
+                case RequestCodes.PASSCODE_PREF_DISABLE:
+                    if(resultCode == RESULT_OK) {
+                        mPasscodeToggle.setTitle(R.string.pref_passcode_toggle_title_on);
+                        mPasscodeChange.setEnabled(false);
+                    }
+                    break;
+
+            }
+        }
 
         //Restore wpa_supplicant path to default
         private void resetPathPref() {
@@ -251,7 +336,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
             //Refresh Preference Screen
             setPreferenceScreen(null);
-            loadPreferences();
+            loadGeneralPreferences();
 
         }
 
