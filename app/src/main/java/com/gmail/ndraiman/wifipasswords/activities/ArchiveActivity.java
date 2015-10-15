@@ -32,6 +32,7 @@ import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
 import com.gmail.ndraiman.wifipasswords.recycler.RecyclerTouchListener;
 import com.gmail.ndraiman.wifipasswords.recycler.WifiListAdapter;
+import com.gmail.ndraiman.wifipasswords.task.TaskCheckPasscode;
 
 import java.util.ArrayList;
 
@@ -136,12 +137,27 @@ public class ArchiveActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume()");
+
+        if(MyApplication.mPasscodeActivated && MyApplication.mAppWentBackground) {
+            startActivity(new Intent(this, PasscodeActivity.class));
+        }
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         Log.d(TAG, "onPause()");
 
         MyApplication.getWritableDatabase().deleteWifiEntries(mEntriesRestored, true);
         MyApplication.closeDatabase();
+
+        if(MyApplication.mPasscodeActivated && !isFinishing()) {
+            Log.e(TAG, "executing TaskCheckPasscode()");
+            new TaskCheckPasscode(getApplicationContext(), this).execute();
+        }
     }
 
 

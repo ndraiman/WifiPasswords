@@ -16,6 +16,7 @@ import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.gmail.ndraiman.wifipasswords.R;
 import com.gmail.ndraiman.wifipasswords.database.PasswordDB;
@@ -160,7 +161,11 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.show_passcode:
-                startActivity(new Intent(this, PasscodeActivity.class));
+                if(MyApplication.mPasscodeActivated) {
+                    startActivity(new Intent(this, PasscodeActivity.class));
+                } else {
+                    Toast.makeText(this, "No Passcode Set", Toast.LENGTH_SHORT).show();
+                }
 
         }
 

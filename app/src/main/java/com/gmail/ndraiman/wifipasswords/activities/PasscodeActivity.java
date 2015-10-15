@@ -33,6 +33,9 @@ public class PasscodeActivity extends AppCompatActivity {
     private String mPasscode;
 
     private int mAttemptNum;
+    private final int ATTEMPT_CHANGE = -1;
+    private final int ATTEMPT_ENABLE = 0;
+    private final int ATTEMPT_ENABLE_REENTER = 1;
 
     private TextWatcher mPasscodeListener;
 
@@ -57,19 +60,22 @@ public class PasscodeActivity extends AppCompatActivity {
 
         mRequestCode = getIntent().getIntExtra(MyApplication.PASSCODE_REQUEST_CODE, RequestCodes.PASSCODE_ACTIVITY);
 
-        mAttemptNum = 0;
-
         mPasscode = PreferenceManager.getDefaultSharedPreferences(this).getString(MyApplication.PASSCODE_KEY, "0000");
-//        mPasscode = "1234";
 
-        if (mRequestCode == RequestCodes.PASSCODE_PREF_ENABLE) {
-            setupPasscodeEnableListener();
+        if (mRequestCode == RequestCodes.PASSCODE_PREF_ENABLE || mRequestCode == RequestCodes.PASSCODE_PREF_CHANGE) {
+            mAttemptNum = ATTEMPT_ENABLE;
+
+            if (mRequestCode == RequestCodes.PASSCODE_PREF_CHANGE) {
+                mAttemptNum = ATTEMPT_CHANGE;
+                mDescription.setText(R.string.passcode_description_old);
+            }
+
+            setupEnablePasscodeListener();
 
         } else {
-            setupCorrectEntryListener();
+            setupCorrectPasscodeListener();
 
         }
-
 
         mEditTextPasscode.addTextChangedListener(mPasscodeListener);
 
@@ -127,7 +133,7 @@ public class PasscodeActivity extends AppCompatActivity {
 
     }
 
-    private void setupCorrectEntryListener() {
+    private void setupCorrectPasscodeListener() {
 
         mPasscodeListener = new TextWatcher() {
 
@@ -184,7 +190,7 @@ public class PasscodeActivity extends AppCompatActivity {
                     if (submit(s.toString())) {
                         setResult(RESULT_OK);
 
-                        if(mRequestCode == RequestCodes.PASSCODE_PREF_DISABLE) {
+                        if (mRequestCode == RequestCodes.PASSCODE_PREF_DISABLE) {
                             disablePasscode();
                         }
 
@@ -205,11 +211,12 @@ public class PasscodeActivity extends AppCompatActivity {
 
     }
 
-    private void setupPasscodeEnableListener() {
+    private void setupEnablePasscodeListener() {
 
         mPasscodeListener = new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -256,16 +263,29 @@ public class PasscodeActivity extends AppCompatActivity {
 
                 if (s.length() == 4) {
 
-                    if (mAttemptNum == 0) {
+                    if (mAttemptNum == ATTEMPT_CHANGE) {
+
+                        if(submit(s.toString())) {
+                            clearRadioButtons();
+                            mDescription.setText(R.string.passcode_description);
+                            mEditTextPasscode.setText("");
+                            mAttemptNum = ATTEMPT_ENABLE;
+
+                        } else {
+                            wrongPasscode();
+
+                        }
+
+                    } else if (mAttemptNum == ATTEMPT_ENABLE) {
                         clearRadioButtons();
                         mDescription.setText(R.string.passcode_description_reenter);
                         mPasscode = s.toString();
                         mEditTextPasscode.setText("");
-                        mAttemptNum++;
+                        mAttemptNum = ATTEMPT_ENABLE_REENTER;
 
                     } else {
 
-                        if(submit(s.toString())) {
+                        if (submit(s.toString())) {
                             enablePasscode();
                             setResult(RESULT_OK);
                             finish();
@@ -273,7 +293,7 @@ public class PasscodeActivity extends AppCompatActivity {
                         } else {
                             wrongPasscode();
                             mPasscode = "";
-                            mAttemptNum = 0;
+                            mAttemptNum = ATTEMPT_ENABLE;
 
                         }
                     }
@@ -281,7 +301,8 @@ public class PasscodeActivity extends AppCompatActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) { }
+            public void afterTextChanged(Editable s) {
+            }
 
         };
     }
@@ -341,7 +362,12 @@ public class PasscodeActivity extends AppCompatActivity {
 
                 mLogo.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.passcode_logo, getTheme()));
                 mDescription.setTextColor(ContextCompat.getColor(PasscodeActivity.this, R.color.colorPrimary));
-                mDescription.setText(R.string.passcode_description);
+
+                if(mAttemptNum == ATTEMPT_CHANGE) {
+                    mDescription.setText(R.string.passcode_description_old);
+                } else {
+                    mDescription.setText(R.string.passcode_description);
+                }
             }
 
             @Override

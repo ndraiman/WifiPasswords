@@ -42,6 +42,7 @@ import android.widget.Toast;
 import com.gmail.ndraiman.wifipasswords.R;
 import com.gmail.ndraiman.wifipasswords.activities.IntroActivity;
 import com.gmail.ndraiman.wifipasswords.activities.MainActivity;
+import com.gmail.ndraiman.wifipasswords.activities.PasscodeActivity;
 import com.gmail.ndraiman.wifipasswords.activities.SettingsActivity;
 import com.gmail.ndraiman.wifipasswords.database.PasswordDB;
 import com.gmail.ndraiman.wifipasswords.dialogs.CustomAlertDialogFragment;
@@ -57,6 +58,7 @@ import com.gmail.ndraiman.wifipasswords.recycler.RecyclerScrollListener;
 import com.gmail.ndraiman.wifipasswords.recycler.RecyclerTouchListener;
 import com.gmail.ndraiman.wifipasswords.recycler.WifiListAdapter;
 import com.gmail.ndraiman.wifipasswords.recycler.WifiListLoadedListener;
+import com.gmail.ndraiman.wifipasswords.task.TaskCheckPasscode;
 import com.gmail.ndraiman.wifipasswords.task.TaskLoadWifiEntries;
 
 import java.util.ArrayList;
@@ -217,8 +219,23 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         if (mSortModeOn) {
             sortMode(true);
         }
+
+        if(MyApplication.mPasscodeActivated && MyApplication.mAppWentBackground) {
+            startActivity(new Intent(getActivity(), PasscodeActivity.class));
+        }
     }
 
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.e(TAG, "onPause()");
+
+        if(MyApplication.mPasscodeActivated && !getActivity().isFinishing()) {
+            Log.e(TAG, "executing TaskCheckPasscode()");
+            new TaskCheckPasscode(getActivity().getApplicationContext(), getActivity()).execute();
+        }
+    }
 
     @Override
     public void onDestroy() {

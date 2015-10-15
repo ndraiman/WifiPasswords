@@ -22,6 +22,7 @@ import com.gmail.ndraiman.wifipasswords.dialogs.HelpDialogFragment;
 import com.gmail.ndraiman.wifipasswords.extras.AppCompatPreferenceActivity;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
 import com.gmail.ndraiman.wifipasswords.extras.RequestCodes;
+import com.gmail.ndraiman.wifipasswords.task.TaskCheckPasscode;
 
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
@@ -126,6 +127,28 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         super.onSaveInstanceState(outState);
         Log.d(TAG, "onSaveInstanceState() called with: " + "outState = [" + outState + "]");
         outState.putBoolean(PASSCODE_PREFS, mPasscodePrefs);
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume()");
+
+        if(MyApplication.mPasscodeActivated && MyApplication.mAppWentBackground) {
+            startActivity(new Intent(this, PasscodeActivity.class));
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.e(TAG, "onPause()");
+
+        if(MyApplication.mPasscodeActivated && !isFinishing()) {
+            Log.e(TAG, "executing TaskCheckPasscode()");
+            new TaskCheckPasscode(getApplicationContext(), this).execute();
+        }
     }
 
 
@@ -291,6 +314,18 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
                     }
 
+                    return true;
+                }
+            });
+
+
+            mPasscodeChange.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+
+                    Intent intent = new Intent(getActivity(), PasscodeActivity.class);
+                    intent.putExtra(MyApplication.PASSCODE_REQUEST_CODE, RequestCodes.PASSCODE_PREF_CHANGE);
+                    startActivityForResult(intent, RequestCodes.PASSCODE_PREF_CHANGE);
                     return true;
                 }
             });

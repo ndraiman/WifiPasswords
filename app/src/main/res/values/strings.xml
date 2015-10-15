@@ -235,6 +235,9 @@
     <string name="passcode_description">Enter your passcode</string>
     <string name="passcode_description_error">Wrong passcode. Please try again</string>
     <string name="passcode_description_reenter">Re-enter your passcode</string>
+    <string name="passcode_description_old">Enter your old passcode</string>
+    <string name="passcode_description_new">Enter your new passcode</string>
+    <string name="passcode_description_new_reenter">Re-enter your new passcode</string>
 
 
 </resources>
