@@ -16,8 +16,8 @@
         <EditTextPreference
             android:defaultValue="@string/pref_path_default"
             android:key="@string/pref_path_manual_key"
-            android:order="210"
             android:minLines="2"
+            android:order="210"
             android:summary="@string/pref_path_default"
             android:title="@string/pref_path_manual_title" />
 
@@ -29,14 +29,22 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="Behaviour">
+    <PreferenceCategory android:title="@string/pref_category_behavior">
 
         <CheckBoxPreference
+            android:defaultValue="true"
             android:key="@string/pref_share_warning_key"
             android:order="300"
-            android:defaultValue="true"
             android:summary="@string/pref_share_warning_summary"
             android:title="@string/pref_share_warning_title_show" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_category_security">
+
+        <Preference
+            android:key="@string/pref_header_passcode_key"
+            android:title="@string/pref_header_passcode_title" />
 
     </PreferenceCategory>
 

@@ -435,7 +435,10 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
 //        Snackbar.make(mRoot, R.string.snackbar_load_from_file, Snackbar.LENGTH_LONG).show();
         //Changed to Toast as subsequent snackbars cause FAB to glitch
-        Toast.makeText(getActivity(), R.string.snackbar_load_from_file, Toast.LENGTH_SHORT).show();
+        if(!resetDB) {
+            Toast.makeText(getActivity(), R.string.snackbar_load_from_file, Toast.LENGTH_SHORT).show();
+        }
+
         new TaskLoadWifiEntries(mPath, mFileName, resetDB, this, this).execute();
 
     }

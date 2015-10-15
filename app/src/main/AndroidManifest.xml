@@ -29,7 +29,7 @@
             android:name=".activities.IntroActivity"
             android:label="@string/activity_title_intro" />
         <activity
-            android:name=".dialogs.PasscodeActivity"
+            android:name=".activities.PasscodeActivity"
             android:label="@string/activity_title_passcode" />
     </application>
 

@@ -1,4 +1,4 @@
-package com.gmail.ndraiman.wifipasswords.dialogs;
+package com.gmail.ndraiman.wifipasswords.activities;
 
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -43,7 +43,7 @@ public class PasscodeActivity extends AppCompatActivity {
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 
-        setContentView(R.layout.passcode);
+        setContentView(R.layout.activity_passcode);
 
         bindViews();
 

@@ -88,6 +88,9 @@
     <!-- Preferences -->
     <!--*************-->
     <string name="pref_category_general">General</string>
+    <string name="pref_category_behavior">Behavior</string>
+    <string name="pref_category_security">Security</string>
+    <string name="pref_category_default">Reset to Default</string>
 
     <string name="pref_path_default" translateable="false">/data/misc/wifi/wpa_supplicant.conf</string>
     <string name="pref_path_manual_key" translateable="false">pref_path_manual</string>
@@ -98,8 +101,6 @@
     <string name="pref_reset_manual_key" translateable="false">pref_reset_manual</string>
     <string name="pref_reset_manual_summary">restore default path</string>
     <string name="pref_reset_manual_title">Reset Manual Location</string>
-
-    <string name="pref_category_default">Reset to Default</string>
 
     <string name="pref_default_key" translateable="false">pref_default</string>
     <string name="pref_default_title">Reset Data</string>
@@ -118,6 +119,10 @@
     <string name="pref_share_warning_title_show">Show Share Warning</string>
     <string name="pref_share_warning_title_hide">No Share Warning</string>
     <string name="pref_share_warning_summary">a warning before sharing wifi passwords</string>
+
+    <string name="pref_header_passcode_title">Configure Passcode</string>
+    <string name="pref_header_passcode_key">passcode_header</string>
+    <string name="pref_fragment_passcode_title">Passcode</string>
 
 
     <!--***************-->

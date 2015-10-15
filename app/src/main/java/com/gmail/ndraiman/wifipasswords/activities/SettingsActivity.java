@@ -2,7 +2,6 @@ package com.gmail.ndraiman.wifipasswords.activities;
 
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
@@ -10,18 +9,12 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.transition.TransitionInflater;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.gmail.ndraiman.wifipasswords.R;
 import com.gmail.ndraiman.wifipasswords.dialogs.HelpDialogFragment;
@@ -29,43 +22,55 @@ import com.gmail.ndraiman.wifipasswords.extras.AppCompatPreferenceActivity;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
 import com.gmail.ndraiman.wifipasswords.extras.RequestCodes;
 
-import java.util.List;
-
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
     private Toolbar mToolbar;
+    private SettingsFragment mSettingsFragment;
+    public static final String SETTINGS_FRAGMENT_TAG = "settings_fragment_tag";
+    private static boolean mPasscodePrefs = false;
+    private static final String PASSCODE_PREFS = "passcode_preferences";
     private static final String TAG = "SettingsActivity";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Log.d(TAG, "onCreate() called with: " + "savedInstanceState = [" + savedInstanceState + "]");
         setContentView(R.layout.activity_settings);
+
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(mToolbar);
+
+        ActionBar sBar = getSupportActionBar();
+        if(sBar != null) {
+            sBar.setDisplayShowHomeEnabled(true);
+            sBar.setDisplayHomeAsUpEnabled(true);
+            sBar.setDisplayShowTitleEnabled(true);
+
+//            sBar.setTitle(getResources().getString(R.string.activity_title_settings));
+        }
+
+
+        if(savedInstanceState == null) {
+            mSettingsFragment = new SettingsFragment();
+
+        } else {
+            mSettingsFragment = (SettingsFragment) getFragmentManager().findFragmentByTag(SETTINGS_FRAGMENT_TAG);
+            mPasscodePrefs = savedInstanceState.getBoolean(PASSCODE_PREFS, false);
+        }
 
         // Display the fragment as the main content
         getFragmentManager().beginTransaction()
-                .replace(R.id.settings_frame, new SettingsFragment()).commit();
+                .replace(R.id.settings_frame, mSettingsFragment, SETTINGS_FRAGMENT_TAG).commit();
 
     }
 
-
-    @Override
-    public void onBuildHeaders(List<Header> target) {
-        Log.d(TAG, "SettingsActivity onBuildHeaders");
-
-        //loadHeadersFromResource(R.xml.pref_header, target);
-
-        setContentView(R.layout.fragment_settings);
-        mToolbar = (Toolbar) findViewById(R.id.app_bar);
-        setSupportActionBar(mToolbar);
-
-    }
 
     //Required Method to Override to Validated Fragments
     @Override
     protected boolean isValidFragment(String fragmentName) {
+        Log.d(TAG, "isValidFragment() called with: " + "fragmentName = [" + fragmentName + "]");
         return SettingsFragment.class.getName().equals(fragmentName);
     }
 
@@ -90,9 +95,31 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_settings, menu);
+        return true;
+    }
+
+    @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(R.anim.left_in, R.anim.right_out);
+        Log.d(TAG, "onBackPressed");
+
+        if (mPasscodePrefs) {
+            mPasscodePrefs = false;
+            mSettingsFragment.setPreferenceScreen(null);
+            mSettingsFragment.loadPreferences();
+
+        } else {
+            super.onBackPressed();
+            overridePendingTransition(R.anim.left_in, R.anim.right_out);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.d(TAG, "onSaveInstanceState() called with: " + "outState = [" + outState + "]");
+        outState.putBoolean(PASSCODE_PREFS, mPasscodePrefs);
     }
 
 
@@ -156,50 +183,15 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             super.onCreate(savedInstanceState);
             Log.d(TAG, "SettingsFragment - onCreate");
 
-            getActivity().setTheme(R.style.AppTheme);
-            setHasOptionsMenu(true);
-
             getActivity().setResult(RESULT_CANCELED);
 
             loadPreferences();
         }
 
-        @Override
-        public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-            inflater.inflate(R.menu.menu_settings, menu);
-        }
-
-
-        @Override
-        public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-            if (Build.VERSION.SDK_INT >= 21)
-                setEnterTransition(TransitionInflater.from(getActivity()).inflateTransition(R.transition.activity_slide_left));
-
-            View layout = inflater.inflate(R.layout.fragment_settings, container, false);
-
-            if (layout != null) {
-
-                //Adding Toolbar to fragment
-                Log.d(TAG, "SettingsFragment onCreateView");
-                AppCompatPreferenceActivity sActivity = (AppCompatPreferenceActivity) getActivity();
-                Toolbar sToolbar = (Toolbar) layout.findViewById(R.id.app_bar);
-                sActivity.setSupportActionBar(sToolbar);
-
-                ActionBar sBar = sActivity.getSupportActionBar();
-                sBar.setDisplayShowHomeEnabled(true);
-                sBar.setDisplayHomeAsUpEnabled(true);
-                sBar.setDisplayShowTitleEnabled(true);
-
-                sBar.setTitle(getResources().getString(R.string.activity_title_settings));
-
-            }
-
-            return layout;
-        }
 
         //Helper method for onCreate
-        private void loadPreferences() {
+        public void loadPreferences() {
+            Log.d(TAG, "loadPreferences() called with: mPasscodePrefs = " + mPasscodePrefs);
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.preferences);
 
@@ -219,11 +211,28 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 }
             });
 
-            setupShareWarning();
+            findPreference(getString(R.string.pref_header_passcode_key)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+
+                    setPreferenceScreen(null);
+                    addPreferencesFromResource(R.xml.passcode_prefs);
+                    mPasscodePrefs = true;
+
+                    return true;
+                }
+            });
+
+            setupShareWarningPreference();
 
             //Summary to Value
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_path_manual_key)));
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_path_list_key)));
+
+            if(mPasscodePrefs) {
+                setPreferenceScreen(null);
+                addPreferencesFromResource(R.xml.passcode_prefs);
+            }
 
         }
 
@@ -275,7 +284,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         }
 
 
-        private void setupShareWarning() {
+        private void setupShareWarningPreference() {
 
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
@@ -288,7 +297,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     Log.d(TAG, "onPreferenceChange() called with: " + "preference = [" + preference + "], newValue = [" + newValue + "]");
                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-                    if ((boolean)newValue) {
+                    if ((boolean) newValue) {
                         Log.d(TAG, "isChecked");
                         preference.setTitle(R.string.pref_share_warning_title_show);
                         sharedPreferences.edit().putBoolean(MyApplication.SHARE_WARNING, true).apply();
@@ -304,7 +313,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 }
             });
         }
-
 
     }
 }
