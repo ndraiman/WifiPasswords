@@ -117,7 +117,6 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     private boolean mShowShareDialog;
 
     private boolean mFirstAppLaunch;
-    private static final String FIRST_LAUNCH = "first_launch";
 
     private boolean mRootAccess;
     private static final String ROOT_ACCESS = "root_access";
@@ -157,12 +156,11 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         setupFAB();
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        mFirstAppLaunch = sharedPreferences.getBoolean(FIRST_LAUNCH, true);
+        mFirstAppLaunch = sharedPreferences.getBoolean(MyApplication.FIRST_LAUNCH, true);
         mRootAccess = sharedPreferences.getBoolean(ROOT_ACCESS, true);
 
         if (mFirstAppLaunch) {
             getActivity().startActivityForResult(new Intent(getActivity(), IntroActivity.class), RequestCodes.ACTIVITY_INTRO_CODE);
-            sharedPreferences.edit().putBoolean(FIRST_LAUNCH, false).apply();
 
         } else {
 

@@ -1,14 +1,18 @@
 package com.gmail.ndraiman.wifipasswords.activities;
 
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.github.paolorotolo.appintro.AppIntro2;
 import com.github.paolorotolo.appintro.AppIntroFragment;
 import com.gmail.ndraiman.wifipasswords.R;
+import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
+import com.gmail.ndraiman.wifipasswords.task.TaskCheckPasscode;
 
 public class IntroActivity extends AppIntro2 {
 
@@ -58,6 +62,7 @@ public class IntroActivity extends AppIntro2 {
 
     @Override
     public void onDonePressed() {
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(MyApplication.FIRST_LAUNCH, false).apply();
         setResult(RESULT_OK);
         finish();
     }
@@ -65,5 +70,25 @@ public class IntroActivity extends AppIntro2 {
     @Override
     public void onBackPressed() {
         //do nothing
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if(MyApplication.mPasscodeActivated && !isFinishing()) {
+            Log.e(TAG, "executing TaskCheckPasscode()");
+            new TaskCheckPasscode(getApplicationContext(), this).execute();
+
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(MyApplication.mPasscodeActivated && MyApplication.mAppWentBackground) {
+            startActivity(new Intent(this, PasscodeActivity.class));
+        }
     }
 }
