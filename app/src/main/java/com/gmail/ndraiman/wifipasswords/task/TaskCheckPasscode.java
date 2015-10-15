@@ -30,7 +30,7 @@ public class TaskCheckPasscode extends AsyncTask<Void, Void, Boolean>{
     protected Boolean doInBackground(Void... params) {
 
         try {
-            Thread.sleep(500);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

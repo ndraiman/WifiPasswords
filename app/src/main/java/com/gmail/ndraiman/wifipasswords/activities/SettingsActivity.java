@@ -343,6 +343,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     if(resultCode == RESULT_OK) {
                         mPasscodeToggle.setTitle(R.string.pref_passcode_toggle_title_off);
                         mPasscodeChange.setEnabled(true);
+                        MyApplication.mAppWentBackground = false;
                     }
                     break;
 

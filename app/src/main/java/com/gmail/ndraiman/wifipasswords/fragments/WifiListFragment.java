@@ -982,7 +982,13 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
         CustomAlertDialogFragment dialog = CustomAlertDialogFragment.getInstance(title, message, buttons);
         dialog.setTargetFragment(this, RequestCodes.DIALOG_ERROR_CODE);
-        dialog.show(getFragmentManager(), getString(R.string.dialog_error_path_key));
+        try {
+            dialog.show(getFragmentManager(), getString(R.string.dialog_error_path_key));
+
+        } catch (IllegalStateException e) {
+
+            Log.e(TAG, "showPathErrorDialog ERROR: " + e.getClass().getName());
+        }
     }
 
     public void showRootErrorDialog() {
@@ -1000,7 +1006,6 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         } catch (IllegalStateException e) {
 
             Log.e(TAG, "showRootErrorDialog ERROR: " + e.getClass().getName());
-            Toast.makeText(getActivity(), R.string.dialog_error_root_title, Toast.LENGTH_LONG).show();
         }
 
         PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putBoolean(ROOT_ACCESS, false).apply();
