@@ -234,6 +234,9 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         if(MyApplication.mPasscodeActivated && !getActivity().isFinishing()) {
             Log.e(TAG, "executing TaskCheckPasscode()");
             new TaskCheckPasscode(getActivity().getApplicationContext(), getActivity()).execute();
+
+        } else if ((getActivity().isFinishing())) {
+            MyApplication.mAppWentBackground = true;
         }
     }
 

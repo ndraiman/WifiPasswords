@@ -61,6 +61,8 @@ public class TaskCheckPasscode extends AsyncTask<Void, Void, Boolean>{
             MyApplication.mAppWentBackground = result;
     }
 
+
+
     protected boolean isAppOnForeground(final Context context) {
         List<ActivityManager.RunningAppProcessInfo> appProcesses = ((ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE)).getRunningAppProcesses();
 
