@@ -14,12 +14,12 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import com.andexert.library.RippleView;
 import com.gmail.ndraiman.wifipasswords.R;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
 import com.gmail.ndraiman.wifipasswords.extras.RequestCodes;
@@ -45,7 +45,7 @@ public class PasscodeActivity extends AppCompatActivity {
     private ImageView mLogo;
     private RadioButton mRadioButton1, mRadioButton2, mRadioButton3, mRadioButton4;
     private RadioButton mRadioError1, mRadioError2, mRadioError3, mRadioError4;
-    private ImageButton mButtonOne, mButtonTwo, mButtonThree, mButtonFour, mButtonFive, mButtonSix,
+    private RippleView mButtonOne, mButtonTwo, mButtonThree, mButtonFour, mButtonFive, mButtonSix,
             mButtonSeven, mButtonEight, mButtonNine, mButtonZero, mButtonBackspace;
 
 
@@ -120,17 +120,17 @@ public class PasscodeActivity extends AppCompatActivity {
         mRadioError3 = (RadioButton) findViewById(R.id.radioButtonError3);
         mRadioError4 = (RadioButton) findViewById(R.id.radioButtonError4);
 
-        mButtonOne = (ImageButton) findViewById(R.id.button_1);
-        mButtonTwo = (ImageButton) findViewById(R.id.button_2);
-        mButtonThree = (ImageButton) findViewById(R.id.button_3);
-        mButtonFour = (ImageButton) findViewById(R.id.button_4);
-        mButtonFive = (ImageButton) findViewById(R.id.button_5);
-        mButtonSix = (ImageButton) findViewById(R.id.button_6);
-        mButtonSeven = (ImageButton) findViewById(R.id.button_7);
-        mButtonEight = (ImageButton) findViewById(R.id.button_8);
-        mButtonNine = (ImageButton) findViewById(R.id.button_9);
-        mButtonZero = (ImageButton) findViewById(R.id.button_0);
-        mButtonBackspace = (ImageButton) findViewById(R.id.button_backspace);
+        mButtonOne = (RippleView) findViewById(R.id.button_1);
+        mButtonTwo = (RippleView) findViewById(R.id.button_2);
+        mButtonThree = (RippleView) findViewById(R.id.button_3);
+        mButtonFour = (RippleView) findViewById(R.id.button_4);
+        mButtonFive = (RippleView) findViewById(R.id.button_5);
+        mButtonSix = (RippleView) findViewById(R.id.button_6);
+        mButtonSeven = (RippleView) findViewById(R.id.button_7);
+        mButtonEight = (RippleView) findViewById(R.id.button_8);
+        mButtonNine = (RippleView) findViewById(R.id.button_9);
+        mButtonZero = (RippleView) findViewById(R.id.button_0);
+        mButtonBackspace = (RippleView) findViewById(R.id.button_backspace);
 
         mEditTextPasscode = (EditText) findViewById(R.id.edit_text_passcode);
 

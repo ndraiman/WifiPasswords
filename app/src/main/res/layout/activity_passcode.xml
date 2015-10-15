@@ -150,69 +150,69 @@
             android:padding="@dimen/passcode_row_padding">
 
             <com.andexert.library.RippleView
+                android:id="@+id/button_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:onClick="buttonClicked"
                 app:rv_centered="true"
                 app:rv_color="@color/colorHighlight"
                 app:rv_zoom="true"
                 app:rv_zoomDuration="@integer/passcode_button_zoom_duration"
                 app:rv_zoomScale="1.25">
 
-                <ImageButton
-                    android:id="@+id/button_1"
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@android:color/white"
                     android:contentDescription="@string/description_passcode_digit"
-                    android:onClick="buttonClicked"
                     android:padding="@dimen/passcode_button_padding"
                     android:src="@drawable/ic_digit_one"
                     android:tint="@color/colorPrimary" />
             </com.andexert.library.RippleView>
 
             <com.andexert.library.RippleView
+                android:id="@+id/button_2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:onClick="buttonClicked"
                 app:rv_centered="true"
                 app:rv_color="@color/colorHighlight"
                 app:rv_zoom="true"
                 app:rv_zoomDuration="@integer/passcode_button_zoom_duration"
                 app:rv_zoomScale="1.25">
 
-                <ImageButton
-                    android:id="@+id/button_2"
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@android:color/white"
                     android:contentDescription="@string/description_passcode_digit"
-                    android:onClick="buttonClicked"
                     android:padding="@dimen/passcode_button_padding"
                     android:src="@drawable/ic_digit_two"
                     android:tint="@color/colorPrimary" />
             </com.andexert.library.RippleView>
 
             <com.andexert.library.RippleView
+                android:id="@+id/button_3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:onClick="buttonClicked"
                 app:rv_centered="true"
                 app:rv_color="@color/colorHighlight"
                 app:rv_zoom="true"
                 app:rv_zoomDuration="@integer/passcode_button_zoom_duration"
                 app:rv_zoomScale="1.25">
 
-                <ImageButton
-                    android:id="@+id/button_3"
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@android:color/white"
                     android:contentDescription="@string/description_passcode_digit"
-                    android:onClick="buttonClicked"
                     android:padding="@dimen/passcode_button_padding"
                     android:src="@drawable/ic_digit_three"
                     android:tint="@color/colorPrimary" />
@@ -229,69 +229,69 @@
             android:padding="@dimen/passcode_row_padding">
 
             <com.andexert.library.RippleView
+                android:id="@+id/button_4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:onClick="buttonClicked"
                 app:rv_centered="true"
                 app:rv_color="@color/colorHighlight"
                 app:rv_zoom="true"
                 app:rv_zoomDuration="@integer/passcode_button_zoom_duration"
                 app:rv_zoomScale="1.25">
 
-                <ImageButton
-                    android:id="@+id/button_4"
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@android:color/white"
                     android:contentDescription="@string/description_passcode_digit"
-                    android:onClick="buttonClicked"
                     android:padding="@dimen/passcode_button_padding"
                     android:src="@drawable/ic_digit_four"
                     android:tint="@color/colorPrimary" />
             </com.andexert.library.RippleView>
 
             <com.andexert.library.RippleView
+                android:id="@+id/button_5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:onClick="buttonClicked"
                 app:rv_centered="true"
                 app:rv_color="@color/colorHighlight"
                 app:rv_zoom="true"
                 app:rv_zoomDuration="@integer/passcode_button_zoom_duration"
                 app:rv_zoomScale="1.25">
 
-                <ImageButton
-                    android:id="@+id/button_5"
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@android:color/white"
                     android:contentDescription="@string/description_passcode_digit"
-                    android:onClick="buttonClicked"
                     android:padding="@dimen/passcode_button_padding"
                     android:src="@drawable/ic_digit_five"
                     android:tint="@color/colorPrimary" />
             </com.andexert.library.RippleView>
 
             <com.andexert.library.RippleView
+                android:id="@+id/button_6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:onClick="buttonClicked"
                 app:rv_centered="true"
                 app:rv_color="@color/colorHighlight"
                 app:rv_zoom="true"
                 app:rv_zoomDuration="@integer/passcode_button_zoom_duration"
                 app:rv_zoomScale="1.25">
 
-                <ImageButton
-                    android:id="@+id/button_6"
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@android:color/white"
                     android:contentDescription="@string/description_passcode_digit"
-                    android:onClick="buttonClicked"
                     android:padding="@dimen/passcode_button_padding"
                     android:src="@drawable/ic_digit_six"
                     android:tint="@color/colorPrimary" />
@@ -309,69 +309,69 @@
             android:padding="@dimen/passcode_row_padding">
 
             <com.andexert.library.RippleView
+                android:id="@+id/button_7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:onClick="buttonClicked"
                 app:rv_centered="true"
                 app:rv_color="@color/colorHighlight"
                 app:rv_zoom="true"
                 app:rv_zoomDuration="@integer/passcode_button_zoom_duration"
                 app:rv_zoomScale="1.25">
 
-                <ImageButton
-                    android:id="@+id/button_7"
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@android:color/white"
                     android:contentDescription="@string/description_passcode_digit"
-                    android:onClick="buttonClicked"
                     android:padding="@dimen/passcode_button_padding"
                     android:src="@drawable/ic_digit_seven"
                     android:tint="@color/colorPrimary" />
             </com.andexert.library.RippleView>
 
             <com.andexert.library.RippleView
+                android:id="@+id/button_8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:onClick="buttonClicked"
                 app:rv_centered="true"
                 app:rv_color="@color/colorHighlight"
                 app:rv_zoom="true"
                 app:rv_zoomDuration="@integer/passcode_button_zoom_duration"
                 app:rv_zoomScale="1.25">
 
-                <ImageButton
-                    android:id="@+id/button_8"
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@android:color/white"
                     android:contentDescription="@string/description_passcode_digit"
-                    android:onClick="buttonClicked"
                     android:padding="@dimen/passcode_button_padding"
                     android:src="@drawable/ic_digit_eight"
                     android:tint="@color/colorPrimary" />
             </com.andexert.library.RippleView>
 
             <com.andexert.library.RippleView
+                android:id="@+id/button_9"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:onClick="buttonClicked"
                 app:rv_centered="true"
                 app:rv_color="@color/colorHighlight"
                 app:rv_zoom="true"
                 app:rv_zoomDuration="@integer/passcode_button_zoom_duration"
                 app:rv_zoomScale="1.25">
 
-                <ImageButton
-                    android:id="@+id/button_9"
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@android:color/white"
                     android:contentDescription="@string/description_passcode_digit"
-                    android:onClick="buttonClicked"
                     android:padding="@dimen/passcode_button_padding"
                     android:src="@drawable/ic_digit_nine"
                     android:tint="@color/colorPrimary" />
@@ -387,7 +387,7 @@
             android:orientation="horizontal"
             android:padding="@dimen/passcode_row_padding">
 
-            <ImageButton
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -398,47 +398,47 @@
                 android:tint="@android:color/white" />
 
             <com.andexert.library.RippleView
+                android:id="@+id/button_0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:onClick="buttonClicked"
                 app:rv_centered="true"
                 app:rv_color="@color/colorHighlight"
                 app:rv_zoom="true"
                 app:rv_zoomDuration="@integer/passcode_button_zoom_duration"
                 app:rv_zoomScale="1.25">
 
-                <ImageButton
-                    android:id="@+id/button_0"
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@android:color/white"
                     android:contentDescription="@string/description_passcode_digit"
-                    android:onClick="buttonClicked"
                     android:padding="@dimen/passcode_button_padding"
                     android:src="@drawable/ic_digit_zero"
                     android:tint="@color/colorPrimary" />
             </com.andexert.library.RippleView>
 
             <com.andexert.library.RippleView
+                android:id="@+id/button_backspace"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:onClick="buttonClicked"
                 app:rv_centered="true"
                 app:rv_color="@color/colorHighlight"
                 app:rv_zoom="true"
                 app:rv_zoomDuration="@integer/passcode_button_zoom_duration"
                 app:rv_zoomScale="1.25">
 
-                <ImageButton
-                    android:id="@+id/button_backspace"
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center|end"
                     android:background="@android:color/white"
                     android:contentDescription="@string/description_passcode_digit"
-                    android:onClick="buttonClicked"
                     android:padding="@dimen/passcode_button_padding"
                     android:src="@drawable/ic_backspace"
                     android:tint="@color/colorAccent" />
