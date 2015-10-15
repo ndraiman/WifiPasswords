@@ -8,4 +8,6 @@
     <integer name="fragment_animation_duration">350</integer>
     <integer name="fragment_animation_distance">-1500</integer>
 
+    <integer name="passcode_button_zoom_duration">100</integer>
+
 </resources>

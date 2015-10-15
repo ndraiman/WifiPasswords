@@ -202,6 +202,7 @@
     <string name="dialog_about_libraries_title"><u>External Libraries Used:</u></string>
     <string name="dialog_about_library_materialprogressbar"><a href="https://github.com/DreaminginCodeZH/MaterialProgressBar">MaterialProgressBar by Zhang Hai</a></string>
     <string name="dialog_about_library_appintro"><a href="https://github.com/PaoloRotolo/AppIntro">AppIntro by Paolo Rotolo</a></string>
+    <string name="dialog_about_library_rippleeffect"><a href="https://github.com/traex/RippleEffect">RippleEffect by Robin Chutaux</a></string>
     <string name="dialog_about_help_title"><u>Get Help:</u></string>
     <string name="dialog_about_help_intro"><u>Show Intro</u></string>
     <string name="dialog_about_help_readme"><a href="https://github.com/Nexxado/WifiPasswords/blob/master/README.md">Readme</a></string>

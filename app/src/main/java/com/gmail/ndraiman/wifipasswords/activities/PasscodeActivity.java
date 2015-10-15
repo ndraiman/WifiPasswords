@@ -1,6 +1,7 @@
 package com.gmail.ndraiman.wifipasswords.activities;
 
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
@@ -79,6 +80,8 @@ public class PasscodeActivity extends AppCompatActivity {
 
         mEditTextPasscode.addTextChangedListener(mPasscodeListener);
 
+        //lock to Portrait Orientation
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
 

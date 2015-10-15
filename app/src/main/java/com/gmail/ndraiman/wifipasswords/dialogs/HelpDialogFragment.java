@@ -44,6 +44,7 @@ public class HelpDialogFragment extends DialogFragment {
         TextView github = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_github);
         TextView libraryProgressBar = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_library_materialprogressbar);
         TextView libraryAppIntro = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_library_appintro);
+        TextView libraryRippleEffect = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_library_rippleeffect);
         TextView helpIntro = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_help_intro);
         TextView helpReadme = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_help_readme);
 
@@ -51,6 +52,7 @@ public class HelpDialogFragment extends DialogFragment {
         github.setMovementMethod(LinkMovementMethod.getInstance());
         libraryProgressBar.setMovementMethod(LinkMovementMethod.getInstance());
         libraryAppIntro.setMovementMethod(LinkMovementMethod.getInstance());
+        libraryRippleEffect.setMovementMethod(LinkMovementMethod.getInstance());
         helpReadme.setMovementMethod(LinkMovementMethod.getInstance());
 
         helpIntro.setOnClickListener(new View.OnClickListener() {
