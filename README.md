@@ -2,7 +2,10 @@
 
 this is my first Android Project.
 
-a completely free app that shows your device saved wifi passwords.
+#### a completely free app that shows your device saved wifi passwords.
+
+
+Warning: sharing a wifi password with someone can compromise that wifi network security!
 
 ##Features:
 - Retrieve your device saved wifi passwords (<u><b>ROOT REQUIRED</b></u>) 
