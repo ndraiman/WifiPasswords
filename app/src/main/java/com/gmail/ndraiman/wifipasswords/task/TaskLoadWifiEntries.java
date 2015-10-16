@@ -67,6 +67,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         return readFile();
     }
 
+
     @Override
     protected void onPostExecute(ArrayList<WifiEntry> wifiEntries) {
         Log.d(TAG, "OnPost Execute \n" + wifiEntries.toString());
@@ -110,8 +111,6 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
             if (mDialogListener != null) {
                 Log.d(TAG, "OnCancelled Execute \n");
                 mDialogListener.showRootErrorDialog();
-                //return empty list
-//                mListListener.onWifiListLoaded(new ArrayList<WifiEntry>());
             }
         }
 
@@ -137,9 +136,6 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
     }
 
     private void copyFile() {
-//        if (!mRootAccess) {
-//            return;
-//        }
 
         Log.e(TAG, "Copying File");
         try {
@@ -186,8 +182,6 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
 
                     line = bufferedReader.readLine();
 
-                    //Log.i(TAG, title + " " + line.substring(6, line.length() - 1));
-                    //Log.i(TAG, title + " " + line.substring(1, 4));
 
                     if ((line.substring(1, 4)).equals(WPA_PSK)) {
                         password = line.substring(6, line.length() - 1);

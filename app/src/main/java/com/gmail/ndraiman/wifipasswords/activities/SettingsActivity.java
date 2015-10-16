@@ -21,7 +21,7 @@ import com.gmail.ndraiman.wifipasswords.R;
 import com.gmail.ndraiman.wifipasswords.dialogs.HelpDialogFragment;
 import com.gmail.ndraiman.wifipasswords.extras.AppCompatPreferenceActivity;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
-import com.gmail.ndraiman.wifipasswords.extras.RequestCodes;
+import com.gmail.ndraiman.wifipasswords.extras.Endpoints;
 import com.gmail.ndraiman.wifipasswords.task.TaskCheckPasscode;
 
 
@@ -303,14 +303,14 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     if (!MyApplication.mPasscodeActivated) {
 
                         Intent intent = new Intent(getActivity(), PasscodeActivity.class);
-                        intent.putExtra(MyApplication.PASSCODE_REQUEST_CODE, RequestCodes.PASSCODE_PREF_ENABLE);
-                        startActivityForResult(intent, RequestCodes.PASSCODE_PREF_ENABLE);
+                        intent.putExtra(MyApplication.PASSCODE_REQUEST_CODE, Endpoints.PASSCODE_PREF_ENABLE);
+                        startActivityForResult(intent, Endpoints.PASSCODE_PREF_ENABLE);
 
 
                     } else {
                         Intent intent = new Intent(getActivity(), PasscodeActivity.class);
-                        intent.putExtra(MyApplication.PASSCODE_REQUEST_CODE, RequestCodes.PASSCODE_PREF_DISABLE);
-                        startActivityForResult(intent, RequestCodes.PASSCODE_PREF_DISABLE);
+                        intent.putExtra(MyApplication.PASSCODE_REQUEST_CODE, Endpoints.PASSCODE_PREF_DISABLE);
+                        startActivityForResult(intent, Endpoints.PASSCODE_PREF_DISABLE);
 
                     }
 
@@ -324,8 +324,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 public boolean onPreferenceClick(Preference preference) {
 
                     Intent intent = new Intent(getActivity(), PasscodeActivity.class);
-                    intent.putExtra(MyApplication.PASSCODE_REQUEST_CODE, RequestCodes.PASSCODE_PREF_CHANGE);
-                    startActivityForResult(intent, RequestCodes.PASSCODE_PREF_CHANGE);
+                    intent.putExtra(MyApplication.PASSCODE_REQUEST_CODE, Endpoints.PASSCODE_PREF_CHANGE);
+                    startActivityForResult(intent, Endpoints.PASSCODE_PREF_CHANGE);
                     return true;
                 }
             });
@@ -339,7 +339,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
             switch (requestCode) {
 
-                case RequestCodes.PASSCODE_PREF_ENABLE:
+                case Endpoints.PASSCODE_PREF_ENABLE:
                     if(resultCode == RESULT_OK) {
                         mPasscodeToggle.setTitle(R.string.pref_passcode_toggle_title_off);
                         mPasscodeChange.setEnabled(true);
@@ -348,7 +348,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     break;
 
 
-                case RequestCodes.PASSCODE_PREF_DISABLE:
+                case Endpoints.PASSCODE_PREF_DISABLE:
                     if(resultCode == RESULT_OK) {
                         mPasscodeToggle.setTitle(R.string.pref_passcode_toggle_title_on);
                         mPasscodeChange.setEnabled(false);
@@ -390,7 +390,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     .setPositiveButton(buttons[0], new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            getActivity().setResult(RequestCodes.RESET_TO_DEFAULT);
+                            getActivity().setResult(Endpoints.RESET_TO_DEFAULT);
                             getActivity().finish();
                         }
                     })

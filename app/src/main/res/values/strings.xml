@@ -132,7 +132,7 @@
     <string name="pref_passcode_toggle_key" translateable="false">pref_passcode_toggle</string>
     <string name="pref_passcode_toggle_title_on">Turn passcode on</string>
     <string name="pref_passcode_toggle_title_off">Turn passcode off</string>
-    <string name="pref_passcode_toggle_summary">a four pin number passcode to protect the app</string>
+    <string name="pref_passcode_toggle_summary">a 4 digit passcode to protect your data</string>
 
     <string name="pref_passcode_change_key" translateable="false">pref_passcode_change</string>
     <string name="pref_passcode_change_title">Change passcode</string>

@@ -50,7 +50,7 @@ import com.gmail.ndraiman.wifipasswords.dialogs.CustomAlertDialogListener;
 import com.gmail.ndraiman.wifipasswords.dialogs.InputDialogFragment;
 import com.gmail.ndraiman.wifipasswords.dialogs.InputDialogListener;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
-import com.gmail.ndraiman.wifipasswords.extras.RequestCodes;
+import com.gmail.ndraiman.wifipasswords.extras.Endpoints;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
 import com.gmail.ndraiman.wifipasswords.recycler.ItemDragListener;
 import com.gmail.ndraiman.wifipasswords.recycler.MyTouchHelperCallback;
@@ -160,7 +160,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         mRootAccess = sharedPreferences.getBoolean(ROOT_ACCESS, true);
 
         if (mFirstAppLaunch) {
-            getActivity().startActivityForResult(new Intent(getActivity(), IntroActivity.class), RequestCodes.ACTIVITY_INTRO_CODE);
+            getActivity().startActivityForResult(new Intent(getActivity(), IntroActivity.class), Endpoints.ACTIVITY_INTRO_CODE);
 
         } else {
 
@@ -376,7 +376,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         switch (requestCode) {
 
 
-            case RequestCodes.ACTIVITY_INTRO_CODE: //Handle IntroActivity loadFromFile on finish.
+            case Endpoints.ACTIVITY_INTRO_CODE: //Handle IntroActivity loadFromFile on finish.
 
                 if (resultCode == Activity.RESULT_OK) {
                     Log.d(TAG, "Returning From IntroApp - loading from file");
@@ -388,7 +388,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                 break;
 
 
-            case RequestCodes.ACTIVITY_ARCHIVE_CODE: //Handle ArchiveActivity items restored
+            case Endpoints.ACTIVITY_ARCHIVE_CODE: //Handle ArchiveActivity items restored
 
                 if (resultCode == Activity.RESULT_OK) {
                     Log.d(TAG, "ArchiveActivity - Items Restored");
@@ -404,27 +404,27 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                 }
                 break;
 
-            case RequestCodes.DIALOG_PATH_ERROR_CODE:  //Handle Path Error Dialog
+            case Endpoints.DIALOG_PATH_ERROR_CODE:  //Handle Path Error Dialog
 
                 //Hide Progress Bar
                 if (mProgressBar.getVisibility() == View.VISIBLE) {
                     mProgressBar.setVisibility(View.GONE);
                 }
 
-                if (resultCode == RequestCodes.DIALOG_CONFIRM) {
+                if (resultCode == Endpoints.DIALOG_CONFIRM) {
                     Log.d(TAG, "Dialog Error - Confirm");
                     FragmentActivity parent = getActivity();
                     ActivityOptionsCompat compat = ActivityOptionsCompat.makeCustomAnimation(parent, R.anim.right_in, R.anim.left_out);
                     parent.startActivityForResult(
                             new Intent(parent, SettingsActivity.class),
-                            RequestCodes.ACTIVITY_SETTINGS_CODE,
+                            Endpoints.ACTIVITY_SETTINGS_CODE,
                             compat.toBundle());
                 } //Else Dismissed
                 break;
 
-            case RequestCodes.DIALOG_LOAD_WARNING_CODE: //Handle LoadFromFile Warning Dialog
+            case Endpoints.DIALOG_LOAD_WARNING_CODE: //Handle LoadFromFile Warning Dialog
 
-                if (resultCode == RequestCodes.DIALOG_CONFIRM) {
+                if (resultCode == Endpoints.DIALOG_CONFIRM) {
                     Log.d(TAG, "Dialog Warning - Confirm");
                     loadFromFile(true);
 
@@ -796,7 +796,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                         bundle.putIntegerArrayList(InputDialogFragment.POSITIONS_LEY, selectedItems);
 
                         InputDialogFragment fragment = InputDialogFragment.getInstance(InputDialogFragment.INPUT_TAG, bundle);
-                        fragment.setTargetFragment(getFragmentManager().findFragmentByTag(MainActivity.WIFI_LIST_FRAGMENT_TAG), RequestCodes.DIALOG_TAG_CODE);
+                        fragment.setTargetFragment(getFragmentManager().findFragmentByTag(MainActivity.WIFI_LIST_FRAGMENT_TAG), Endpoints.DIALOG_TAG_CODE);
                         fragment.show(getFragmentManager(), getString(R.string.dialog_tag_key));
 
                         return true;
@@ -900,7 +900,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
         InputDialogFragment fragment = InputDialogFragment
                 .getInstance(InputDialogFragment.INPUT_ENTRY, null);
-        fragment.setTargetFragment(this, RequestCodes.DIALOG_ADD_CODE);
+        fragment.setTargetFragment(this, Endpoints.DIALOG_ADD_CODE);
         fragment.show(getFragmentManager(), getString(R.string.dialog_add_key));
 
     }
@@ -928,7 +928,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         String[] buttons = getResources().getStringArray(R.array.dialog_warning_reset_buttons);
 
         CustomAlertDialogFragment dialog = CustomAlertDialogFragment.getInstance(title, message, buttons);
-        dialog.setTargetFragment(this, RequestCodes.DIALOG_LOAD_WARNING_CODE);
+        dialog.setTargetFragment(this, Endpoints.DIALOG_LOAD_WARNING_CODE);
         dialog.show(getFragmentManager(), getString(R.string.dialog_warning_reset_key));
 
     }
@@ -988,7 +988,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         String[] buttons = getResources().getStringArray(R.array.dialog_error_path_buttons);
 
         CustomAlertDialogFragment dialog = CustomAlertDialogFragment.getInstance(title, message, buttons);
-        dialog.setTargetFragment(this, RequestCodes.DIALOG_PATH_ERROR_CODE);
+        dialog.setTargetFragment(this, Endpoints.DIALOG_PATH_ERROR_CODE);
 //        try {
 //            dialog.show(getFragmentManager(), getString(R.string.dialog_error_path_key));
 //
