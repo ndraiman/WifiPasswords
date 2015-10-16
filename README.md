@@ -8,7 +8,7 @@ this is my first Android Project.
 Warning: sharing a wifi password with someone can compromise that wifi network security!
 
 ##Features:
-- Retrieve your device saved wifi passwords (<u><b>ROOT REQUIRED</b></u>) 
+- Show your device saved wifi passwords (<u><b>ROOT REQUIRED</b></u>) 
 - Add wifi passwords manually
 - Hide wifi passwords in an archive list.
 - Live search wifi passwords by Name & Tag.
@@ -30,9 +30,9 @@ Warning: sharing a wifi password with someone can compromise that wifi network s
 ### Screenshots:
 
 ![intro](/intro.png)
+![passcode](/passcode.png)
 ![list](/list.png)
 ![cab](/cab.png)
-![passcode](/passcode.png)
 
 
 
