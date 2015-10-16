@@ -10,7 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
 import com.gmail.ndraiman.wifipasswords.R;
-import com.gmail.ndraiman.wifipasswords.extras.Endpoints;
+import com.gmail.ndraiman.wifipasswords.extras.RequestCodes;
 
 
 public class CustomAlertDialogFragment extends DialogFragment {
@@ -56,7 +56,7 @@ public class CustomAlertDialogFragment extends DialogFragment {
             builder.setPositiveButton(buttons[0], new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    sendResult(Endpoints.DIALOG_CONFIRM, null);
+                    sendResult(RequestCodes.DIALOG_CONFIRM, null);
                 }
             });
 
@@ -64,7 +64,7 @@ public class CustomAlertDialogFragment extends DialogFragment {
                 builder.setNegativeButton(buttons[1], new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        sendResult(Endpoints.DIALOG_CANCEL, null);
+                        sendResult(RequestCodes.DIALOG_CANCEL, null);
                     }
                 });
             }

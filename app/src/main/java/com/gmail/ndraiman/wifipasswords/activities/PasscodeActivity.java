@@ -22,7 +22,7 @@ import android.widget.TextView;
 import com.andexert.library.RippleView;
 import com.gmail.ndraiman.wifipasswords.R;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
-import com.gmail.ndraiman.wifipasswords.extras.Endpoints;
+import com.gmail.ndraiman.wifipasswords.extras.RequestCodes;
 
 
 public class PasscodeActivity extends AppCompatActivity {
@@ -59,14 +59,14 @@ public class PasscodeActivity extends AppCompatActivity {
 
         bindViews();
 
-        mRequestCode = getIntent().getIntExtra(MyApplication.PASSCODE_REQUEST_CODE, Endpoints.PASSCODE_ACTIVITY);
+        mRequestCode = getIntent().getIntExtra(MyApplication.PASSCODE_REQUEST_CODE, RequestCodes.PASSCODE_ACTIVITY);
 
         mPasscode = PreferenceManager.getDefaultSharedPreferences(this).getString(MyApplication.PASSCODE_KEY, "0000");
 
-        if (mRequestCode == Endpoints.PASSCODE_PREF_ENABLE || mRequestCode == Endpoints.PASSCODE_PREF_CHANGE) {
+        if (mRequestCode == RequestCodes.PASSCODE_PREF_ENABLE || mRequestCode == RequestCodes.PASSCODE_PREF_CHANGE) {
             mAttemptNum = ATTEMPT_ENABLE;
 
-            if (mRequestCode == Endpoints.PASSCODE_PREF_CHANGE) {
+            if (mRequestCode == RequestCodes.PASSCODE_PREF_CHANGE) {
                 mAttemptNum = ATTEMPT_CHANGE;
                 mDescription.setText(R.string.passcode_description_old);
             }
@@ -87,7 +87,7 @@ public class PasscodeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (mRequestCode == Endpoints.PASSCODE_ACTIVITY) {
+        if (mRequestCode == RequestCodes.PASSCODE_ACTIVITY) {
             return;
         }
         super.onBackPressed();
@@ -193,7 +193,7 @@ public class PasscodeActivity extends AppCompatActivity {
                     if (submit(s.toString())) {
                         setResult(RESULT_OK);
 
-                        if (mRequestCode == Endpoints.PASSCODE_PREF_DISABLE) {
+                        if (mRequestCode == RequestCodes.PASSCODE_PREF_DISABLE) {
                             disablePasscode();
                         }
 

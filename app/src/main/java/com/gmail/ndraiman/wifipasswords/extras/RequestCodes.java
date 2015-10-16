@@ -1,7 +1,7 @@
 package com.gmail.ndraiman.wifipasswords.extras;
 
 
-public class Endpoints {
+public class RequestCodes {
 
     public static final int ACTIVITY_INTRO_CODE = 30;
     public static final int ACTIVITY_SETTINGS_CODE = 40;
