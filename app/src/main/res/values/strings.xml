@@ -124,7 +124,6 @@
     <!--**********************-->
     <!-- Passcode Preferences -->
     <!--**********************-->
-    <!-- TODO change strings -->
     <string name="pref_header_passcode_key" translateable="false">passcode_header</string>
     <string name="pref_header_passcode_title">Configure Passcode</string>
     <string name="pref_passcode_toolbar_title">Passcode</string>

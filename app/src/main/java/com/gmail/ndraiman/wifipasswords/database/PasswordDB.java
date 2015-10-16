@@ -265,42 +265,6 @@ public class PasswordDB {
     }
 
 
-    /******************************************************/
-    /****************** DEBUG Methods ********************/
-    /******************************************************/
-    //TODO Delete
-    public String printTable(String table) {
-
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("TABLE: " + table.toUpperCase() + "\n");
-
-        Cursor cursor = mDatabase.query(table, null, null, null, null, null, null);
-
-        if (cursor != null && cursor.moveToFirst()) {
-
-            do {
-
-
-                String title = cursor.getString(cursor.getColumnIndex(PasswordHelper.COLUMN_TITLE));
-                String password = cursor.getString(cursor.getColumnIndex(PasswordHelper.COLUMN_PASSWORD));
-                String tag = cursor.getString(cursor.getColumnIndex(PasswordHelper.COLUMN_TAG));
-                if (tag == null) {
-                    tag = "null";
-                }
-
-                stringBuilder.append(title + " ||| " + password + " ||| " + tag + "\n");
-
-
-            } while (cursor.moveToNext());
-
-
-            cursor.close();
-        }
-
-        return stringBuilder.toString();
-    }
-
-
     /*************************************************************/
     /****************** Database Helper Class ********************/
     /*************************************************************/

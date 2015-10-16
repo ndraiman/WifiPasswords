@@ -16,7 +16,6 @@ import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.util.Log;
@@ -49,14 +48,10 @@ public class ArchiveActivity extends AppCompatActivity {
 
     private ArrayList<WifiEntry> mListWifi;
 
-    private Toolbar mToolbar;
     private CoordinatorLayout mRoot;
 
     private RecyclerView mRecyclerView;
     private WifiListAdapter mAdapter;
-    private RecyclerView.OnItemTouchListener mRecyclerTouchListener;
-    private ItemTouchHelper mItemTouchHelper;
-    private ItemTouchHelper.Callback mTouchHelperCallback;
 
     private ArrayList<WifiEntry> mEntriesRestored; //track restored entries to add to main list adapter
 
@@ -95,8 +90,8 @@ public class ArchiveActivity extends AppCompatActivity {
 
         mRoot = (CoordinatorLayout) findViewById(R.id.activity_hidden_wifi_container);
         mRecyclerView = (RecyclerView) findViewById(R.id.hidden_wifi_list_recycler);
-        mToolbar = (Toolbar) findViewById(R.id.app_bar);
-        setSupportActionBar(mToolbar);
+        Toolbar toolbar  = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
 
         ActionBar sBar;
         if ((sBar = getSupportActionBar()) != null) {
@@ -212,37 +207,7 @@ public class ArchiveActivity extends AppCompatActivity {
         mAdapter = new WifiListAdapter(this, false, null);
         mRecyclerView.setAdapter(mAdapter);
 
-        //Setup ItemTouchHelper
-//        mTouchHelperCallback = new MyTouchHelperCallback(mAdapter);
-
-//        mTouchHelperCallback = new ItemTouchHelper.SimpleCallback(0, 0) {
-//            @Override
-//            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-//                return false;
-//            }
-//
-//            @Override
-//            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-//                Log.d(TAG, "onSwiped");
-//
-//                WifiEntry deleted = mAdapter.onItemDismiss(viewHolder.getAdapterPosition());
-//
-//                mEntriesRestored.add(deleted);
-//                Intent data = getIntent();
-//                data.putParcelableArrayListExtra(STATE_RESTORED_ENTRIES, mEntriesRestored);
-//                setResult(RESULT_OK, data);
-//
-//                Snackbar.make(mRoot,
-//                        deleted.getTitle() + " " + getString(R.string.snackbar_wifi_restore),
-//                        Snackbar.LENGTH_SHORT)
-//                        .show();
-//            }
-//        };
-//
-//        mItemTouchHelper = new ItemTouchHelper(mTouchHelperCallback);
-//        mItemTouchHelper.attachToRecyclerView(mRecyclerView);
-
-        mRecyclerTouchListener = new RecyclerTouchListener(this, mRecyclerView, new RecyclerTouchListener.ClickListener() {
+        RecyclerView.OnItemTouchListener recyclerTouchListener = new RecyclerTouchListener(this, mRecyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
                 Log.d(TAG, "RecyclerView - onClick " + position);
@@ -284,7 +249,7 @@ public class ArchiveActivity extends AppCompatActivity {
             }
         });
 
-        mRecyclerView.addOnItemTouchListener(mRecyclerTouchListener);
+        mRecyclerView.addOnItemTouchListener(recyclerTouchListener);
 
     }
 

@@ -14,8 +14,8 @@
     <dimen name="size_list_item">72dp</dimen>
 
     <dimen name="dialog_input_margin">16dp</dimen>
-    <dimen name="dialog_about_margin">16dp</dimen>
-    <dimen name="dialog_about_padding">4dp</dimen>
+    <dimen name="dialog_help_margin">16dp</dimen>
+    <dimen name="dialog_help_padding">4dp</dimen>
 
     <dimen name="passcode_logo_top_margin">50dp</dimen>
     <dimen name="passcode_row_margin">4dp</dimen>

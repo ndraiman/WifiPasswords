@@ -7,7 +7,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -16,21 +15,16 @@ import android.transition.TransitionInflater;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.gmail.ndraiman.wifipasswords.R;
-import com.gmail.ndraiman.wifipasswords.database.PasswordDB;
 import com.gmail.ndraiman.wifipasswords.dialogs.HelpDialogFragment;
-import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
 import com.gmail.ndraiman.wifipasswords.extras.Endpoints;
 import com.gmail.ndraiman.wifipasswords.fragments.WifiListFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Toolbar mToolbar;
     private WifiListFragment mWifiListFragment;
     private static final String TAG = "MainActivity";
-    private ActivityOptionsCompat mCompat;
 
     public static final String WIFI_LIST_FRAGMENT_TAG = "main_fragment_tag";
 
@@ -53,10 +47,8 @@ public class MainActivity extends AppCompatActivity {
         //Set default values for preferences - false = runs only once!!
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-        mToolbar = (Toolbar) findViewById(R.id.app_bar);
-        //Transparent Background for CollapsingToolbar Parallax
-        mToolbar.setBackgroundColor(ContextCompat.getColor(this, android.R.color.transparent));
-        setSupportActionBar(mToolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(toolbar);
 
         if (savedInstanceState == null) {
             Log.d(TAG, "savedInstanceState = null");
@@ -119,20 +111,20 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        ActivityOptionsCompat compat;
+
         //noinspection SimplifiableIfStatement
         switch (id) {
 
             case R.id.action_hidden_list:
-                mCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, null);
-//                mCompat = ActivityOptionsCompat.makeCustomAnimation(this,R.anim.right_in, R.anim.left_out);
-                startActivityForResult(new Intent(this, ArchiveActivity.class), Endpoints.ACTIVITY_ARCHIVE_CODE, mCompat.toBundle());
+                compat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, null);
+                startActivityForResult(new Intent(this, ArchiveActivity.class), Endpoints.ACTIVITY_ARCHIVE_CODE, compat.toBundle());
                 return true;
 
             case R.id.action_settings:
                 //Start Settings with Transition
-//                mCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, null);
-                mCompat = ActivityOptionsCompat.makeCustomAnimation(this, R.anim.right_in, R.anim.left_out);
-                startActivityForResult(new Intent(this, SettingsActivity.class), Endpoints.RESET_TO_DEFAULT, mCompat.toBundle());
+                compat = ActivityOptionsCompat.makeCustomAnimation(this, R.anim.right_in, R.anim.left_out);
+                startActivityForResult(new Intent(this, SettingsActivity.class), Endpoints.RESET_TO_DEFAULT, compat.toBundle());
                 return true;
 
             case R.id.action_help:
@@ -140,32 +132,6 @@ public class MainActivity extends AppCompatActivity {
                 dialog.show(getFragmentManager(), getString(R.string.dialog_about_key));
 
                 return true;
-
-            case R.id.show_tables:
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                PasswordDB db = MyApplication.getWritableDatabase();
-
-                builder.setMessage(db.printTable(PasswordDB.PasswordHelper.TABLE_MAIN) + "\n\n"
-                        + db.printTable(PasswordDB.PasswordHelper.TABLE_ARCHIVE) + "\n\n"
-                        + db.printTable(PasswordDB.PasswordHelper.TABLE_DELETED));
-
-                MyApplication.closeDatabase();
-
-                builder.setPositiveButton("Dismiss", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //do nothing
-                    }
-                });
-                builder.create().show();
-                break;
-
-            case R.id.show_passcode:
-                if(MyApplication.mPasscodeActivated) {
-                    startActivity(new Intent(this, PasscodeActivity.class));
-                } else {
-                    Toast.makeText(this, "No Passcode Set", Toast.LENGTH_SHORT).show();
-                }
 
         }
 
@@ -184,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
                 mWifiListFragment.onActivityResult(requestCode, resultCode, data);
                 break;
 
+
             case Endpoints.ACTIVITY_SETTINGS_CODE: //Handles returning from SettingsActivity after Error in Path
 
                 if (resultCode == Activity.RESULT_OK) {
@@ -195,10 +162,12 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
 
+
             case Endpoints.ACTIVITY_ARCHIVE_CODE: //return from ArchiveActivity
                 Log.d(TAG, "Return from ArchiveActivity - resultCode = " + resultCode);
                 mWifiListFragment.onActivityResult(requestCode, resultCode, data);
                 break;
+
 
             case Endpoints.RESET_TO_DEFAULT: //Return from Settings Activity - Reset to Default
                 if (resultCode == Endpoints.RESET_TO_DEFAULT) {

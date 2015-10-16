@@ -9,5 +9,6 @@
     <integer name="fragment_animation_distance">-1500</integer>
 
     <integer name="passcode_button_zoom_duration">25</integer>
+    <integer name="passcode_button_ripple_duration">200</integer>
 
 </resources>

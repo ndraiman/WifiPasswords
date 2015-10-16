@@ -157,7 +157,8 @@
                 android:gravity="center"
                 android:onClick="buttonClicked"
                 app:rv_centered="true"
-                app:rv_color="@color/colorHighlight"
+                app:rv_color="@color/colorRippleEffect"
+                app:rv_rippleDuration="@integer/passcode_button_ripple_duration"
                 app:rv_zoom="true"
                 app:rv_zoomDuration="@integer/passcode_button_zoom_duration"
                 app:rv_zoomScale="1.25">
@@ -180,7 +181,8 @@
                 android:gravity="center"
                 android:onClick="buttonClicked"
                 app:rv_centered="true"
-                app:rv_color="@color/colorHighlight"
+                app:rv_color="@color/colorRippleEffect"
+                app:rv_rippleDuration="@integer/passcode_button_ripple_duration"
                 app:rv_zoom="true"
                 app:rv_zoomDuration="@integer/passcode_button_zoom_duration"
                 app:rv_zoomScale="1.25">
@@ -203,7 +205,8 @@
                 android:gravity="center"
                 android:onClick="buttonClicked"
                 app:rv_centered="true"
-                app:rv_color="@color/colorHighlight"
+                app:rv_color="@color/colorRippleEffect"
+                app:rv_rippleDuration="@integer/passcode_button_ripple_duration"
                 app:rv_zoom="true"
                 app:rv_zoomDuration="@integer/passcode_button_zoom_duration"
                 app:rv_zoomScale="1.25">
@@ -236,7 +239,8 @@
                 android:gravity="center"
                 android:onClick="buttonClicked"
                 app:rv_centered="true"
-                app:rv_color="@color/colorHighlight"
+                app:rv_color="@color/colorRippleEffect"
+                app:rv_rippleDuration="@integer/passcode_button_ripple_duration"
                 app:rv_zoom="true"
                 app:rv_zoomDuration="@integer/passcode_button_zoom_duration"
                 app:rv_zoomScale="1.25">
@@ -259,7 +263,8 @@
                 android:gravity="center"
                 android:onClick="buttonClicked"
                 app:rv_centered="true"
-                app:rv_color="@color/colorHighlight"
+                app:rv_color="@color/colorRippleEffect"
+                app:rv_rippleDuration="@integer/passcode_button_ripple_duration"
                 app:rv_zoom="true"
                 app:rv_zoomDuration="@integer/passcode_button_zoom_duration"
                 app:rv_zoomScale="1.25">
@@ -282,7 +287,8 @@
                 android:gravity="center"
                 android:onClick="buttonClicked"
                 app:rv_centered="true"
-                app:rv_color="@color/colorHighlight"
+                app:rv_color="@color/colorRippleEffect"
+                app:rv_rippleDuration="@integer/passcode_button_ripple_duration"
                 app:rv_zoom="true"
                 app:rv_zoomDuration="@integer/passcode_button_zoom_duration"
                 app:rv_zoomScale="1.25">
@@ -316,7 +322,8 @@
                 android:gravity="center"
                 android:onClick="buttonClicked"
                 app:rv_centered="true"
-                app:rv_color="@color/colorHighlight"
+                app:rv_color="@color/colorRippleEffect"
+                app:rv_rippleDuration="@integer/passcode_button_ripple_duration"
                 app:rv_zoom="true"
                 app:rv_zoomDuration="@integer/passcode_button_zoom_duration"
                 app:rv_zoomScale="1.25">
@@ -339,7 +346,8 @@
                 android:gravity="center"
                 android:onClick="buttonClicked"
                 app:rv_centered="true"
-                app:rv_color="@color/colorHighlight"
+                app:rv_color="@color/colorRippleEffect"
+                app:rv_rippleDuration="@integer/passcode_button_ripple_duration"
                 app:rv_zoom="true"
                 app:rv_zoomDuration="@integer/passcode_button_zoom_duration"
                 app:rv_zoomScale="1.25">
@@ -362,7 +370,8 @@
                 android:gravity="center"
                 android:onClick="buttonClicked"
                 app:rv_centered="true"
-                app:rv_color="@color/colorHighlight"
+                app:rv_color="@color/colorRippleEffect"
+                app:rv_rippleDuration="@integer/passcode_button_ripple_duration"
                 app:rv_zoom="true"
                 app:rv_zoomDuration="@integer/passcode_button_zoom_duration"
                 app:rv_zoomScale="1.25">
@@ -405,7 +414,8 @@
                 android:gravity="center"
                 android:onClick="buttonClicked"
                 app:rv_centered="true"
-                app:rv_color="@color/colorHighlight"
+                app:rv_color="@color/colorRippleEffect"
+                app:rv_rippleDuration="@integer/passcode_button_ripple_duration"
                 app:rv_zoom="true"
                 app:rv_zoomDuration="@integer/passcode_button_zoom_duration"
                 app:rv_zoomScale="1.25">
@@ -428,7 +438,8 @@
                 android:gravity="center"
                 android:onClick="buttonClicked"
                 app:rv_centered="true"
-                app:rv_color="@color/colorHighlight"
+                app:rv_color="@color/colorRippleEffect"
+                app:rv_rippleDuration="@integer/passcode_button_ripple_duration"
                 app:rv_zoom="true"
                 app:rv_zoomDuration="@integer/passcode_button_zoom_duration"
                 app:rv_zoomScale="1.25">

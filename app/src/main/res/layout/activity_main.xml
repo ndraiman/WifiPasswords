@@ -13,8 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:layout_behavior="com.gmail.ndraiman.wifipasswords.extras.FlingBehavior">
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <include
             android:id="@+id/app_bar"

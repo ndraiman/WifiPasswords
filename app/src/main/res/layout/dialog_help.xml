@@ -11,14 +11,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dialog_about_margin"
+            android:layout_margin="@dimen/dialog_help_margin"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/dialog_about_info"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/dialog_about_padding"
+                android:padding="@dimen/dialog_help_padding"
                 android:text="@string/dialog_about_info"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
@@ -26,7 +26,7 @@
                 android:id="@+id/dialog_about_version"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/dialog_about_padding"
+                android:padding="@dimen/dialog_help_padding"
                 android:text="@string/dialog_about_version"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
@@ -35,7 +35,7 @@
                 android:id="@+id/dialog_about_github"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/dialog_about_padding"
+                android:padding="@dimen/dialog_help_padding"
                 android:text="@string/dialog_about_github"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
@@ -44,7 +44,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dialog_about_margin"
+            android:layout_margin="@dimen/dialog_help_margin"
             android:orientation="vertical">
 
             <TextView
@@ -57,8 +57,8 @@
                 android:id="@+id/dialog_about_library_materialprogressbar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dialog_about_margin"
-                android:padding="@dimen/dialog_about_padding"
+                android:layout_marginTop="@dimen/dialog_help_margin"
+                android:padding="@dimen/dialog_help_padding"
                 android:text="@string/dialog_about_library_materialprogressbar"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
@@ -66,7 +66,7 @@
                 android:id="@+id/dialog_about_library_appintro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/dialog_about_padding"
+                android:padding="@dimen/dialog_help_padding"
                 android:text="@string/dialog_about_library_appintro"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
@@ -74,7 +74,7 @@
                 android:id="@+id/dialog_about_library_rippleeffect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/dialog_about_padding"
+                android:padding="@dimen/dialog_help_padding"
                 android:text="@string/dialog_about_library_rippleeffect"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
         </LinearLayout>
@@ -82,8 +82,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dialog_about_margin"
-            android:layout_marginStart="@dimen/dialog_about_margin"
+            android:layout_marginLeft="@dimen/dialog_help_margin"
+            android:layout_marginStart="@dimen/dialog_help_margin"
             android:layout_marginTop="32dp"
             android:orientation="vertical">
 
@@ -97,10 +97,10 @@
                 android:id="@+id/dialog_about_help_intro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dialog_about_margin"
+                android:layout_marginTop="@dimen/dialog_help_margin"
                 android:clickable="true"
                 android:longClickable="false"
-                android:padding="@dimen/dialog_about_padding"
+                android:padding="@dimen/dialog_help_padding"
                 android:text="@string/dialog_about_help_intro"
                 android:textColor="@color/colorPrimary" />
 
@@ -108,7 +108,7 @@
                 android:id="@+id/dialog_about_help_readme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/dialog_about_padding"
+                android:padding="@dimen/dialog_help_padding"
                 android:text="@string/dialog_about_help_readme"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 

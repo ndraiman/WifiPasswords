@@ -21,15 +21,4 @@
         android:title="@string/action_help"
         app:showAsAction="never" />
 
-    <!-- Debug Actions -->
-    <item android:id="@+id/show_tables"
-        android:orderInCategory="900"
-        android:title="Show Tables"
-        app:showAsAction="never" />
-
-    <item android:id="@+id/show_passcode"
-        android:orderInCategory="1000"
-        android:title="Show Passcode"
-        app:showAsAction="never" />
-
 </menu>

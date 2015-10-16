@@ -3,6 +3,7 @@ package com.gmail.ndraiman.wifipasswords.recycler;
 import android.support.v7.widget.RecyclerView;
 
 
+//Handles FAB show\hide
 public abstract class RecyclerScrollListener extends RecyclerView.OnScrollListener {
 
     static final float MINIMUM = 25;

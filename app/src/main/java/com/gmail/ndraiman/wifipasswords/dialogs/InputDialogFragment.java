@@ -36,7 +36,6 @@ public class InputDialogFragment extends DialogFragment {
     public static final int INPUT_TAG = 1;
 
     private EditText mTitle, mPassword;
-    private Button mCancel, mConfirm;
     private LinearLayout mRoot;
 
     public static InputDialogFragment getInstance(int type, Bundle listWifiBundle) {
@@ -70,8 +69,8 @@ public class InputDialogFragment extends DialogFragment {
 
         mTitle = (EditText) layout.findViewById(R.id.input_title);
         mPassword = (EditText) layout.findViewById(R.id.input_password);
-        mConfirm = (Button) layout.findViewById(R.id.input_confirm);
-        mCancel = (Button) layout.findViewById(R.id.input_cancel);
+        Button mConfirm = (Button) layout.findViewById(R.id.input_confirm);
+        Button mCancel = (Button) layout.findViewById(R.id.input_cancel);
         mRoot = (LinearLayout) layout.findViewById(R.id.dialog_add_container);
 
         final InputDialogListener listener = (InputDialogListener) getTargetFragment();
