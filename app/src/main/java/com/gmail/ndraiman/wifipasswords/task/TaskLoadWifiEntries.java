@@ -107,9 +107,9 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         //Show "No Root Access" error
         if (!mRootAccess) {
 
-            if (mListListener != null) {
+            if (mDialogListener != null) {
                 Log.d(TAG, "OnCancelled Execute \n");
-                mListListener.showRootErrorDialog();
+                mDialogListener.showRootErrorDialog();
                 //return empty list
 //                mListListener.onWifiListLoaded(new ArrayList<WifiEntry>());
             }
@@ -137,9 +137,9 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
     }
 
     private void copyFile() {
-        if (!mRootAccess) {
-            return;
-        }
+//        if (!mRootAccess) {
+//            return;
+//        }
 
         Log.e(TAG, "Copying File");
         try {

@@ -8,5 +8,4 @@ public interface WifiListLoadedListener {
 
     public void onWifiListLoaded(ArrayList<WifiEntry> listWifi, int numOfEntries, boolean resetDB);
 
-    public void showRootErrorDialog();
 }

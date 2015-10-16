@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_hidden_list:
                 mCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, null);
 //                mCompat = ActivityOptionsCompat.makeCustomAnimation(this,R.anim.right_in, R.anim.left_out);
-                startActivityForResult(new Intent(this, ArchiveActivity.class), RequestCodes.ACTIVITY_HIDDEN_CODE, mCompat.toBundle());
+                startActivityForResult(new Intent(this, ArchiveActivity.class), RequestCodes.ACTIVITY_ARCHIVE_CODE, mCompat.toBundle());
                 return true;
 
             case R.id.action_settings:
@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
 
-            case RequestCodes.ACTIVITY_HIDDEN_CODE: //return from ArchiveActivity
+            case RequestCodes.ACTIVITY_ARCHIVE_CODE: //return from ArchiveActivity
                 Log.d(TAG, "Return from ArchiveActivity - resultCode = " + resultCode);
                 mWifiListFragment.onActivityResult(requestCode, resultCode, data);
                 break;

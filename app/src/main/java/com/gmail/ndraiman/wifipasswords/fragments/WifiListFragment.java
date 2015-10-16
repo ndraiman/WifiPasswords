@@ -234,6 +234,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
             new TaskCheckPasscode(getActivity().getApplicationContext(), getActivity()).execute();
 
         } else if ((getActivity().isFinishing())) {
+            Log.e(TAG, "executing TaskCheckPasscode()");
             MyApplication.mAppWentBackground = true;
         }
     }
@@ -375,7 +376,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         switch (requestCode) {
 
 
-            case RequestCodes.ACTIVITY_INTRO_CODE:
+            case RequestCodes.ACTIVITY_INTRO_CODE: //Handle IntroActivity loadFromFile on finish.
 
                 if (resultCode == Activity.RESULT_OK) {
                     Log.d(TAG, "Returning From IntroApp - loading from file");
@@ -387,7 +388,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                 break;
 
 
-            case RequestCodes.ACTIVITY_HIDDEN_CODE: //Handle ArchiveActivity items restored
+            case RequestCodes.ACTIVITY_ARCHIVE_CODE: //Handle ArchiveActivity items restored
 
                 if (resultCode == Activity.RESULT_OK) {
                     Log.d(TAG, "ArchiveActivity - Items Restored");
@@ -403,7 +404,12 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                 }
                 break;
 
-            case RequestCodes.DIALOG_ERROR_CODE:  //Handle Path Error Dialog
+            case RequestCodes.DIALOG_PATH_ERROR_CODE:  //Handle Path Error Dialog
+
+                //Hide Progress Bar
+                if (mProgressBar.getVisibility() == View.VISIBLE) {
+                    mProgressBar.setVisibility(View.GONE);
+                }
 
                 if (resultCode == RequestCodes.DIALOG_CONFIRM) {
                     Log.d(TAG, "Dialog Error - Confirm");
@@ -416,7 +422,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                 } //Else Dismissed
                 break;
 
-            case RequestCodes.DIALOG_WARNING_CODE: //Handle LoadFromFile Warning Dialog
+            case RequestCodes.DIALOG_LOAD_WARNING_CODE: //Handle LoadFromFile Warning Dialog
 
                 if (resultCode == RequestCodes.DIALOG_CONFIRM) {
                     Log.d(TAG, "Dialog Warning - Confirm");
@@ -922,7 +928,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         String[] buttons = getResources().getStringArray(R.array.dialog_warning_reset_buttons);
 
         CustomAlertDialogFragment dialog = CustomAlertDialogFragment.getInstance(title, message, buttons);
-        dialog.setTargetFragment(this, RequestCodes.DIALOG_WARNING_CODE);
+        dialog.setTargetFragment(this, RequestCodes.DIALOG_LOAD_WARNING_CODE);
         dialog.show(getFragmentManager(), getString(R.string.dialog_warning_reset_key));
 
     }
@@ -982,14 +988,14 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         String[] buttons = getResources().getStringArray(R.array.dialog_error_path_buttons);
 
         CustomAlertDialogFragment dialog = CustomAlertDialogFragment.getInstance(title, message, buttons);
-        dialog.setTargetFragment(this, RequestCodes.DIALOG_ERROR_CODE);
-        try {
-            dialog.show(getFragmentManager(), getString(R.string.dialog_error_path_key));
-
-        } catch (IllegalStateException e) {
-
-            Log.e(TAG, "showPathErrorDialog ERROR: " + e.getClass().getName());
-        }
+        dialog.setTargetFragment(this, RequestCodes.DIALOG_PATH_ERROR_CODE);
+//        try {
+//            dialog.show(getFragmentManager(), getString(R.string.dialog_error_path_key));
+//
+//        } catch (IllegalStateException e) {
+//            Log.e(TAG, "showPathErrorDialog ERROR: " + e.getClass().getName());
+//        }
+        getFragmentManager().beginTransaction().add(dialog, getString(R.string.dialog_error_path_key)).commitAllowingStateLoss();
     }
 
     public void showRootErrorDialog() {
@@ -1001,13 +1007,14 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
         CustomAlertDialogFragment dialog = CustomAlertDialogFragment.getInstance(title, message, buttons);
         dialog.setTargetFragment(this, 0);
-        try {
-            dialog.show(getFragmentManager(), getString(R.string.dialog_error_root_key));
+//        try {
+//            dialog.show(getFragmentManager(), getString(R.string.dialog_error_root_key));
+//
+//        } catch (IllegalStateException e) {
+//            Log.e(TAG, "showRootErrorDialog ERROR: " + e.getClass().getName());
+//        }
 
-        } catch (IllegalStateException e) {
-
-            Log.e(TAG, "showRootErrorDialog ERROR: " + e.getClass().getName());
-        }
+        getFragmentManager().beginTransaction().add(dialog, getString(R.string.dialog_error_root_key)).commitAllowingStateLoss();
 
         PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putBoolean(ROOT_ACCESS, false).apply();
 
