@@ -1,9 +1,17 @@
 apply plugin: 'com.android.application'
+apply plugin: 'signing'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'WifiPasswords'
+            storeFile file('D:/נתנאל/Programming/Android/My Android Apps/MyKeyStore.jks')
+            keyPassword MyKeyPassword
+            storePassword MyStorePassword
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
-
     defaultConfig {
         applicationId "com.gmail.ndraiman.wifipasswords"
         minSdkVersion 16
@@ -15,6 +23,7 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
 }
