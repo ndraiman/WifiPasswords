@@ -8,7 +8,6 @@ public class WifiEntry implements Parcelable {
     public static final Parcelable.Creator<WifiEntry> CREATOR = new Parcelable.Creator<WifiEntry>() {
         @Override
         public WifiEntry createFromParcel(Parcel in) {
-            //Log.d(LOG_TAG, "create from parcel :WifiEntry");
             return new WifiEntry(in);
         }
 

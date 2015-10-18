@@ -75,7 +75,7 @@ public class HelpDialogFragment extends DialogFragment {
 
         builder.setTitle(getString(R.string.dialog_about_title));
         builder.setView(helpDialogLayout)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.dialog_about_button, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //do nothing

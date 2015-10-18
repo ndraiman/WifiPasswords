@@ -207,19 +207,13 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
 
     @Override
-    public void onPause() {
-        super.onPause();
-        Log.e(TAG, "onPause()");
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy");
 
         updateDatabase();
-
     }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {

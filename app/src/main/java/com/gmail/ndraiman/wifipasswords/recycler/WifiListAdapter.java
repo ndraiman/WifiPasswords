@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -27,7 +26,6 @@ import java.util.List;
 public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyViewHolder>
         implements ItemTouchHelperAdapter {
 
-    private static final String TAG = "RecyclerAdapter";
     private LayoutInflater layoutInflater;
     private List<WifiEntry> mListWifi;
     private ItemDragListener mDragListener;
@@ -104,7 +102,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
 
 
     public void setWifiList(ArrayList<WifiEntry> listWifi) {
-        Log.d(TAG, "setWifiList");
+
         mListWifi = listWifi;
         mPreviousPosition = -1; //fix load animation on new data loaded
         notifyDataSetChanged();
@@ -134,7 +132,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     /*******************************************************/
 
     public void toggleSelection(int position) {
-        Log.d(TAG, "toggleSelection");
+
         if (mSelectedItems.get(position, false)) {
             mSelectedItems.delete(position);
         } else {
@@ -144,13 +142,13 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     }
 
     public void clearSelection() {
-        Log.d(TAG, "clearSelection");
+
         mSelectedItems.clear();
         notifyDataSetChanged();
     }
 
     public ArrayList<Integer> getSelectedItems() {
-        Log.d(TAG, "getSelectedItems");
+
         ArrayList<Integer> items = new ArrayList<>(mSelectedItems.size());
 
         for (int i = 0; i < mSelectedItems.size(); i++) {
@@ -160,11 +158,11 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     }
 
     /**********************************************/
-    /************ Items Changed Methods ***********/
+    /************ Items Changes Methods ***********/
     /**********************************************/
 
     public WifiEntry removeItem(int position) {
-        Log.d(TAG, "removeItem - position = " + position);
+
         final WifiEntry entry = mListWifi.remove(position);
 
         if(mSelectedItems.get(position, false)) {
@@ -176,13 +174,13 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     }
 
     public void addItem(int position, WifiEntry entry) {
-        Log.d(TAG, "addItem - position = " + position);
+
         mListWifi.add(position, entry);
         notifyItemInserted(position);
     }
 
     public void moveItem(int fromPosition, int toPosition) {
-        Log.d(TAG, "moveItem - from " + fromPosition + " to " + toPosition);
+
         final WifiEntry entry = mListWifi.remove(fromPosition);
         mListWifi.add(toPosition, entry);
         notifyItemMoved(fromPosition, toPosition);
@@ -194,7 +192,6 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     /*********************************************/
 
     public void animateTo(ArrayList<WifiEntry> listWifi) {
-        Log.d(TAG, "animateTo");
         //Order is important
         applyAndAnimateRemovals(listWifi);
         applyAndAnimateAdditions(listWifi);
@@ -202,7 +199,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     }
 
     private void applyAndAnimateRemovals(ArrayList<WifiEntry> newListWifi) {
-        Log.d(TAG, "applyAndAnimateRemovals");
+
         for (int i = mListWifi.size() - 1; i >= 0; i--) {
             final WifiEntry entry = mListWifi.get(i);
             if (!newListWifi.contains(entry)) {
@@ -212,7 +209,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     }
 
     private void applyAndAnimateAdditions(ArrayList<WifiEntry> newListWifi) {
-        Log.d(TAG, "applyAndAnimateAdditions");
+
         for (int i = 0, count = newListWifi.size(); i < count; i++) {
             final WifiEntry entry = newListWifi.get(i);
             if (!mListWifi.contains(entry)) {
@@ -222,7 +219,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     }
 
     private void applyAndAnimateMovedItems(ArrayList<WifiEntry> newListWifi) {
-        Log.d(TAG, "applyAndAnimateMovedItems");
+
         for (int toPosition = newListWifi.size() - 1; toPosition >= 0; toPosition--) {
             final WifiEntry entry = newListWifi.get(toPosition);
             final int fromPosition = mListWifi.indexOf(entry);
@@ -255,7 +252,7 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
 
     @Override
     public WifiEntry onItemDismiss(int position) {
-        Log.d(TAG, "onItemDismiss");
+
         return removeItem(position);
     }
 
@@ -270,11 +267,6 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
         // If the bound view wasn't previously displayed on screen, it's animated
         if (position > mPreviousPosition)
         {
-            //Alternating Slide Animation - Glitchy when fast scrolling
-//            Animation animation = android.view.animation.AnimationUtils
-//                    .loadAnimation(mContext,
-//                            position%2 == 0 ? R.anim.slide_in_up_left : R.anim.slide_in_up_right);
-//            viewToAnimate.startAnimation(animation);
 
             MyAnimationUtils.translateY(viewToAnimate, true);
             mPreviousPosition = position;

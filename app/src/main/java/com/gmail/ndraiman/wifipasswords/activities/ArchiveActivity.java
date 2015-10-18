@@ -18,7 +18,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,7 +37,6 @@ import java.util.ArrayList;
 
 public class ArchiveActivity extends AppCompatActivity {
 
-    private static final String TAG = "ArchiveActivity";
     private static final String COPIED_WIFI_ENTRY = "copied_wifi_entry"; //Clipboard Label
 
     private static final String STATE_HIDDEN_ENTRIES = "state_hidden_entries";
@@ -71,7 +69,6 @@ public class ArchiveActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate");
 
         //Set Activity Transition - Lollipop+
         if (Build.VERSION.SDK_INT >= 21) {
@@ -103,14 +100,14 @@ public class ArchiveActivity extends AppCompatActivity {
         setupActionModeCallback();
 
         if (savedInstanceState != null) {
-            Log.d(TAG, "extracting hidden list from parcelable");
+
             mListWifi = savedInstanceState.getParcelableArrayList(STATE_HIDDEN_ENTRIES);
             mActionModeOn = savedInstanceState.getBoolean(STATE_ACTION_MODE);
             mActionModeSelections = savedInstanceState.getIntegerArrayList(STATE_ACTION_MODE_SELECTIONS);
             mEntriesRestored = savedInstanceState.getParcelableArrayList(STATE_RESTORED_ENTRIES);
 
         } else {
-            Log.d(TAG, "getting hidden list from database");
+
             mListWifi = MyApplication.getWritableDatabase().getAllWifiEntries(true);
             MyApplication.closeDatabase();
 
@@ -134,7 +131,7 @@ public class ArchiveActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume()");
+
 
         if(MyApplication.mPasscodeActivated && MyApplication.mAppWentBackground) {
             startActivity(new Intent(this, PasscodeActivity.class));
@@ -144,14 +141,14 @@ public class ArchiveActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        Log.d(TAG, "onPause()");
+
 
         MyApplication.getWritableDatabase().deleteWifiEntries(mEntriesRestored, true);
         MyApplication.closeDatabase();
 
         if(MyApplication.mPasscodeActivated && !isFinishing()) {
-            Log.e(TAG, "executing TaskCheckPasscode()");
-            new TaskCheckPasscode(getApplicationContext(), this).execute();
+
+            new TaskCheckPasscode(getApplicationContext()).execute();
         }
     }
 
@@ -159,7 +156,6 @@ public class ArchiveActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Log.d(TAG, "onSaveInstanceState");
 
         outState.putParcelableArrayList(STATE_HIDDEN_ENTRIES, mListWifi);
         outState.putBoolean(STATE_ACTION_MODE, mActionModeOn);
@@ -200,7 +196,6 @@ public class ArchiveActivity extends AppCompatActivity {
     /***************************************************************/
 
     private void setupRecyclerView() {
-        Log.d(TAG, "setupRecyclerView");
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setHasFixedSize(true);
@@ -210,7 +205,6 @@ public class ArchiveActivity extends AppCompatActivity {
         RecyclerView.OnItemTouchListener recyclerTouchListener = new RecyclerTouchListener(this, mRecyclerView, new RecyclerTouchListener.ClickListener() {
             @Override
             public void onClick(View view, int position) {
-                Log.d(TAG, "RecyclerView - onClick " + position);
 
                 //while in ActionMode - regular clicks will also select items
                 if (mActionModeOn) {
@@ -221,7 +215,6 @@ public class ArchiveActivity extends AppCompatActivity {
 
             @Override
             public void onLongClick(View view, int position) {
-                Log.d(TAG, "RecyclerView - onLongClick " + position);
 
                 //Invoking Context Action Mode
                 mAdapter.toggleSelection(position);
@@ -235,7 +228,6 @@ public class ArchiveActivity extends AppCompatActivity {
 
             @Override
             public void onDoubleTap(View view, int position) {
-                Log.d(TAG, "RecyclerView - onDoubleTap " + position);
 
                 if (mActionModeOn) {
                     return;
@@ -254,7 +246,6 @@ public class ArchiveActivity extends AppCompatActivity {
     }
 
     public void setupActionModeCallback() {
-        Log.d(TAG, "setupActionModeCallback");
 
         mActionModeCallback = new ActionMode.Callback() {
             @Override
@@ -273,7 +264,7 @@ public class ArchiveActivity extends AppCompatActivity {
 
             @Override
             public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
-                Log.d(TAG, "onActionItemClicked");
+
                 final ArrayList<WifiEntry> selectedEntries = new ArrayList<>();
                 final ArrayList<Integer> selectedItems = mAdapter.getSelectedItems();
 
@@ -388,7 +379,6 @@ public class ArchiveActivity extends AppCompatActivity {
         clipboardManager.setPrimaryClip(clipData);
 
         Snackbar.make(mRoot, snackbarMessage, Snackbar.LENGTH_SHORT).show();
-        Log.d(TAG, "copyToClipboard:\n" + clipData.toString());
     }
 
 

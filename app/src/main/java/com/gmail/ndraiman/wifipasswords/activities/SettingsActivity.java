@@ -13,7 +13,6 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -34,13 +33,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     private static boolean mPasscodePrefs = false;
     private static final String PASSCODE_PREFS = "passcode_preferences";
-    private static final String TAG = "SettingsActivity";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate() called with: " + "savedInstanceState = [" + savedInstanceState + "]");
         setContentView(R.layout.activity_settings);
 
         mToolbar = (Toolbar) findViewById(R.id.app_bar);
@@ -77,7 +74,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     //Required Method to Override to Validated Fragments
     @Override
     protected boolean isValidFragment(String fragmentName) {
-        Log.d(TAG, "isValidFragment() called with: " + "fragmentName = [" + fragmentName + "]");
+
         return SettingsFragment.class.getName().equals(fragmentName);
     }
 
@@ -109,7 +106,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     @Override
     public void onBackPressed() {
-        Log.d(TAG, "onBackPressed");
 
         if (mPasscodePrefs) {
             mPasscodePrefs = false;
@@ -125,7 +121,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Log.d(TAG, "onSaveInstanceState() called with: " + "outState = [" + outState + "]");
+
         outState.putBoolean(PASSCODE_PREFS, mPasscodePrefs);
     }
 
@@ -133,7 +129,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume()");
 
         if(MyApplication.mPasscodeActivated && MyApplication.mAppWentBackground) {
             startActivity(new Intent(this, PasscodeActivity.class));
@@ -143,11 +138,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     @Override
     public void onPause() {
         super.onPause();
-        Log.e(TAG, "onPause()");
 
         if(MyApplication.mPasscodeActivated && !isFinishing()) {
-            Log.e(TAG, "executing TaskCheckPasscode()");
-            new TaskCheckPasscode(getApplicationContext(), this).execute();
+
+            new TaskCheckPasscode(getApplicationContext()).execute();
         }
     }
 
@@ -157,7 +151,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     /***************************************************************/
     public static class SettingsFragment extends PreferenceFragment {
 
-        private static final String TAG = "SettingsFragment";
 
         private Preference mPasscodeToggle;
         private Preference mPasscodeChange;
@@ -171,7 +164,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 getActivity().setResult(RESULT_OK);
 
                 String stringValue = newValue.toString();
-                Log.d(TAG, "onPreferenceChange: " + stringValue);
 
                 if (preference instanceof EditTextPreference) {
 
@@ -199,7 +191,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         };
 
         private void bindPreferenceSummaryToValue(Preference preference) {
-            Log.d(TAG, "bindPreferenceSummaryToValue");
             // Set the listener to watch for value changes.
             preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 
@@ -214,7 +205,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         @Override
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
-            Log.d(TAG, "SettingsFragment - onCreate called with: mPasscodePrefs = " + mPasscodePrefs);
 
             getActivity().setResult(RESULT_CANCELED);
 
@@ -230,7 +220,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         //Helper method for onCreate
         public void loadGeneralPreferences() {
-            Log.d(TAG, "loadGeneralPreferences()");
 
             mToolbar.setTitle(getString(R.string.action_settings));
 
@@ -275,7 +264,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
 
         public void loadPasscodePreferences() {
-            Log.d(TAG, "loadPasscodePreferences()");
 
             mToolbar.setTitle(getString(R.string.pref_passcode_toolbar_title));
             addPreferencesFromResource(R.xml.passcode_prefs);
@@ -335,7 +323,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         @Override
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
-            Log.d(TAG, "onActivityResult() called with: " + "requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
 
             switch (requestCode) {
 
@@ -360,7 +347,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
         //Restore wpa_supplicant path to default
         private void resetPathPref() {
-            Log.d(TAG, "resetPathPref");
 
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getActivity());
             SharedPreferences.Editor editor = settings.edit();
@@ -378,7 +364,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
 
         private void showResetWarningDialog() {
-            Log.d(TAG, "showResetWarningDialog");
 
             String[] buttons = getResources().getStringArray(R.array.dialog_warning_reset_buttons);
 
@@ -415,16 +400,16 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             shareWarning.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
                 @Override
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    Log.d(TAG, "onPreferenceChange() called with: " + "preference = [" + preference + "], newValue = [" + newValue + "]");
+
                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
                     if ((boolean) newValue) {
-                        Log.d(TAG, "isChecked");
+
                         preference.setTitle(R.string.pref_share_warning_title_show);
                         sharedPreferences.edit().putBoolean(MyApplication.SHARE_WARNING, true).apply();
 
                     } else {
-                        Log.d(TAG, "Not Checked");
+
                         preference.setTitle(R.string.pref_share_warning_title_hide);
                         sharedPreferences.edit().putBoolean(MyApplication.SHARE_WARNING, false).apply();
 

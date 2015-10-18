@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +25,6 @@ import java.util.ArrayList;
 
 public class InputDialogFragment extends DialogFragment {
 
-    private static final String TAG = "InputDialogFragment";
     private static final String TYPE_KEY = "type_key";
 
     public static final String ENTRIES_KEY = "entries_key";
@@ -42,7 +40,6 @@ public class InputDialogFragment extends DialogFragment {
         InputDialogFragment fragment = new InputDialogFragment();
 
         if (listWifiBundle == null) {
-            Log.d(TAG, "getInstance() called with listWifiBundle = null");
             listWifiBundle = new Bundle();
         }
         listWifiBundle.putInt(TYPE_KEY, type);
@@ -60,12 +57,10 @@ public class InputDialogFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView");
         View layout = inflater.inflate(R.layout.dialog_input, container);
 
         final Bundle bundle = getArguments();
         int type = bundle.getInt(TYPE_KEY);
-        Log.d(TAG, "type = " + type);
 
         mTitle = (EditText) layout.findViewById(R.id.input_title);
         mPassword = (EditText) layout.findViewById(R.id.input_password);
@@ -78,12 +73,11 @@ public class InputDialogFragment extends DialogFragment {
         switch (type) {
 
             case INPUT_ENTRY:
-                Log.d(TAG, "type = INPUT_ENTRY");
+
                 getDialog().setTitle(R.string.dialog_add_title);
                 mConfirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d(TAG, "mConfirm - onClick");
 
                         if (hasErrors())
                             return; //return to dialog
@@ -96,7 +90,7 @@ public class InputDialogFragment extends DialogFragment {
                 break;
 
             case INPUT_TAG:
-                Log.d(TAG, "type = INPUT_TAG");
+
                 getDialog().setTitle(R.string.dialog_tag_title);
                 mPassword.setVisibility(View.GONE);
                 mTitle.setHint(R.string.dialog_tag_hint);
@@ -117,10 +111,8 @@ public class InputDialogFragment extends DialogFragment {
                 mConfirm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d(TAG, "mConfirm - onClick");
 
                         if (mTitle.getText() == null) {
-                            Log.e(TAG, "mTitle.getText() = null");
                             return; //return to dialog
                         }
 
@@ -137,7 +129,6 @@ public class InputDialogFragment extends DialogFragment {
         mCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "mCancel - onClick");
                 dismiss();
             }
         });
@@ -150,7 +141,6 @@ public class InputDialogFragment extends DialogFragment {
     @Override
     public void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume");
 
         //Set Dialog Dimensions
         Window dialogWindow = getDialog().getWindow();

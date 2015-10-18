@@ -12,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -26,7 +25,6 @@ import com.gmail.ndraiman.wifipasswords.task.TaskCheckPasscode;
 public class MainActivity extends AppCompatActivity {
 
     private WifiListFragment mWifiListFragment;
-    private static final String TAG = "MainActivity";
 
     public static final String WIFI_LIST_FRAGMENT_TAG = "main_fragment_tag";
 
@@ -34,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate");
 
         //Set Activity Transition - Lollipop+
         if (Build.VERSION.SDK_INT >= 21) {
@@ -53,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         if (savedInstanceState == null) {
-            Log.d(TAG, "savedInstanceState = null");
+
             mWifiListFragment = WifiListFragment.newInstance();
 
         } else {
@@ -68,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume()");
 
         if(MyApplication.mPasscodeActivated && MyApplication.mAppWentBackground) {
             startActivity(new Intent(this, PasscodeActivity.class));
@@ -78,21 +74,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        Log.e(TAG, "onPause()");
 
         if(MyApplication.mPasscodeActivated && !isFinishing()) {
-            Log.e(TAG, "executing TaskCheckPasscode()");
-            new TaskCheckPasscode(getApplicationContext(), this).execute();
+
+            new TaskCheckPasscode(getApplicationContext()).execute();
 
         } else if (isFinishing()) {
-            Log.e(TAG, "executing TaskCheckPasscode()");
+
             MyApplication.mAppWentBackground = true;
         }
     }
 
     @Override
     public void onBackPressed() {
-        Log.d(TAG, "onBackPressed");
+
         if (mWifiListFragment.isVisible() && mWifiListFragment.getSortModeStatus()) {
             mWifiListFragment.sortMode(false);
             return;
@@ -125,7 +120,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        Log.d(TAG, "onCreateOptionsMenu");
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
@@ -168,12 +162,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.e(TAG, "onActivityResult - requestCode = " + requestCode + ", resultCode = " + resultCode);
 
         switch (requestCode) {
 
             case RequestCodes.ACTIVITY_INTRO_CODE:
-                Log.d(TAG, "Returning From IntroApp - resultCode = " + resultCode);
+
                 mWifiListFragment.onActivityResult(requestCode, resultCode, data);
                 break;
 
@@ -181,24 +174,22 @@ public class MainActivity extends AppCompatActivity {
             case RequestCodes.ACTIVITY_SETTINGS_CODE: //Handles returning from SettingsActivity after Error in Path
 
                 if (resultCode == Activity.RESULT_OK) {
-                    Log.d(TAG, "Return from Settings - Loading from file");
+
                     if (mWifiListFragment.isVisible())
                         mWifiListFragment.loadFromFile(true);
-                } else {
-                    Log.d(TAG, "Return from Settings - didn't change anything");
                 }
                 break;
 
 
             case RequestCodes.ACTIVITY_ARCHIVE_CODE: //return from ArchiveActivity
-                Log.d(TAG, "Return from ArchiveActivity - resultCode = " + resultCode);
+
                 mWifiListFragment.onActivityResult(requestCode, resultCode, data);
                 break;
 
 
             case RequestCodes.RESET_TO_DEFAULT: //Return from Settings Activity - Reset to Default
                 if (resultCode == RequestCodes.RESET_TO_DEFAULT) {
-                    Log.d(TAG, "Return from Settings - Reset to Default");
+
                     mWifiListFragment.loadFromFile(true);
 
                 }

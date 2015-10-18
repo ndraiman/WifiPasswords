@@ -6,7 +6,6 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 
 import com.github.paolorotolo.appintro.AppIntro2;
 import com.github.paolorotolo.appintro.AppIntroFragment;
@@ -16,11 +15,9 @@ import com.gmail.ndraiman.wifipasswords.task.TaskCheckPasscode;
 
 public class IntroActivity extends AppIntro2 {
 
-    private static final String TAG = "IntroActivity";
 
     @Override
     public void init(Bundle savedInstanceState) {
-        Log.d(TAG, "init");
 
         addSlide(AppIntroFragment.newInstance(getString(R.string.intro_title_welcome),
                 getString(R.string.intro_message_welcome),
@@ -77,8 +74,8 @@ public class IntroActivity extends AppIntro2 {
         super.onPause();
 
         if(MyApplication.mPasscodeActivated && !isFinishing()) {
-            Log.e(TAG, "executing TaskCheckPasscode()");
-            new TaskCheckPasscode(getApplicationContext(), this).execute();
+
+            new TaskCheckPasscode(getApplicationContext()).execute();
 
         }
     }

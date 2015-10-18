@@ -9,7 +9,6 @@ import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -27,7 +26,6 @@ import com.gmail.ndraiman.wifipasswords.extras.RequestCodes;
 
 public class PasscodeActivity extends AppCompatActivity {
 
-    private static final String TAG = "PasscodeActivity";
     private int mRequestCode;
 
     private EditText mEditTextPasscode;
@@ -147,7 +145,6 @@ public class PasscodeActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.d(TAG, "onTextChanged() called with: " + "s = [" + s + "], start = [" + start + "], before = [" + before + "], count = [" + count + "]");
 
                 if (count > before) { //digit added
 
@@ -223,7 +220,6 @@ public class PasscodeActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.d(TAG, "onTextChanged() called with: " + "s = [" + s + "], start = [" + start + "], before = [" + before + "], count = [" + count + "]");
 
                 if (count > before) { //digit added
 
@@ -336,7 +332,7 @@ public class PasscodeActivity extends AppCompatActivity {
     }
 
     private boolean submit(String passcodeInserted) {
-        Log.d(TAG, "submit() called with: " + "passcodeInserted = [" + passcodeInserted + "]");
+
         return mPasscode.equals(passcodeInserted);
     }
 
@@ -385,7 +381,6 @@ public class PasscodeActivity extends AppCompatActivity {
 
 
     public void buttonClicked(View view) {
-        Log.d(TAG, "buttonClicked() called with: " + "view = [" + view + "]");
 
         String current = mEditTextPasscode.getText().toString();
         int id = view.getId();

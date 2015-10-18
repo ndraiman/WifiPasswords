@@ -3,7 +3,6 @@ package com.gmail.ndraiman.wifipasswords.task;
 
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.util.Log;
 
 import com.gmail.ndraiman.wifipasswords.database.PasswordDB;
 import com.gmail.ndraiman.wifipasswords.dialogs.CustomAlertDialogListener;
@@ -26,7 +25,6 @@ import java.util.ArrayList;
 public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiEntry>> {
 
 
-    private static final String TAG = "TaskLoadWifiEntries";
     private static final String APP_FOLDER = "WifiPasswords";
     private WifiListLoadedListener mListListener;
     private boolean mRootAccess = true;
@@ -45,7 +43,6 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         mDialogListener = dialogListener;
         mResetDB = resetDB;
 
-        Log.d(TAG, "Constructor - mPath = " + mPath + "\n mFileName = " + mFileName);
     }
 
 
@@ -53,13 +50,11 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
     protected ArrayList<WifiEntry> doInBackground(String... params) {
 
         if (!(mRootAccess = RootCheck.canRunRootCommands())) {
-            Log.e(TAG, "No Root Access");
             cancel(true);
         }
 
         boolean dirCreated = createDir();
         if (!dirCreated) {
-            Log.e(TAG, "Failed to create app directory");
             return null;
         }
         copyFile();
@@ -70,13 +65,11 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
 
     @Override
     protected void onPostExecute(ArrayList<WifiEntry> wifiEntries) {
-        Log.d(TAG, "OnPost Execute \n" + wifiEntries.toString());
 
         //Insert Wifi Entries to database
         PasswordDB db = MyApplication.getWritableDatabase();
 
         if (mResetDB) {
-            Log.d(TAG, "Resetting Database");
             db.purgeDatabase();
         }
 
@@ -95,9 +88,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         File directory = Environment.getExternalStorageDirectory();
         File file = new File(directory + "/" + APP_FOLDER + "/" + mFileName);
 
-        if(file.delete()) {
-            Log.e(TAG, "file deleted");
-        }
+        file.delete();
     }
 
 
@@ -109,7 +100,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         if (!mRootAccess) {
 
             if (mDialogListener != null) {
-                Log.d(TAG, "OnCancelled Execute \n");
+
                 mDialogListener.showRootErrorDialog();
             }
         }
@@ -121,14 +112,13 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
      * Helper Methods
      ********************/
     private boolean createDir() {
-        Log.e(TAG, "Creating Dir");
+
         File folder = new File(Environment.getExternalStorageDirectory() + "/" + APP_FOLDER);
         boolean dirCreated = true;
         if (!folder.exists()) {
             dirCreated = folder.mkdir();
         }
         if (!dirCreated) {
-            Log.e(TAG, "Failed to create directory");
             return false;
         }
 
@@ -137,12 +127,12 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
 
     private void copyFile() {
 
-        Log.e(TAG, "Copying File");
         try {
             Process suProcess = Runtime.getRuntime().exec("su -c cp " + mPath + mFileName + " /sdcard/" + APP_FOLDER);
             suProcess.waitFor(); //wait for SU command to finish
+
         } catch (IOException | InterruptedException e) {
-            Log.e(TAG, "copyFile Error: " + e.getClass().getName() + " " + e);
+
             e.printStackTrace();
         }
     }
@@ -155,10 +145,8 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
 
             File directory = Environment.getExternalStorageDirectory();
             File file = new File(directory + "/" + APP_FOLDER + "/" + mFileName);
-            Log.d(TAG, directory + "/" + APP_FOLDER + "/" + mFileName);
 
             if (!file.exists()) {
-                Log.e(TAG, "readFile - File not found");
                 //Show Error Dialog
 
                 if(mRootAccess) {
@@ -167,7 +155,6 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
                 return new ArrayList<>();
             }
 
-            Log.e(TAG, "Starting to read");
 
             BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
             String line = "";
@@ -193,8 +180,6 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
                     } else {
                         password = "no password";
                     }
-
-                    Log.e(TAG, title + " " + password);
 
                     WifiEntry current = new WifiEntry(title, password);
                     listWifi.add(current);

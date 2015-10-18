@@ -6,19 +6,16 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 
 public class PasswordDB {
 
     private PasswordHelper mHelper;
     private SQLiteDatabase mDatabase;
-    private static final String TAG = "PasswordDB";
 
     //TODO is adding public static variable to DB class good practice?
     public static int mNewEntriesOnLastInsert = 0;
@@ -50,7 +47,6 @@ public class PasswordDB {
                 selection += " OR " + PasswordHelper.COLUMN_TITLE + " = ?";
             }
             selectionArgs[i] = listWifi.get(i).getTitle();
-            Log.d(TAG, "selectionArgs[" + i + "] = " + selectionArgs[i]);
         }
 
 
@@ -80,7 +76,6 @@ public class PasswordDB {
         mNewEntriesOnLastInsert = 0;
 
         String table = archive ? PasswordHelper.TABLE_ARCHIVE : PasswordHelper.TABLE_MAIN;
-        Log.d(TAG, "insertWifiEntries - archive=" + archive + " table=" + table);
 
         ContentValues values = new ContentValues();
 
@@ -105,13 +100,12 @@ public class PasswordDB {
                 Cursor cursor = mDatabase.query(table, columns, selection, selectionArgs, null, null, null);
 
                 if (cursor.moveToFirst()) {
-                    Log.e(TAG, "Updating Entry - " + current.getTitle());
 
                     int id = cursor.getInt(cursor.getColumnIndex(PasswordHelper.COLUMN_UID));
                     mDatabase.update(table, values, PasswordHelper.COLUMN_UID + " = ?", new String[]{id + ""});
 
                 } else {
-                    Log.e(TAG, "Inserting Entry - " + current.getTitle());
+
                     mDatabase.insert(table, null, values);
                     mNewEntriesOnLastInsert++;
                 }
@@ -123,13 +117,11 @@ public class PasswordDB {
             }
         }
 
-        Log.d(TAG, "inserting entries " + listWifi.size() + new Date(System.currentTimeMillis()));
     }
 
 
     //Holds Deleted Wifi Entries
     public void insertDeleted(ArrayList<WifiEntry> listWifi) {
-        Log.d(TAG, "insertDeleted");
 
         ContentValues values = new ContentValues();
 
@@ -152,7 +144,6 @@ public class PasswordDB {
     public ArrayList<WifiEntry> getAllWifiEntries(boolean archive) {
 
         String table = archive ? PasswordHelper.TABLE_ARCHIVE : PasswordHelper.TABLE_MAIN;
-        Log.d(TAG, "getAllWifiEntries - archive=" + archive + " table=" + table);
 
         String selection;
 
@@ -173,7 +164,6 @@ public class PasswordDB {
         Cursor cursor = mDatabase.query(table, null, selection, null, null, null, null);
 
         if (cursor != null && cursor.moveToFirst()) {
-            Log.d(TAG, "loading entries " + cursor.getCount() + new Date(System.currentTimeMillis()));
 
             do {
 
@@ -198,14 +188,12 @@ public class PasswordDB {
     public ArrayList<WifiEntry> getWifiEntries(String whereClause, String[] whereArgs, boolean archive) {
 
         String table = archive ? PasswordHelper.TABLE_ARCHIVE : PasswordHelper.TABLE_MAIN;
-        Log.d(TAG, "getWifiEntries - archive=" + archive + " table=" + table);
 
         ArrayList<WifiEntry> listWifi = new ArrayList<>();
 
         Cursor cursor = mDatabase.query(table, null, whereClause, whereArgs, null, null, null);
 
         if (cursor != null && cursor.moveToFirst()) {
-            Log.d(TAG, "loading entries " + cursor.getCount() + new Date(System.currentTimeMillis()));
 
             do {
                 WifiEntry entry = new WifiEntry();
@@ -229,7 +217,7 @@ public class PasswordDB {
     /******************************************************/
 
     public void purgeDatabase() {
-        Log.d(TAG, "purgeDatabase");
+
         deleteAll(false);
         deleteAll(true);
         mDatabase.delete(PasswordHelper.TABLE_DELETED, null, null);
@@ -238,7 +226,6 @@ public class PasswordDB {
     public void deleteAll(boolean archive) {
 
         String table = archive ? PasswordHelper.TABLE_ARCHIVE : PasswordHelper.TABLE_MAIN;
-        Log.d(TAG, "deleteAll - archive=" + archive + " table=" + table);
 
         mDatabase.delete(table, null, null);
     }
@@ -247,7 +234,6 @@ public class PasswordDB {
     public void deleteWifiEntries(ArrayList<WifiEntry> listWifi, boolean archive) {
 
         String table = archive ? PasswordHelper.TABLE_ARCHIVE : PasswordHelper.TABLE_MAIN;
-        Log.d(TAG, "deleteWifiEntries - archive=" + archive + " table=" + table);
 
         String whereClause = PasswordHelper.COLUMN_TITLE + " = ?";
         String[] whereArgs;
@@ -320,14 +306,11 @@ public class PasswordDB {
 
             try {
                 db.execSQL(CREATE_TABLE_MAIN);
-                Log.d(TAG, "create table main executed");
                 db.execSQL(CREATE_TABLE_ARCHIVE);
-                Log.d(TAG, "create table archive executed");
                 db.execSQL(CREATE_TABLE_DELETED);
-                Log.d(TAG, "create table deleted executed");
 
             } catch (SQLiteException e) {
-                Log.e(TAG, "ERROR: Helper onCreate - " + e);
+                e.printStackTrace();
             }
 
         }
@@ -336,14 +319,13 @@ public class PasswordDB {
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
             try {
-                Log.e(TAG, "upgrade table box office executed");
                 db.execSQL("DROP TABLE " + TABLE_MAIN + " IF EXISTS;");
                 db.execSQL("DROP TABLE " + TABLE_ARCHIVE + " IF EXISTS;");
                 db.execSQL("DROP TABLE " + TABLE_DELETED + " IF EXISTS;");
                 onCreate(db);
 
             } catch (SQLiteException e) {
-                Log.e(TAG, "ERROR: Helper onUpgrade - " + e);
+                e.printStackTrace();
             }
 
         }

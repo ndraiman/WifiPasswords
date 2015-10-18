@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 
 import com.gmail.ndraiman.wifipasswords.R;
 import com.gmail.ndraiman.wifipasswords.extras.RequestCodes;
@@ -18,7 +17,6 @@ public class CustomAlertDialogFragment extends DialogFragment {
     private static final String MESSAGE_KEY = "alert_dialog_message";
     private static final String TITLE_KEY = "alert_dialog_title";
     private static final String BUTTONS_KEY = "alert_dialog_buttons";
-    private static final String TAG = "CustomAlertDialog";
 
     public static CustomAlertDialogFragment getInstance(String title, String message, String... buttons) {
         CustomAlertDialogFragment fragment = new CustomAlertDialogFragment();
@@ -39,7 +37,6 @@ public class CustomAlertDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateDialog");
 
         Bundle bundle = getArguments();
         String title = bundle.getString(TITLE_KEY);
@@ -75,7 +72,7 @@ public class CustomAlertDialogFragment extends DialogFragment {
 
 
     private void sendResult(int resultCode, Intent intent) {
-        Log.d(TAG, "sendResult");
+
         getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, intent);
     }
 

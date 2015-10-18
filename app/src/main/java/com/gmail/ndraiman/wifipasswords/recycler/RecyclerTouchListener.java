@@ -2,7 +2,6 @@ package com.gmail.ndraiman.wifipasswords.recycler;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,13 +12,12 @@ import android.view.View;
 /*****************************************************************************************/
 public class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
 
-    private static final String TAG = "TouchListener";
     private GestureDetector gestureDetector;
     private ClickListener clickListener;
 
 
     public RecyclerTouchListener(Context context, final RecyclerView recyclerView, final ClickListener clickListener) {
-        Log.d(TAG, "constructor invoked");
+
         this.clickListener = clickListener;
 
 
@@ -27,7 +25,7 @@ public class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
 
             @Override
             public boolean onDoubleTap(MotionEvent e) {
-                Log.d(TAG, "onDoubleTap " + e);
+
                 View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
                 if(child != null && clickListener != null) {
                     clickListener.onDoubleTap(child, recyclerView.getChildAdapterPosition(child));
@@ -37,7 +35,7 @@ public class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
 
             @Override
             public boolean onSingleTapUp(MotionEvent e) {
-                Log.d(TAG, "onSingleTap " + e);
+
                 return true;
             }
 
@@ -47,7 +45,7 @@ public class RecyclerTouchListener implements RecyclerView.OnItemTouchListener {
                 if(child != null && clickListener != null) {
                     clickListener.onLongClick(child, recyclerView.getChildAdapterPosition(child));
                 }
-                Log.d(TAG, "onLongPress "+ e);
+
                 super.onLongPress(e);
             }
         });
