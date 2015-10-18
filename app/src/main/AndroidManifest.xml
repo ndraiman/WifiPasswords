@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.gmail.ndraiman.wifipasswords">
+    package="com.gmail.ndrdevelop.wifipasswords">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".extras.MyApplication"
+        android:name="com.gmail.ndrdevelop.wifipasswords.extras.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activities.MainActivity"
+            android:name="com.gmail.ndrdevelop.wifipasswords.activities.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,16 +20,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.SettingsActivity"
+            android:name="com.gmail.ndrdevelop.wifipasswords.activities.SettingsActivity"
             android:label="@string/action_settings" />
         <activity
-            android:name=".activities.ArchiveActivity"
+            android:name="com.gmail.ndrdevelop.wifipasswords.activities.ArchiveActivity"
             android:label="@string/activity_title_hidden_wifi" />
         <activity
-            android:name=".activities.IntroActivity"
+            android:name="com.gmail.ndrdevelop.wifipasswords.activities.IntroActivity"
             android:label="@string/activity_title_intro" />
         <activity
-            android:name=".activities.PasscodeActivity"
+            android:name="com.gmail.ndrdevelop.wifipasswords.activities.PasscodeActivity"
             android:label="@string/activity_title_passcode" />
     </application>
 

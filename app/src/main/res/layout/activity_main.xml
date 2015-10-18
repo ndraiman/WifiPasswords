@@ -5,7 +5,7 @@
     android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.gmail.ndraiman.wifipasswords.activities.MainActivity">
+    tools:context="com.gmail.ndrdevelop.wifipasswords.activities.MainActivity">
 
 
     <android.support.design.widget.AppBarLayout
