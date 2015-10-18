@@ -7,6 +7,8 @@ this is my first Android Project.
 
 Warning: sharing a wifi password with someone can compromise that wifi network security!
 
+![Troubleshooting](./README.md#troubleshooting)
+
 ##Features:
 - Show your device saved wifi passwords (<u><b>ROOT REQUIRED</b></u>) 
 - Add wifi passwords manually
@@ -20,6 +22,9 @@ Warning: sharing a wifi password with someone can compromise that wifi network s
 - Long Press to bring up the Contextual Action Bar, allowing you to tag, share, copy or archive your wifi passwords.
 </br>you can then select multiple wifi passwords by simply tapping them
 
+####ToDo List:
+- Automatically choose default file path according to device.
+- Add import\export capabilities
 
 ### External Libraries Used:
 
@@ -37,6 +42,11 @@ Warning: sharing a wifi password with someone can compromise that wifi network s
 ***
 ![cab](/cab.png)
 ***
+
+##Troubleshooting
+In case the app is unable to find the file containing your saved wifi passwords please goto settings and choose one of the other known locations & try again.
+
+If all the known locations do not work, you can insert a location manually.
 
 ##License
 
