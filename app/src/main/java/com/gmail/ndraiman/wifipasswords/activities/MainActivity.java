@@ -18,8 +18,10 @@ import android.view.MenuItem;
 
 import com.gmail.ndraiman.wifipasswords.R;
 import com.gmail.ndraiman.wifipasswords.dialogs.HelpDialogFragment;
+import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
 import com.gmail.ndraiman.wifipasswords.extras.RequestCodes;
 import com.gmail.ndraiman.wifipasswords.fragments.WifiListFragment;
+import com.gmail.ndraiman.wifipasswords.task.TaskCheckPasscode;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -61,6 +63,31 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace
                 (R.id.content_frame, mWifiListFragment, WIFI_LIST_FRAGMENT_TAG).commit();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume()");
+
+        if(MyApplication.mPasscodeActivated && MyApplication.mAppWentBackground) {
+            startActivity(new Intent(this, PasscodeActivity.class));
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.e(TAG, "onPause()");
+
+        if(MyApplication.mPasscodeActivated && !isFinishing()) {
+            Log.e(TAG, "executing TaskCheckPasscode()");
+            new TaskCheckPasscode(getApplicationContext(), this).execute();
+
+        } else if (isFinishing()) {
+            Log.e(TAG, "executing TaskCheckPasscode()");
+            MyApplication.mAppWentBackground = true;
+        }
     }
 
     @Override

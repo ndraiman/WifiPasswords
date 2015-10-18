@@ -41,15 +41,14 @@ import android.widget.Toast;
 import com.gmail.ndraiman.wifipasswords.R;
 import com.gmail.ndraiman.wifipasswords.activities.IntroActivity;
 import com.gmail.ndraiman.wifipasswords.activities.MainActivity;
-import com.gmail.ndraiman.wifipasswords.activities.PasscodeActivity;
 import com.gmail.ndraiman.wifipasswords.activities.SettingsActivity;
 import com.gmail.ndraiman.wifipasswords.database.PasswordDB;
 import com.gmail.ndraiman.wifipasswords.dialogs.CustomAlertDialogFragment;
 import com.gmail.ndraiman.wifipasswords.dialogs.CustomAlertDialogListener;
 import com.gmail.ndraiman.wifipasswords.dialogs.InputDialogFragment;
 import com.gmail.ndraiman.wifipasswords.dialogs.InputDialogListener;
-import com.gmail.ndraiman.wifipasswords.extras.RequestCodes;
 import com.gmail.ndraiman.wifipasswords.extras.MyApplication;
+import com.gmail.ndraiman.wifipasswords.extras.RequestCodes;
 import com.gmail.ndraiman.wifipasswords.pojo.WifiEntry;
 import com.gmail.ndraiman.wifipasswords.recycler.ItemDragListener;
 import com.gmail.ndraiman.wifipasswords.recycler.MyTouchHelperCallback;
@@ -57,7 +56,6 @@ import com.gmail.ndraiman.wifipasswords.recycler.RecyclerScrollListener;
 import com.gmail.ndraiman.wifipasswords.recycler.RecyclerTouchListener;
 import com.gmail.ndraiman.wifipasswords.recycler.WifiListAdapter;
 import com.gmail.ndraiman.wifipasswords.recycler.WifiListLoadedListener;
-import com.gmail.ndraiman.wifipasswords.task.TaskCheckPasscode;
 import com.gmail.ndraiman.wifipasswords.task.TaskLoadWifiEntries;
 
 import java.util.ArrayList;
@@ -205,9 +203,6 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
             sortMode(true);
         }
 
-        if(MyApplication.mPasscodeActivated && MyApplication.mAppWentBackground) {
-            startActivity(new Intent(getActivity(), PasscodeActivity.class));
-        }
     }
 
 
@@ -215,15 +210,6 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     public void onPause() {
         super.onPause();
         Log.e(TAG, "onPause()");
-
-        if(MyApplication.mPasscodeActivated && !getActivity().isFinishing()) {
-            Log.e(TAG, "executing TaskCheckPasscode()");
-            new TaskCheckPasscode(getActivity().getApplicationContext(), getActivity()).execute();
-
-        } else if ((getActivity().isFinishing())) {
-            Log.e(TAG, "executing TaskCheckPasscode()");
-            MyApplication.mAppWentBackground = true;
-        }
     }
 
     @Override
@@ -984,6 +970,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putBoolean(ROOT_ACCESS, false).apply();
 
         //Restore Menu functions
+        mFAB.show();
         mCurrentlyLoading = false;
         getActivity().invalidateOptionsMenu();
 
