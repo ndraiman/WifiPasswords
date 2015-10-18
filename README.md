@@ -7,7 +7,7 @@ this is my first Android Project.
 
 Warning: sharing a wifi password with someone can compromise that wifi network security!
 
-![Troubleshooting](./README.md#troubleshooting)
+<a href="#troubleshooting">Troubleshooting</a>
 
 ##Features:
 - Show your device saved wifi passwords (<u><b>ROOT REQUIRED</b></u>) 
