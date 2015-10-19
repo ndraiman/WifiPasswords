@@ -436,7 +436,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
             if(!getPath()) {
                 Toast.makeText(getActivity(), R.string.snackbar_illegal_path, Toast.LENGTH_LONG).show();
 
-                onWifiListLoaded(new ArrayList<WifiEntry>(), 0, resetDB);
+                showPathErrorDialog();
                 return;
             }
             new TaskLoadWifiEntries(mPath, mFileName, resetDB, this, this).execute();

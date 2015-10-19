@@ -42,7 +42,6 @@
     <string name="snackbar_dismiss">Dismiss</string>
     <string name="snackbar_undo">Undo</string>
     <string name="snackbar_load_from_file">Updating list</string>
-    <string name="snackbar_illegal_path">Error! Manual path is not complete!</string>
     <string name="snackbar_wifi_archive">Wifi Password is now hidden</string>
     <string name="snackbar_wifi_archive_multiple">Wifi Passwords are now hidden</string>
     <string name="snackbar_wifi_restore">Wifi Password no longer hidden</string>
