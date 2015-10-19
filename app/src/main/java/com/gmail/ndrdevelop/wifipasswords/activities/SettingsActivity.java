@@ -130,7 +130,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     protected void onResume() {
         super.onResume();
 
-        if(MyApplication.mPasscodeActivated && MyApplication.mAppWentBackground) {
+        if (MyApplication.mPasscodeActivated && MyApplication.mAppWentBackground) {
             startActivity(new Intent(this, PasscodeActivity.class));
         }
     }
@@ -139,7 +139,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
     public void onPause() {
         super.onPause();
 
-        if(MyApplication.mPasscodeActivated && !isFinishing()) {
+        if (MyApplication.mPasscodeActivated && !isFinishing()) {
 
             new TaskCheckPasscode(getApplicationContext()).execute();
         }
@@ -170,20 +170,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     preference.setSummary(stringValue);
 
 
-                } else if (preference instanceof ListPreference) {
-
-                    preference.setSummary(stringValue);
-
-                    //Toggle Manual location entry according to List Choice
-                    if (stringValue.equals(getString(R.string.pref_path_list_manual))) {
-
-                        findPreference(getString(R.string.pref_path_manual_key)).setEnabled(true);
-                        findPreference(getString(R.string.pref_reset_manual_key)).setEnabled(true);
-                    } else {
-                        findPreference(getString(R.string.pref_path_manual_key)).setEnabled(false);
-                        findPreference(getString(R.string.pref_reset_manual_key)).setEnabled(false);
-                    }
-
                 }
 
                 return true;
@@ -208,7 +194,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
             getActivity().setResult(RESULT_CANCELED);
 
-            if(mPasscodePrefs) {
+            if (mPasscodePrefs) {
                 loadPasscodePreferences();
 
             } else {
@@ -226,13 +212,19 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             // Load the preferences from an XML resource
             addPreferencesFromResource(R.xml.preferences);
 
-            findPreference(getString(R.string.pref_reset_manual_key)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+
+            Preference resetManualPath = findPreference(getString(R.string.pref_reset_manual_key));
+            resetManualPath.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     resetPathPref();
                     return true;
                 }
             });
+
+            //set dependency on checkbox
+            resetManualPath.setDependency(getString(R.string.pref_path_checkbox_key));
+            findPreference(getString(R.string.pref_path_manual_key)).setDependency(getString(R.string.pref_path_checkbox_key));
 
             findPreference(getString(R.string.pref_default_key)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
@@ -254,11 +246,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 }
             });
 
-            setupShareWarningPreference();
-
             //Summary to Value
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_path_manual_key)));
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_path_list_key)));
 
         }
 
@@ -273,7 +262,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             mPasscodeChange = findPreference(getString(R.string.pref_passcode_change_key));
 
 
-            if(MyApplication.mPasscodeActivated) {
+            if (MyApplication.mPasscodeActivated) {
                 mPasscodeToggle.setTitle(R.string.pref_passcode_toggle_title_off);
                 mPasscodeChange.setEnabled(true);
 
@@ -327,7 +316,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             switch (requestCode) {
 
                 case RequestCodes.PASSCODE_PREF_ENABLE:
-                    if(resultCode == RESULT_OK) {
+                    if (resultCode == RESULT_OK) {
                         mPasscodeToggle.setTitle(R.string.pref_passcode_toggle_title_off);
                         mPasscodeChange.setEnabled(true);
                         MyApplication.mAppWentBackground = false;
@@ -336,7 +325,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
 
                 case RequestCodes.PASSCODE_PREF_DISABLE:
-                    if(resultCode == RESULT_OK) {
+                    if (resultCode == RESULT_OK) {
                         mPasscodeToggle.setTitle(R.string.pref_passcode_toggle_title_on);
                         mPasscodeChange.setEnabled(false);
                     }
@@ -390,35 +379,26 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         }
 
 
-        private void setupShareWarningPreference() {
-
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-            final CheckBoxPreference shareWarning = (CheckBoxPreference) findPreference(getString(R.string.pref_share_warning_key));
-            shareWarning.setChecked(sharedPreferences.getBoolean(MyApplication.SHARE_WARNING, true));
-
-            shareWarning.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-
-                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-                    if ((boolean) newValue) {
-
-                        preference.setTitle(R.string.pref_share_warning_title_show);
-                        sharedPreferences.edit().putBoolean(MyApplication.SHARE_WARNING, true).apply();
-
-                    } else {
-
-                        preference.setTitle(R.string.pref_share_warning_title_hide);
-                        sharedPreferences.edit().putBoolean(MyApplication.SHARE_WARNING, false).apply();
-
-                    }
-
-                    return true;
-                }
-            });
-        }
+//        private void setupShareWarningPreference() {
+//
+//            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+//
+//            final CheckBoxPreference shareWarning = (CheckBoxPreference) findPreference(getString(R.string.pref_share_warning_key));
+//            shareWarning.setChecked(sharedPreferences.getBoolean(MyApplication.SHARE_WARNING, true));
+//
+//            shareWarning.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+//                @Override
+//                public boolean onPreferenceChange(Preference preference, Object newValue) {
+//
+//                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+//
+//                    sharedPreferences.edit()
+//                            .putBoolean(MyApplication.SHARE_WARNING, (boolean) newValue).apply();
+//
+//                    return true;
+//                }
+//            });
+//        }
 
     }
 }

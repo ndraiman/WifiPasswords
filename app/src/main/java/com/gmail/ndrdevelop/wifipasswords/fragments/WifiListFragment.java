@@ -181,7 +181,6 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         mAdapter.setWifiList(mListWifi);
 
 
-
         //Restore Context Action Bar state
         if (mActionModeOn) {
             mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(mActionModeCallback);
@@ -254,7 +253,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         if (numOfEntries > 0) {
             snackbarMessage = numOfEntries + " " + getString(R.string.snackbar_wifi_entries_inserted);
 
-            if(!resetDB) {
+            if (!resetDB) {
                 mRecyclerView.smoothScrollToPosition(mListWifi.size());
             }
 
@@ -411,6 +410,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     public void loadFromFile(boolean resetDB) {
         Log.d(TAG, "loadFromFile");
 
+
         if (!resetDB) {
             updateDatabase();
 
@@ -419,20 +419,32 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
             mProgressBar.setVisibility(View.VISIBLE); //Show Progress Bar
         }
 
-        getPath();
-
         mCurrentlyLoading = true;
         mFAB.hide();
         getActivity().invalidateOptionsMenu();
 
 
 //        Snackbar.make(mRoot, R.string.snackbar_load_from_file, Snackbar.LENGTH_LONG).show();
-        //Changed to Toast as subsequent snackbars cause FAB to glitch
-        if(!resetDB) {
+        //Changed to Toast as subsequent snackbars cause FAB animation to glitch
+        if (!resetDB) {
             Toast.makeText(getActivity(), R.string.snackbar_load_from_file, Toast.LENGTH_SHORT).show();
         }
 
-        new TaskLoadWifiEntries(mPath, mFileName, resetDB, this, this).execute();
+        boolean manualLocation = PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean(getString(R.string.pref_path_checkbox_key), false);
+
+        if (manualLocation) {
+            if(!getPath()) {
+                Toast.makeText(getActivity(), R.string.snackbar_illegal_path, Toast.LENGTH_LONG).show();
+
+                onWifiListLoaded(new ArrayList<WifiEntry>(), 0, resetDB);
+                return;
+            }
+            new TaskLoadWifiEntries(mPath, mFileName, resetDB, this, this).execute();
+
+        } else {
+            new TaskLoadWifiEntries(resetDB, this, this).execute();
+        }
+
 
     }
 
@@ -485,22 +497,25 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
 
     //Retrieve wpa_supplicant Path from Settings
-    private void getPath() {
+    private boolean getPath() {
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String prefListChoice = sharedPreferences.getString(getString(R.string.pref_path_list_key), getString(R.string.pref_path_default));
+        mPath = PreferenceManager.getDefaultSharedPreferences(getActivity())
+                .getString(getString(R.string.pref_path_manual_key), getString(R.string.pref_path_default));
 
-        if (prefListChoice.equals(getString(R.string.pref_path_list_manual)))
-            mPath = sharedPreferences.getString(getString(R.string.pref_path_manual_key), getString(R.string.pref_path_default));
-        else
-            mPath = prefListChoice;
+        if (mPath == null || mPath.replace(" ", "").isEmpty()) {
+            return false;
+        }
 
         //Split entire path to Path & Filename
         mFileName = mPath.substring(mPath.lastIndexOf("/") + 1);
         mPath = mPath.substring(0, mPath.lastIndexOf("/") + 1);
 
-        Log.d(TAG, "getPath() - path = " + mPath + "\n filename = " + mFileName);
+        if (mFileName.replace(" ", "").isEmpty()) {
+            return false;
+        }
 
+        Log.e(TAG, "getPath() - path = " + mPath + "\n filename = " + mFileName);
+        return true;
     }
 
     //Toggle Search Mode
@@ -889,12 +904,11 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     }
 
 
-
     private void showShareDialog(final ArrayList<WifiEntry> listWifi) {
         Log.d(TAG, "showShareDialog");
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        boolean mShowShareDialog = sharedPreferences.getBoolean(MyApplication.SHARE_WARNING, true);
+        boolean mShowShareDialog = sharedPreferences.getBoolean(getString(R.string.pref_share_warning_key), true);
 
         if (mShowShareDialog) {
 
@@ -913,7 +927,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                             if (dontShowShareDialog.isChecked()) {
                                 Log.d(TAG, "Don't Show Again is Checked");
                                 SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                                sharedPreferences.edit().putBoolean(MyApplication.SHARE_WARNING, false).apply();
+                                sharedPreferences.edit().putBoolean(getString(R.string.pref_share_warning_key), false).apply();
                             }
 
                             shareWifiList(listWifi);

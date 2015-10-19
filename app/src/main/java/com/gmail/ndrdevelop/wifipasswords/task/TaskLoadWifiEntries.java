@@ -3,6 +3,7 @@ package com.gmail.ndrdevelop.wifipasswords.task;
 
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.util.Log;
 
 import com.gmail.ndrdevelop.wifipasswords.database.PasswordDB;
 import com.gmail.ndrdevelop.wifipasswords.dialogs.CustomAlertDialogListener;
@@ -32,6 +33,9 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
     private String mFileName;
     private CustomAlertDialogListener mDialogListener;
     private boolean mResetDB;
+    //TODO return wpa_supplicant.conf path to be the first in the array
+    private String[] mLocationList = {"/data/wifi/bcm_supp.conf", "/data/misc/wifi/wpa.conf", "/data/misc/wifi/wpa_supplicant.conf"};
+    boolean mManualLocation;
 
     private static final String WPA_PSK = "psk";
     private static final String WEP_PSK = "auth_alg=OPEN SHARED";
@@ -42,7 +46,14 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         mFileName = fileName;
         mDialogListener = dialogListener;
         mResetDB = resetDB;
+        mManualLocation = true;
+    }
 
+    public TaskLoadWifiEntries(boolean resetDB, WifiListLoadedListener listListener, CustomAlertDialogListener dialogListener) {
+        mListListener = listListener;
+        mDialogListener = dialogListener;
+        mResetDB = resetDB;
+        mManualLocation = false;
     }
 
 
@@ -57,7 +68,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         if (!dirCreated) {
             return null;
         }
-        copyFile();
+//        copyFile();
 
         return readFile();
     }
@@ -108,9 +119,10 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
     }
 
 
-    /**************
-     * Helper Methods
-     ********************/
+    /****************************************************/
+    /****************** Helper Methods ******************/
+    /****************************************************/
+
     private boolean createDir() {
 
         File folder = new File(Environment.getExternalStorageDirectory() + "/" + APP_FOLDER);
@@ -125,6 +137,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         return true;
     }
 
+
     private void copyFile() {
 
         try {
@@ -137,24 +150,66 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         }
     }
 
-    private ArrayList<WifiEntry> readFile() {
 
+    private ArrayList<WifiEntry> readFile() {
+        Log.e("TaskLoadWifiEntries", "readFile()");
         ArrayList<WifiEntry> listWifi = new ArrayList<>();
+
         try {
 
-
             File directory = Environment.getExternalStorageDirectory();
-            File file = new File(directory + "/" + APP_FOLDER + "/" + mFileName);
+            File file = null;
 
-            if (!file.exists()) {
-                //Show Error Dialog
+            if(mManualLocation) {
+                copyFile();
+                file = new File(directory + "/" + APP_FOLDER + "/" + mFileName);
 
-                if(mRootAccess) {
-                    mDialogListener.showPathErrorDialog();
+                if(!file.exists()) {
+
+                    //Show Error Dialog
+
+                    if (mRootAccess) {
+                        mDialogListener.showPathErrorDialog();
+                    }
+
+                    return new ArrayList<>();
                 }
-                return new ArrayList<>();
+
+            } else {
+                //Check for file in all known locations
+                for (int i = 0; i < mLocationList.length; i++) {
+                    Log.e("TaskLoadWifiEntries", "i = " + i);
+                    String fileLocation = mLocationList[i];
+
+                    mPath = fileLocation.substring(0, fileLocation.lastIndexOf("/") + 1);
+                    mFileName = fileLocation.substring(fileLocation.lastIndexOf("/") + 1);
+
+                    Log.e("TaskLoadWifiEntries", "fileLocation = " + fileLocation);
+                    Log.e("TaskLoadWifiEntries", "mPath = " + mPath);
+                    Log.e("TaskLoadWifiEntries", "mFileName = " + mFileName);
+
+                    copyFile();
+
+                    file = new File(directory + "/" + APP_FOLDER + "/" + mFileName);
+
+                    if (file.exists()) {
+                        break;
+
+                    } else if (!file.exists() && i == mLocationList.length) {
+                        //Show Error Dialog
+
+                        if (mRootAccess) {
+                            mDialogListener.showPathErrorDialog();
+                        }
+                        return new ArrayList<>();
+                    }
+                }
             }
 
+            if(file == null) {
+                Log.e("TaskLoadWifiEntries", "File == null");
+                return new ArrayList<>();
+            }
 
             BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
             String line = "";

@@ -35,13 +35,14 @@
     <string name="intro_title_thank_you">Thank you for choosing Wifi Passwords</string>
 
 
-    <!--**********-->
-    <!-- Snackbar -->
-    <!--**********-->
+    <!--*******************-->
+    <!-- Snackbar & Toasts -->
+    <!--*******************-->
     <string name="snackbar_wifi_copy">Wifi Password Copied to Clipboard</string>
     <string name="snackbar_dismiss">Dismiss</string>
     <string name="snackbar_undo">Undo</string>
     <string name="snackbar_load_from_file">Updating list</string>
+    <string name="snackbar_illegal_path">Error! Manual path is not complete!</string>
     <string name="snackbar_wifi_archive">Wifi Password is now hidden</string>
     <string name="snackbar_wifi_archive_multiple">Wifi Passwords are now hidden</string>
     <string name="snackbar_wifi_restore">Wifi Password no longer hidden</string>
@@ -98,6 +99,9 @@
     <string name="pref_path_list_key" translateable="false">pref_path_list</string>
     <string name="pref_path_list_title">File Location</string>
 
+    <string name="pref_path_checkbox_key" translateable="false">pref_path_checkbox</string>
+    <string name="pref_path_checkbox_title">Enter file location manually</string>
+
     <string name="pref_reset_manual_key" translateable="false">pref_reset_manual</string>
     <string name="pref_reset_manual_summary">restore default path</string>
     <string name="pref_reset_manual_title">Reset Manual Location</string>
@@ -115,10 +119,12 @@
     <string name="pref_path_list_manual">Manual</string>
 
     <string name="pref_share_warning_key" translateable="false">pref_share_warning</string>
-    <string name="pref_share_warning_default">true</string>
     <string name="pref_share_warning_title_show">Show Share Warning</string>
-    <string name="pref_share_warning_title_hide">No Share Warning</string>
     <string name="pref_share_warning_summary">a warning before sharing wifi passwords</string>
+
+    <string name="pref_hide_no_password_key" translateable="false">pref_hide_no_password</string>
+    <string name="pref_hide_no_password_title">Hide Wifi entries without passwords</string>
+
 
 
     <!--**********************-->
@@ -142,7 +148,7 @@
     <!--***************-->
     <string name="dialog_error_path_key" translateable="false">dialog_error</string>
     <string name="dialog_error_path_title">Error!</string>
-    <string name="dialog_error_path_message">Could not find Wifi Password list in the current path \nwould you like to change path settings?</string>
+    <string name="dialog_error_path_message">Could not find Wifi Password list in known locations \nWould you like to enter the path manually through settings?</string>
     <string-array name="dialog_error_path_buttons">
         <item>Settings</item>
         <item>Dismiss</item>

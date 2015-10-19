@@ -19,7 +19,6 @@ public class MyApplication extends Application {
     public static boolean mAppWentBackground;
 
     public static final String FIRST_LAUNCH = "first_launch";
-    public static final String SHARE_WARNING = "share_dialog"; //sharedPrefs key
 
     public static final String PASSCODE_STATE = "passcode_state";
     public static final String PASSCODE_KEY = "passcode_key";
