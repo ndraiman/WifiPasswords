@@ -145,7 +145,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_settings:
                 //Start Settings with Transition
                 compat = ActivityOptionsCompat.makeCustomAnimation(this, R.anim.right_in, R.anim.left_out);
-                startActivityForResult(new Intent(this, SettingsActivity.class), RequestCodes.RESET_TO_DEFAULT, compat.toBundle());
+                startActivityForResult(new Intent(this, SettingsActivity.class), RequestCodes.ACTIVITY_SETTINGS_CODE, compat.toBundle());
                 return true;
 
             case R.id.action_help:
@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
 
-            case RequestCodes.ACTIVITY_SETTINGS_CODE: //Handles returning from SettingsActivity after Error in Path
+            case RequestCodes.SETTINGS_PATH_ERROR_CODE: //Handles returning from SettingsActivity after Error in Path
 
                 if (resultCode == Activity.RESULT_OK) {
 
@@ -187,10 +187,15 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
 
-            case RequestCodes.RESET_TO_DEFAULT: //Return from Settings Activity - Reset to Default
+            case RequestCodes.ACTIVITY_SETTINGS_CODE: //Return from Settings Activity - Reset to Default
+
                 if (resultCode == RequestCodes.RESET_TO_DEFAULT) {
 
                     mWifiListFragment.loadFromFile(true);
+
+                } else if (resultCode == RequestCodes.SHOW_NO_PASSWORD_CODE) {
+
+                    mWifiListFragment.toggleNoPassword();
 
                 }
                 break;

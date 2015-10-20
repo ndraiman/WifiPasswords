@@ -233,7 +233,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
                         password = line.substring(10, line.length() - 1);
 
                     } else {
-                        password = "no password";
+                        password = MyApplication.NO_PASSWORD_TEXT;
                     }
 
                     WifiEntry current = new WifiEntry(title, password);

@@ -24,6 +24,8 @@ public class MyApplication extends Application {
     public static final String PASSCODE_KEY = "passcode_key";
     public static final String PASSCODE_REQUEST_CODE = "passcode_request_code";
 
+    public static final String NO_PASSWORD_TEXT = "no password";
+
     @Override
     public void onCreate() {
         super.onCreate();

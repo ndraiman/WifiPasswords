@@ -4,8 +4,10 @@ package com.gmail.ndrdevelop.wifipasswords.extras;
 public class RequestCodes {
 
     public static final int ACTIVITY_INTRO_CODE = 30;
-    public static final int ACTIVITY_SETTINGS_CODE = 40;
     public static final int ACTIVITY_ARCHIVE_CODE = 41;
+    public static final int ACTIVITY_SETTINGS_CODE = 42;
+
+    public static final int SETTINGS_PATH_ERROR_CODE = 50;
 
     public static final int DIALOG_PATH_ERROR_CODE = 51;
     public static final int DIALOG_LOAD_WARNING_CODE = 52;
@@ -15,6 +17,7 @@ public class RequestCodes {
     public static final int DIALOG_CANCEL = 98;
     public static final int DIALOG_CONFIRM = 99;
 
+    public static final int SHOW_NO_PASSWORD_CODE = 998;
     public static final int RESET_TO_DEFAULT = 999;
 
 

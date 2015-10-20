@@ -6,7 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.preference.PreferenceManager;
 
+import com.gmail.ndrdevelop.wifipasswords.R;
+import com.gmail.ndrdevelop.wifipasswords.extras.MyApplication;
 import com.gmail.ndrdevelop.wifipasswords.pojo.WifiEntry;
 
 import java.util.ArrayList;
@@ -174,8 +177,12 @@ public class PasswordDB {
                 String tag = cursor.getString(cursor.getColumnIndex(PasswordHelper.COLUMN_TAG));
                 wifiEntry.setTag(tag == null ? "" : tag);
 
-//                Log.e(TAG, "tag = " + wifiEntry.getTag());
-                listWifi.add(wifiEntry);
+                boolean hideNoPassword = PreferenceManager.getDefaultSharedPreferences(mHelper.mContext)
+                        .getBoolean(mHelper.mContext.getString(R.string.pref_hide_no_password_key), true);
+
+                if(!wifiEntry.getPassword().equals(MyApplication.NO_PASSWORD_TEXT) || !hideNoPassword) {
+                    listWifi.add(wifiEntry);
+                }
 
             } while (cursor.moveToNext());
 
