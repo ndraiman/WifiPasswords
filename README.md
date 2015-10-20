@@ -23,7 +23,6 @@ Warning: sharing a wifi password with someone can compromise that wifi network s
 </br>you can then select multiple wifi passwords by simply tapping them
 
 ####ToDo List:
-- Automatically choose default file path according to device.
 - Add import\export capabilities
 
 ### External Libraries Used:
@@ -44,9 +43,17 @@ Warning: sharing a wifi password with someone can compromise that wifi network s
 ***
 
 ##Troubleshooting
-In case the app is unable to find the file containing your saved wifi passwords please goto settings and choose one of the other known locations & try again.
+In case the app is unable to find the file containing your saved wifi passwords please google your device's path for the saved wifi passwords file.
 
-If all the known locations do not work, you can insert a location manually.
+then insert it manually into the app's settings.
+
+the most commonly used paths by manufacturers which the app automatically tries are: 
+- /data/misc/wifi/wpa_supplicant.conf
+- /data/wifi/bcm_supp.conf
+- /data/misc/wifi/wpa.conf
+
+
+<a href="#wifipasswords">Back to Top</a>
 
 ##License
 
