@@ -3,7 +3,6 @@ package com.gmail.ndrdevelop.wifipasswords.task;
 
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.util.Log;
 
 import com.gmail.ndrdevelop.wifipasswords.database.PasswordDB;
 import com.gmail.ndrdevelop.wifipasswords.dialogs.CustomAlertDialogListener;
@@ -154,7 +153,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
 
 
     private ArrayList<WifiEntry> readFile() {
-        Log.e("TaskLoadWifiEntries", "readFile()");
+
         ArrayList<WifiEntry> listWifi = new ArrayList<>();
 
         try {
@@ -180,15 +179,11 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
             } else {
                 //Check for file in all known locations
                 for (int i = 0; i < mLocationList.length; i++) {
-                    Log.e("TaskLoadWifiEntries", "i = " + i);
+
                     String fileLocation = mLocationList[i];
 
                     mPath = fileLocation.substring(0, fileLocation.lastIndexOf("/") + 1);
                     mFileName = fileLocation.substring(fileLocation.lastIndexOf("/") + 1);
-
-                    Log.e("TaskLoadWifiEntries", "fileLocation = " + fileLocation);
-                    Log.e("TaskLoadWifiEntries", "mPath = " + mPath);
-                    Log.e("TaskLoadWifiEntries", "mFileName = " + mFileName);
 
                     copyFile();
 
@@ -209,7 +204,6 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
             }
 
             if(file == null) {
-                Log.e("TaskLoadWifiEntries", "File == null");
                 return new ArrayList<>();
             }
 

@@ -122,7 +122,7 @@
     <string name="pref_share_warning_summary">a warning before sharing wifi passwords</string>
 
     <string name="pref_hide_no_password_key" translateable="false">pref_hide_no_password</string>
-    <string name="pref_hide_no_password_title">Hide Wifi entries without passwords</string>
+    <string name="pref_hide_no_password_title">Hide WiFi without passwords</string>
 
 
 
