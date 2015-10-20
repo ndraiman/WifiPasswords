@@ -48,6 +48,8 @@
     <string name="snackbar_wifi_exists">Wifi Password already exists!</string>
     <string name="snackbar_wifi_entries_inserted">new Wifi Passwords</string>
     <string name="snackbar_wifi_entries_inserted_none">No new Wifi Passwords</string>
+    <string name="snackbar_wifi_no_password_added">Wifi without passwords added</string>
+    <string name="snackbar_wifi_no_password_removed">Wifi without passwords removed</string>
 
 
     <!--**********************-->
@@ -121,8 +123,8 @@
     <string name="pref_share_warning_title_show">Show Share Warning</string>
     <string name="pref_share_warning_summary">a warning before sharing wifi passwords</string>
 
-    <string name="pref_hide_no_password_key" translateable="false">pref_hide_no_password</string>
-    <string name="pref_hide_no_password_title">Hide WiFi without passwords</string>
+    <string name="pref_show_no_password_key" translateable="false">pref_show_no_password</string>
+    <string name="pref_show_no_password_title">Show WiFi without passwords</string>
 
 
 

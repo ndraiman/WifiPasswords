@@ -236,6 +236,10 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
         mAdapter.setWifiList(mListWifi);
 
+        if (resetDB) {
+            mRecyclerView.setLayoutAnimation(AnimationUtils.loadLayoutAnimation(getActivity(), R.anim.layout_left_to_right_slide));
+            mRecyclerView.startLayoutAnimation();
+        }
 
         //Show number of wifi entries inserted
         String snackbarMessage;
@@ -549,38 +553,17 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
     public void toggleNoPassword() {
 
-        boolean hideNoPassword = PreferenceManager.getDefaultSharedPreferences(getActivity())
-                .getBoolean(getString(R.string.pref_hide_no_password_key), true);
+        boolean showNoPassword = PreferenceManager.getDefaultSharedPreferences(getActivity())
+                .getBoolean(getString(R.string.pref_show_no_password_key), false);
 
-        if (hideNoPassword) {
-            int removedEntries = 0;
-
-            for (int i = mListWifi.size() - 1; i >= 0; i--) {
-
-                if (mListWifi.get(i).getPassword().equals(MyApplication.NO_PASSWORD_TEXT)) {
-                    mAdapter.removeItem(i);
-                    removedEntries++;
-                }
-            }
-
-            Snackbar.make(mRoot, removedEntries + " " + getString(R.string.snackbar_wifi_archive_multiple), Snackbar.LENGTH_SHORT)
-                    .setAction(R.string.snackbar_dismiss, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            //dismiss
-                        }
-                    })
-                    .show();
-
-        } else {
+        if (showNoPassword) {
 
             ArrayList<WifiEntry> listNoPassword = MyApplication.getWritableDatabase().getAllWifiEntries(false);
             MyApplication.closeDatabase();
 
             for (int i = 0; i < listNoPassword.size(); i++) {
 
-                if(!(listNoPassword.get(i).getPassword()).equals(MyApplication.NO_PASSWORD_TEXT)) {
-
+                if (!(listNoPassword.get(i).getPassword()).equals(MyApplication.NO_PASSWORD_TEXT)) {
                     listNoPassword.remove(i);
                     i--;
                 }
@@ -592,7 +575,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
             mRecyclerView.smoothScrollToPosition(mListWifi.size());
 
-            Snackbar.make(mRoot, listNoPassword.size() + " " + getString(R.string.snackbar_wifi_entries_inserted), Snackbar.LENGTH_SHORT)
+            Snackbar.make(mRoot, listNoPassword.size() + " " + getString(R.string.snackbar_wifi_no_password_added), Snackbar.LENGTH_LONG)
                     .setAction(R.string.snackbar_dismiss, new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -600,6 +583,29 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                         }
                     })
                     .show();
+        } else {
+
+            int removedEntries = 0;
+
+            for (int i = mListWifi.size() - 1; i >= 0; i--) {
+
+                if (mListWifi.get(i).getPassword().equals(MyApplication.NO_PASSWORD_TEXT)) {
+                    mAdapter.removeItem(i);
+                    removedEntries++;
+                }
+            }
+
+            mRecyclerView.smoothScrollToPosition(0);
+
+            Snackbar.make(mRoot, removedEntries + " " + getString(R.string.snackbar_wifi_no_password_removed), Snackbar.LENGTH_LONG)
+                    .setAction(R.string.snackbar_dismiss, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //dismiss
+                        }
+                    })
+                    .show();
+
         }
     }
 

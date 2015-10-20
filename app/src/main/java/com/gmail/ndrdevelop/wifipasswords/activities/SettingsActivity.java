@@ -244,7 +244,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 }
             });
 
-            findPreference(getString(R.string.pref_hide_no_password_key)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            findPreference(getString(R.string.pref_show_no_password_key)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
                     getActivity().setResult(RequestCodes.SHOW_NO_PASSWORD_CODE);

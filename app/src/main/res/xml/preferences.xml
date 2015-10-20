@@ -36,10 +36,10 @@
             android:title="@string/pref_share_warning_title_show" />
 
         <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="@string/pref_hide_no_password_key"
+            android:defaultValue="false"
+            android:key="@string/pref_show_no_password_key"
             android:order="310"
-            android:title="@string/pref_hide_no_password_title" />
+            android:title="@string/pref_show_no_password_title" />
 
     </PreferenceCategory>
 

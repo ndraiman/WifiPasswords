@@ -177,10 +177,10 @@ public class PasswordDB {
                 String tag = cursor.getString(cursor.getColumnIndex(PasswordHelper.COLUMN_TAG));
                 wifiEntry.setTag(tag == null ? "" : tag);
 
-                boolean hideNoPassword = PreferenceManager.getDefaultSharedPreferences(mHelper.mContext)
-                        .getBoolean(mHelper.mContext.getString(R.string.pref_hide_no_password_key), true);
+                boolean showNoPassword = PreferenceManager.getDefaultSharedPreferences(mHelper.mContext)
+                        .getBoolean(mHelper.mContext.getString(R.string.pref_show_no_password_key), true);
 
-                if(!wifiEntry.getPassword().equals(MyApplication.NO_PASSWORD_TEXT) || !hideNoPassword) {
+                if(!wifiEntry.getPassword().equals(MyApplication.NO_PASSWORD_TEXT) || showNoPassword) {
                     listWifi.add(wifiEntry);
                 }
 
