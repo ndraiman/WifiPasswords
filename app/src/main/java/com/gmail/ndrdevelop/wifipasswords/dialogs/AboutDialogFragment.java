@@ -17,14 +17,14 @@ import com.gmail.ndrdevelop.wifipasswords.R;
 import com.gmail.ndrdevelop.wifipasswords.activities.IntroActivity;
 
 
-public class HelpDialogFragment extends DialogFragment {
+public class AboutDialogFragment extends DialogFragment {
 
 
-    public static HelpDialogFragment getInstance() {
-        return new HelpDialogFragment();
+    public static AboutDialogFragment getInstance() {
+        return new AboutDialogFragment();
     }
 
-    public HelpDialogFragment() {
+    public AboutDialogFragment() {
 
     }
 
@@ -37,7 +37,7 @@ public class HelpDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(parent, R.style.AlertDialogTheme);
 
         LayoutInflater inflater = LayoutInflater.from(parent);
-        View helpDialogLayout = inflater.inflate(R.layout.dialog_help, null);
+        View helpDialogLayout = inflater.inflate(R.layout.dialog_about, null);
 
         TextView info = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_info);
         TextView version = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_version);
@@ -47,6 +47,7 @@ public class HelpDialogFragment extends DialogFragment {
         TextView libraryRippleEffect = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_library_rippleeffect);
         TextView helpIntro = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_help_intro);
         TextView helpReadme = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_help_readme);
+        TextView helpEmail = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_help_feedback);
 
         info.setMovementMethod(LinkMovementMethod.getInstance());
         github.setMovementMethod(LinkMovementMethod.getInstance());
@@ -54,6 +55,7 @@ public class HelpDialogFragment extends DialogFragment {
         libraryAppIntro.setMovementMethod(LinkMovementMethod.getInstance());
         libraryRippleEffect.setMovementMethod(LinkMovementMethod.getInstance());
         helpReadme.setMovementMethod(LinkMovementMethod.getInstance());
+        helpEmail.setMovementMethod(LinkMovementMethod.getInstance());
 
         helpIntro.setOnClickListener(new View.OnClickListener() {
             @Override

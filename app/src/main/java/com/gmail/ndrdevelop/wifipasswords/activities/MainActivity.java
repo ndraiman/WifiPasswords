@@ -16,7 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.gmail.ndrdevelop.wifipasswords.R;
-import com.gmail.ndrdevelop.wifipasswords.dialogs.HelpDialogFragment;
+import com.gmail.ndrdevelop.wifipasswords.dialogs.AboutDialogFragment;
 import com.gmail.ndrdevelop.wifipasswords.extras.MyApplication;
 import com.gmail.ndrdevelop.wifipasswords.extras.RequestCodes;
 import com.gmail.ndrdevelop.wifipasswords.fragments.WifiListFragment;
@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_help:
-                HelpDialogFragment dialog = HelpDialogFragment.getInstance();
+                AboutDialogFragment dialog = AboutDialogFragment.getInstance();
                 dialog.show(getFragmentManager(), getString(R.string.dialog_about_key));
 
                 return true;

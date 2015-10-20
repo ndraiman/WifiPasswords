@@ -147,7 +147,7 @@
     <!--***************-->
     <string name="dialog_error_path_key" translateable="false">dialog_error</string>
     <string name="dialog_error_path_title">Error!</string>
-    <string name="dialog_error_path_message">Could not find Wifi Password list in known locations \nWould you like to enter the path manually through settings?</string>
+    <string name="dialog_error_path_message">Could not find Wifi Password list \nWould you like to enter the path manually through settings?</string>
     <string-array name="dialog_error_path_buttons">
         <item>Settings</item>
         <item>Dismiss</item>
@@ -210,6 +210,7 @@
     <string name="dialog_about_help_title"><u>Get Help:</u></string>
     <string name="dialog_about_help_intro"><u>Show Intro</u></string>
     <string name="dialog_about_help_readme"><a href="https://github.com/Nexxado/WifiPasswords/blob/master/README.md">Readme</a></string>
+    <string name="dialog_about_help_feedback"><a href="mailto:ndrdevelop@gmail.com">Send Feedback</a></string>
     <string name="dialog_about_button">OK</string>
 
 

@@ -26,20 +26,21 @@ import java.util.ArrayList;
 public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiEntry>> {
 
 
-    private static final String APP_FOLDER = "WifiPasswords";
+
     private WifiListLoadedListener mListListener;
     private boolean mRootAccess = true;
     private String mPath;
     private String mFileName;
     private CustomAlertDialogListener mDialogListener;
     private boolean mResetDB;
-    //TODO return wpa_supplicant.conf path to be the first in the array
-    private String[] mLocationList = {"/data/wifi/bcm_supp.conf", "/data/misc/wifi/wpa.conf", "/data/misc/wifi/wpa_supplicant.conf"};
-    boolean mManualLocation;
+    private String[] mLocationList = {"/data/misc/wifi/wpa_supplicant.conf", "/data/wifi/bcm_supp.conf", "/data/misc/wifi/wpa.conf"};
+    private boolean mManualLocation;
 
+    private static final String APP_FOLDER = "WifiPasswords";
     private static final String WPA_PSK = "psk";
     private static final String WEP_PSK = "auth_alg=OPEN SHARED";
 
+    //Constructor for Manual Path
     public TaskLoadWifiEntries(String filePath, String fileName, boolean resetDB, WifiListLoadedListener listListener, CustomAlertDialogListener dialogListener) {
         mListListener = listListener;
         mPath = filePath;
@@ -49,6 +50,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         mManualLocation = true;
     }
 
+    //Constructor for Known Paths
     public TaskLoadWifiEntries(boolean resetDB, WifiListLoadedListener listListener, CustomAlertDialogListener dialogListener) {
         mListListener = listListener;
         mDialogListener = dialogListener;
@@ -195,7 +197,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
                     if (file.exists()) {
                         break;
 
-                    } else if (!file.exists() && i == mLocationList.length) {
+                    } else if (!file.exists() && i == mLocationList.length - 1) {
                         //Show Error Dialog
 
                         if (mRootAccess) {

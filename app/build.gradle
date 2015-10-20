@@ -13,7 +13,7 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
     defaultConfig {
-        applicationId "com.gmail.ndraiman.wifipasswords"
+        applicationId "com.gmail.ndrdevelop.wifipasswords"
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
