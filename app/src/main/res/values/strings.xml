@@ -15,7 +15,7 @@
     <!--****************-->
     <!-- Intro Messages -->
     <!--****************-->
-    <string name="intro_title_welcome">Welcome to Wifi Passwords</string>
+    <string name="intro_title_welcome">Welcome to \nWifi Passwords</string>
     <string name="intro_message_welcome">Using this app you can save, tag &amp; share your saved Wifi Passwords</string>
 
     <string name="intro_title_disclaimer">Be Careful!</string>
@@ -32,7 +32,7 @@
     <string name="intro_message_cab">Long press a wifi password &amp; choose your desired action
         \n\nYou can select multiple wifi passwords</string>
 
-    <string name="intro_title_thank_you">Thank you for choosing Wifi Passwords</string>
+    <string name="intro_title_thank_you">Thank you for choosing \nWifi Passwords</string>
 
 
     <!--*******************-->
