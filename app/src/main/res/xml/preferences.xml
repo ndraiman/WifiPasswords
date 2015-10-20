@@ -4,14 +4,11 @@
 
     <PreferenceCategory android:title="@string/pref_category_general">
 
-        <ListPreference
-            android:defaultValue="@string/pref_path_default"
-            android:entries="@array/wpa_supplicant_locations"
-            android:entryValues="@array/wpa_supplicant_locations"
-            android:key="@string/pref_path_list_key"
-            android:order="200"
-            android:summary="@string/pref_path_default"
-            android:title="@string/pref_path_list_title" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/pref_path_checkbox_key"
+            android:order="100"
+            android:title="@string/pref_path_checkbox_title" />
 
         <EditTextPreference
             android:defaultValue="@string/pref_path_default"
@@ -37,6 +34,12 @@
             android:order="300"
             android:summary="@string/pref_share_warning_summary"
             android:title="@string/pref_share_warning_title_show" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/pref_show_no_password_key"
+            android:order="310"
+            android:title="@string/pref_show_no_password_title" />
 
     </PreferenceCategory>
 

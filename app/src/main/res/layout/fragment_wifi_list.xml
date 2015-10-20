@@ -3,7 +3,7 @@
     android:id="@+id/fragment_main_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.gmail.ndraiman.wifipasswords.fragments.WifiListFragment">
+    tools:context="com.gmail.ndrdevelop.wifipasswords.fragments.WifiListFragment">
 
     <!-- Wifi List Container -->
     <android.support.v7.widget.RecyclerView

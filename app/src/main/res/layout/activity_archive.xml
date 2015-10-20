@@ -4,7 +4,7 @@
     android:id="@+id/activity_hidden_wifi_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.gmail.ndraiman.wifipasswords.activities.ArchiveActivity">
+    tools:context="com.gmail.ndrdevelop.wifipasswords.activities.ArchiveActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"

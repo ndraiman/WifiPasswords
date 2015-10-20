@@ -15,7 +15,7 @@
     <!--****************-->
     <!-- Intro Messages -->
     <!--****************-->
-    <string name="intro_title_welcome">Welcome to WifiPasswords</string>
+    <string name="intro_title_welcome">Welcome to \nWifi Passwords</string>
     <string name="intro_message_welcome">Using this app you can save, tag &amp; share your saved Wifi Passwords</string>
 
     <string name="intro_title_disclaimer">Be Careful!</string>
@@ -32,12 +32,12 @@
     <string name="intro_message_cab">Long press a wifi password &amp; choose your desired action
         \n\nYou can select multiple wifi passwords</string>
 
-    <string name="intro_title_thank_you">Thank you for choosing Wifi Passwords</string>
+    <string name="intro_title_thank_you">Thank you for choosing \nWifi Passwords</string>
 
 
-    <!--**********-->
-    <!-- Snackbar -->
-    <!--**********-->
+    <!--*******************-->
+    <!-- Snackbar & Toasts -->
+    <!--*******************-->
     <string name="snackbar_wifi_copy">Wifi Password Copied to Clipboard</string>
     <string name="snackbar_dismiss">Dismiss</string>
     <string name="snackbar_undo">Undo</string>
@@ -48,6 +48,8 @@
     <string name="snackbar_wifi_exists">Wifi Password already exists!</string>
     <string name="snackbar_wifi_entries_inserted">new Wifi Passwords</string>
     <string name="snackbar_wifi_entries_inserted_none">No new Wifi Passwords</string>
+    <string name="snackbar_wifi_no_password_added">Wifi without passwords added</string>
+    <string name="snackbar_wifi_no_password_removed">Wifi without passwords removed</string>
 
 
     <!--**********************-->
@@ -98,6 +100,9 @@
     <string name="pref_path_list_key" translateable="false">pref_path_list</string>
     <string name="pref_path_list_title">File Location</string>
 
+    <string name="pref_path_checkbox_key" translateable="false">pref_path_checkbox</string>
+    <string name="pref_path_checkbox_title">Enter file location manually</string>
+
     <string name="pref_reset_manual_key" translateable="false">pref_reset_manual</string>
     <string name="pref_reset_manual_summary">restore default path</string>
     <string name="pref_reset_manual_title">Reset Manual Location</string>
@@ -115,10 +120,12 @@
     <string name="pref_path_list_manual">Manual</string>
 
     <string name="pref_share_warning_key" translateable="false">pref_share_warning</string>
-    <string name="pref_share_warning_default">true</string>
     <string name="pref_share_warning_title_show">Show Share Warning</string>
-    <string name="pref_share_warning_title_hide">No Share Warning</string>
     <string name="pref_share_warning_summary">a warning before sharing wifi passwords</string>
+
+    <string name="pref_show_no_password_key" translateable="false">pref_show_no_password</string>
+    <string name="pref_show_no_password_title">Show WiFi without passwords</string>
+
 
 
     <!--**********************-->
@@ -142,7 +149,7 @@
     <!--***************-->
     <string name="dialog_error_path_key" translateable="false">dialog_error</string>
     <string name="dialog_error_path_title">Error!</string>
-    <string name="dialog_error_path_message">Could not find Wifi Password list in the current path \nwould you like to change path settings?</string>
+    <string name="dialog_error_path_message">Could not find Wifi Password list \nWould you like to enter the path manually through settings?</string>
     <string-array name="dialog_error_path_buttons">
         <item>Settings</item>
         <item>Dismiss</item>
@@ -194,7 +201,7 @@
 
     <string name="dialog_about_key" translateable="false">dialog_about</string>
     <string name="dialog_about_title">Help &amp; Feedback</string>
-    <string name="dialog_about_info">WifiPasswords by <a href="https://www.reddit.com/u/Nexxado/">/u/Nexxado</a></string>
+    <string name="dialog_about_info">Wifi Passwords by <a href="https://www.reddit.com/u/Nexxado/">/u/Nexxado</a></string>
     <string name="dialog_about_github"><a href="https://github.com/Nexxado/WifiPasswords">GitHub Repo</a></string>
     <string name="dialog_about_version">Version:</string>
     <string name="dialog_about_version_error">Version: ###</string>
@@ -205,6 +212,8 @@
     <string name="dialog_about_help_title"><u>Get Help:</u></string>
     <string name="dialog_about_help_intro"><u>Show Intro</u></string>
     <string name="dialog_about_help_readme"><a href="https://github.com/Nexxado/WifiPasswords/blob/master/README.md">Readme</a></string>
+    <string name="dialog_about_help_feedback"><a href="mailto:ndrdevelop@gmail.com">Send Feedback</a></string>
+    <string name="dialog_about_button">OK</string>
 
 
     <!--*****************-->
