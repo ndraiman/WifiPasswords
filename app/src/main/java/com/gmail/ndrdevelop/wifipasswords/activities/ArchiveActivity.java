@@ -101,6 +101,7 @@ public class ArchiveActivity extends AppCompatActivity {
 
         if (savedInstanceState != null) {
 
+            mRecyclerView.setLayoutAnimation(null);
             mListWifi = savedInstanceState.getParcelableArrayList(STATE_HIDDEN_ENTRIES);
             mActionModeOn = savedInstanceState.getBoolean(STATE_ACTION_MODE);
             mActionModeSelections = savedInstanceState.getIntegerArrayList(STATE_ACTION_MODE_SELECTIONS);

@@ -23,7 +23,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -155,6 +154,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
             if (savedInstanceState != null) {
 
+                mRecyclerView.setLayoutAnimation(null);
                 mListWifi = savedInstanceState.getParcelableArrayList(STATE_WIFI_ENTRIES);
                 mActionModeOn = savedInstanceState.getBoolean(STATE_ACTION_MODE);
                 mActionModeSelections = savedInstanceState.getIntegerArrayList(STATE_ACTION_MODE_SELECTIONS);
