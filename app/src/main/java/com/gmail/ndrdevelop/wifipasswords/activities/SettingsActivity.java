@@ -167,7 +167,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
                     preference.setSummary(stringValue);
 
-
                 }
 
                 return true;
@@ -199,6 +198,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 loadGeneralPreferences();
 
             }
+
+            //Summary to Value
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_path_manual_key)));
         }
 
 
@@ -251,9 +253,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     return true;
                 }
             });
-
-            //Summary to Value
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_path_manual_key)));
 
         }
 
@@ -383,28 +382,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
             builder.create().show();
         }
-
-
-//        private void setupShareWarningPreference() {
-//
-//            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-//
-//            final CheckBoxPreference shareWarning = (CheckBoxPreference) findPreference(getString(R.string.pref_share_warning_key));
-//            shareWarning.setChecked(sharedPreferences.getBoolean(MyApplication.SHARE_WARNING, true));
-//
-//            shareWarning.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-//                @Override
-//                public boolean onPreferenceChange(Preference preference, Object newValue) {
-//
-//                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-//
-//                    sharedPreferences.edit()
-//                            .putBoolean(MyApplication.SHARE_WARNING, (boolean) newValue).apply();
-//
-//                    return true;
-//                }
-//            });
-//        }
 
     }
 }
