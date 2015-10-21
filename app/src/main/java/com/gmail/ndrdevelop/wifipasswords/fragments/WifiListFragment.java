@@ -51,7 +51,6 @@ import com.gmail.ndrdevelop.wifipasswords.extras.RequestCodes;
 import com.gmail.ndrdevelop.wifipasswords.pojo.WifiEntry;
 import com.gmail.ndrdevelop.wifipasswords.recycler.ItemDragListener;
 import com.gmail.ndrdevelop.wifipasswords.recycler.MyTouchHelperCallback;
-import com.gmail.ndrdevelop.wifipasswords.recycler.RecyclerScrollListener;
 import com.gmail.ndrdevelop.wifipasswords.recycler.RecyclerTouchListener;
 import com.gmail.ndrdevelop.wifipasswords.recycler.WifiListAdapter;
 import com.gmail.ndrdevelop.wifipasswords.recycler.WifiListLoadedListener;
@@ -699,19 +698,6 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
         mRecyclerView.addOnItemTouchListener(mRecyclerTouchListener);
 
-
-        //Setup Scroll Listener
-        mRecyclerView.addOnScrollListener(new RecyclerScrollListener() {
-            @Override
-            public void show() {
-                mFAB.animate().translationY(0).start();
-            }
-
-            @Override
-            public void hide() {
-                mFAB.animate().translationY(mFAB.getHeight() * 2).start();
-            }
-        });
     }
 
     //Setup Context Action Mode
