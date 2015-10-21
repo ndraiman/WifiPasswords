@@ -147,7 +147,6 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         boolean mRootAccess = sharedPreferences.getBoolean(ROOT_ACCESS, true);
 
         if (mFirstAppLaunch) {
-            MyApplication.setKeys();
             getActivity().startActivityForResult(new Intent(getActivity(), IntroActivity.class), RequestCodes.ACTIVITY_INTRO_CODE);
 
         } else {

@@ -9,12 +9,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.preference.PreferenceManager;
 
 import com.gmail.ndrdevelop.wifipasswords.R;
-import com.gmail.ndrdevelop.wifipasswords.extras.AesCbcWithIntegrity;
 import com.gmail.ndrdevelop.wifipasswords.extras.MyApplication;
 import com.gmail.ndrdevelop.wifipasswords.pojo.WifiEntry;
 
-import java.io.UnsupportedEncodingException;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 
 
@@ -87,15 +84,13 @@ public class PasswordDB {
         String[] columns = new String[]{PasswordHelper.COLUMN_UID, PasswordHelper.COLUMN_TITLE};
         String selection = PasswordHelper.COLUMN_TITLE + " = ?";
 
-        //get encryption keys
-        AesCbcWithIntegrity.SecretKeys keys = MyApplication.getKeys();
 
         for (int i = 0; i < listWifi.size(); i++) {
             WifiEntry current = listWifi.get(i);
 
             values.clear();
             values.put(PasswordHelper.COLUMN_TITLE, current.getTitle());
-            values.put(PasswordHelper.COLUMN_PASSWORD, encrypt(current.getPassword(), keys));
+            values.put(PasswordHelper.COLUMN_PASSWORD, current.getPassword());
 
             if (updateTags) {
                 values.put(PasswordHelper.COLUMN_TAG, current.getTag());
@@ -133,15 +128,12 @@ public class PasswordDB {
 
         ContentValues values = new ContentValues();
 
-        //get Encryption keys
-        AesCbcWithIntegrity.SecretKeys keys = MyApplication.getKeys();
-
         for (int i = 0; i < listWifi.size(); i++) {
             WifiEntry current = listWifi.get(i);
 
             values.clear();
             values.put(PasswordHelper.COLUMN_TITLE, current.getTitle());
-            values.put(PasswordHelper.COLUMN_PASSWORD, encrypt(current.getPassword(), keys));
+            values.put(PasswordHelper.COLUMN_PASSWORD, current.getPassword());
             values.put(PasswordHelper.COLUMN_TAG, current.getTag());
 
             mDatabase.insert(PasswordHelper.TABLE_DELETED, null, values);
@@ -176,15 +168,12 @@ public class PasswordDB {
 
         if (cursor != null && cursor.moveToFirst()) {
 
-            //get Encryption keys
-            AesCbcWithIntegrity.SecretKeys keys = MyApplication.getKeys();
-
             do {
 
                 WifiEntry wifiEntry = new WifiEntry();
 
                 wifiEntry.setTitle(cursor.getString(cursor.getColumnIndex(PasswordHelper.COLUMN_TITLE)));
-                wifiEntry.setPassword(decrypt(cursor.getString(cursor.getColumnIndex(PasswordHelper.COLUMN_PASSWORD)), keys));
+                wifiEntry.setPassword(cursor.getString(cursor.getColumnIndex(PasswordHelper.COLUMN_PASSWORD)));
 
                 String tag = cursor.getString(cursor.getColumnIndex(PasswordHelper.COLUMN_TAG));
                 wifiEntry.setTag(tag == null ? "" : tag);
@@ -268,41 +257,6 @@ public class PasswordDB {
         mDatabase.close();
     }
 
-
-    /******************************************************/
-    /****************** Crypto Methods ********************/
-    /******************************************************/
-
-    private String encrypt(String textToEncrypt, AesCbcWithIntegrity.SecretKeys keys) {
-
-        AesCbcWithIntegrity.CipherTextIvMac cipherTextIvMac = null;
-
-        try {
-
-            cipherTextIvMac = AesCbcWithIntegrity.encrypt(textToEncrypt, keys);
-
-        } catch (GeneralSecurityException | UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        return cipherTextIvMac != null ? cipherTextIvMac.toString() : "Encryption Failed";
-    }
-
-
-    private String decrypt(String textToDecrypt, AesCbcWithIntegrity.SecretKeys keys) {
-
-        String decryptedText = null;
-
-        try {
-
-            decryptedText = AesCbcWithIntegrity.decryptString(new AesCbcWithIntegrity.CipherTextIvMac(textToDecrypt), keys);
-
-        } catch (UnsupportedEncodingException | GeneralSecurityException e) {
-            e.printStackTrace();
-        }
-
-        return decryptedText != null ? decryptedText : "Decryption Failed";
-    }
 
     /*************************************************************/
     /****************** Database Helper Class ********************/
