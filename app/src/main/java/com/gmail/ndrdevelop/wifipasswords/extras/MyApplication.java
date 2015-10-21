@@ -5,8 +5,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.gmail.ndrdevelop.wifipasswords.R;
 import com.gmail.ndrdevelop.wifipasswords.database.PasswordDB;
 
+import java.security.GeneralSecurityException;
+import java.security.InvalidKeyException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MyApplication extends Application {
@@ -58,5 +61,38 @@ public class MyApplication extends Application {
             mPasswordDB.close();
         }
 
+    }
+
+
+    public static void setKeys() {
+
+        try {
+
+            String key = getAppContext().getString(R.string.key);
+            AesCbcWithIntegrity.SecretKeys secretKeys = AesCbcWithIntegrity.generateKey();
+            String keyStr = AesCbcWithIntegrity.keyString(secretKeys);
+            PreferenceManager.getDefaultSharedPreferences(getAppContext()).edit().putString(key, keyStr).commit();
+
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static AesCbcWithIntegrity.SecretKeys getKeys() {
+
+        AesCbcWithIntegrity.SecretKeys secretKeys = null;
+
+        try {
+
+            String key = getAppContext().getString(R.string.key);
+            String keyStr = PreferenceManager.getDefaultSharedPreferences(getAppContext()).getString(key, "");
+            secretKeys = AesCbcWithIntegrity.keys(keyStr);
+
+        } catch (InvalidKeyException e) {
+            e.printStackTrace();
+        }
+
+        return secretKeys;
     }
 }

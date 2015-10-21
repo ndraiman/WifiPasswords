@@ -147,6 +147,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         boolean mRootAccess = sharedPreferences.getBoolean(ROOT_ACCESS, true);
 
         if (mFirstAppLaunch) {
+            MyApplication.setKeys();
             getActivity().startActivityForResult(new Intent(getActivity(), IntroActivity.class), RequestCodes.ACTIVITY_INTRO_CODE);
 
         } else {
@@ -201,7 +202,13 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     public void onDestroy() {
         super.onDestroy();
 
-        updateDatabase();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                updateDatabase();
+            }
+        }).start();
+//        updateDatabase();
     }
 
 
@@ -493,11 +500,8 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         mFileName = mPath.substring(mPath.lastIndexOf("/") + 1);
         mPath = mPath.substring(0, mPath.lastIndexOf("/") + 1);
 
-        if (mFileName.replace(" ", "").isEmpty()) {
-            return false;
-        }
+        return !mFileName.replace(" ", "").isEmpty();
 
-        return true;
     }
 
     //Toggle Search Mode

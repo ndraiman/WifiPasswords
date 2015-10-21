@@ -24,8 +24,6 @@ import java.util.ArrayList;
 /***********************************************************************/
 public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiEntry>> {
 
-
-
     private WifiListLoadedListener mListListener;
     private boolean mRootAccess = true;
     private String mPath;
@@ -131,11 +129,8 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         if (!folder.exists()) {
             dirCreated = folder.mkdir();
         }
-        if (!dirCreated) {
-            return false;
-        }
+        return dirCreated;
 
-        return true;
     }
 
 
@@ -161,11 +156,11 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
             File directory = Environment.getExternalStorageDirectory();
             File file = null;
 
-            if(mManualLocation) {
+            if (mManualLocation) {
                 copyFile();
                 file = new File(directory + "/" + APP_FOLDER + "/" + mFileName);
 
-                if(!file.exists()) {
+                if (!file.exists()) {
 
                     //Show Error Dialog
 
@@ -203,14 +198,14 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
                 }
             }
 
-            if(file == null) {
+            if (file == null) {
                 return new ArrayList<>();
             }
 
             BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-            String line = "";
-            String title = "";
-            String password = "";
+            String line;
+            String title;
+            String password;
 
             while ((line = bufferedReader.readLine()) != null) {
                 if (line.equals("network={")) {

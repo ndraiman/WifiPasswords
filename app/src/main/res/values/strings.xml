@@ -2,6 +2,7 @@
 
     <string name="text_placeholder">NA</string>
     <string name="toast_root_request">Requesting Root Permission…</string>
+    <string name="key">mykey</string>
 
     <!--*****************-->
     <!-- Activity Titles -->
