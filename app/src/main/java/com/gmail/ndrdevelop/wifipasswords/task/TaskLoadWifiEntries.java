@@ -2,7 +2,6 @@ package com.gmail.ndrdevelop.wifipasswords.task;
 
 
 import android.os.AsyncTask;
-import android.os.Environment;
 
 import com.gmail.ndrdevelop.wifipasswords.database.PasswordDB;
 import com.gmail.ndrdevelop.wifipasswords.dialogs.CustomAlertDialogListener;
@@ -12,9 +11,8 @@ import com.gmail.ndrdevelop.wifipasswords.pojo.WifiEntry;
 import com.gmail.ndrdevelop.wifipasswords.recycler.WifiListLoadedListener;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 
@@ -33,7 +31,6 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
     private String[] mLocationList = {"/data/misc/wifi/wpa_supplicant.conf", "/data/wifi/bcm_supp.conf", "/data/misc/wifi/wpa.conf"};
     private boolean mManualLocation;
 
-    private final String APP_FOLDER = "WifiPasswords";
     private final String SSID = "ssid";
     private final String WPA_PSK = "psk";
     private final String WEP_PSK = "wep_key0";
@@ -66,12 +63,6 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
             cancel(true);
         }
 
-        boolean dirCreated = createDir();
-        if (!dirCreated) {
-            return null;
-        }
-//        copyFile();
-
         return readFile();
     }
 
@@ -96,12 +87,6 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
         }
 
         MyApplication.closeDatabase();
-
-        //Delete wpa_supplicant file for security reasons
-        File directory = Environment.getExternalStorageDirectory();
-        File file = new File(directory + "/" + APP_FOLDER + "/" + mFileName);
-
-        file.delete();
     }
 
 
@@ -125,46 +110,28 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
     /****************** Helper Methods ******************/
     /****************************************************/
 
-    private boolean createDir() {
-
-        File folder = new File(Environment.getExternalStorageDirectory() + "/" + APP_FOLDER);
-        boolean dirCreated = true;
-        if (!folder.exists()) {
-            dirCreated = folder.mkdir();
-        }
-        return dirCreated;
-
-    }
-
-
-    private void copyFile() {
-
-        try {
-            Process suProcess = Runtime.getRuntime().exec("su -c cp " + mPath + mFileName + " /sdcard/" + APP_FOLDER);
-            suProcess.waitFor(); //wait for SU command to finish
-
-        } catch (IOException | InterruptedException e) {
-
-            e.printStackTrace();
-        }
-    }
-
 
     private ArrayList<WifiEntry> readFile() {
 
         ArrayList<WifiEntry> listWifi = new ArrayList<>();
+        BufferedReader bufferedReader = null;
 
         try {
 
-            File directory = Environment.getExternalStorageDirectory();
-            File file = null;
-
             if (mManualLocation) {
-                copyFile();
-                file = new File(directory + "/" + APP_FOLDER + "/" + mFileName);
 
-                if (!file.exists()) {
 
+                Process suProcess = Runtime.getRuntime().exec("su -c /system/bin/cat " + mPath + mFileName);
+                try {
+                    suProcess.waitFor();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                bufferedReader = new BufferedReader(new InputStreamReader(suProcess.getInputStream()));
+                String testString = bufferedReader.readLine();
+
+                if (testString == null) {
                     //Show Error Dialog
 
                     if (mRootAccess) {
@@ -175,22 +142,24 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
                 }
 
             } else {
+
                 //Check for file in all known locations
                 for (int i = 0; i < mLocationList.length; i++) {
 
-                    String fileLocation = mLocationList[i];
+                    Process suProcess = Runtime.getRuntime().exec("su -c /system/bin/cat " + mLocationList[i]);
+                    try {
+                        suProcess.waitFor();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
 
-                    mPath = fileLocation.substring(0, fileLocation.lastIndexOf("/") + 1);
-                    mFileName = fileLocation.substring(fileLocation.lastIndexOf("/") + 1);
+                    bufferedReader = new BufferedReader(new InputStreamReader(suProcess.getInputStream()));
+                    String testString = bufferedReader.readLine();
 
-                    copyFile();
-
-                    file = new File(directory + "/" + APP_FOLDER + "/" + mFileName);
-
-                    if (file.exists()) {
+                    if (testString != null) {
                         break;
 
-                    } else if (!file.exists() && i == mLocationList.length - 1) {
+                    } else if (i == mLocationList.length - 1) {
                         //Show Error Dialog
 
                         if (mRootAccess) {
@@ -201,11 +170,11 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
                 }
             }
 
-            if (file == null) {
+            if(bufferedReader == null) {
                 return new ArrayList<>();
             }
 
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+
             String line;
             String title = "";
             String password = "";
