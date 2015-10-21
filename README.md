@@ -9,6 +9,11 @@ Warning: sharing a wifi password with someone can compromise that wifi network s
 
 <a href="#troubleshooting">Troubleshooting</a>
 
+<a href="https://play.google.com/store/apps/details?id=com.gmail.ndrdevelop.wifipasswords">
+  <img alt="Get it on Google Play"
+       src="https://developer.android.com/images/brand/en_generic_rgb_wo_45.png" />
+</a>
+
 ##Features:
 - Show your device saved wifi passwords (<u><b>ROOT REQUIRED</b></u>) 
 - Add wifi passwords manually
