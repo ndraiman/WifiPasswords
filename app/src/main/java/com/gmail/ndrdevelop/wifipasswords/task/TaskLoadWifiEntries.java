@@ -33,9 +33,12 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
     private String[] mLocationList = {"/data/misc/wifi/wpa_supplicant.conf", "/data/wifi/bcm_supp.conf", "/data/misc/wifi/wpa.conf"};
     private boolean mManualLocation;
 
-    private static final String APP_FOLDER = "WifiPasswords";
-    private static final String WPA_PSK = "psk";
-    private static final String WEP_PSK = "auth_alg=OPEN SHARED";
+    private final String APP_FOLDER = "WifiPasswords";
+    private final String SSID = "ssid";
+    private final String WPA_PSK = "psk";
+    private final String WEP_PSK = "wep_key0";
+    private final String ENTRY_START = "network={";
+    private final String ENTRY_END = "}";
 
     //Constructor for Manual Path
     public TaskLoadWifiEntries(String filePath, String fileName, boolean resetDB, WifiListLoadedListener listListener, CustomAlertDialogListener dialogListener) {
@@ -204,34 +207,40 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
 
             BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
             String line;
-            String title;
-            String password;
+            String title = "";
+            String password = "";
 
             while ((line = bufferedReader.readLine()) != null) {
-                if (line.equals("network={")) {
+                if (line.contains(ENTRY_START)) {
 
-                    line = bufferedReader.readLine();
-                    title = line.substring(7, line.length() - 1);
-
-                    line = bufferedReader.readLine();
-
-
-                    if ((line.substring(1, 4)).equals(WPA_PSK)) {
-                        password = line.substring(6, line.length() - 1);
-
-                    } else if ((line = bufferedReader.readLine()).substring(1, line.length()).equals(WEP_PSK)) {
+                    while (!line.contains(ENTRY_END)) {
                         line = bufferedReader.readLine();
-                        password = line.substring(10, line.length() - 1);
 
-                    } else {
+                        if (line.contains(SSID)) {
+                            title = line.replace(SSID, "").replace("=", "").replace("\"", "").replace(" ", "");
+                        }
+
+                        if (line.contains(WPA_PSK)) {
+
+                            password = line.replace(WPA_PSK, "").replace("=", "").replace("\"", "").replace(" ", "");
+
+                        } else if (line.contains(WEP_PSK)) {
+
+                            password = line.replace(WEP_PSK, "").replace("=", "").replace("\"", "").replace(" ", "");
+                        }
+
+                    }
+
+
+                    if(password.equals("")) {
                         password = MyApplication.NO_PASSWORD_TEXT;
                     }
 
-                    title = title.replace("\"", "");
-                    password = password.replace("\"", "");
-
                     WifiEntry current = new WifiEntry(title, password);
                     listWifi.add(current);
+
+                    title = "";
+                    password = "";
                 }
             }
 
