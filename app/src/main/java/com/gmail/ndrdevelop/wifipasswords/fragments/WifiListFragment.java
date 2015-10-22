@@ -712,7 +712,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                 MenuInflater menuInflater = mode.getMenuInflater();
                 menuInflater.inflate(R.menu.menu_context, menu);
 
-                //Fix for CAB forcing icons into overflow menu - doing this via XML doesnt work.
+                //Fix for CAB forcing icons into overflow menu - doing this via XML doesn't work.
                 for (int i = 0; i < menu.size(); i++) {
                     menu.getItem(i).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
                 }
@@ -744,6 +744,37 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
                 switch (item.getItemId()) {
 
+                    case R.id.menu_context_top:
+                        mRecyclerView.smoothScrollToPosition(0);
+
+                        for (int i = selectedItems.size() - 1; i >= 0; i--) {
+                            mAdapter.removeItem(selectedItems.get(i));
+                        }
+
+                        for(int i = 0; i < selectedEntries.size(); i++) {
+                            mAdapter.addItem(0, selectedEntries.get(i));
+                        }
+
+
+                        Snackbar.make(mRoot, selectedEntries.size() + " " + getString(R.string.snackbar_move_to_top), Snackbar.LENGTH_LONG)
+                                .setAction(R.string.snackbar_undo, new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+
+                                        for(int i = 0; i < selectedEntries.size(); i++) {
+                                            mAdapter.removeItem(0);
+                                        }
+
+                                        for (int i = 0; i < selectedEntries.size(); i++) {
+                                            mAdapter.addItem(selectedItems.get(i), selectedEntries.get(i));
+
+                                        }
+                                    }
+                                })
+                                .show();
+                        mode.finish();
+                        return true;
+
                     case R.id.menu_context_archive:
                         mAnimateChanges = true;
 
@@ -758,10 +789,15 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                         mode.finish();
 
                         if (selectedItems.size() > 0) {
+                            String snackbarMessage;
 
-                            Snackbar.make(mRoot,
-                                    selectedItems.size() > 1 ? R.string.snackbar_wifi_archive_multiple
-                                            : R.string.snackbar_wifi_archive, Snackbar.LENGTH_LONG)
+                            if(selectedItems.size() > 1) {
+                                snackbarMessage = selectedItems.size() + " " + getString(R.string.snackbar_wifi_archive_multiple);
+                            } else {
+                                snackbarMessage = getString(R.string.snackbar_wifi_archive);
+                            }
+
+                            Snackbar.make(mRoot, snackbarMessage, Snackbar.LENGTH_LONG)
                                     .setAction(R.string.snackbar_undo, new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
@@ -770,7 +806,6 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                                                 mAdapter.addItem(selectedItems.get(i), selectedEntries.get(i));
 
                                             }
-//                                            mRecyclerView.smoothScrollToPosition(selectedItems.get(0));
                                             db.deleteWifiEntries(selectedEntries, true);
                                         }
                                     })

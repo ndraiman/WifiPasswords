@@ -51,6 +51,7 @@
     <string name="snackbar_wifi_entries_inserted_none">No new Wifi Passwords</string>
     <string name="snackbar_wifi_no_password_added">Wifi without passwords added</string>
     <string name="snackbar_wifi_no_password_removed">Wifi without passwords removed</string>
+    <string name="snackbar_move_to_top">Wifi Passwords moved to top</string>
 
 
     <!--**********************-->
