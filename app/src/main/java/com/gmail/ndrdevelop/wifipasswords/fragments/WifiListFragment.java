@@ -103,7 +103,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     private ActionMode mActionMode;
     private ArrayList<Integer> mActionModeSelections;
     private ActionMode.Callback mActionModeCallback;
-    private boolean mActionModeOn = false;
+    public boolean mActionModeOn = false;
     private boolean mAnimateChanges = false; //Checks if Archive was pressed - will not call clearSelection to preserve animations
 
     private static final String ROOT_ACCESS = "root_access";
@@ -218,6 +218,8 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         outState.putParcelableArrayList(STATE_WIFI_ENTRIES,
                 mSearchView != null && mSearchView.isIconified() ? mListWifi : mSearchSavedList);
 
+
+
         if (mSearchView != null) {
             mSearchSavedQuery = mSearchView.getQuery().toString();
         }
@@ -272,7 +274,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
 
         mCurrentlyLoading = false;
-        mFAB.show();
+        hideFAB(false);
         getActivity().invalidateOptionsMenu();
     }
 
@@ -413,7 +415,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         }
 
         mCurrentlyLoading = true;
-        mFAB.hide();
+        hideFAB(true);
         getActivity().invalidateOptionsMenu();
 
 
@@ -542,14 +544,14 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
 
     public void hideFAB(boolean hide) {
-//        mRecyclerView.setNestedScrollingEnabled(!hide);
 
         if (hide) {
             mFAB.hide();
+            mFAB.setEnabled(false);
 
         } else {
             mFAB.show();
-
+            mFAB.setEnabled(true);
         }
     }
 
@@ -1032,7 +1034,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putBoolean(ROOT_ACCESS, false).apply();
 
         //Restore Menu functions
-        mFAB.show();
+        hideFAB(false);
         mCurrentlyLoading = false;
         getActivity().invalidateOptionsMenu();
 
