@@ -161,6 +161,9 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
             } else {
 
+                Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.simple_grow);
+                mFAB.startAnimation(animation);
+
                 mListWifi = MyApplication.getWritableDatabase().getAllWifiEntries(false);
                 MyApplication.closeDatabase();
 
@@ -180,6 +183,10 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
             for (int i = 0; i < mActionModeSelections.size(); i++) {
                 mAdapter.toggleSelection(mActionModeSelections.get(i));
             }
+
+        } else if (mSortModeOn) {
+            sortMode(true);
+
         }
 
         return layout;
@@ -190,9 +197,6 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     public void onResume() {
         super.onResume();
 
-        if (mSortModeOn) {
-            sortMode(true);
-        }
 
     }
 
@@ -207,7 +211,6 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                 updateDatabase();
             }
         }).start();
-//        updateDatabase();
     }
 
 
@@ -217,7 +220,6 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         //save the wifi list to a parcelable prior to rotation or configuration change
         outState.putParcelableArrayList(STATE_WIFI_ENTRIES,
                 mSearchView != null && mSearchView.isIconified() ? mListWifi : mSearchSavedList);
-
 
 
         if (mSearchView != null) {
@@ -634,10 +636,6 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
         //get Activity Views
         mFAB = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-
-        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.simple_grow);
-        mFAB.startAnimation(animation);
-
     }
 
     private void setupProgressBar() {
@@ -753,7 +751,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                             mAdapter.removeItem(selectedItems.get(i));
                         }
 
-                        for(int i = 0; i < selectedEntries.size(); i++) {
+                        for (int i = 0; i < selectedEntries.size(); i++) {
                             mAdapter.addItem(0, selectedEntries.get(i));
                         }
 
@@ -763,7 +761,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                                     @Override
                                     public void onClick(View v) {
 
-                                        for(int i = 0; i < selectedEntries.size(); i++) {
+                                        for (int i = 0; i < selectedEntries.size(); i++) {
                                             mAdapter.removeItem(0);
                                         }
 
@@ -793,7 +791,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                         if (selectedItems.size() > 0) {
                             String snackbarMessage;
 
-                            if(selectedItems.size() > 1) {
+                            if (selectedItems.size() > 1) {
                                 snackbarMessage = selectedItems.size() + " " + getString(R.string.snackbar_wifi_archive_multiple);
                             } else {
                                 snackbarMessage = getString(R.string.snackbar_wifi_archive);
