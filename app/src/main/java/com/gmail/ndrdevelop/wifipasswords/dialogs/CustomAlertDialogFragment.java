@@ -1,7 +1,6 @@
 package com.gmail.ndrdevelop.wifipasswords.dialogs;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -50,19 +49,13 @@ public class CustomAlertDialogFragment extends DialogFragment {
         if(buttons != null && buttons.length > 0) {
 
             //Send Result Codes to target fragment according to button clicked
-            builder.setPositiveButton(buttons[0], new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    sendResult(RequestCodes.DIALOG_CONFIRM, null);
-                }
+            builder.setPositiveButton(buttons[0], (dialog, which) -> {
+                sendResult(RequestCodes.DIALOG_CONFIRM, null);
             });
 
             if(buttons.length > 1) {
-                builder.setNegativeButton(buttons[1], new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        sendResult(RequestCodes.DIALOG_CANCEL, null);
-                    }
+                builder.setNegativeButton(buttons[1], (dialog, which) -> {
+                    sendResult(RequestCodes.DIALOG_CANCEL, null);
                 });
             }
         }

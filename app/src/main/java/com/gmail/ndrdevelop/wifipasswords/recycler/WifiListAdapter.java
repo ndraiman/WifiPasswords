@@ -71,15 +71,12 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
         }
 
         //Drag Icon
-        holder.mDragHandler.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (MotionEventCompat.getActionMasked(event) ==
-                        MotionEvent.ACTION_DOWN) {
-                    mDragListener.onStartDrag(holder);
-                }
-                return false;
+        holder.mDragHandler.setOnTouchListener((v, event) -> {
+            if (MotionEventCompat.getActionMasked(event) ==
+                    MotionEvent.ACTION_DOWN) {
+                mDragListener.onStartDrag(holder);
             }
+            return false;
         });
 
 

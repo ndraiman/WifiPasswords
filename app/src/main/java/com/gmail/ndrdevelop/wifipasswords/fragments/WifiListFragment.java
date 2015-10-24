@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -205,11 +204,8 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     public void onDestroy() {
         super.onDestroy();
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                updateDatabase();
-            }
+        new Thread(() -> {
+            updateDatabase();
         }).start();
     }
 
@@ -266,11 +262,8 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         }
 
         Snackbar.make(mRoot, snackbarMessage, Snackbar.LENGTH_LONG)
-                .setAction(R.string.snackbar_dismiss, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        //Dismiss
-                    }
+                .setAction(R.string.snackbar_dismiss, v -> {
+                    //Dismiss
                 })
                 .show();
 
@@ -582,11 +575,8 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
             mRecyclerView.smoothScrollToPosition(mListWifi.size());
 
             Snackbar.make(mRoot, listNoPassword.size() + " " + getString(R.string.snackbar_wifi_no_password_added), Snackbar.LENGTH_LONG)
-                    .setAction(R.string.snackbar_dismiss, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            //dismiss
-                        }
+                    .setAction(R.string.snackbar_dismiss, v -> {
+                        //dismiss
                     })
                     .show();
         } else {
@@ -604,11 +594,8 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
             mRecyclerView.smoothScrollToPosition(0);
 
             Snackbar.make(mRoot, removedEntries + " " + getString(R.string.snackbar_wifi_no_password_removed), Snackbar.LENGTH_LONG)
-                    .setAction(R.string.snackbar_dismiss, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            //dismiss
-                        }
+                    .setAction(R.string.snackbar_dismiss, v -> {
+                        //dismiss
                     })
                     .show();
 
@@ -757,18 +744,15 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
 
                         Snackbar.make(mRoot, selectedEntries.size() + " " + getString(R.string.snackbar_move_to_top), Snackbar.LENGTH_LONG)
-                                .setAction(R.string.snackbar_undo, new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
+                                .setAction(R.string.snackbar_undo, v -> {
 
-                                        for (int i = 0; i < selectedEntries.size(); i++) {
-                                            mAdapter.removeItem(0);
-                                        }
+                                    for (int i = 0; i < selectedEntries.size(); i++) {
+                                        mAdapter.removeItem(0);
+                                    }
 
-                                        for (int i = 0; i < selectedEntries.size(); i++) {
-                                            mAdapter.addItem(selectedItems.get(i), selectedEntries.get(i));
+                                    for (int i = 0; i < selectedEntries.size(); i++) {
+                                        mAdapter.addItem(selectedItems.get(i), selectedEntries.get(i));
 
-                                        }
                                     }
                                 })
                                 .show();
@@ -798,16 +782,13 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                             }
 
                             Snackbar.make(mRoot, snackbarMessage, Snackbar.LENGTH_LONG)
-                                    .setAction(R.string.snackbar_undo, new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View v) {
+                                    .setAction(R.string.snackbar_undo, v -> {
 
-                                            for (int i = 0; i < selectedItems.size(); i++) {
-                                                mAdapter.addItem(selectedItems.get(i), selectedEntries.get(i));
+                                        for (int i = 0; i < selectedItems.size(); i++) {
+                                            mAdapter.addItem(selectedItems.get(i), selectedEntries.get(i));
 
-                                            }
-                                            db.deleteWifiEntries(selectedEntries, true);
                                         }
+                                        db.deleteWifiEntries(selectedEntries, true);
                                     })
                                     .show();
                         }
@@ -903,12 +884,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     private void setupFAB() {
 
         mFAB.setImageResource(R.drawable.ic_action_add);
-        mFAB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAddWifiDialog();
-            }
-        });
+        mFAB.setOnClickListener(v -> showAddWifiDialog());
 
     }
 
@@ -977,23 +953,17 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
             String[] buttons = getResources().getStringArray(R.array.dialog_warning_share_buttons);
 
             builder.setView(shareDialogLayout)
-                    .setPositiveButton(buttons[0], new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            if (dontShowShareDialog.isChecked()) {
+                    .setPositiveButton(buttons[0], (dialog, which) -> {
+                        if (dontShowShareDialog.isChecked()) {
 
-                                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                                sharedPreferences.edit().putBoolean(getString(R.string.pref_share_warning_key), false).apply();
-                            }
-
-                            shareWifiList(listWifi);
+                            SharedPreferences sharedPreferences1 = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                            sharedPreferences1.edit().putBoolean(getString(R.string.pref_share_warning_key), false).apply();
                         }
+
+                        shareWifiList(listWifi);
                     })
-                    .setNegativeButton(buttons[1], new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            //Dismiss
-                        }
+                    .setNegativeButton(buttons[1], (dialog, which) -> {
+                        //Dismiss
                     });
 
             builder.create().show();

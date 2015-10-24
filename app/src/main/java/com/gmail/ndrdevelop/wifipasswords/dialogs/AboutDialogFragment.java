@@ -3,7 +3,6 @@ package com.gmail.ndrdevelop.wifipasswords.dialogs;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -57,12 +56,7 @@ public class AboutDialogFragment extends DialogFragment {
         helpReadme.setMovementMethod(LinkMovementMethod.getInstance());
         helpEmail.setMovementMethod(LinkMovementMethod.getInstance());
 
-        helpIntro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(v.getContext(), IntroActivity.class));
-            }
-        });
+        helpIntro.setOnClickListener(v -> startActivity(new Intent(v.getContext(), IntroActivity.class)));
 
         String versionName;
 
@@ -77,11 +71,8 @@ public class AboutDialogFragment extends DialogFragment {
 
         builder.setTitle(getString(R.string.dialog_about_title));
         builder.setView(helpDialogLayout)
-                .setPositiveButton(R.string.dialog_about_button, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //do nothing
-                    }
+                .setPositiveButton(R.string.dialog_about_button, (dialog, which) -> {
+                    //do nothing
                 });
 
         return builder.create();

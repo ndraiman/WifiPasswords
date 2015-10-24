@@ -75,16 +75,13 @@ public class InputDialogFragment extends DialogFragment {
             case INPUT_ENTRY:
 
                 getDialog().setTitle(R.string.dialog_add_title);
-                mConfirm.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                mConfirm.setOnClickListener(v -> {
 
-                        if (hasErrors())
-                            return; //return to dialog
+                    if (hasErrors())
+                        return; //return to dialog
 
-                        listener.onSubmitAddDialog(mTitle.getText().toString(), mPassword.getText().toString());
-                        dismiss();
-                    }
+                    listener.onSubmitAddDialog(mTitle.getText().toString(), mPassword.getText().toString());
+                    dismiss();
                 });
 
                 break;
@@ -108,30 +105,22 @@ public class InputDialogFragment extends DialogFragment {
                     mTitle.setSelection(mTitle.getText().toString().length());
                 }
 
-                mConfirm.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                mConfirm.setOnClickListener(v -> {
 
-                        if (mTitle.getText() == null) {
-                            return; //return to dialog
-                        }
-
-                        listener.onSubmitTagDialog(mTitle.getText().toString(),
-                                listWifi, indexWifi);
-                        dismiss();
+                    if (mTitle.getText() == null) {
+                        return; //return to dialog
                     }
+
+                    listener.onSubmitTagDialog(mTitle.getText().toString(),
+                            listWifi, indexWifi);
+                    dismiss();
                 });
 
                 break;
 
         }
 
-        mCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
+        mCancel.setOnClickListener(v -> dismiss());
 
 
         return layout;
@@ -162,11 +151,8 @@ public class InputDialogFragment extends DialogFragment {
 
         if (isEmptyTitle && isEmptyPassword) {
             Snackbar.make(mRoot, getString(R.string.dialog_add_error_empty), Snackbar.LENGTH_SHORT)
-                    .setAction(R.string.snackbar_dismiss, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            //Dismisses Snackbar
-                        }
+                    .setAction(R.string.snackbar_dismiss, v -> {
+                        //Dismisses Snackbar
                     }).show();
             hasError = true;
 
@@ -198,11 +184,8 @@ public class InputDialogFragment extends DialogFragment {
             }
 
             Snackbar.make(mRoot, R.string.snackbar_wifi_exists, Snackbar.LENGTH_SHORT)
-                    .setAction(R.string.snackbar_dismiss, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            //Dismisses Snackbar
-                        }
+                    .setAction(R.string.snackbar_dismiss, v -> {
+                        //Dismisses Snackbar
                     }).show();
         }
 

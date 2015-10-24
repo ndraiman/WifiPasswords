@@ -100,18 +100,12 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
         builder.setTitle(R.string.dialog_exit_title)
                 .setMessage(R.string.dialog_exit_message)
-                .setPositiveButton(buttons[0], new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                        overridePendingTransition(R.anim.activity_slide_in_up, R.anim.activity_slide_out_down);
-                    }
+                .setPositiveButton(buttons[0], (dialog, which) -> {
+                    finish();
+                    overridePendingTransition(R.anim.activity_slide_in_up, R.anim.activity_slide_out_down);
                 })
-                .setNegativeButton(buttons[1], new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        //Dismiss Dialog
-                    }
+                .setNegativeButton(buttons[1], (dialog, which) -> {
+                    //Dismiss Dialog
                 });
 
 

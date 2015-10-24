@@ -3,7 +3,6 @@ package com.gmail.ndrdevelop.wifipasswords.activities;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -329,18 +328,12 @@ public class ArchiveActivity extends AppCompatActivity {
 
                         builder.setMessage(R.string.dialog_delete_message)
                                 .setTitle(R.string.dialog_delete_title)
-                                .setPositiveButton(buttons[0], new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        deleteItems(selectedItems, selectedEntries);
-                                        mode.finish();
-                                    }
+                                .setPositiveButton(buttons[0], (dialog, which) -> {
+                                    deleteItems(selectedItems, selectedEntries);
+                                    mode.finish();
                                 })
-                                .setNegativeButton(buttons[1], new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        //Dismiss Dialog
-                                    }
+                                .setNegativeButton(buttons[1], (dialog, which) -> {
+                                    //Dismiss Dialog
                                 });
 
                         builder.create().show();

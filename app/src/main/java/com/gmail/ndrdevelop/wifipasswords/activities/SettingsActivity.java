@@ -1,6 +1,5 @@
 package com.gmail.ndrdevelop.wifipasswords.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -155,23 +154,20 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
 
         private Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener
-                = new Preference.OnPreferenceChangeListener() {
-            @Override
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                = (preference, newValue) -> {
 
-                getActivity().setResult(RESULT_OK);
+                    getActivity().setResult(RESULT_OK);
 
-                String stringValue = newValue.toString();
+                    String stringValue = newValue.toString();
 
-                if (preference instanceof EditTextPreference) {
+                    if (preference instanceof EditTextPreference) {
 
-                    preference.setSummary(stringValue);
+                        preference.setSummary(stringValue);
 
-                }
+                    }
 
-                return true;
-            }
-        };
+                    return true;
+                };
 
         private void bindPreferenceSummaryToValue(Preference preference) {
             // Set the listener to watch for value changes.
@@ -214,44 +210,32 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
 
             Preference resetManualPath = findPreference(getString(R.string.pref_reset_manual_key));
-            resetManualPath.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    resetPathPref();
-                    return true;
-                }
+            resetManualPath.setOnPreferenceClickListener(preference -> {
+                resetPathPref();
+                return true;
             });
 
             //set dependency on checkbox
             resetManualPath.setDependency(getString(R.string.pref_path_checkbox_key));
             findPreference(getString(R.string.pref_path_manual_key)).setDependency(getString(R.string.pref_path_checkbox_key));
 
-            findPreference(getString(R.string.pref_default_key)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    showResetWarningDialog();
-                    return true;
-                }
+            findPreference(getString(R.string.pref_default_key)).setOnPreferenceClickListener(preference -> {
+                showResetWarningDialog();
+                return true;
             });
 
-            findPreference(getString(R.string.pref_header_passcode_key)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
+            findPreference(getString(R.string.pref_header_passcode_key)).setOnPreferenceClickListener(preference -> {
 
-                    setPreferenceScreen(null);
-                    loadPasscodePreferences();
-                    mPasscodePrefs = true;
+                setPreferenceScreen(null);
+                loadPasscodePreferences();
+                mPasscodePrefs = true;
 
-                    return true;
-                }
+                return true;
             });
 
-            findPreference(getString(R.string.pref_show_no_password_key)).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    getActivity().setResult(RequestCodes.SHOW_NO_PASSWORD_CODE);
-                    return true;
-                }
+            findPreference(getString(R.string.pref_show_no_password_key)).setOnPreferenceClickListener(preference -> {
+                getActivity().setResult(RequestCodes.SHOW_NO_PASSWORD_CODE);
+                return true;
             });
 
         }
@@ -278,38 +262,32 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             }
 
 
-            mPasscodeToggle.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
+            mPasscodeToggle.setOnPreferenceClickListener(preference -> {
 
-                    if (!MyApplication.mPasscodeActivated) {
+                if (!MyApplication.mPasscodeActivated) {
 
-                        Intent intent = new Intent(getActivity(), PasscodeActivity.class);
-                        intent.putExtra(MyApplication.PASSCODE_REQUEST_CODE, RequestCodes.PASSCODE_PREF_ENABLE);
-                        startActivityForResult(intent, RequestCodes.PASSCODE_PREF_ENABLE);
+                    Intent intent = new Intent(getActivity(), PasscodeActivity.class);
+                    intent.putExtra(MyApplication.PASSCODE_REQUEST_CODE, RequestCodes.PASSCODE_PREF_ENABLE);
+                    startActivityForResult(intent, RequestCodes.PASSCODE_PREF_ENABLE);
 
 
-                    } else {
-                        Intent intent = new Intent(getActivity(), PasscodeActivity.class);
-                        intent.putExtra(MyApplication.PASSCODE_REQUEST_CODE, RequestCodes.PASSCODE_PREF_DISABLE);
-                        startActivityForResult(intent, RequestCodes.PASSCODE_PREF_DISABLE);
+                } else {
+                    Intent intent = new Intent(getActivity(), PasscodeActivity.class);
+                    intent.putExtra(MyApplication.PASSCODE_REQUEST_CODE, RequestCodes.PASSCODE_PREF_DISABLE);
+                    startActivityForResult(intent, RequestCodes.PASSCODE_PREF_DISABLE);
 
-                    }
-
-                    return true;
                 }
+
+                return true;
             });
 
 
-            mPasscodeChange.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
+            mPasscodeChange.setOnPreferenceClickListener(preference -> {
 
-                    Intent intent = new Intent(getActivity(), PasscodeActivity.class);
-                    intent.putExtra(MyApplication.PASSCODE_REQUEST_CODE, RequestCodes.PASSCODE_PREF_CHANGE);
-                    startActivityForResult(intent, RequestCodes.PASSCODE_PREF_CHANGE);
-                    return true;
-                }
+                Intent intent = new Intent(getActivity(), PasscodeActivity.class);
+                intent.putExtra(MyApplication.PASSCODE_REQUEST_CODE, RequestCodes.PASSCODE_PREF_CHANGE);
+                startActivityForResult(intent, RequestCodes.PASSCODE_PREF_CHANGE);
+                return true;
             });
 
 
@@ -366,18 +344,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             //Send Result Codes to target fragment according to button clicked
             builder.setMessage(R.string.dialog_warning_reset_message)
                     .setTitle(R.string.dialog_warning_reset_title)
-                    .setPositiveButton(buttons[0], new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            getActivity().setResult(RequestCodes.RESET_TO_DEFAULT);
-                            getActivity().finish();
-                        }
+                    .setPositiveButton(buttons[0], (dialog, which) -> {
+                        getActivity().setResult(RequestCodes.RESET_TO_DEFAULT);
+                        getActivity().finish();
                     })
-                    .setNegativeButton(buttons[1], new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            //Dismiss Dialog
-                        }
+                    .setNegativeButton(buttons[1], (dialog, which) -> {
+                        //Dismiss Dialog
                     });
 
             builder.create().show();
