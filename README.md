@@ -35,6 +35,8 @@ Warning: sharing a wifi password with someone can compromise that wifi network s
 - <a href="https://github.com/DreaminginCodeZH/MaterialProgressBar">MaterialProgressBar by Zhang Hai</a>
 - <a href="https://github.com/PaoloRotolo/AppIntro">AppIntro by Paolo Rotolo</a>
 - <a href="https://github.com/traex/RippleEffect">RippleEffect by Robin Chutaux</a>
+- <a href="https://github.com/evant/gradle-retrolambda">Gradle Retrolambda Plugin by Evan Tatarka</a>
+- <a href="https://github.com/JakeWharton/butterknife">Butter Knife by Jake Wharton</a>
 
 ### Screenshots:
 
