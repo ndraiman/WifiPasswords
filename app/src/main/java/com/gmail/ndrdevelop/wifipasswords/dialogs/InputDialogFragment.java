@@ -22,19 +22,25 @@ import com.gmail.ndrdevelop.wifipasswords.pojo.WifiEntry;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 
 public class InputDialogFragment extends DialogFragment {
 
-    private static final String TYPE_KEY = "type_key";
+    static final String TYPE_KEY = "type_key";
 
     public static final String ENTRIES_KEY = "entries_key";
     public static final String POSITIONS_LEY = "positions_key";
-
     public static final int INPUT_ENTRY = 0;
     public static final int INPUT_TAG = 1;
 
-    private EditText mTitle, mPassword;
-    private LinearLayout mRoot;
+    @Bind(R.id.input_title) EditText mTitle;
+    @Bind(R.id.input_password) EditText mPassword;
+    @Bind(R.id.input_confirm) Button mConfirm;
+    @Bind(R.id.input_cancel) Button mCancel;
+    @Bind(R.id.dialog_add_container) LinearLayout mRoot;
+
 
     public static InputDialogFragment getInstance(int type, Bundle listWifiBundle) {
         InputDialogFragment fragment = new InputDialogFragment();
@@ -58,15 +64,10 @@ public class InputDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View layout = inflater.inflate(R.layout.dialog_input, container);
+        ButterKnife.bind(this, layout);
 
         final Bundle bundle = getArguments();
         int type = bundle.getInt(TYPE_KEY);
-
-        mTitle = (EditText) layout.findViewById(R.id.input_title);
-        mPassword = (EditText) layout.findViewById(R.id.input_password);
-        Button mConfirm = (Button) layout.findViewById(R.id.input_confirm);
-        Button mCancel = (Button) layout.findViewById(R.id.input_cancel);
-        mRoot = (LinearLayout) layout.findViewById(R.id.dialog_add_container);
 
         final InputDialogListener listener = (InputDialogListener) getTargetFragment();
 

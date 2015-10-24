@@ -15,8 +15,25 @@ import android.widget.TextView;
 import com.gmail.ndrdevelop.wifipasswords.R;
 import com.gmail.ndrdevelop.wifipasswords.activities.IntroActivity;
 
+import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 
 public class AboutDialogFragment extends DialogFragment {
+
+    @Bind ({R.id.dialog_about_info, R.id.dialog_about_github, R.id.dialog_about_library_materialprogressbar,
+            R.id.dialog_about_library_appintro, R.id.dialog_about_library_rippleeffect, R.id.dialog_about_help_readme,
+            R.id.dialog_about_help_feedback})
+    List<TextView> textViewsLinks;
+
+    @Bind(R.id.dialog_about_version) TextView mVersion;
+
+    @OnClick(R.id.dialog_about_help_intro)
+    void intro(View v) { startActivity(new Intent(v.getContext(), IntroActivity.class)); }
+
 
 
     public static AboutDialogFragment getInstance() {
@@ -35,38 +52,21 @@ public class AboutDialogFragment extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(parent, R.style.AlertDialogTheme);
 
-        LayoutInflater inflater = LayoutInflater.from(parent);
-        View helpDialogLayout = inflater.inflate(R.layout.dialog_about, null);
+        View helpDialogLayout = LayoutInflater.from(parent).inflate(R.layout.dialog_about, null);
 
-        TextView info = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_info);
-        TextView version = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_version);
-        TextView github = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_github);
-        TextView libraryProgressBar = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_library_materialprogressbar);
-        TextView libraryAppIntro = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_library_appintro);
-        TextView libraryRippleEffect = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_library_rippleeffect);
-        TextView helpIntro = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_help_intro);
-        TextView helpReadme = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_help_readme);
-        TextView helpEmail = (TextView) helpDialogLayout.findViewById(R.id.dialog_about_help_feedback);
+        ButterKnife.bind(this, helpDialogLayout);
+        ButterKnife.apply(textViewsLinks, LINK);
 
-        info.setMovementMethod(LinkMovementMethod.getInstance());
-        github.setMovementMethod(LinkMovementMethod.getInstance());
-        libraryProgressBar.setMovementMethod(LinkMovementMethod.getInstance());
-        libraryAppIntro.setMovementMethod(LinkMovementMethod.getInstance());
-        libraryRippleEffect.setMovementMethod(LinkMovementMethod.getInstance());
-        helpReadme.setMovementMethod(LinkMovementMethod.getInstance());
-        helpEmail.setMovementMethod(LinkMovementMethod.getInstance());
-
-        helpIntro.setOnClickListener(v -> startActivity(new Intent(v.getContext(), IntroActivity.class)));
-
+        //set Version Number
         String versionName;
 
         try {
-            versionName = version.getText().toString() + " " + parent.getPackageManager().getPackageInfo(parent.getPackageName(), 0).versionName;
+            versionName = mVersion.getText().toString() + " " + parent.getPackageManager().getPackageInfo(parent.getPackageName(), 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
             versionName = getString(R.string.dialog_about_version_error);
         }
 
-        version.setText(versionName);
+        mVersion.setText(versionName);
 
 
         builder.setTitle(getString(R.string.dialog_about_title));
@@ -77,4 +77,9 @@ public class AboutDialogFragment extends DialogFragment {
 
         return builder.create();
     }
+
+
+    final static ButterKnife.Action<TextView> LINK = (view, index) -> {
+        view.setMovementMethod(LinkMovementMethod.getInstance());
+    };
 }

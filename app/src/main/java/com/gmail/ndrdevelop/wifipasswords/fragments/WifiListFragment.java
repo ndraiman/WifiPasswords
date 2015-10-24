@@ -57,6 +57,8 @@ import com.gmail.ndrdevelop.wifipasswords.task.TaskLoadWifiEntries;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import me.zhanghai.android.materialprogressbar.IndeterminateProgressDrawable;
 
 
@@ -64,48 +66,47 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         SearchView.OnQueryTextListener, CustomAlertDialogListener, InputDialogListener,
         ItemDragListener {
 
-    private static final String COPIED_WIFI_ENTRY = "copied_wifi_entry"; //Clipboard Label
-    private static final String STATE_RESTORED_ENTRIES = "state_restored_entries"; //HiddenActivityWifi intent.extra key
+    static final String COPIED_WIFI_ENTRY = "copied_wifi_entry"; //Clipboard Label
+    static final String STATE_RESTORED_ENTRIES = "state_restored_entries"; //HiddenActivityWifi intent.extra key
+    static final String ROOT_ACCESS = "root_access";
 
-    private ArrayList<WifiEntry> mListWifi;
+    //onSavedInstance Keys
+    static final String STATE_WIFI_ENTRIES = "state_wifi_entries"; //Parcel key
+    static final String STATE_ACTION_MODE = "state_action_mode";
+    static final String STATE_ACTION_MODE_SELECTIONS = "state_action_mode_selections";
+    static final String STATE_SORT_MODE = "state_sort_mode";
 
-    private boolean mSortModeOn = false;
+    ArrayList<WifiEntry> mListWifi;
 
-    //OnSavedInstance Keys
-    private static final String STATE_WIFI_ENTRIES = "state_wifi_entries"; //Parcel key
-    private static final String STATE_ACTION_MODE = "state_action_mode";
-    private static final String STATE_ACTION_MODE_SELECTIONS = "state_action_mode_selections";
-    private static final String STATE_SORT_MODE = "state_sort_mode";
+    boolean mSortModeEnabled = false;
 
     //Layout
-    private FrameLayout mRoot;
-    private FloatingActionButton mFAB;
-    private ProgressBar mProgressBar;
+    @Bind(R.id.fragment_main_container) FrameLayout mRoot;
+    FloatingActionButton mFAB;
+    @Bind(R.id.progress_bar) ProgressBar mProgressBar;
 
     //wpa_supplicant file
-    private String mPath;
-    private String mFileName;
-    private boolean mCurrentlyLoading = false;
+    String mPath;
+    String mFileName;
+    boolean mCurrentlyLoading = false;
 
     //RecyclerView
-    private RecyclerView mRecyclerView;
-    private WifiListAdapter mAdapter;
-    private RecyclerView.OnItemTouchListener mRecyclerTouchListener;
-    private ItemTouchHelper mItemTouchHelper;
+    @Bind(R.id.main_wifi_list_recycler) RecyclerView mRecyclerView;
+    WifiListAdapter mAdapter;
+    RecyclerView.OnItemTouchListener mRecyclerTouchListener;
+    ItemTouchHelper mItemTouchHelper;
 
     //SearchView
-    private SearchView mSearchView;
-    private ArrayList<WifiEntry> mSearchSavedList; //saves list for SearchView Live Search
-    private String mSearchSavedQuery = ""; //saves query for configuration change
+    SearchView mSearchView;
+    ArrayList<WifiEntry> mSearchSavedList; //saves list for SearchView Live Search
+    String mSearchSavedQuery = ""; //saves query for configuration change
 
     //Context Action Mode
-    private ActionMode mActionMode;
-    private ArrayList<Integer> mActionModeSelections;
-    private ActionMode.Callback mActionModeCallback;
-    public boolean mActionModeOn = false;
-    private boolean mAnimateChanges = false; //Checks if Archive was pressed - will not call clearSelection to preserve animations
-
-    private static final String ROOT_ACCESS = "root_access";
+    boolean mActionModeEnabled = false;
+    boolean mAnimateChanges = false; //Checks if Archive was pressed - will not call clearSelection to preserve animations
+    ActionMode mActionMode;
+    ArrayList<Integer> mActionModeSelections;
+    ActionMode.Callback mActionModeCallback;
 
 
     public static WifiListFragment newInstance() {
@@ -128,7 +129,8 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
         mListWifi = new ArrayList<>();
 
-        bindViews(layout);
+        ButterKnife.bind(this, layout);
+        mFAB = ButterKnife. findById(getActivity(), R.id.fab);
 
         setupProgressBar();
 
@@ -154,9 +156,9 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
                 mRecyclerView.setLayoutAnimation(null);
                 mListWifi = savedInstanceState.getParcelableArrayList(STATE_WIFI_ENTRIES);
-                mActionModeOn = savedInstanceState.getBoolean(STATE_ACTION_MODE);
+                mActionModeEnabled = savedInstanceState.getBoolean(STATE_ACTION_MODE);
                 mActionModeSelections = savedInstanceState.getIntegerArrayList(STATE_ACTION_MODE_SELECTIONS);
-                mSortModeOn = savedInstanceState.getBoolean(STATE_SORT_MODE);
+                mSortModeEnabled = savedInstanceState.getBoolean(STATE_SORT_MODE);
 
             } else {
 
@@ -177,13 +179,13 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
 
         //Restore Context Action Bar state
-        if (mActionModeOn) {
+        if (mActionModeEnabled) {
             mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(mActionModeCallback);
             for (int i = 0; i < mActionModeSelections.size(); i++) {
                 mAdapter.toggleSelection(mActionModeSelections.get(i));
             }
 
-        } else if (mSortModeOn) {
+        } else if (mSortModeEnabled) {
             sortMode(true);
 
         }
@@ -204,9 +206,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     public void onDestroy() {
         super.onDestroy();
 
-        new Thread(() -> {
-            updateDatabase();
-        }).start();
+        new Thread(this::updateDatabase).start();
     }
 
 
@@ -222,8 +222,8 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
             mSearchSavedQuery = mSearchView.getQuery().toString();
         }
 
-        outState.putBoolean(STATE_SORT_MODE, mSortModeOn);
-        outState.putBoolean(STATE_ACTION_MODE, mActionModeOn);
+        outState.putBoolean(STATE_SORT_MODE, mSortModeEnabled);
+        outState.putBoolean(STATE_ACTION_MODE, mActionModeEnabled);
         outState.putIntegerArrayList(STATE_ACTION_MODE_SELECTIONS, mAdapter.getSelectedItems());
     }
 
@@ -279,8 +279,8 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
         //Disable\Enable menu items according to SortMode
         menu.setGroupEnabled(R.id.menu_group_main, !mCurrentlyLoading);
-        menu.setGroupVisible(R.id.menu_group_main, !mSortModeOn);
-        menu.setGroupVisible(R.id.menu_group_sort_mode, mSortModeOn);
+        menu.setGroupVisible(R.id.menu_group_main, !mSortModeEnabled);
+        menu.setGroupVisible(R.id.menu_group_sort_mode, mSortModeEnabled);
 
     }
 
@@ -527,14 +527,14 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
             mRecyclerView.addOnItemTouchListener(mRecyclerTouchListener);
         }
 
-        mSortModeOn = isOn;
+        mSortModeEnabled = isOn;
 
         getActivity().invalidateOptionsMenu();
     }
 
     //Return Sort Mode Status - used OnBackPressed in MainActivity
     public boolean getSortModeStatus() {
-        return mSortModeOn;
+        return mSortModeEnabled;
     }
 
 
@@ -614,16 +614,6 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     /******************** Layout Setup Methods *********************/
     /***************************************************************/
 
-    private void bindViews(View layout) {
-
-        //Init local Views
-        mRecyclerView = (RecyclerView) layout.findViewById(R.id.main_wifi_list_recycler);
-        mProgressBar = (ProgressBar) layout.findViewById(R.id.progress_bar);
-        mRoot = (FrameLayout) layout.findViewById(R.id.fragment_main_container);
-
-        //get Activity Views
-        mFAB = (FloatingActionButton) getActivity().findViewById(R.id.fab);
-    }
 
     private void setupProgressBar() {
 
@@ -652,7 +642,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
             public void onClick(View view, int position) {
 
                 //while in ActionMode - regular clicks will also select items
-                if (mActionModeOn) {
+                if (mActionModeEnabled) {
                     mAdapter.toggleSelection(position);
                     mRecyclerView.smoothScrollToPosition(position);
                 }
@@ -665,7 +655,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                 mAdapter.toggleSelection(position);
                 mRecyclerView.smoothScrollToPosition(position);
 
-                if (mActionMode != null || mSortModeOn) {
+                if (mActionMode != null || mSortModeEnabled) {
                     return;
                 }
                 mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(mActionModeCallback);
@@ -674,7 +664,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
             @Override
             public void onDoubleTap(View view, int position) {
 
-                if (mActionModeOn) {
+                if (mActionModeEnabled) {
                     return;
                 }
                 WifiEntry entry = mListWifi.get(position);
@@ -704,7 +694,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                     menu.getItem(i).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
                 }
 
-                mActionModeOn = true;
+                mActionModeEnabled = true;
 
                 return true;
             }
@@ -839,7 +829,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                 hideFAB(false);
                 mAnimateChanges = false;
                 mRecyclerView.setNestedScrollingEnabled(true);
-                mActionModeOn = false;
+                mActionModeEnabled = false;
                 mActionMode = null;
             }
         };

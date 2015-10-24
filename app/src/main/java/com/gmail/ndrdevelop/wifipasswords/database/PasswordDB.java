@@ -17,8 +17,8 @@ import java.util.ArrayList;
 
 public class PasswordDB {
 
-    private PasswordHelper mHelper;
-    private SQLiteDatabase mDatabase;
+    PasswordHelper mHelper;
+    SQLiteDatabase mDatabase;
 
     public static int mNewEntriesOnLastInsert = 0;
 

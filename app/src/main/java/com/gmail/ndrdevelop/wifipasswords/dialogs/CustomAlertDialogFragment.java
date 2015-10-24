@@ -13,9 +13,9 @@ import com.gmail.ndrdevelop.wifipasswords.extras.RequestCodes;
 
 public class CustomAlertDialogFragment extends DialogFragment {
 
-    private static final String MESSAGE_KEY = "alert_dialog_message";
-    private static final String TITLE_KEY = "alert_dialog_title";
-    private static final String BUTTONS_KEY = "alert_dialog_buttons";
+    static final String MESSAGE_KEY = "alert_dialog_message";
+    static final String TITLE_KEY = "alert_dialog_title";
+    static final String BUTTONS_KEY = "alert_dialog_buttons";
 
     public static CustomAlertDialogFragment getInstance(String title, String message, String... buttons) {
         CustomAlertDialogFragment fragment = new CustomAlertDialogFragment();

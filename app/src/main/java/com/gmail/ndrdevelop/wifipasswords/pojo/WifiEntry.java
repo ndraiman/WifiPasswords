@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 
 public class WifiEntry implements Parcelable {
+
     public static final Parcelable.Creator<WifiEntry> CREATOR = new Parcelable.Creator<WifiEntry>() {
         @Override
         public WifiEntry createFromParcel(Parcel in) {
@@ -17,9 +18,12 @@ public class WifiEntry implements Parcelable {
         }
     };
 
+
     private String title;
     private String password;
     private String tag = "";
+
+
 
     public WifiEntry() {}
 
@@ -78,7 +82,7 @@ public class WifiEntry implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        //Log.d(LOG_TAG, "writeToParcel WifiEntry");
+
         dest.writeString(title);
         dest.writeString(password);
         dest.writeString(tag);

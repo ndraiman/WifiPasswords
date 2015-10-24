@@ -22,18 +22,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 
 public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyViewHolder>
         implements ItemTouchHelperAdapter {
 
-    private LayoutInflater layoutInflater;
-    private List<WifiEntry> mListWifi;
-    private ItemDragListener mDragListener;
-    private int mPreviousPosition = -1; //used for Item Animation
-    private boolean mShowDragHandler;
-    private boolean isAnimated;
-    private Context mContext;
-    private SparseBooleanArray mSelectedItems = new SparseBooleanArray();
+    LayoutInflater layoutInflater;
+    List<WifiEntry> mListWifi;
+    ItemDragListener mDragListener;
+    int mPreviousPosition = -1; //used for Item Animation
+    boolean mShowDragHandler;
+    boolean isAnimated;
+    Context mContext;
+    SparseBooleanArray mSelectedItems = new SparseBooleanArray();
 
 
 
@@ -277,23 +280,17 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView mTitle;
-        private TextView mPassword;
-        private ImageView mDragHandler;
-        private LinearLayout mBackground;
-        private CardView mContainer;
-        private TextView mTagText;
+        @Bind(R.id.title_wifi) TextView mTitle;
+        @Bind(R.id.password_wifi) TextView mPassword;
+        @Bind(R.id.drag_handler) ImageView mDragHandler;
+        @Bind(R.id.wifi_entry_layout) LinearLayout mBackground;
+        @Bind(R.id.wifi_entry_container) CardView mContainer;
+        @Bind(R.id.tag_wifi_text) TextView mTagText;
 
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            mTitle = (TextView) itemView.findViewById(R.id.title_wifi);
-            mPassword = (TextView) itemView.findViewById(R.id.password_wifi);
-            mDragHandler = (ImageView) itemView.findViewById(R.id.drag_handler);
-            mBackground = (LinearLayout) itemView.findViewById(R.id.wifi_entry_layout);
-            mContainer = (CardView) itemView.findViewById(R.id.wifi_entry_container);
-            mTagText = (TextView) itemView.findViewById(R.id.tag_wifi_text);
-
+            ButterKnife.bind(this, itemView);
         }
     }
 }

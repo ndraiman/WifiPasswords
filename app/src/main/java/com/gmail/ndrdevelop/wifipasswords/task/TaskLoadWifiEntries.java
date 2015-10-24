@@ -22,20 +22,20 @@ import java.util.ArrayList;
 /***********************************************************************/
 public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiEntry>> {
 
-    private WifiListLoadedListener mListListener;
-    private boolean mRootAccess = true;
-    private String mPath;
-    private String mFileName;
-    private CustomAlertDialogListener mDialogListener;
-    private boolean mResetDB;
-    private String[] mLocationList = {"/data/misc/wifi/wpa_supplicant.conf", "/data/wifi/bcm_supp.conf", "/data/misc/wifi/wpa.conf"};
-    private boolean mManualLocation;
+    WifiListLoadedListener mListListener;
+    boolean mRootAccess = true;
+    String mPath;
+    String mFileName;
+    CustomAlertDialogListener mDialogListener;
+    boolean mResetDB;
+    String[] mLocationList = {"/data/misc/wifi/wpa_supplicant.conf", "/data/wifi/bcm_supp.conf", "/data/misc/wifi/wpa.conf"};
+    boolean mManualLocation;
 
-    private final String SSID = "ssid";
-    private final String WPA_PSK = "psk";
-    private final String WEP_PSK = "wep_key0";
-    private final String ENTRY_START = "network={";
-    private final String ENTRY_END = "}";
+    final String SSID = "ssid";
+    final String WPA_PSK = "psk";
+    final String WEP_PSK = "wep_key0";
+    final String ENTRY_START = "network={";
+    final String ENTRY_END = "}";
 
     //Constructor for Manual Path
     public TaskLoadWifiEntries(String filePath, String fileName, boolean resetDB, WifiListLoadedListener listListener, CustomAlertDialogListener dialogListener) {

@@ -33,31 +33,34 @@ import com.gmail.ndrdevelop.wifipasswords.task.TaskCheckPasscode;
 
 import java.util.ArrayList;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 
 public class ArchiveActivity extends AppCompatActivity {
 
-    private static final String COPIED_WIFI_ENTRY = "copied_wifi_entry"; //Clipboard Label
+    static final String COPIED_WIFI_ENTRY = "copied_wifi_entry"; //Clipboard Label
 
-    private static final String STATE_HIDDEN_ENTRIES = "state_hidden_entries";
-    private static final String STATE_RESTORED_ENTRIES = "state_restored_entries";
-    private static final String STATE_ACTION_MODE = "state_action_mode";
-    private static final String STATE_ACTION_MODE_SELECTIONS = "state_action_mode_selections";
+    //onSavedInstance Keys
+    static final String STATE_HIDDEN_ENTRIES = "state_hidden_entries";
+    static final String STATE_RESTORED_ENTRIES = "state_restored_entries";
+    static final String STATE_ACTION_MODE = "state_action_mode";
+    static final String STATE_ACTION_MODE_SELECTIONS = "state_action_mode_selections";
 
-    private ArrayList<WifiEntry> mListWifi;
+    ArrayList<WifiEntry> mListWifi;
+    ArrayList<WifiEntry> mEntriesRestored; //track restored entries to add to main list adapter
 
-    private CoordinatorLayout mRoot;
-
-    private RecyclerView mRecyclerView;
-    private WifiListAdapter mAdapter;
-
-    private ArrayList<WifiEntry> mEntriesRestored; //track restored entries to add to main list adapter
+    @Bind(R.id.activity_hidden_wifi_container) CoordinatorLayout mRoot;
+    @Bind(R.id.app_bar) Toolbar mToolbar;
+    @Bind(R.id.hidden_wifi_list_recycler) RecyclerView mRecyclerView;
+    WifiListAdapter mAdapter;
 
     //Context Action Mode
-    private ActionMode mActionMode;
-    private ArrayList<Integer> mActionModeSelections;
-    private ActionMode.Callback mActionModeCallback;
-    private boolean mActionModeOn = false;
-    private boolean mAnimateChanges = false; //Checks if Archive was pressed - will not call clearSelection to preserve animations
+    boolean mActionModeEnabled = false;
+    boolean mAnimateChanges = false; //Checks if Archive was pressed - will not call clearSelection to preserve animations
+    ActionMode mActionMode;
+    ArrayList<Integer> mActionModeSelections;
+    ActionMode.Callback mActionModeCallback;
 
 
     public ArchiveActivity() {
@@ -81,13 +84,11 @@ public class ArchiveActivity extends AppCompatActivity {
 
         }
         setContentView(R.layout.activity_archive);
+        ButterKnife.bind(this);
 
         mListWifi = new ArrayList<>();
 
-        mRoot = (CoordinatorLayout) findViewById(R.id.activity_hidden_wifi_container);
-        mRecyclerView = (RecyclerView) findViewById(R.id.hidden_wifi_list_recycler);
-        Toolbar toolbar  = (Toolbar) findViewById(R.id.app_bar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(mToolbar);
 
         ActionBar sBar;
         if ((sBar = getSupportActionBar()) != null) {
@@ -102,7 +103,7 @@ public class ArchiveActivity extends AppCompatActivity {
 
             mRecyclerView.setLayoutAnimation(null);
             mListWifi = savedInstanceState.getParcelableArrayList(STATE_HIDDEN_ENTRIES);
-            mActionModeOn = savedInstanceState.getBoolean(STATE_ACTION_MODE);
+            mActionModeEnabled = savedInstanceState.getBoolean(STATE_ACTION_MODE);
             mActionModeSelections = savedInstanceState.getIntegerArrayList(STATE_ACTION_MODE_SELECTIONS);
             mEntriesRestored = savedInstanceState.getParcelableArrayList(STATE_RESTORED_ENTRIES);
 
@@ -120,7 +121,7 @@ public class ArchiveActivity extends AppCompatActivity {
 
 
         //Restore Context Action Bar state
-        if (mActionModeOn) {
+        if (mActionModeEnabled) {
             mActionMode = startSupportActionMode(mActionModeCallback);
             for (int i = 0; i < mActionModeSelections.size(); i++) {
                 mAdapter.toggleSelection(mActionModeSelections.get(i));
@@ -158,7 +159,7 @@ public class ArchiveActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
 
         outState.putParcelableArrayList(STATE_HIDDEN_ENTRIES, mListWifi);
-        outState.putBoolean(STATE_ACTION_MODE, mActionModeOn);
+        outState.putBoolean(STATE_ACTION_MODE, mActionModeEnabled);
         outState.putIntegerArrayList(STATE_ACTION_MODE_SELECTIONS, mAdapter.getSelectedItems());
         outState.putParcelableArrayList(STATE_RESTORED_ENTRIES, mEntriesRestored);
 
@@ -207,7 +208,7 @@ public class ArchiveActivity extends AppCompatActivity {
             public void onClick(View view, int position) {
 
                 //while in ActionMode - regular clicks will also select items
-                if (mActionModeOn) {
+                if (mActionModeEnabled) {
                     mAdapter.toggleSelection(position);
                     mRecyclerView.smoothScrollToPosition(position);
                 }
@@ -229,7 +230,7 @@ public class ArchiveActivity extends AppCompatActivity {
             @Override
             public void onDoubleTap(View view, int position) {
 
-                if (mActionModeOn) {
+                if (mActionModeEnabled) {
                     return;
                 }
                 WifiEntry entry = mListWifi.get(position);
@@ -253,7 +254,7 @@ public class ArchiveActivity extends AppCompatActivity {
                 MenuInflater menuInflater = mode.getMenuInflater();
                 menuInflater.inflate(R.menu.menu_context_archive, menu);
 
-                mActionModeOn = true;
+                mActionModeEnabled = true;
                 return true;
             }
 
@@ -352,7 +353,7 @@ public class ArchiveActivity extends AppCompatActivity {
                 }
 
                 mAnimateChanges = false;
-                mActionModeOn = false;
+                mActionModeEnabled = false;
                 mActionMode = null;
             }
         };

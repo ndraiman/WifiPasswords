@@ -23,39 +23,48 @@ import com.gmail.ndrdevelop.wifipasswords.R;
 import com.gmail.ndrdevelop.wifipasswords.extras.MyApplication;
 import com.gmail.ndrdevelop.wifipasswords.extras.RequestCodes;
 
+import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 
 public class PasscodeActivity extends AppCompatActivity {
 
-    private int mRequestCode;
+    int mRequestCode;
 
-    private EditText mEditTextPasscode;
-    private String mPasscode;
+    @Bind(R.id.edit_text_passcode) EditText mEditTextPasscode;
+    String mPasscode;
 
-    private int mAttemptNum;
-    private final int ATTEMPT_CHANGE = -1;
-    private final int ATTEMPT_ENABLE = 0;
-    private final int ATTEMPT_ENABLE_REENTER = 1;
+    int mAttemptNum;
+    final int ATTEMPT_CHANGE = -1;
+    final int ATTEMPT_ENABLE = 0;
+    final int ATTEMPT_ENABLE_REENTER = 1;
 
-    private TextWatcher mPasscodeListener;
+    TextWatcher mPasscodeListener;
 
-    private LinearLayout mRadioButtonLayout;
-    private TextView mDescription;
-    private ImageView mLogo;
-    private RadioButton mRadioButton1, mRadioButton2, mRadioButton3, mRadioButton4;
-    private RadioButton mRadioError1, mRadioError2, mRadioError3, mRadioError4;
-    private RippleView mButtonOne, mButtonTwo, mButtonThree, mButtonFour, mButtonFive, mButtonSix,
-            mButtonSeven, mButtonEight, mButtonNine, mButtonZero, mButtonBackspace;
+
+    @Bind(R.id.layout_radio_buttons) LinearLayout mRadioButtonLayout;
+    @Bind(R.id.passcode_description) TextView mDescription;
+    @Bind(R.id.passcode_logo) ImageView mLogo;
+
+    @Bind({R.id.radioButton1, R.id.radioButton2, R.id.radioButton3, R.id.radioButton4})
+    List<RadioButton> mRadioButtonList;
+
+    @Bind({R.id.radioButtonError1, R.id.radioButtonError2, R.id.radioButtonError3, R.id.radioButtonError4})
+    List<RadioButton> mRadioErrorList;
+
+    @Bind({R.id.button_1, R.id.button_2, R.id.button_3, R.id.button_4, R.id.button_5, R.id.button_6,
+            R.id.button_7, R.id.button_8, R.id.button_9, R.id.button_0, R.id.button_backspace})
+    List<RippleView> mDigitButtonList;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
-
         setContentView(R.layout.activity_passcode);
-
-        bindViews();
+        ButterKnife.bind(this);
 
         mRequestCode = getIntent().getIntExtra(MyApplication.PASSCODE_REQUEST_CODE, RequestCodes.PASSCODE_ACTIVITY);
 
@@ -91,48 +100,11 @@ public class PasscodeActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    @Override
-    protected void onResume() {
-//        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
-        super.onResume();
-    }
 
 
     /********************************************************/
     /****************** Additional Methods ******************/
     /********************************************************/
-
-    private void bindViews() {
-
-        mDescription = (TextView) findViewById(R.id.passcode_description);
-        mRadioButtonLayout = (LinearLayout) findViewById(R.id.layout_radio_buttons);
-        mLogo = (ImageView) findViewById(R.id.passcode_logo);
-
-        mRadioButton1 = (RadioButton) findViewById(R.id.radioButton1);
-        mRadioButton2 = (RadioButton) findViewById(R.id.radioButton2);
-        mRadioButton3 = (RadioButton) findViewById(R.id.radioButton3);
-        mRadioButton4 = (RadioButton) findViewById(R.id.radioButton4);
-
-        mRadioError1 = (RadioButton) findViewById(R.id.radioButtonError1);
-        mRadioError2 = (RadioButton) findViewById(R.id.radioButtonError2);
-        mRadioError3 = (RadioButton) findViewById(R.id.radioButtonError3);
-        mRadioError4 = (RadioButton) findViewById(R.id.radioButtonError4);
-
-        mButtonOne = (RippleView) findViewById(R.id.button_1);
-        mButtonTwo = (RippleView) findViewById(R.id.button_2);
-        mButtonThree = (RippleView) findViewById(R.id.button_3);
-        mButtonFour = (RippleView) findViewById(R.id.button_4);
-        mButtonFive = (RippleView) findViewById(R.id.button_5);
-        mButtonSix = (RippleView) findViewById(R.id.button_6);
-        mButtonSeven = (RippleView) findViewById(R.id.button_7);
-        mButtonEight = (RippleView) findViewById(R.id.button_8);
-        mButtonNine = (RippleView) findViewById(R.id.button_9);
-        mButtonZero = (RippleView) findViewById(R.id.button_0);
-        mButtonBackspace = (RippleView) findViewById(R.id.button_backspace);
-
-        mEditTextPasscode = (EditText) findViewById(R.id.edit_text_passcode);
-
-    }
 
     private void setupCorrectPasscodeListener() {
 
@@ -151,19 +123,19 @@ public class PasscodeActivity extends AppCompatActivity {
                     switch (count) {
 
                         case 1:
-                            mRadioButton1.setChecked(true);
+                            mRadioButtonList.get(0).setChecked(true);
                             break;
 
                         case 2:
-                            mRadioButton2.setChecked(true);
+                            mRadioButtonList.get(1).setChecked(true);
                             break;
 
                         case 3:
-                            mRadioButton3.setChecked(true);
+                            mRadioButtonList.get(2).setChecked(true);
                             break;
 
                         case 4:
-                            mRadioButton4.setChecked(true);
+                            mRadioButtonList.get(3).setChecked(true);
                             break;
                     }
 
@@ -172,15 +144,15 @@ public class PasscodeActivity extends AppCompatActivity {
                     switch (before) {
 
                         case 1:
-                            mRadioButton1.setChecked(false);
+                            mRadioButtonList.get(0).setChecked(false);
                             break;
 
                         case 2:
-                            mRadioButton2.setChecked(false);
+                            mRadioButtonList.get(1).setChecked(false);
                             break;
 
                         case 3:
-                            mRadioButton3.setChecked(false);
+                            mRadioButtonList.get(2).setChecked(false);
                             break;
                     }
                 }
@@ -226,19 +198,19 @@ public class PasscodeActivity extends AppCompatActivity {
                     switch (count) {
 
                         case 1:
-                            mRadioButton1.setChecked(true);
+                            mRadioButtonList.get(0).setChecked(true);
                             break;
 
                         case 2:
-                            mRadioButton2.setChecked(true);
+                            mRadioButtonList.get(1).setChecked(true);
                             break;
 
                         case 3:
-                            mRadioButton3.setChecked(true);
+                            mRadioButtonList.get(2).setChecked(true);
                             break;
 
                         case 4:
-                            mRadioButton4.setChecked(true);
+                            mRadioButtonList.get(3).setChecked(true);
                             break;
                     }
 
@@ -247,15 +219,15 @@ public class PasscodeActivity extends AppCompatActivity {
                     switch (before) {
 
                         case 1:
-                            mRadioButton1.setChecked(false);
+                            mRadioButtonList.get(0).setChecked(false);
                             break;
 
                         case 2:
-                            mRadioButton2.setChecked(false);
+                            mRadioButtonList.get(1).setChecked(false);
                             break;
 
                         case 3:
-                            mRadioButton3.setChecked(false);
+                            mRadioButtonList.get(2).setChecked(false);
                             break;
                     }
                 }
@@ -450,56 +422,38 @@ public class PasscodeActivity extends AppCompatActivity {
 
     private void digitsClickable(boolean enable) {
 
-        mButtonOne.setClickable(enable);
-        mButtonTwo.setClickable(enable);
-        mButtonThree.setClickable(enable);
-        mButtonFour.setClickable(enable);
-        mButtonFive.setClickable(enable);
-        mButtonSix.setClickable(enable);
-        mButtonSeven.setClickable(enable);
-        mButtonEight.setClickable(enable);
-        mButtonNine.setClickable(enable);
-        mButtonZero.setClickable(enable);
-        mButtonBackspace.setClickable(enable);
+        ButterKnife.apply(mDigitButtonList, ENABLED, enable);
 
     }
 
 
     private void clearRadioButtons() {
 
-        mRadioButton1.setChecked(false);
-        mRadioButton2.setChecked(false);
-        mRadioButton3.setChecked(false);
-        mRadioButton4.setChecked(false);
-
+        ButterKnife.apply(mRadioButtonList, CHECKED, false);
     }
 
     private void showErrorRadioButtons(boolean show) {
 
         if (show) {
 
-            mRadioButton1.setVisibility(View.GONE);
-            mRadioButton2.setVisibility(View.GONE);
-            mRadioButton3.setVisibility(View.GONE);
-            mRadioButton4.setVisibility(View.GONE);
-
-            mRadioError1.setVisibility(View.VISIBLE);
-            mRadioError2.setVisibility(View.VISIBLE);
-            mRadioError3.setVisibility(View.VISIBLE);
-            mRadioError4.setVisibility(View.VISIBLE);
+            ButterKnife.apply(mRadioButtonList, VISIBILITY, View.GONE);
+            ButterKnife.apply(mRadioErrorList, VISIBILITY, View.VISIBLE);
 
         } else {
 
-            mRadioButton1.setVisibility(View.VISIBLE);
-            mRadioButton2.setVisibility(View.VISIBLE);
-            mRadioButton3.setVisibility(View.VISIBLE);
-            mRadioButton4.setVisibility(View.VISIBLE);
-
-            mRadioError1.setVisibility(View.GONE);
-            mRadioError2.setVisibility(View.GONE);
-            mRadioError3.setVisibility(View.GONE);
-            mRadioError4.setVisibility(View.GONE);
+            ButterKnife.apply(mRadioButtonList, VISIBILITY, View.VISIBLE);
+            ButterKnife.apply(mRadioErrorList, VISIBILITY, View.GONE);
         }
 
     }
+
+
+    /*********************************************************/
+    /****************** ButterKnife Methods ******************/
+    /*********************************************************/
+    static final ButterKnife.Setter<View, Boolean> ENABLED = (view, value, index) -> view.setEnabled(value);
+
+    static final ButterKnife.Setter<RadioButton, Boolean> CHECKED = (view, value, index) -> view.setChecked(value);
+
+    static final ButterKnife.Setter<View, Integer> VISIBILITY = (view, value, index) -> view.setVisibility(value);
 }

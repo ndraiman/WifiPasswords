@@ -13,7 +13,7 @@ import java.util.List;
 public class TaskCheckPasscode extends AsyncTask<Void, Void, Boolean>{
 
 
-    private Context mApplicationContext;
+    Context mApplicationContext;
 
 
     public TaskCheckPasscode(Context applicationContext) {

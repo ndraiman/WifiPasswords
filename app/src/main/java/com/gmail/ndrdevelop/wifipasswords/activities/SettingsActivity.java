@@ -23,13 +23,13 @@ import com.gmail.ndrdevelop.wifipasswords.task.TaskCheckPasscode;
 
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
-    private static Toolbar mToolbar;
-    private SettingsFragment mSettingsFragment;
+    static Toolbar mToolbar;
+    SettingsFragment mSettingsFragment;
 
-    public static final String SETTINGS_FRAGMENT_TAG = "settings_fragment_tag";
+    static final String SETTINGS_FRAGMENT_TAG = "settings_fragment_tag";
 
-    private static boolean mPasscodePrefs = false;
-    private static final String PASSCODE_PREFS = "passcode_preferences";
+    static boolean mPasscodePrefs = false;
+    final String PASSCODE_PREFS = "passcode_preferences";
 
 
     @Override
@@ -180,6 +180,8 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                             .getDefaultSharedPreferences(preference.getContext())
                             .getString(preference.getKey(), ""));
         }
+
+
 
         @Override
         public void onCreate(Bundle savedInstanceState) {

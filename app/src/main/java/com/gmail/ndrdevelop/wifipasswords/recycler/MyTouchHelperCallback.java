@@ -6,7 +6,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 
 public class MyTouchHelperCallback extends ItemTouchHelper.Callback {
 
-    private final ItemTouchHelperAdapter mAdapter;
+    final ItemTouchHelperAdapter mAdapter;
 
     public MyTouchHelperCallback(ItemTouchHelperAdapter adapter) {
         mAdapter = adapter;
