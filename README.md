@@ -32,11 +32,11 @@ Warning: sharing a wifi password with someone can compromise that wifi network s
 
 ### External Libraries Used:
 
-- <a href="https://github.com/DreaminginCodeZH/MaterialProgressBar">MaterialProgressBar by Zhang Hai</a>
-- <a href="https://github.com/PaoloRotolo/AppIntro">AppIntro by Paolo Rotolo</a>
-- <a href="https://github.com/traex/RippleEffect">RippleEffect by Robin Chutaux</a>
-- <a href="https://github.com/evant/gradle-retrolambda">Gradle Retrolambda Plugin by Evan Tatarka</a>
-- <a href="https://github.com/JakeWharton/butterknife">Butter Knife by Jake Wharton</a>
+- <a href="https://github.com/JakeWharton/butterknife">Butter Knife</a> by Jake Wharton
+- <a href="https://github.com/evant/gradle-retrolambda">Gradle Retrolambda Plugin</a>  by Evan Tatarka
+- <a href="https://github.com/DreaminginCodeZH/MaterialProgressBar">MaterialProgressBar</a> by Zhang Hai
+- <a href="https://github.com/PaoloRotolo/AppIntro">AppIntro</a> by Paolo Rotolo
+- <a href="https://github.com/traex/RippleEffect">RippleEffect</a>  by Robin Chutaux
 
 ### Screenshots:
 
