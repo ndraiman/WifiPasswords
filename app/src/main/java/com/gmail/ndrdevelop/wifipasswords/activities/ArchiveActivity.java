@@ -282,14 +282,14 @@ public class ArchiveActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
 
                     case R.id.menu_context_copy:
-                        StringBuilder textToCopy = new StringBuilder();
+                        String textToCopy = "";
 
                         for (WifiEntry entry : selectedEntries) {
-                            textToCopy.append("Wifi Name: " + entry.getTitle() + "\n"
-                                    + "Password: " + entry.getPassword() + "\n\n");
+                            textToCopy += "Wifi Name: " + entry.getTitle() + "\n"
+                                    + "Password: " + entry.getPassword() + "\n\n";
                         }
 
-                        copyToClipboard(COPIED_WIFI_ENTRY, textToCopy.toString(), getString(R.string.snackbar_wifi_copy));
+                        copyToClipboard(COPIED_WIFI_ENTRY, textToCopy, getString(R.string.snackbar_wifi_copy));
                         mode.finish();
                         return true;
 

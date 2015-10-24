@@ -82,8 +82,8 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
     //Layout
     @Bind(R.id.fragment_main_container) FrameLayout mRoot;
-    FloatingActionButton mFAB;
     @Bind(R.id.progress_bar) ProgressBar mProgressBar;
+    FloatingActionButton mFAB;
 
     //wpa_supplicant file
     String mPath;
@@ -397,7 +397,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
             updateDatabase();
 
         } else {
-            mAdapter.setWifiList(new ArrayList<WifiEntry>());
+            mAdapter.setWifiList(new ArrayList<>());
             mProgressBar.setVisibility(View.VISIBLE); //Show Progress Bar
         }
 
@@ -779,14 +779,14 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                         return true;
 
                     case R.id.menu_context_copy:
-                        StringBuilder textToCopy = new StringBuilder();
+                        String textToCopy = "";
 
                         for (WifiEntry entry : selectedEntries) {
-                            textToCopy.append("Wifi Name: " + entry.getTitle() + "\n"
-                                    + "Password: " + entry.getPassword() + "\n\n");
+                            textToCopy += "Wifi Name: " + entry.getTitle() + "\n"
+                                    + "Password: " + entry.getPassword() + "\n\n";
                         }
 
-                        copyToClipboard(COPIED_WIFI_ENTRY, textToCopy.toString(), getString(R.string.snackbar_wifi_copy));
+                        copyToClipboard(COPIED_WIFI_ENTRY, textToCopy, getString(R.string.snackbar_wifi_copy));
                         mode.finish();
                         return true;
 

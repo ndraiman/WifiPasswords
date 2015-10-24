@@ -24,9 +24,14 @@ import butterknife.OnClick;
 
 public class AboutDialogFragment extends DialogFragment {
 
-    @Bind ({R.id.dialog_about_info, R.id.dialog_about_github, R.id.dialog_about_library_materialprogressbar,
-            R.id.dialog_about_library_appintro, R.id.dialog_about_library_rippleeffect, R.id.dialog_about_help_readme,
-            R.id.dialog_about_help_feedback})
+    @Bind ({R.id.dialog_about_info,
+            R.id.dialog_about_github,
+            R.id.dialog_about_library_butterknife,
+            R.id.dialog_about_library_retrolambda,
+            R.id.dialog_about_library_materialprogressbar,
+            R.id.dialog_about_library_appintro,
+            R.id.dialog_about_library_rippleeffect,
+            R.id.dialog_about_help_readme})
     List<TextView> textViewsLinks;
 
     @Bind(R.id.dialog_about_version) TextView mVersion;
@@ -79,7 +84,5 @@ public class AboutDialogFragment extends DialogFragment {
     }
 
 
-    final static ButterKnife.Action<TextView> LINK = (view, index) -> {
-        view.setMovementMethod(LinkMovementMethod.getInstance());
-    };
+    final static ButterKnife.Action<TextView> LINK = (view, index) -> view.setMovementMethod(LinkMovementMethod.getInstance());
 }

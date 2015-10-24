@@ -5,6 +5,7 @@
 
     <dimen name="margin_top">24dp</dimen>
     <dimen name="app_bar_top_padding">0dp</dimen>
+    <dimen name="card_layout_margin">8dp</dimen>
 
     <dimen name="size_word">16dp</dimen>
     <dimen name="size_half_byte">4dp</dimen>

@@ -48,14 +48,29 @@ public class PasscodeActivity extends AppCompatActivity {
     @Bind(R.id.passcode_description) TextView mDescription;
     @Bind(R.id.passcode_logo) ImageView mLogo;
 
-    @Bind({R.id.radioButton1, R.id.radioButton2, R.id.radioButton3, R.id.radioButton4})
+    @Bind({R.id.radioButton1,
+            R.id.radioButton2,
+            R.id.radioButton3,
+            R.id.radioButton4})
     List<RadioButton> mRadioButtonList;
 
-    @Bind({R.id.radioButtonError1, R.id.radioButtonError2, R.id.radioButtonError3, R.id.radioButtonError4})
+    @Bind({R.id.radioButtonError1,
+            R.id.radioButtonError2,
+            R.id.radioButtonError3,
+            R.id.radioButtonError4})
     List<RadioButton> mRadioErrorList;
 
-    @Bind({R.id.button_1, R.id.button_2, R.id.button_3, R.id.button_4, R.id.button_5, R.id.button_6,
-            R.id.button_7, R.id.button_8, R.id.button_9, R.id.button_0, R.id.button_backspace})
+    @Bind({R.id.button_1,
+            R.id.button_2,
+            R.id.button_3,
+            R.id.button_4,
+            R.id.button_5,
+            R.id.button_6,
+            R.id.button_7,
+            R.id.button_8,
+            R.id.button_9,
+            R.id.button_0,
+            R.id.button_backspace})
     List<RippleView> mDigitButtonList;
 
 

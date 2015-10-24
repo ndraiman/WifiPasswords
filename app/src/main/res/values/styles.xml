@@ -20,12 +20,6 @@
 
     </style>
 
-    <!-- Toolbar title to fix Landscape text size -->
-    <style name="ToolbarTitle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="android:textSize">20sp</item>
-    </style>
-
-
     <!-- Alert Dialog Theme -->
     <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@color/colorAccent</item>
@@ -72,6 +66,13 @@
         <item name="android:windowExitAnimation">@anim/dialog_slide_out_bottom</item>
         <item name="android:interpolator">@android:interpolator/anticipate</item>
     </style>
+
+
+    <!-- Toolbar title to fix Landscape text size -->
+    <style name="ToolbarTitle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textSize">20sp</item>
+    </style>
+
 
     <!-- FAB -->
     <style name="floating_action_button">

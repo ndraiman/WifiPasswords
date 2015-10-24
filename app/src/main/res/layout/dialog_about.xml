@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fadeScrollbars="false"
+    android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
+    android:scrollbars="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -39,6 +42,7 @@
                 android:text="@string/dialog_about_github"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
+
         </LinearLayout>
 
         <LinearLayout
@@ -54,10 +58,26 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
             <TextView
-                android:id="@+id/dialog_about_library_materialprogressbar"
+                android:id="@+id/dialog_about_library_butterknife"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dialog_help_margin"
+                android:padding="@dimen/dialog_help_padding"
+                android:text="@string/dialog_about_library_butterknife"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+            <TextView
+                android:id="@+id/dialog_about_library_retrolambda"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dialog_help_padding"
+                android:text="@string/dialog_about_library_retrolambda"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+            <TextView
+                android:id="@+id/dialog_about_library_materialprogressbar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:padding="@dimen/dialog_help_padding"
                 android:text="@string/dialog_about_library_materialprogressbar"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
@@ -84,7 +104,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dialog_help_margin"
             android:layout_marginStart="@dimen/dialog_help_margin"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="@dimen/dialog_help_margin"
             android:orientation="vertical">
 
             <TextView
@@ -113,14 +133,6 @@
                 android:text="@string/dialog_about_help_readme"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
-            <TextView
-                android:layout_marginTop="10dp"
-                android:id="@+id/dialog_about_help_feedback"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/dialog_help_padding"
-                android:text="@string/dialog_about_help_feedback"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
         </LinearLayout>
     </LinearLayout>
