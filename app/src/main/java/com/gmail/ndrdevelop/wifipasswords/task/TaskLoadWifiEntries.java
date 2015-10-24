@@ -61,6 +61,7 @@ public class TaskLoadWifiEntries extends AsyncTask<String, Void, ArrayList<WifiE
 
         if (!(mRootAccess = RootCheck.canRunRootCommands())) {
             cancel(true);
+            return null;
         }
 
         return readFile();
