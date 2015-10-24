@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.gmail.ndrdevelop.wifipasswords.R;
 import com.gmail.ndrdevelop.wifipasswords.database.PasswordDB;
@@ -270,6 +271,7 @@ public class ArchiveActivity extends AppCompatActivity {
                 final ArrayList<Integer> selectedItems = mAdapter.getSelectedItems();
 
                 if(selectedItems.size() == 0) {
+                    Toast.makeText(ArchiveActivity.this, R.string.toast_nothing_selected, Toast.LENGTH_SHORT).show();
                     return false;
                 }
 

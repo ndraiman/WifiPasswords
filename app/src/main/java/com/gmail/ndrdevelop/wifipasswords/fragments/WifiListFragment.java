@@ -130,7 +130,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         mListWifi = new ArrayList<>();
 
         ButterKnife.bind(this, layout);
-        mFAB = ButterKnife. findById(getActivity(), R.id.fab);
+        mFAB = ButterKnife.findById(getActivity(), R.id.fab);
 
         setupProgressBar();
 
@@ -178,27 +178,19 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         mAdapter.setWifiList(mListWifi);
 
 
-        //Restore Context Action Bar state
+        //Restore Context Action Mode state
         if (mActionModeEnabled) {
             mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(mActionModeCallback);
             for (int i = 0; i < mActionModeSelections.size(); i++) {
                 mAdapter.toggleSelection(mActionModeSelections.get(i));
             }
 
-        } else if (mSortModeEnabled) {
+        } else if (mSortModeEnabled) { //Restore Sort Mode state
             sortMode(true);
 
         }
 
         return layout;
-    }
-
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-
     }
 
 
@@ -712,6 +704,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                 final ArrayList<Integer> selectedItems = mAdapter.getSelectedItems();
 
                 if (selectedItems.size() == 0) {
+                    Toast.makeText(getActivity(), R.string.toast_nothing_selected, Toast.LENGTH_SHORT).show();
                     return false;
                 }
 
@@ -978,6 +971,8 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         getFragmentManager().beginTransaction().add(dialog, getString(R.string.dialog_error_path_key)).commitAllowingStateLoss();
     }
 
+
+
     public void showRootErrorDialog() {
 
         String title = getString(R.string.dialog_error_root_title);
@@ -1022,7 +1017,8 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         return true;
     }
 
-    public ArrayList<WifiEntry> filter(ArrayList<WifiEntry> listWifi, String query) {
+
+    private ArrayList<WifiEntry> filter(ArrayList<WifiEntry> listWifi, String query) {
         query = query.toLowerCase();
 
         final ArrayList<WifiEntry> filteredWifiList = new ArrayList<>();
