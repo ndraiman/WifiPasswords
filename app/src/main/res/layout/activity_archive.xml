@@ -23,7 +23,13 @@
         android:id="@+id/hidden_wifi_list_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/card_layout_margin"
+        android:fadeScrollbars="true"
         android:layoutAnimation="@anim/layout_left_to_right_slide"
+        android:overScrollMode="always"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
+        android:scrollbars="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </android.support.design.widget.CoordinatorLayout>
