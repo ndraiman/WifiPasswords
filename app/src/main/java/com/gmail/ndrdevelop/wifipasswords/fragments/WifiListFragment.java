@@ -620,7 +620,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setHasFixedSize(true);
-        mAdapter = new WifiListAdapter(getActivity(), true, this);
+        mAdapter = new WifiListAdapter(getActivity(), this);
         mRecyclerView.setAdapter(mAdapter);
 
         //Setup ItemTouchHelper

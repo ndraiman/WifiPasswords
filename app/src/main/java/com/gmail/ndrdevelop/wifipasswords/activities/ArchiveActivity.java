@@ -201,7 +201,7 @@ public class ArchiveActivity extends AppCompatActivity {
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setHasFixedSize(true);
-        mAdapter = new WifiListAdapter(this, false, null);
+        mAdapter = new WifiListAdapter(this, null);
         mRecyclerView.setAdapter(mAdapter);
 
         RecyclerView.OnItemTouchListener recyclerTouchListener = new RecyclerTouchListener(this, mRecyclerView, new RecyclerTouchListener.ClickListener() {

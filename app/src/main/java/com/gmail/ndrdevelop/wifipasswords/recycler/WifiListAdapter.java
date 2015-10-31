@@ -2,7 +2,6 @@ package com.gmail.ndrdevelop.wifipasswords.recycler;
 
 import android.content.Context;
 import android.support.v4.view.MotionEventCompat;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -15,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gmail.ndrdevelop.wifipasswords.R;
-import com.gmail.ndrdevelop.wifipasswords.extras.MyAnimationUtils;
 import com.gmail.ndrdevelop.wifipasswords.pojo.WifiEntry;
 
 import java.util.ArrayList;
@@ -32,21 +30,18 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     LayoutInflater layoutInflater;
     List<WifiEntry> mListWifi;
     ItemDragListener mDragListener;
-    int mPreviousPosition = -1; //used for Item Animation
     boolean mShowDragHandler;
-    boolean isAnimated;
     Context mContext;
     SparseBooleanArray mSelectedItems = new SparseBooleanArray();
 
 
 
-    public WifiListAdapter(Context context, boolean isAnimated, ItemDragListener dragListener) {
+    public WifiListAdapter(Context context, ItemDragListener dragListener) {
         layoutInflater = LayoutInflater.from(context);
         mContext = context;
         mDragListener = dragListener;
         mListWifi = new ArrayList<>();
         mShowDragHandler = false;
-        this.isAnimated = isAnimated;
     }
 
     @Override
@@ -85,11 +80,6 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
 
         //Tag & Drag Handler Visibility
         toggleTagAndDrag(holder);
-        
-        //Set Animation
-        if(isAnimated) {
-            setAnimation(holder.mContainer, position);
-        }
 
     }
 
@@ -104,7 +94,6 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     public void setWifiList(ArrayList<WifiEntry> listWifi) {
 
         mListWifi = listWifi;
-        mPreviousPosition = -1; //fix load animation on new data loaded
         notifyDataSetChanged();
     }
 
@@ -262,17 +251,6 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
     }
 
 
-    private void setAnimation(View viewToAnimate, int position)
-    {
-        // If the bound view wasn't previously displayed on screen, it's animated
-        if (position > mPreviousPosition)
-        {
-
-            MyAnimationUtils.translateY(viewToAnimate, true);
-            mPreviousPosition = position;
-        }
-    }
-
 
     /*****************************************/
     /********** View Holder Sub-Class ********/
@@ -284,7 +262,6 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
         @Bind(R.id.password_wifi) TextView mPassword;
         @Bind(R.id.drag_handler) ImageView mDragHandler;
         @Bind(R.id.wifi_entry_layout) LinearLayout mBackground;
-        @Bind(R.id.wifi_entry_container) CardView mContainer;
         @Bind(R.id.tag_wifi_text) TextView mTagText;
 
         public MyViewHolder(View itemView) {
