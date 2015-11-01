@@ -45,6 +45,7 @@ import com.gmail.ndrdevelop.wifipasswords.dialogs.CustomAlertDialogFragment;
 import com.gmail.ndrdevelop.wifipasswords.dialogs.CustomAlertDialogListener;
 import com.gmail.ndrdevelop.wifipasswords.dialogs.InputDialogFragment;
 import com.gmail.ndrdevelop.wifipasswords.dialogs.InputDialogListener;
+import com.gmail.ndrdevelop.wifipasswords.dialogs.RateItDialogFragment;
 import com.gmail.ndrdevelop.wifipasswords.extras.MyApplication;
 import com.gmail.ndrdevelop.wifipasswords.extras.RequestCodes;
 import com.gmail.ndrdevelop.wifipasswords.pojo.WifiEntry;
@@ -193,6 +194,12 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
         return layout;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        RateItDialogFragment.show(getActivity(), getFragmentManager());
+    }
 
     @Override
     public void onDestroy() {
