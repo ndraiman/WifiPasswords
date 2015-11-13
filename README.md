@@ -40,13 +40,9 @@ Warning: sharing a wifi password with someone can compromise that wifi network s
 
 ### Screenshots:
 
-![intro](/intro.png)
+![list](/list-new.png)
 ***
-![passcode](/passcode.png)
-***
-![list](/list.png)
-***
-![cab](/cab.png)
+![list-dark](/list-dark.png)
 ***
 
 ##Troubleshooting
