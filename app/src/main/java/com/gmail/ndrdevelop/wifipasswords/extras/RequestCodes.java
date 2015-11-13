@@ -17,6 +17,7 @@ public class RequestCodes {
     public static final int DIALOG_CANCEL = 98;
     public static final int DIALOG_CONFIRM = 99;
 
+    public static final int DARK_THEME = 997;
     public static final int SHOW_NO_PASSWORD_CODE = 998;
     public static final int RESET_TO_DEFAULT = 999;
 

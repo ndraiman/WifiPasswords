@@ -1,6 +1,8 @@
 package com.gmail.ndrdevelop.wifipasswords.recycler;
 
 import android.content.Context;
+import android.preference.PreferenceManager;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
@@ -63,9 +65,19 @@ public class WifiListAdapter extends RecyclerView.Adapter<WifiListAdapter.MyView
 
         //Selected Background
         if (mSelectedItems.get(position, false)) {
+
             holder.mBackground.setBackgroundResource(R.color.colorHighlight);
+
         } else {
-            holder.mBackground.setBackgroundResource(R.drawable.highlight_selected);
+
+            if (PreferenceManager.getDefaultSharedPreferences(mContext)
+                    .getBoolean(mContext.getString(R.string.pref_dark_theme_key), false)) {
+                holder.mBackground.setBackground(ResourcesCompat.getDrawable(mContext.getResources(),
+                        R.drawable.highlight_selected_dark, mContext.getTheme()));
+            } else {
+                holder.mBackground.setBackgroundResource(R.drawable.highlight_selected);
+            }
+
         }
 
         //Drag Icon

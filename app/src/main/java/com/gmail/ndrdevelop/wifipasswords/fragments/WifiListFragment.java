@@ -13,7 +13,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -618,7 +617,6 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
         //backward compatible MaterialProgressBar - https://github.com/DreaminginCodeZH/MaterialProgressBar
         IndeterminateProgressDrawable progressDrawable = new IndeterminateProgressDrawable(getActivity());
-        progressDrawable.setTint(ContextCompat.getColor(getActivity(), R.color.colorPrimary)); //Change Color
         mProgressBar.setIndeterminateDrawable(progressDrawable);
 
     }
@@ -934,7 +932,13 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
         if (mShowShareDialog) {
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+            AlertDialog.Builder builder;
+
+            if (MyApplication.sIsDark == 0) {
+                builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+            } else {
+                builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme_Dark);
+            }
 
             LayoutInflater inflater = LayoutInflater.from(getActivity());
             View shareDialogLayout = inflater.inflate(R.layout.dialog_share_warning, null);

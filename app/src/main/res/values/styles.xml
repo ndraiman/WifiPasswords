@@ -4,25 +4,55 @@
 
     </style>
 
+    <style name="AppTheme.Dark" parent="AppTheme.Dark.Base">
+
+    </style>
 
     <style name="AppTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorControlHighlight">@color/colorHighlight</item>
+        <item name="android:textColorPrimary">@color/colorPrimaryText</item>
+        <item name="android:textColorSecondary">@color/colorSecondaryText</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
 
         <!-- Context Action Mode will Overlay Toolbar -->
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeCloseDrawable">@android:drawable/ic_menu_close_clear_cancel</item>
 
         <item name="android:dialogTheme">@style/InputDialogTheme</item>
-        <!--<item name="android:alertDialogTheme">@style/AlertDialogTheme</item>-->
 
     </style>
 
+    <!-- Dark Theme Variant -->
+    <style name="AppTheme.Dark.Base" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/Dark.colorPrimary</item>
+        <item name="colorPrimaryDark">@color/Dark.colorPrimaryDark</item>
+        <item name="colorAccent">@color/Dark.colorAccent</item>
+        <item name="colorControlHighlight">@color/colorHighlight</item>
+        <item name="android:textColorPrimary">@color/Dark.colorPrimaryText</item>
+        <item name="android:textColorSecondary">@color/Dark.colorSecondaryText</item>
+        <item name="android:colorBackground">@color/Dark.colorBackground</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
+
+        <!-- Context Action Mode will Overlay Toolbar -->
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeCloseDrawable">@android:drawable/ic_menu_close_clear_cancel</item>
+
+        <item name="android:dialogTheme">@style/InputDialogTheme.Dark</item>
+
+    </style>
+
+    <!--********************-->
     <!-- Alert Dialog Theme -->
+    <!--********************-->
     <style name="AlertDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowAnimationStyle">@style/AlertDialogTheme.Animation</item>
+    </style>
+
+    <style name="AlertDialogTheme.Dark" parent="Theme.AppCompat.Dialog.Alert">
         <item name="android:windowAnimationStyle">@style/AlertDialogTheme.Animation</item>
     </style>
 
@@ -37,19 +67,37 @@
         <item name="android:windowAnimationStyle">@style/DeleteDialogTheme.Animation</item>
     </style>
 
+    <style name="DeleteDialogTheme.Dark" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="android:windowAnimationStyle">@style/DeleteDialogTheme.Animation</item>
+    </style>
+
     <style name="DeleteDialogTheme.Animation">
         <item name="android:windowEnterAnimation">@anim/scale_from_top_right_corner</item>
         <item name="android:windowExitAnimation">@anim/scale_to_top_right_corner</item>
         <item name="android:interpolator">@android:interpolator/accelerate_decelerate</item>
     </style>
 
+    <!--**********************-->
     <!-- DialogFragment Theme -->
+    <!--**********************-->
     <style name="InputDialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <!-- Colors -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorControlHighlight">@color/colorHighlight</item>
+
+        <!-- Windows Properties -->
+        <item name="android:windowNoTitle">false</item>
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+        <item name="android:windowAnimationStyle">@style/InputDialogTheme.Animation</item>
+
+    </style>
+
+    <!-- Dark Theme Variant -->
+    <style name="InputDialogTheme.Dark" parent="Theme.AppCompat.Dialog">
 
         <!-- Windows Properties -->
         <item name="android:windowNoTitle">false</item>
@@ -83,6 +131,10 @@
     <!-- Passcode Radio Buttons -->
     <style name="PasscodeRadioButton" parent="Widget.AppCompat.CompoundButton.RadioButton">
         <item name="buttonTint">@color/colorPrimary</item>
+    </style>
+
+    <style name="PasscodeRadioButton.Dark" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="buttonTint">@color/colorWhite</item>
     </style>
 
     <style name="PasscodeRadioButtonError" parent="Widget.AppCompat.CompoundButton.RadioButton">

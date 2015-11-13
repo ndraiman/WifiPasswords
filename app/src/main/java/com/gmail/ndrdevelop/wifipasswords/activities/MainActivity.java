@@ -1,12 +1,12 @@
 package com.gmail.ndrdevelop.wifipasswords.activities;
 
 import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -31,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (MyApplication.sIsDark == 1) {
+            setTheme(R.style.AppTheme_Dark);
+        }
         super.onCreate(savedInstanceState);
 
         //Set Activity Transition - Lollipop+
@@ -96,8 +99,15 @@ public class MainActivity extends AppCompatActivity {
         //Dialog to confirm Exit
 
         String[] buttons = getResources().getStringArray(R.array.dialog_exit_buttons);
+        AlertDialog.Builder builder;
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
+        //Choose theme
+        if (MyApplication.sIsDark == 0) {
+            builder = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
+        } else {
+            builder = new AlertDialog.Builder(this, R.style.AlertDialogTheme_Dark);
+        }
+
         builder.setTitle(R.string.dialog_exit_title)
                 .setMessage(R.string.dialog_exit_message)
                 .setPositiveButton(buttons[0], (dialog, which) -> {
@@ -191,8 +201,14 @@ public class MainActivity extends AppCompatActivity {
 
                     mWifiListFragment.toggleNoPassword();
 
+                } else if (resultCode == RequestCodes.DARK_THEME) {
+                    finish();
+                    final Intent intent = getIntent();
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | IntentCompat.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
                 }
                 break;
+
         }
     }
 

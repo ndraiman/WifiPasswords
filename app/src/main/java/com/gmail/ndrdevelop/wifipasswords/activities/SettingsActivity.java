@@ -3,6 +3,7 @@ package com.gmail.ndrdevelop.wifipasswords.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -34,6 +35,9 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (MyApplication.sIsDark == 1) {
+            setTheme(R.style.AppTheme_Dark);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
@@ -197,8 +201,6 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
             }
 
-            //Summary to Value
-            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_path_manual_key)));
         }
 
 
@@ -240,6 +242,15 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 return true;
             });
 
+            findPreference(getString(R.string.pref_dark_theme_key)).setOnPreferenceClickListener(preference -> {
+                MyApplication.darkTheme((CheckBoxPreference)preference);
+                getActivity().setResult(RequestCodes.DARK_THEME);
+                getActivity().finish();
+                return true;
+            });
+
+            //Summary to Value
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_path_manual_key)));
         }
 
 
@@ -341,7 +352,13 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
             String[] buttons = getResources().getStringArray(R.array.dialog_warning_reset_buttons);
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+            AlertDialog.Builder builder;
+
+            if (MyApplication.sIsDark == 0) {
+                builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+            } else {
+                builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme_Dark);
+            }
 
             //Send Result Codes to target fragment according to button clicked
             builder.setMessage(R.string.dialog_warning_reset_message)

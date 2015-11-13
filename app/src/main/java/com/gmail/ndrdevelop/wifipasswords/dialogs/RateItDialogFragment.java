@@ -70,11 +70,11 @@ public class RateItDialogFragment extends DialogFragment {
                     getSharedPreferences(getActivity()).edit().putBoolean(DISABLED, true).commit();
                     dismiss();
                 })
-                .setNeutralButton(R.string.dialog_rate_button_remindlater, (dialog, which) -> {
+                .setNeutralButton(R.string.dialog_rate_button_never, (dialog, which) -> {
+                    getSharedPreferences(getActivity()).edit().putBoolean(DISABLED, true).commit();
                     dismiss();
                 })
-                .setNegativeButton(R.string.dialog_rate_button_never, (dialog, which) -> {
-                    getSharedPreferences(getActivity()).edit().putBoolean(DISABLED, true).commit();
+                .setNegativeButton(R.string.dialog_rate_button_remindlater, (dialog, which) -> {
                     dismiss();
                 }).create();
     }

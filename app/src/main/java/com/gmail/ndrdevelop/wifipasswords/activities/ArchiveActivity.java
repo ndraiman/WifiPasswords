@@ -71,6 +71,9 @@ public class ArchiveActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (MyApplication.sIsDark == 1) {
+            setTheme(R.style.AppTheme_Dark);
+        }
         super.onCreate(savedInstanceState);
 
         //Set Activity Transition - Lollipop+
@@ -327,7 +330,13 @@ public class ArchiveActivity extends AppCompatActivity {
                         //show Delete confirmation Dialog
                         String[] buttons = getResources().getStringArray(R.array.dialog_delete_buttons);
 
-                        AlertDialog.Builder builder = new AlertDialog.Builder(ArchiveActivity.this, R.style.DeleteDialogTheme);
+                        AlertDialog.Builder builder;
+
+                        if (MyApplication.sIsDark == 0) {
+                            builder = new AlertDialog.Builder(ArchiveActivity.this, R.style.DeleteDialogTheme);
+                        } else {
+                            builder = new AlertDialog.Builder(ArchiveActivity.this, R.style.DeleteDialogTheme_Dark);
+                        }
 
                         builder.setMessage(R.string.dialog_delete_message)
                                 .setTitle(R.string.dialog_delete_title)

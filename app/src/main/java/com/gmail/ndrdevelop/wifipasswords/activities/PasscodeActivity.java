@@ -76,9 +76,17 @@ public class PasscodeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (MyApplication.sIsDark == 1) {
+            setTheme(R.style.AppTheme_Dark);
+        }
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_passcode);
+        if (MyApplication.sIsDark == 0) {
+            setContentView(R.layout.activity_passcode);
+        } else {
+            setContentView(R.layout.activity_passcode_dark);
+        }
+
         ButterKnife.bind(this);
 
         mRequestCode = getIntent().getIntExtra(MyApplication.PASSCODE_REQUEST_CODE, RequestCodes.PASSCODE_ACTIVITY);
@@ -347,7 +355,12 @@ public class PasscodeActivity extends AppCompatActivity {
                 showErrorRadioButtons(false);
 
                 mLogo.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.passcode_logo, getTheme()));
-                mDescription.setTextColor(ContextCompat.getColor(PasscodeActivity.this, R.color.colorPrimary));
+
+                if (MyApplication.sIsDark == 0) {
+                    mDescription.setTextColor(ContextCompat.getColor(PasscodeActivity.this, R.color.colorPrimary));
+                } else {
+                    mDescription.setTextColor(ContextCompat.getColor(PasscodeActivity.this, R.color.colorWhite));
+                }
 
                 if(mAttemptNum == ATTEMPT_CHANGE) {
                     mDescription.setText(R.string.passcode_description_old);

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.gmail.ndrdevelop.wifipasswords.R;
 import com.gmail.ndrdevelop.wifipasswords.activities.IntroActivity;
+import com.gmail.ndrdevelop.wifipasswords.extras.MyApplication;
 
 import java.util.List;
 
@@ -54,8 +55,14 @@ public class AboutDialogFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         Activity parent = getActivity();
+        AlertDialog.Builder builder;
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(parent, R.style.AlertDialogTheme);
+        //Choose theme
+        if (MyApplication.sIsDark == 1) {
+            builder = new AlertDialog.Builder(parent, R.style.AlertDialogTheme_Dark);
+        } else {
+            builder = new AlertDialog.Builder(parent, R.style.AlertDialogTheme);
+        }
 
         View helpDialogLayout = LayoutInflater.from(parent).inflate(R.layout.dialog_about, null);
 

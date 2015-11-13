@@ -53,7 +53,6 @@
     <string name="snackbar_wifi_no_password_removed">Wifi without passwords removed</string>
     <string name="snackbar_move_to_top">Wifi Passwords moved to top</string>
 
-
     <!--**********************-->
     <!-- Content Descriptions -->
     <!--**********************-->
@@ -92,7 +91,7 @@
     <!-- General Preferences -->
     <!--*********************-->
     <string name="pref_category_general">General</string>
-    <string name="pref_category_behavior">Behavior</string>
+    <string name="pref_category_behavior">Appearance &amp; Behavior</string>
     <string name="pref_category_security">Security</string>
     <string name="pref_category_default">Reset to Default</string>
 
@@ -128,7 +127,9 @@
     <string name="pref_show_no_password_key" translateable="false">pref_show_no_password</string>
     <string name="pref_show_no_password_title">Show WiFi without passwords</string>
 
-
+    <string name="pref_dark_theme_key">pref_dark_theme</string>
+    <string name="pref_dark_theme_title">Dark Theme</string>
+    <string name="pref_dark_theme_summary">Cause the app to restart &amp; apply theme</string>
 
     <!--**********************-->
     <!-- Passcode Preferences -->
@@ -244,8 +245,8 @@
     <string name="dialog_rate_title">Rate Wifi Passwords</string>
     <string name="dialog_rate_message">If you enjoy using this app, please take a moment to rate it.\nit won\'t take more than a minute.\nThanks for your support.</string>
     <string name="dialog_rate_button_positive">Rate now</string>
-    <string name="dialog_rate_button_remindlater">No, thanks</string>
-    <string name="dialog_rate_button_never">Remind later</string>
+    <string name="dialog_rate_button_remindlater">Remind later</string>
+    <string name="dialog_rate_button_never">No, thanks</string>
 
 
     <!--*******************-->

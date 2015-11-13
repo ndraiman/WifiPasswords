@@ -3,8 +3,10 @@ package com.gmail.ndrdevelop.wifipasswords.extras;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.CheckBoxPreference;
 import android.preference.PreferenceManager;
 
+import com.gmail.ndrdevelop.wifipasswords.R;
 import com.gmail.ndrdevelop.wifipasswords.database.PasswordDB;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -26,6 +28,8 @@ public class MyApplication extends Application {
 
     public static final String NO_PASSWORD_TEXT = "no password";
 
+    public static int sIsDark;
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -35,6 +39,12 @@ public class MyApplication extends Application {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mPasscodeActivated = sharedPreferences.getBoolean(PASSCODE_STATE, false);
         mAppWentBackground = true;
+
+        if(sharedPreferences.getBoolean(getString(R.string.pref_dark_theme_key), false)) {
+            sIsDark = 1;
+        } else {
+            sIsDark = 0;
+        }
     }
 
     public static MyApplication getInstance() {
@@ -58,5 +68,13 @@ public class MyApplication extends Application {
             mPasswordDB.close();
         }
 
+    }
+
+    public static void darkTheme(CheckBoxPreference preference) {
+        if(preference.isChecked()) {
+            sIsDark = 1;
+        } else {
+            sIsDark = 0;
+        }
     }
 }

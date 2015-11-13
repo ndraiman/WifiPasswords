@@ -8,6 +8,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
 import com.gmail.ndrdevelop.wifipasswords.R;
+import com.gmail.ndrdevelop.wifipasswords.extras.MyApplication;
 import com.gmail.ndrdevelop.wifipasswords.extras.RequestCodes;
 
 
@@ -42,7 +43,14 @@ public class CustomAlertDialogFragment extends DialogFragment {
         String message = bundle.getString(MESSAGE_KEY);
         String[] buttons = bundle.getStringArray(BUTTONS_KEY);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+        AlertDialog.Builder builder;
+
+        if (MyApplication.sIsDark == 1) {
+            builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme_Dark);
+        } else {
+            builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
+        }
+
         builder.setMessage(message)
                 .setTitle(title);
 

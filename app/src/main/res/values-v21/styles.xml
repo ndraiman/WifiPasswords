@@ -5,4 +5,8 @@
         <item name="android:alertDialogTheme">@style/AlertDialogTheme</item>
     </style>
 
+    <style name="AppTheme.Dark" parent="AppTheme.Dark.Base">
+        <item name="android:alertDialogTheme">@style/AlertDialogTheme.Dark</item>
+    </style>
+
 </resources>
