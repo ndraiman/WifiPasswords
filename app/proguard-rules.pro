@@ -28,3 +28,7 @@
 -keepclasseswithmembernames class * {
     @butterknife.* <methods>;
 }
+
+-keep class com.crashlytics.** { *; }
+-keep class com.crashlytics.android.**
+-keepattributes SourceFile,LineNumberTable

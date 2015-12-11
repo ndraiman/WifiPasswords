@@ -29,6 +29,10 @@
         <activity
             android:name="com.gmail.ndrdevelop.wifipasswords.activities.PasscodeActivity"
             android:label="@string/activity_title_passcode" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="06f213f31a8be7b286366ad575d0b66761422192" />
     </application>
 
+    <uses-permission android:name="android.permission.INTERNET" />
 </manifest>

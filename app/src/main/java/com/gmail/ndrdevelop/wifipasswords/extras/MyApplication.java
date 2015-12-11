@@ -3,13 +3,18 @@ package com.gmail.ndrdevelop.wifipasswords.extras;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.preference.CheckBoxPreference;
 import android.preference.PreferenceManager;
 
+import com.crashlytics.android.Crashlytics;
 import com.gmail.ndrdevelop.wifipasswords.R;
 import com.gmail.ndrdevelop.wifipasswords.database.PasswordDB;
 
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import io.fabric.sdk.android.Fabric;
 
 public class MyApplication extends Application {
 
@@ -21,6 +26,7 @@ public class MyApplication extends Application {
     public static boolean mAppWentBackground;
 
     public static final String FIRST_LAUNCH = "first_launch";
+    public static final String DEVICE_UUID = "uuid";
 
     public static final String PASSCODE_STATE = "passcode_state";
     public static final String PASSCODE_KEY = "passcode_key";
@@ -29,6 +35,7 @@ public class MyApplication extends Application {
     public static final String NO_PASSWORD_TEXT = "no password";
 
     public static int sIsDark;
+    public static String myUUID;
 
     @Override
     public void onCreate() {
@@ -37,6 +44,16 @@ public class MyApplication extends Application {
         mPasswordDB = new PasswordDB(this);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        if(sharedPreferences.getBoolean(FIRST_LAUNCH, true)) {
+            generateUUID();
+        } else {
+            myUUID = sharedPreferences.getString(DEVICE_UUID, "");
+        }
+
+        Fabric.with(this, new Crashlytics());
+        logUser();
+
         mPasscodeActivated = sharedPreferences.getBoolean(PASSCODE_STATE, false);
         mAppWentBackground = true;
 
@@ -46,6 +63,7 @@ public class MyApplication extends Application {
             sIsDark = 0;
         }
     }
+
 
     public static MyApplication getInstance() {
         return sInstance;
@@ -77,4 +95,19 @@ public class MyApplication extends Application {
             sIsDark = 0;
         }
     }
+
+    private void generateUUID() {
+
+        myUUID = UUID.randomUUID().toString();
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putString(DEVICE_UUID, myUUID).apply();
+
+    }
+
+    private void logUser() {
+
+        Crashlytics.setUserIdentifier(myUUID);
+        Crashlytics.setUserName(Build.DEVICE);
+//        Crashlytics.setUserEmail("user@fabric.io");
+    }
+
 }
