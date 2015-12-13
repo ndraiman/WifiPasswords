@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 
-import com.gmail.ndrdevelop.wifipasswords.extras.MyApplication;
 import com.gmail.ndrdevelop.wifipasswords.fragments.WifiListFragment;
 
 

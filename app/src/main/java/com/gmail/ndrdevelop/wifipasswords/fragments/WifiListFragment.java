@@ -21,7 +21,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -46,6 +45,7 @@ import com.gmail.ndrdevelop.wifipasswords.dialogs.CustomAlertDialogListener;
 import com.gmail.ndrdevelop.wifipasswords.dialogs.InputDialogFragment;
 import com.gmail.ndrdevelop.wifipasswords.dialogs.InputDialogListener;
 import com.gmail.ndrdevelop.wifipasswords.dialogs.RateItDialogFragment;
+import com.gmail.ndrdevelop.wifipasswords.extras.AutoUpdateList;
 import com.gmail.ndrdevelop.wifipasswords.extras.MyApplication;
 import com.gmail.ndrdevelop.wifipasswords.extras.RequestCodes;
 import com.gmail.ndrdevelop.wifipasswords.pojo.WifiEntry;
@@ -54,7 +54,6 @@ import com.gmail.ndrdevelop.wifipasswords.recycler.MyTouchHelperCallback;
 import com.gmail.ndrdevelop.wifipasswords.recycler.RecyclerTouchListener;
 import com.gmail.ndrdevelop.wifipasswords.recycler.WifiListAdapter;
 import com.gmail.ndrdevelop.wifipasswords.recycler.WifiListLoadedListener;
-import com.gmail.ndrdevelop.wifipasswords.extras.AutoUpdateList;
 import com.gmail.ndrdevelop.wifipasswords.task.TaskLoadWifiEntries;
 
 import java.util.ArrayList;
@@ -199,7 +198,6 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     @Override
     public void onResume() {
         super.onResume();
-        Log.d("test", "onResume: called");
 
         RateItDialogFragment.show(getActivity(), getFragmentManager());
         AutoUpdateList.update(getActivity(), getFragmentManager());
@@ -334,7 +332,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("test", "onActivityResult: called");
+
         switch (requestCode) {
 
 
