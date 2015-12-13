@@ -35,7 +35,8 @@ public class MyApplication extends Application {
     public static final String NO_PASSWORD_TEXT = "no password";
 
     public static int sIsDark;
-    public static String myUUID;
+    public static String sMyUUID;
+    public static boolean sShouldAutoUpdateList;
 
     @Override
     public void onCreate() {
@@ -48,7 +49,7 @@ public class MyApplication extends Application {
         if(sharedPreferences.getBoolean(FIRST_LAUNCH, true)) {
             generateUUID();
         } else {
-            myUUID = sharedPreferences.getString(DEVICE_UUID, "");
+            sMyUUID = sharedPreferences.getString(DEVICE_UUID, "");
         }
 
         Fabric.with(this, new Crashlytics());
@@ -56,6 +57,7 @@ public class MyApplication extends Application {
 
         mPasscodeActivated = sharedPreferences.getBoolean(PASSCODE_STATE, false);
         mAppWentBackground = true;
+        sShouldAutoUpdateList = true;
 
         if(sharedPreferences.getBoolean(getString(R.string.pref_dark_theme_key), false)) {
             sIsDark = 1;
@@ -98,14 +100,14 @@ public class MyApplication extends Application {
 
     private void generateUUID() {
 
-        myUUID = UUID.randomUUID().toString();
-        PreferenceManager.getDefaultSharedPreferences(this).edit().putString(DEVICE_UUID, myUUID).apply();
+        sMyUUID = UUID.randomUUID().toString();
+        PreferenceManager.getDefaultSharedPreferences(this).edit().putString(DEVICE_UUID, sMyUUID).apply();
 
     }
 
     private void logUser() {
 
-        Crashlytics.setUserIdentifier(myUUID);
+        Crashlytics.setUserIdentifier(sMyUUID);
         Crashlytics.setUserName(Build.DEVICE);
 //        Crashlytics.setUserEmail("user@fabric.io");
     }

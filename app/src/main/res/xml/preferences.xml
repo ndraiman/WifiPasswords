@@ -48,6 +48,15 @@
             android:order="310"
             android:title="@string/pref_show_no_password_title" />
 
+        <ListPreference
+            android:defaultValue="@string/pref_auto_update_default"
+            android:entries="@array/pref_auto_update_list_modes"
+            android:entryValues="@array/pref_auto_update_list_values"
+            android:key="@string/pref_auto_update_key"
+            android:order="320"
+            android:summary="@string/pref_auto_update_default_summary"
+            android:title="@string/pref_auto_update_title"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_category_security">

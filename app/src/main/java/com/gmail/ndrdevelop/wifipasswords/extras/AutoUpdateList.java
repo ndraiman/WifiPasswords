@@ -1,0 +1,57 @@
+package com.gmail.ndrdevelop.wifipasswords.extras;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentManager;
+
+import com.gmail.ndrdevelop.wifipasswords.extras.MyApplication;
+import com.gmail.ndrdevelop.wifipasswords.fragments.WifiListFragment;
+
+
+public class AutoUpdateList {
+
+    private static final String AUTO_UPDATE_KEY = "auto_update_list";
+    private static final String DEFAULT_UPDATE = "1";
+    private static final String LAST_UPDATE = "last_update";
+    private static final int DISABLED = -1;
+
+
+    public static void update(Context context, FragmentManager fragmentManager) {
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+
+        if(!MyApplication.sShouldAutoUpdateList)
+            return;
+
+
+        long currentTime = System.currentTimeMillis();
+        long lastUpdateTime = sharedPreferences.getLong(LAST_UPDATE, 0);
+
+        if(lastUpdateTime == 0) {
+            lastUpdateTime = currentTime;
+            editor.putLong(LAST_UPDATE, lastUpdateTime).apply();
+        }
+
+        int updateOption = Integer.parseInt(sharedPreferences.getString(AUTO_UPDATE_KEY, DEFAULT_UPDATE));
+
+
+        if(updateOption != DISABLED) {
+            MyApplication.sShouldAutoUpdateList = false;
+
+            if(currentTime > lastUpdateTime + getMillisUntilPrompt(updateOption)) {
+
+                editor.putLong(LAST_UPDATE, System.currentTimeMillis()).apply();
+                ((WifiListFragment) fragmentManager.findFragmentByTag("main_fragment_tag")).loadFromFile(false);
+            }
+
+        }
+    }
+
+
+    private static int getMillisUntilPrompt(int days) {
+        return days * 24 * 60 * 60 * 1000;
+    }
+}

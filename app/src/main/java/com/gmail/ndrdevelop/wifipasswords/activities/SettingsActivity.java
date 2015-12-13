@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -168,6 +169,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
                         preference.setSummary(stringValue);
 
+                    } else if (preference instanceof ListPreference) {
+
+                        int index = ((ListPreference) preference).findIndexOfValue(stringValue);
+                        preference.setSummary(((ListPreference) preference).getEntries()[index]);
                     }
 
                     return true;
@@ -251,6 +256,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
             //Summary to Value
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_path_manual_key)));
+            bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_auto_update_key)));
         }
 
 

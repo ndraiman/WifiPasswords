@@ -39,7 +39,7 @@
     <!--*******************-->
     <!-- Snackbar & Toasts -->
     <!--*******************-->
-    <string name="snackbar_wifi_copy">Wifi Password Copied to Clipboard</string>
+    <string name="snackbar_wifi_copy">Wifi info Copied to Clipboard</string>
     <string name="snackbar_dismiss">Dismiss</string>
     <string name="snackbar_undo">Undo</string>
     <string name="snackbar_load_from_file">Updating list</string>
@@ -130,6 +130,21 @@
     <string name="pref_dark_theme_key">pref_dark_theme</string>
     <string name="pref_dark_theme_title">Dark Theme</string>
     <string name="pref_dark_theme_summary">Cause the app to restart &amp; apply theme</string>
+
+    <string name="pref_auto_update_key">auto_update_list</string>
+    <string name="pref_auto_update_title">Update list on app launch</string>
+    <string name="pref_auto_update_default">1</string>
+    <string name="pref_auto_update_default_summary">Once a day</string>
+    <string-array name="pref_auto_update_list_modes">
+        <item>Disabled</item>
+        <item>Once a day</item>
+        <item>Once a week</item>
+    </string-array>
+    <string-array name="pref_auto_update_list_values">
+        <item>-1</item>
+        <item>1</item>
+        <item>7</item>
+    </string-array>
 
     <!--**********************-->
     <!-- Passcode Preferences -->

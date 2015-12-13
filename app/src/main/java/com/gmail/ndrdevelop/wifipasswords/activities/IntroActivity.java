@@ -4,7 +4,6 @@ package com.gmail.ndrdevelop.wifipasswords.activities;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.content.ContextCompat;
 
 import com.github.paolorotolo.appintro.AppIntro2;
@@ -59,7 +58,7 @@ public class IntroActivity extends AppIntro2 {
 
     @Override
     public void onDonePressed() {
-        PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(MyApplication.FIRST_LAUNCH, false).apply();
+//        PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(MyApplication.FIRST_LAUNCH, false).apply();
         setResult(RESULT_OK);
         finish();
     }
