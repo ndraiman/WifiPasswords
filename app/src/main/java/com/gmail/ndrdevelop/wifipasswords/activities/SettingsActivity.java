@@ -14,6 +14,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.gmail.ndrdevelop.wifipasswords.R;
 import com.gmail.ndrdevelop.wifipasswords.dialogs.AboutDialogFragment;
@@ -251,6 +252,11 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                 MyApplication.darkTheme((CheckBoxPreference)preference);
                 getActivity().setResult(RequestCodes.DARK_THEME);
                 getActivity().finish();
+                return true;
+            });
+
+            findPreference(getString(R.string.pref_crashlytics_optout_key)).setOnPreferenceClickListener(preference -> {
+                Toast.makeText(getActivity(), "Requires app restart to take effect", Toast.LENGTH_LONG).show();
                 return true;
             });
 

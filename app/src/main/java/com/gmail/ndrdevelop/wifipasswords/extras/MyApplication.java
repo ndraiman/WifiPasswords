@@ -46,14 +46,19 @@ public class MyApplication extends Application {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
+        //Generate UUID for use with Crashlytics
         if(sharedPreferences.getBoolean(FIRST_LAUNCH, true)) {
             generateUUID();
         } else {
             sMyUUID = sharedPreferences.getString(DEVICE_UUID, "");
         }
 
-        Fabric.with(this, new Crashlytics());
-        logUser();
+
+        //Check user opt-out of Crashlytics before initializing it
+        if(!sharedPreferences.getBoolean(getString(R.string.pref_crashlytics_optout_key), false)) {
+            Fabric.with(this, new Crashlytics());
+            logUser();
+        }
 
         mPasscodeActivated = sharedPreferences.getBoolean(PASSCODE_STATE, false);
         mAppWentBackground = true;

@@ -65,6 +65,12 @@
             android:key="@string/pref_header_passcode_key"
             android:title="@string/pref_header_passcode_title" />
 
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/pref_crashlytics_optout_key"
+            android:summary="@string/pref_crashlytics_optout_summary"
+            android:title="@string/pref_crashlytics_optout_title"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/pref_category_default">

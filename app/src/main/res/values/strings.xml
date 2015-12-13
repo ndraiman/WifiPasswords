@@ -92,7 +92,7 @@
     <!--*********************-->
     <string name="pref_category_general">General</string>
     <string name="pref_category_behavior">Appearance &amp; Behavior</string>
-    <string name="pref_category_security">Security</string>
+    <string name="pref_category_security">Privacy</string>
     <string name="pref_category_default">Reset to Default</string>
 
     <string name="pref_path_default" translateable="false">/data/misc/wifi/wpa_supplicant.conf</string>
@@ -145,6 +145,11 @@
         <item>1</item>
         <item>7</item>
     </string-array>
+
+
+    <string name="pref_crashlytics_optout_key">crashlytics_optout</string>
+    <string name="pref_crashlytics_optout_title">Disable anonymous crash reports</string>
+    <string name="pref_crashlytics_optout_summary">Sending crash reports help diagnose &amp; fix problems with the app, no private data is collected</string>
 
     <!--**********************-->
     <!-- Passcode Preferences -->
