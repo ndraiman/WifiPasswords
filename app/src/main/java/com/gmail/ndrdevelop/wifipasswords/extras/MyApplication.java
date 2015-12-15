@@ -62,7 +62,7 @@ public class MyApplication extends Application {
 
         mPasscodeActivated = sharedPreferences.getBoolean(PASSCODE_STATE, false);
         mAppWentBackground = true;
-        sShouldAutoUpdateList = true;
+        sShouldAutoUpdateList = !mPasscodeActivated;
 
         if(sharedPreferences.getBoolean(getString(R.string.pref_dark_theme_key), false)) {
             sIsDark = 1;

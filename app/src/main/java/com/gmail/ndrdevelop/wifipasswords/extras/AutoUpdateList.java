@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 
 import com.gmail.ndrdevelop.wifipasswords.R;
+import com.gmail.ndrdevelop.wifipasswords.activities.MainActivity;
 import com.gmail.ndrdevelop.wifipasswords.fragments.WifiListFragment;
 
 
@@ -18,13 +19,11 @@ public class AutoUpdateList {
 
     public static void update(Context context, FragmentManager fragmentManager) {
 
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-
-
         if(!MyApplication.sShouldAutoUpdateList)
             return;
 
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
 
         long currentTime = System.currentTimeMillis();
         long lastUpdateTime = sharedPreferences.getLong(LAST_UPDATE, 0);
@@ -42,7 +41,9 @@ public class AutoUpdateList {
             if(currentTime > lastUpdateTime + getMillisUntilPrompt(updateOption)) {
 
                 editor.putLong(LAST_UPDATE, System.currentTimeMillis()).apply();
-                ((WifiListFragment) fragmentManager.findFragmentByTag("main_fragment_tag")).loadFromFile(false);
+                ((WifiListFragment) fragmentManager
+                        .findFragmentByTag(MainActivity.WIFI_LIST_FRAGMENT_TAG))
+                        .loadFromFile(false);
             }
 
         }

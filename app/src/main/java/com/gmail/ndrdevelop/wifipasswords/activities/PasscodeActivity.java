@@ -114,6 +114,12 @@ public class PasscodeActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        MyApplication.sShouldAutoUpdateList = true;
+    }
 
     @Override
     public void onBackPressed() {
