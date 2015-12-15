@@ -122,19 +122,21 @@
 
     <string name="pref_share_warning_key" translateable="false">pref_share_warning</string>
     <string name="pref_share_warning_title_show">Show Share Warning</string>
-    <string name="pref_share_warning_summary">a warning before sharing wifi passwords</string>
+    <string name="pref_share_warning_summary">a warning before sharing WiFi passwords</string>
 
     <string name="pref_show_no_password_key" translateable="false">pref_show_no_password</string>
-    <string name="pref_show_no_password_title">Show WiFi without passwords</string>
+    <string name="pref_show_no_password_title">Show open WiFi networks</string>
+    <string name="pref_show_no_password_summary">list networks that don\'t have a password</string>
 
-    <string name="pref_dark_theme_key">pref_dark_theme</string>
+    <string name="pref_dark_theme_key" translateable="false">pref_dark_theme</string>
     <string name="pref_dark_theme_title">Dark Theme</string>
     <string name="pref_dark_theme_summary">Cause the app to restart &amp; apply theme</string>
 
-    <string name="pref_auto_update_key">auto_update_list</string>
-    <string name="pref_auto_update_title">Update list on app launch</string>
+    <string name="pref_auto_update_key" translateable="false">auto_update_list</string>
+    <string name="pref_auto_update_title">Auto-Update frequency</string>
     <string name="pref_auto_update_default">1</string>
-    <string name="pref_auto_update_default_summary">Once a day</string>
+    <string name="pref_auto_update_default_summary">Update WiFi list Once a day</string>
+    <string name="pref_auto_update_summary">Update Wifi list</string>
     <string-array name="pref_auto_update_list_modes">
         <item>Disabled</item>
         <item>Once a day</item>
@@ -147,7 +149,7 @@
     </string-array>
 
 
-    <string name="pref_crashlytics_optout_key">crashlytics_optout</string>
+    <string name="pref_crashlytics_optout_key" translateable="false">crashlytics_optout</string>
     <string name="pref_crashlytics_optout_title">Disable anonymous crash reports</string>
     <string name="pref_crashlytics_optout_summary">Sending crash reports help diagnose &amp; fix problems with the app, no private data is collected</string>
 

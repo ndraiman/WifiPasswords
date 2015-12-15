@@ -173,7 +173,16 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     } else if (preference instanceof ListPreference) {
 
                         int index = ((ListPreference) preference).findIndexOfValue(stringValue);
-                        preference.setSummary(((ListPreference) preference).getEntries()[index]);
+                        String summary = "";
+
+                        if(preference.getKey().equals(getString(R.string.pref_auto_update_key))) {
+                            String disabled = getResources().getStringArray(R.array.pref_auto_update_list_values)[0];
+                            if(!stringValue.equals(disabled))
+                                summary += getString(R.string.pref_auto_update_summary) + " - ";
+                        }
+
+                        summary += ((ListPreference) preference).getEntries()[index];
+                        preference.setSummary(summary);
                     }
 
                     return true;
