@@ -32,8 +32,8 @@ android {
         applicationId "com.gmail.ndrdevelop.wifipasswords"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 12
-        versionName "1.09"
+        versionCode 13
+        versionName "1.1"
     }
     buildTypes {
         release {

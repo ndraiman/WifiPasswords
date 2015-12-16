@@ -939,10 +939,10 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
             AlertDialog.Builder builder;
 
-            if (MyApplication.sIsDark == 0) {
-                builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
-            } else {
+            if (MyApplication.sIsDark) {
                 builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme_Dark);
+            } else {
+                builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
             }
 
             LayoutInflater inflater = LayoutInflater.from(getActivity());

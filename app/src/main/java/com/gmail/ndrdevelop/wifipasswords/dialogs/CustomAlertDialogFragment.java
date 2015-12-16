@@ -45,7 +45,7 @@ public class CustomAlertDialogFragment extends DialogFragment {
 
         AlertDialog.Builder builder;
 
-        if (MyApplication.sIsDark == 1) {
+        if (MyApplication.sIsDark) {
             builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme_Dark);
         } else {
             builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);

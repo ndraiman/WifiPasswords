@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (MyApplication.sIsDark == 1) {
+        if (MyApplication.sIsDark) {
             setTheme(R.style.AppTheme_Dark);
         }
         super.onCreate(savedInstanceState);
@@ -102,10 +102,10 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog.Builder builder;
 
         //Choose theme
-        if (MyApplication.sIsDark == 0) {
-            builder = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
-        } else {
+        if (MyApplication.sIsDark) {
             builder = new AlertDialog.Builder(this, R.style.AlertDialogTheme_Dark);
+        } else {
+            builder = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
         }
 
         builder.setTitle(R.string.dialog_exit_title)

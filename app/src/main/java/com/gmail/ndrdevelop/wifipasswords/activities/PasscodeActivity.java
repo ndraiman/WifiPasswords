@@ -76,15 +76,15 @@ public class PasscodeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (MyApplication.sIsDark == 1) {
+        if (MyApplication.sIsDark) {
             setTheme(R.style.AppTheme_Dark);
         }
         super.onCreate(savedInstanceState);
 
-        if (MyApplication.sIsDark == 0) {
-            setContentView(R.layout.activity_passcode);
-        } else {
+        if (MyApplication.sIsDark) {
             setContentView(R.layout.activity_passcode_dark);
+        } else {
+            setContentView(R.layout.activity_passcode);
         }
 
         ButterKnife.bind(this);
@@ -362,10 +362,10 @@ public class PasscodeActivity extends AppCompatActivity {
 
                 mLogo.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.passcode_logo, getTheme()));
 
-                if (MyApplication.sIsDark == 0) {
-                    mDescription.setTextColor(ContextCompat.getColor(PasscodeActivity.this, R.color.colorPrimary));
-                } else {
+                if (MyApplication.sIsDark) {
                     mDescription.setTextColor(ContextCompat.getColor(PasscodeActivity.this, R.color.colorWhite));
+                } else {
+                    mDescription.setTextColor(ContextCompat.getColor(PasscodeActivity.this, R.color.colorPrimary));
                 }
 
                 if(mAttemptNum == ATTEMPT_CHANGE) {

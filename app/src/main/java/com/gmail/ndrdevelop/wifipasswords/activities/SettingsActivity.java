@@ -37,7 +37,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (MyApplication.sIsDark == 1) {
+        if (MyApplication.sIsDark) {
             setTheme(R.style.AppTheme_Dark);
         }
         super.onCreate(savedInstanceState);
@@ -375,10 +375,10 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
 
             AlertDialog.Builder builder;
 
-            if (MyApplication.sIsDark == 0) {
-                builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
-            } else {
+            if (MyApplication.sIsDark) {
                 builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme_Dark);
+            } else {
+                builder = new AlertDialog.Builder(getActivity(), R.style.AlertDialogTheme);
             }
 
             //Send Result Codes to target fragment according to button clicked

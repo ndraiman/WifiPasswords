@@ -58,7 +58,7 @@ public class AboutDialogFragment extends DialogFragment {
         AlertDialog.Builder builder;
 
         //Choose theme
-        if (MyApplication.sIsDark == 1) {
+        if (MyApplication.sIsDark) {
             builder = new AlertDialog.Builder(parent, R.style.AlertDialogTheme_Dark);
         } else {
             builder = new AlertDialog.Builder(parent, R.style.AlertDialogTheme);

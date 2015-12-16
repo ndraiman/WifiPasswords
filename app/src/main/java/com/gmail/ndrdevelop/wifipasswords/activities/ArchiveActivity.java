@@ -71,7 +71,7 @@ public class ArchiveActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (MyApplication.sIsDark == 1) {
+        if (MyApplication.sIsDark) {
             setTheme(R.style.AppTheme_Dark);
         }
         super.onCreate(savedInstanceState);
@@ -332,10 +332,10 @@ public class ArchiveActivity extends AppCompatActivity {
 
                         AlertDialog.Builder builder;
 
-                        if (MyApplication.sIsDark == 0) {
-                            builder = new AlertDialog.Builder(ArchiveActivity.this, R.style.DeleteDialogTheme);
-                        } else {
+                        if (MyApplication.sIsDark) {
                             builder = new AlertDialog.Builder(ArchiveActivity.this, R.style.DeleteDialogTheme_Dark);
+                        } else {
+                            builder = new AlertDialog.Builder(ArchiveActivity.this, R.style.DeleteDialogTheme);
                         }
 
                         builder.setMessage(R.string.dialog_delete_message)

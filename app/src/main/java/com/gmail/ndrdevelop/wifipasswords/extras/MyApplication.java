@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.CheckBoxPreference;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 
 import com.crashlytics.android.Crashlytics;
 import com.gmail.ndrdevelop.wifipasswords.R;
@@ -34,7 +35,7 @@ public class MyApplication extends Application {
 
     public static final String NO_PASSWORD_TEXT = "no password";
 
-    public static int sIsDark;
+    public static boolean sIsDark;
     public static String sMyUUID;
     public static boolean sShouldAutoUpdateList;
 
@@ -64,11 +65,7 @@ public class MyApplication extends Application {
         mAppWentBackground = true;
         sShouldAutoUpdateList = !mPasscodeActivated;
 
-        if(sharedPreferences.getBoolean(getString(R.string.pref_dark_theme_key), false)) {
-            sIsDark = 1;
-        } else {
-            sIsDark = 0;
-        }
+        sIsDark = sharedPreferences.getBoolean(getString(R.string.pref_dark_theme_key), false);
     }
 
 
@@ -96,11 +93,7 @@ public class MyApplication extends Application {
     }
 
     public static void darkTheme(CheckBoxPreference preference) {
-        if(preference.isChecked()) {
-            sIsDark = 1;
-        } else {
-            sIsDark = 0;
-        }
+        sIsDark = preference.isChecked();
     }
 
     private void generateUUID() {
@@ -114,7 +107,7 @@ public class MyApplication extends Application {
 
         Crashlytics.setUserIdentifier(sMyUUID);
         Crashlytics.setUserName(Build.DEVICE);
-//        Crashlytics.setUserEmail("user@fabric.io");
+        Crashlytics.setUserEmail(Settings.Secure.ANDROID_ID);
     }
 
 }
