@@ -159,6 +159,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
         private Preference mPasscodeChange;
 
 
+        /***** Bind Summary to value - Listener *****/
         private Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener
                 = (preference, newValue) -> {
 
@@ -265,7 +266,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             });
 
             findPreference(getString(R.string.pref_crashlytics_optout_key)).setOnPreferenceClickListener(preference -> {
-                Toast.makeText(getActivity(), "Requires app restart to take effect", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), getString(R.string.toast_crashlytics_opt_out), Toast.LENGTH_LONG).show();
                 return true;
             });
 
@@ -274,7 +275,7 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
             bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_auto_update_key)));
         }
 
-
+        //Helper method for onCreate
         public void loadPasscodePreferences() {
 
             mToolbar.setTitle(getString(R.string.pref_passcode_toolbar_title));

@@ -6,6 +6,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
@@ -35,6 +36,8 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
 import com.gmail.ndrdevelop.wifipasswords.R;
 import com.gmail.ndrdevelop.wifipasswords.activities.IntroActivity;
 import com.gmail.ndrdevelop.wifipasswords.activities.MainActivity;
@@ -543,6 +546,8 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
     public void hideFAB(boolean hide) {
 
+
+
         if (hide) {
             mFAB.hide();
             mFAB.setEnabled(false);
@@ -657,7 +662,8 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                 mAdapter.toggleSelection(position);
                 mRecyclerView.smoothScrollToPosition(position);
 
-                if (mActionMode != null || mSortModeEnabled) {
+                if (mActionMode != null) {
+                    Toast.makeText(getActivity(), "Tap once to select", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(mActionModeCallback);
@@ -976,6 +982,13 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     //TaskLoadWifiEntries creating PathError Dialog.
     @Override
     public void showPathErrorDialog() {
+
+        Answers.getInstance().logCustom(new CustomEvent("PathError")
+                .putCustomAttribute("device", Build.DEVICE)
+                .putCustomAttribute("model", Build.MODEL)
+                .putCustomAttribute("manufacturer", Build.MANUFACTURER)
+                .putCustomAttribute("id", "99"));
+
 
         String title = getString(R.string.dialog_error_path_title);
         String message = getString(R.string.dialog_error_path_message);

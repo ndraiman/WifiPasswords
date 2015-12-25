@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.CheckBoxPreference;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 
 import com.crashlytics.android.Crashlytics;
 import com.gmail.ndrdevelop.wifipasswords.R;
@@ -107,7 +106,7 @@ public class MyApplication extends Application {
 
         Crashlytics.setUserIdentifier(sMyUUID);
         Crashlytics.setUserName(Build.DEVICE);
-        Crashlytics.setUserEmail(Settings.Secure.ANDROID_ID);
+        Crashlytics.setUserEmail(Build.MODEL);
     }
 
 }

@@ -53,6 +53,8 @@
     <string name="snackbar_wifi_no_password_removed">Wifi without passwords removed</string>
     <string name="snackbar_move_to_top">Wifi Passwords moved to top</string>
 
+    <string name="toast_crashlytics_opt_out">Requires app restart to take effect</string>
+
     <!--**********************-->
     <!-- Content Descriptions -->
     <!--**********************-->
