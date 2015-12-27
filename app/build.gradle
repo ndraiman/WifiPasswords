@@ -32,8 +32,8 @@ android {
         applicationId "com.gmail.ndrdevelop.wifipasswords"
         minSdkVersion 16
         targetSdkVersion 23
-        versionCode 13
-        versionName "1.1"
+        versionCode 14
+        versionName "1.11"
     }
     buildTypes {
         release {
@@ -51,9 +51,9 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:recyclerview-v7:23.1.1'
-    compile 'com.android.support:design:23.0.1'
+    compile 'com.android.support:design:23.1.1'
     compile 'com.android.support:cardview-v7:23.1.1'
     compile 'me.zhanghai.android.materialprogressbar:library:1.1.4'
     compile 'com.github.paolorotolo:appintro:3.2.0'

@@ -13,8 +13,6 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorControlHighlight">@color/colorHighlight</item>
-        <item name="android:textColorPrimary">@color/colorPrimaryText</item>
-        <item name="android:textColorSecondary">@color/colorSecondaryText</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
 
         <!-- Context Action Mode will Overlay Toolbar -->
@@ -31,8 +29,6 @@
         <item name="colorPrimaryDark">@color/Dark.colorPrimaryDark</item>
         <item name="colorAccent">@color/Dark.colorAccent</item>
         <item name="colorControlHighlight">@color/colorHighlight</item>
-        <item name="android:textColorPrimary">@color/Dark.colorPrimaryText</item>
-        <item name="android:textColorSecondary">@color/Dark.colorSecondaryText</item>
         <item name="android:colorBackground">@color/Dark.colorBackground</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat</item>
 
