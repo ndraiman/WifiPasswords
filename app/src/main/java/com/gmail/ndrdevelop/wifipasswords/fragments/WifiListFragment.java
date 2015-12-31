@@ -663,7 +663,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                 mRecyclerView.smoothScrollToPosition(position);
 
                 if (mActionMode != null) {
-                    Toast.makeText(getActivity(), "Tap once to select", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), R.string.toast_cab_double_tap, Toast.LENGTH_SHORT).show();
                     return;
                 }
                 mActionMode = ((AppCompatActivity) getActivity()).startSupportActionMode(mActionModeCallback);
@@ -672,7 +672,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
             @Override
             public void onDoubleTap(View view, int position) {
 
-                if (mActionModeEnabled) {
+                if (mActionModeEnabled || position >= mListWifi.size()) {
                     return;
                 }
                 WifiEntry entry = mListWifi.get(position);
@@ -1003,6 +1003,11 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
 
     public void showRootErrorDialog() {
+
+        if(getActivity() == null || !isAdded()) {
+            Toast.makeText(MyApplication.getAppContext(), R.string.dialog_error_root_title, Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         String title = getString(R.string.dialog_error_root_title);
         String message = getString(R.string.dialog_error_root_message);

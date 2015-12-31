@@ -2,6 +2,7 @@ package com.gmail.ndrdevelop.wifipasswords.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
@@ -16,6 +17,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.crashlytics.android.answers.Answers;
+import com.crashlytics.android.answers.CustomEvent;
 import com.gmail.ndrdevelop.wifipasswords.R;
 import com.gmail.ndrdevelop.wifipasswords.dialogs.AboutDialogFragment;
 import com.gmail.ndrdevelop.wifipasswords.extras.AppCompatPreferenceActivity;
@@ -170,6 +173,12 @@ public class SettingsActivity extends AppCompatPreferenceActivity {
                     if (preference instanceof EditTextPreference) {
 
                         preference.setSummary(stringValue);
+
+                        Answers.getInstance().logCustom(new CustomEvent("Manual Path")
+                                .putCustomAttribute("device", Build.DEVICE)
+                                .putCustomAttribute("model", Build.MODEL)
+                                .putCustomAttribute("manufacturer", Build.MANUFACTURER)
+                                .putCustomAttribute("path", stringValue));
 
                     } else if (preference instanceof ListPreference) {
 
