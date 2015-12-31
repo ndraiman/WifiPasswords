@@ -411,7 +411,12 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
             updateDatabase();
 
         } else {
-            mAdapter.setWifiList(new ArrayList<>());
+            mListWifi = new ArrayList<>();
+            new Thread(() -> {
+                MyApplication.getWritableDatabase().purgeDatabase();
+                MyApplication.closeDatabase();
+            }).start();
+            mAdapter.setWifiList(mListWifi);
             mProgressBar.setVisibility(View.VISIBLE); //Show Progress Bar
         }
 
