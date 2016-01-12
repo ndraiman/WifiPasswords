@@ -30,10 +30,10 @@ android {
     buildToolsVersion "23.0.2"
     defaultConfig {
         applicationId "com.gmail.ndrdevelop.wifipasswords"
-        minSdkVersion 16
+        minSdkVersion 17
         targetSdkVersion 23
         versionCode 16
-        versionName "1.13"
+        versionName "1.132"
     }
     buildTypes {
         release {

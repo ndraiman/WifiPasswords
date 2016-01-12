@@ -724,7 +724,7 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
                 final ArrayList<WifiEntry> selectedEntries = new ArrayList<>();
                 final ArrayList<Integer> selectedItems = mAdapter.getSelectedItems();
 
-                if (selectedItems.size() == 0) {
+                if (selectedItems.size() == 0 || mListWifi.size() == 0) {
                     Toast.makeText(getActivity(), R.string.toast_nothing_selected, Toast.LENGTH_SHORT).show();
                     return false;
                 }
@@ -919,6 +919,9 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
     private void showAddWifiDialog() {
 
+        if(getActivity() == null || !isAdded())
+            return;
+
         InputDialogFragment fragment = InputDialogFragment
                 .getInstance(InputDialogFragment.INPUT_ENTRY, null);
         fragment.setTargetFragment(this, RequestCodes.DIALOG_ADD_CODE);
@@ -928,6 +931,9 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
     @Override
     public void onSubmitTagDialog(String tag, ArrayList<WifiEntry> listWifi, ArrayList<Integer> positions) {
+
+        if(getActivity() == null || !isAdded())
+            return;
 
         for (int i = 0; i < positions.size(); i++) {
 
@@ -942,6 +948,9 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
 
 
     private void showShareDialog(final ArrayList<WifiEntry> listWifi) {
+
+        if(getActivity() == null || !isAdded())
+            return;
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         boolean mShowShareDialog = sharedPreferences.getBoolean(getString(R.string.pref_share_warning_key), true);
@@ -987,6 +996,11 @@ public class WifiListFragment extends Fragment implements WifiListLoadedListener
     //TaskLoadWifiEntries creating PathError Dialog.
     @Override
     public void showPathErrorDialog() {
+
+        if(getActivity() == null || !isAdded()) {
+            Toast.makeText(MyApplication.getAppContext(), R.string.dialog_error_path_message, Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         Answers.getInstance().logCustom(new CustomEvent("PathError")
                 .putCustomAttribute("device", Build.DEVICE)
