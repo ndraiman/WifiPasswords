@@ -14,7 +14,7 @@ Warning: sharing a wifi password with someone can compromise that wifi network s
        src="https://developer.android.com/images/brand/en_generic_rgb_wo_45.png" />
 </a>
 
-##Features:
+## Features:
 - Show your device saved wifi passwords (<u><b>ROOT REQUIRED</b></u>) 
 - Add wifi passwords manually
 - Hide wifi passwords in an archive list.
@@ -22,12 +22,12 @@ Warning: sharing a wifi password with someone can compromise that wifi network s
 - Optional passcode protection (style inspired by Dropbox)
 
 
-####Gesture Actions:
+#### Gesture Actions:
 - Double-Tap to quickly copy a wifi password to clipboard
 - Long Press to bring up the Contextual Action Bar, allowing you to tag, share, copy or archive your wifi passwords.
 </br>you can then select multiple wifi passwords by simply tapping them
 
-####ToDo List:
+#### ToDo List:
 - Add import\export capabilities
 
 ### External Libraries Used:
@@ -45,7 +45,7 @@ Warning: sharing a wifi password with someone can compromise that wifi network s
 ![list-dark](/list-dark.png)
 ***
 
-##Troubleshooting
+## Troubleshooting
 In case the app is unable to find the file containing your saved wifi passwords please google your device's path for the saved wifi passwords file.
 
 then insert it manually into the app's settings.
@@ -58,7 +58,7 @@ the most commonly used paths by manufacturers which the app automatically tries 
 
 <a href="#wifipasswords">Back to Top</a>
 
-##License
+## License
 
 Copyright 2015 Netanel Draiman
 
